@@ -285,7 +285,7 @@ The active research project. Full context:
 
 **Instruments:** XLE, USO, XOM, CVX — 30-day constant maturity ATM IV from OptionMetrics via WRDS (`optionm_all` schema, `vsurfd{year}` tables). ATM = delta 50 (stored as integers). XLE secid = 110011. USO/XOM/CVX secids confirmed via `02_secid_mapper.py`.
 
-**WRDS:** username `hoovyalert`
+**WRDS:** credentials stored locally via pgpass (not in code)
 
 **Events:** 15 events (2003–2026) across 6 clusters — Gulf War II, Strait of Hormuz escalations, Soleimani assassination, Iran-Israel 2024, Twelve-Day War 2025, 2026 conflict. Defined in `events.py`.
 
@@ -307,7 +307,7 @@ The active research project. Full context:
 
 ## Data & Infrastructure
 
-**WRDS access:** Python `wrds` library, username `hoovyalert`
+**WRDS access:** Python `wrds` library — username set via `WRDS_USERNAME` environment variable
 **Data sources used:** OptionMetrics (IV surfaces), IBES (earnings dates), Compustat (fundamentals), yfinance (price data for ETF study)
 **Parquet caching:** Every WRDS pull is cached immediately — never re-pull if cache exists
 **Charts:** Chart.js (all reports) and Plotly.js (iran-iv-study)

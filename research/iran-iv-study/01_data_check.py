@@ -1,10 +1,11 @@
+import os
 import wrds
 import pandas as pd
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 200)
 
-db = wrds.Connection(wrds_username='hoovyalert')
+db = wrds.Connection(wrds_username=os.environ.get("WRDS_USERNAME"))
 
 # Look up XLE secid
 secid_df = db.raw_sql("SELECT * FROM optionm_all.secnmd WHERE ticker = 'XLE'")

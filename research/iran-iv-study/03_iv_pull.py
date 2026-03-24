@@ -41,7 +41,7 @@ if os.path.exists(CACHE):
     print(f"Loaded {len(df):,} rows. Date range: {df['date'].min()} to {df['date'].max()}")
 else:
     print("No cache found — querying WRDS.")
-    db = wrds.Connection(wrds_username="hoovyalert")
+    db = wrds.Connection(wrds_username=os.environ.get("WRDS_USERNAME"))
 
     chunks = []
     for year in YEARS:

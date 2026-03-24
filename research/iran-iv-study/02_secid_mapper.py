@@ -17,7 +17,7 @@ os.makedirs("data", exist_ok=True)
 
 TICKERS = ["XLE", "USO", "XOM", "CVX"]
 
-db = wrds.Connection(wrds_username="hoovyalert")
+db = wrds.Connection(wrds_username=os.environ.get("WRDS_USERNAME"))
 
 # secnmd holds name/ticker history; we want all matches then inspect
 query = """
