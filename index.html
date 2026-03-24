@@ -236,17 +236,17 @@ function renderLog() {
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('hero-cards').innerHTML = renderCards();
   document.getElementById('log-rows').innerHTML = renderLog();
+
+  // Frosted nav on scroll
+  const navEl = document.querySelector('.nav');
+  window.addEventListener('scroll', () => { navEl.classList.toggle('scrolled', window.scrollY > 10); }, { passive: true });
+
+  // Scroll-reveal for log rows, stats strip, contact section
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); io.unobserve(entry.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.log-row, .stats-strip, .contact-section').forEach(el => io.observe(el));
 });
-
-// Change 13: Frosted nav on scroll
-const navEl = document.querySelector('.nav');
-window.addEventListener('scroll', () => { navEl.classList.toggle('scrolled', window.scrollY > 10); }, { passive: true });
-
-// Change 13: Scroll-reveal for log rows, stats strip, contact section
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); io.unobserve(entry.target); } });
-}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-document.querySelectorAll('.log-row, .stats-strip, .contact-section').forEach(el => io.observe(el));
 </script>
 
 <!-- NAV -->
