@@ -17,11 +17,13 @@
 body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.75;font-size:15px;-webkit-font-smoothing:antialiased}
 
 /* NAV */
-nav{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);padding:0 2.5rem;height:62px;display:flex;align-items:center;justify-content:space-between}
+nav{position:sticky;top:0;z-index:100;background:rgba(247,244,236,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:box-shadow 0.3s;border-bottom:1px solid var(--border);padding:0 2.5rem;height:62px;display:flex;align-items:center;justify-content:space-between}
+nav.scrolled{box-shadow:0 1px 24px rgba(15,34,32,0.06)}
 .nav-logo{font-family:var(--serif);font-size:21px;font-weight:600;color:var(--ink)}
 .nav-links{display:flex;gap:2rem}
-.nav-links a{font-size:13px;color:var(--ink);text-decoration:none;font-weight:400;transition:color .2s}
-.nav-links a:hover{color:var(--accent)}
+.nav-links a{font-size:13px;color:var(--ink);text-decoration:none;font-weight:400;position:relative;padding-bottom:2px}
+.nav-links a::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform 0.25s cubic-bezier(0.4,0,0.2,1)}
+.nav-links a:hover::after{transform:scaleX(1)}
 
 /* HERO */
 .hero{background:var(--ink);color:#fff;padding:56px 2.5rem 48px}
@@ -119,6 +121,26 @@ footer{background:var(--ink);color:#fff;padding:2.5rem}
   .wrap{padding:0 1.25rem 3rem}
   footer{padding:2rem 1.25rem}
 }
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23noise)' opacity='0.07'/%3E%3C/svg%3E");mix-blend-mode:multiply;opacity:0.5}
+#progress-bar{position:fixed;top:0;left:0;height:2px;background:#1a5c52;width:0%;z-index:200;transition:width .1s linear}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.hero-tag{animation:fadeUp .6s ease both}
+.hero h1{animation:fadeUp .6s .1s ease both}
+.hero p,.hero-sub{animation:fadeUp .6s .2s ease both}
+.hero-meta{animation:fadeUp .6s .3s ease both}
+.section{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease}
+.section.visible{opacity:1;transform:none}
+.chart-wrap{transition:box-shadow .2s,transform .2s}
+.chart-wrap:hover{box-shadow:0 4px 20px rgba(15,34,32,0.08);transform:translateY(-1px)}
+.callout,.callout-red,.callout-yellow,.callout-blue,.callout-info{opacity:0;transform:translateX(-8px);transition:opacity .45s ease,transform .45s ease}
+.callout.visible,.callout-red.visible,.callout-yellow.visible,.callout-blue.visible,.callout-info.visible{opacity:1;transform:none}
+tbody tr{opacity:0;transform:translateY(6px);transition:opacity .35s ease,transform .35s ease}
+tbody tr.visible{opacity:1;transform:none}
+#dot-nav{position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:50}
+#dot-nav a{width:8px;height:8px;border-radius:50%;background:var(--border);border:1px solid var(--hint);display:block;transition:background .2s,transform .2s}
+#dot-nav a.active{background:var(--accent);transform:scale(1.35)}
+@media(max-width:860px){#dot-nav{display:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
 </style>
 </head>
 <body>
@@ -362,6 +384,54 @@ T.forEach(t=>{
   tabsEl.appendChild(btn);
 });
 buildYearly("MSFT");
+</script>
+<div id="progress-bar"></div>
+<div id="dot-nav"></div>
+<script>
+const pb = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  pb.style.width = (window.scrollY / max * 100) + '%';
+}, { passive: true });
+
+const navEl = document.querySelector('nav');
+window.addEventListener('scroll', () => { navEl.classList.toggle('scrolled', window.scrollY > 10); }, { passive: true });
+
+const sections = document.querySelectorAll('.section');
+const dotNav = document.getElementById('dot-nav');
+if (dotNav && sections.length) {
+  sections.forEach((s, i) => {
+    if (!s.id) s.id = 'sec-' + i;
+    const a = document.createElement('a');
+    a.href = '#' + s.id;
+    a.title = s.querySelector('h2,.section-title') ? (s.querySelector('h2,.section-title').textContent.trim()) : '';
+    dotNav.appendChild(a);
+  });
+}
+
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      e.target.querySelectorAll('tbody tr').forEach((tr, i) => {
+        setTimeout(() => tr.classList.add('visible'), i * 40);
+      });
+      e.target.querySelectorAll('.callout,.callout-red,.callout-yellow,.callout-blue,.callout-info').forEach((c, i) => {
+        setTimeout(() => c.classList.add('visible'), i * 80);
+      });
+    }
+  });
+}, { threshold: 0.08 });
+sections.forEach(s => io.observe(s));
+
+const dotLinks = dotNav ? dotNav.querySelectorAll('a') : [];
+const ioNav = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    const idx = Array.from(sections).indexOf(e.target);
+    if (idx >= 0 && dotLinks[idx]) dotLinks[idx].classList.toggle('active', e.isIntersecting);
+  });
+}, { threshold: 0.3 });
+sections.forEach(s => ioNav.observe(s));
 </script>
 </body>
 </html>

@@ -10,12 +10,16 @@
 body{background:#f7f4ec;font-family:'Inter',sans-serif;color:#0f2220;min-height:100vh}
 
 /* ── NAV ── */
-nav{background:#f7f4ec;border-bottom:1px solid #e2ddd0;padding:0 2.5rem;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+nav{background:rgba(247,244,236,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:box-shadow 0.3s;border-bottom:1px solid #e2ddd0;padding:0 2.5rem;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+nav.scrolled{box-shadow:0 1px 24px rgba(15,34,32,0.06)}
 .nav-logo{font-family:'Fraunces',serif;font-size:21px;font-weight:600;color:#0f2220}
 .nl{display:flex;gap:2.25rem;list-style:none}
 .nl a{font-size:13px;color:#0f2220;text-decoration:none;font-weight:400;transition:color .2s}
 .nl a:hover,.nl a.on{color:#1a5c52}
 .nl a.on{font-weight:500}
+.nl a{position:relative;padding-bottom:2px}
+.nl a::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:#1a5c52;transform:scaleX(0);transform-origin:left;transition:transform 0.25s cubic-bezier(0.4,0,0.2,1)}
+.nl a:hover::after,.nl a.on::after{transform:scaleX(1)}
 
 /* ── PAGE HEADER ── */
 .page-header{padding:3.5rem 2.5rem 3rem;border-bottom:1px solid #e2ddd0;max-width:1200px;margin:0 auto}
@@ -31,7 +35,12 @@ h1 em{font-style:italic;color:#1a5c52}
 /* ── MAIN LIST ── */
 .main-list{padding:2rem 2.5rem;border-right:1px solid #e2ddd0}
 
-.report-row{padding:1.75rem 0;border-top:1px solid #f0ece2;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:start;text-decoration:none;transition:opacity .2s;display:grid}
+.report-row{padding:1.75rem 0;border-top:1px solid #f0ece2;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:start;text-decoration:none;display:grid;opacity:0;transform:translateY(16px);transition:opacity 0.5s cubic-bezier(0.4,0,0.2,1),transform 0.5s cubic-bezier(0.4,0,0.2,1)}
+.report-row.visible{opacity:1;transform:translateY(0)}
+.report-row:nth-child(1){transition-delay:0.0s}
+.report-row:nth-child(2){transition-delay:0.08s}
+.report-row:nth-child(3){transition-delay:0.16s}
+.report-row:nth-child(4){transition-delay:0.24s}
 .report-row:first-of-type{border-top:1px solid #e2ddd0}
 .report-row:hover .report-title{color:#1a5c52}
 .report-row.wip{opacity:.5;cursor:default}
@@ -78,8 +87,8 @@ h1 em{font-style:italic;color:#1a5c52}
 .contact-heading em{font-style:italic;color:#1a5c52}
 .contact-links{display:flex;gap:.65rem;flex-wrap:wrap}
 .cl{display:flex;align-items:center;gap:7px;padding:9px 18px;border-radius:5px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;text-decoration:none;transition:all .2s;white-space:nowrap}
-.cl-primary{background:#1a5c52;color:#fff}
-.cl-primary:hover{background:#144a42}
+.cl-primary{background:#1a5c52;color:#fff;transition:background .2s,transform .2s,box-shadow .2s}
+.cl-primary:hover{background:#144a42;transform:translateY(-1px);box-shadow:0 4px 16px rgba(26,92,82,0.25)}
 .cl-secondary{border:1px solid #c8c2b0;color:#4a6460}
 .cl-secondary:hover{border-color:#1a5c52;color:#1a5c52}
 .cl-icon{width:15px;height:15px;flex-shrink:0}
@@ -102,6 +111,10 @@ footer{background:#0f2220;padding:1.5rem 2.5rem;display:flex;justify-content:spa
   .report-right{text-align:left;display:flex;align-items:center;gap:.75rem}
   footer{flex-direction:column;align-items:flex-start;gap:.4rem;padding:1.25rem}
 }
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
+
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23noise)' opacity='0.07'/%3E%3C/svg%3E");mix-blend-mode:multiply;opacity:0.5}
 </style>
 </head>
 <body>
@@ -205,18 +218,6 @@ footer{background:#0f2220;padding:1.5rem 2.5rem;display:flex;justify-content:spa
       </div>
     </a>
 
-    <div class="report-row wip">
-      <div class="report-left">
-        <div class="ctag ctag-wip">Universe Expansion · In Progress</div>
-        <div class="report-title report-title-wip">IV Crush Strategy — Composite Scoring Model</div>
-        <div class="report-desc">Extending the short straddle earnings strategy beyond the Magnificent Seven using a composite edge scoring model: win rate, average edge, Calmar ratio, and return on margin.</div>
-        <div style="margin-top:.75rem"><span class="wip-tag">In progress</span></div>
-      </div>
-      <div class="report-right">
-        <div class="report-date">Coming</div>
-      </div>
-    </div>
-
   </div>
 
   <!-- SIDEBAR -->
@@ -287,5 +288,16 @@ footer{background:#0f2220;padding:1.5rem 2.5rem;display:flex;justify-content:spa
   <div class="footer-copy">© Brian Liew · BSc Accounting & Finance, London School of Economics</div>
 </footer>
 
+<script>
+// Frosted nav
+const nav = document.querySelector('nav');
+window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 10); }, { passive: true });
+
+// Scroll-reveal report rows
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); io.unobserve(entry.target); } });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.report-row').forEach(el => io.observe(el));
+</script>
 </body>
 </html>

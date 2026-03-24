@@ -8,28 +8,77 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#f7f4ec;font-family:'Inter',sans-serif;color:#0f2220}
 
-.nav{background:#f7f4ec;border-bottom:1px solid #e2ddd0;padding:0 2.5rem;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+/* Change 1: Paper grain texture */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23noise)' opacity='0.07'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+  opacity: 0.5;
+}
+
+/* Change 2: Frosted glass nav */
+.nav{background:rgba(247,244,236,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid #e2ddd0;padding:0 2.5rem;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;transition:box-shadow 0.3s}
+.nav.scrolled{box-shadow:0 1px 24px rgba(15,34,32,0.06)}
+
 .logo{font-family:'Fraunces',serif;font-size:21px;font-weight:600;color:#0f2220}
 .nl{display:flex;gap:2.25rem;list-style:none}
 .nl a{color:#0f2220;font-size:13px;font-weight:400;text-decoration:none;transition:color .2s}
 .nl a.on{font-weight:500}
 .nl a:hover{color:#1a5c52}
 
-.hero{padding:4rem 2.5rem 3.5rem;display:grid;grid-template-columns:1.15fr 1fr;gap:3.5rem;align-items:start;max-width:1200px;margin:0 auto}
+/* Change 3: Animated nav underlines */
+.nl a{position:relative;padding-bottom:2px}
+.nl a::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:#1a5c52;transform:scaleX(0);transform-origin:left;transition:transform 0.25s cubic-bezier(0.4,0,0.2,1)}
+.nl a:hover::after,.nl a.on::after{transform:scaleX(1)}
+
+/* Change 8: Ghost decorative number — hero positioning */
+.hero{position:relative;padding:4rem 2.5rem 3.5rem;display:grid;grid-template-columns:1.15fr 1fr;gap:3.5rem;align-items:start;max-width:1200px;margin:0 auto}
+.hero>div{position:relative;z-index:1}
+.hero::before{content:'04';position:absolute;right:-0.05em;top:50%;transform:translateY(-54%);font-family:'Fraunces',serif;font-size:22rem;font-weight:600;font-style:italic;color:rgba(15,34,32,0.03);line-height:1;pointer-events:none;user-select:none;z-index:0}
+@media(max-width:768px){.hero::before{display:none}}
+
+/* Change 6: Hero animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.eyebrow{opacity:0;animation:fadeUp 0.55s cubic-bezier(0.4,0,0.2,1) 0.05s forwards}
+h1{opacity:0;animation:fadeUp 0.55s cubic-bezier(0.4,0,0.2,1) 0.12s forwards}
+.sub{opacity:0;animation:fadeUp 0.55s cubic-bezier(0.4,0,0.2,1) 0.20s forwards}
+.btns{opacity:0;animation:fadeUp 0.55s cubic-bezier(0.4,0,0.2,1) 0.28s forwards}
+
 .eyebrow{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:#1a5c52;letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.25rem;display:flex;align-items:center;gap:10px}
 .eyebrow::before{content:'';width:24px;height:1px;background:#1a5c52}
 h1{font-family:'Fraunces',serif;font-size:2.35rem;font-weight:600;color:#0f2220;line-height:1.2;margin-bottom:1rem}
 h1 em{font-style:italic;color:#1a5c52}
 .sub{font-family:'Inter',sans-serif;font-size:13.5px;color:#4a6460;line-height:1.85;margin-bottom:1.75rem;font-weight:400}
 .btns{display:flex;gap:.75rem}
-.b1{padding:10px 22px;background:#1a5c52;color:#fff;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;border-radius:5px;text-decoration:none;transition:background .2s}
+
+/* Change 4: Button hover lift */
+.b1,.cl-primary{transition:background .2s,transform .2s,box-shadow .2s}
+.b1:hover,.cl-primary:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(26,92,82,0.25)}
+.b1:active{transform:translateY(0)}
+.b2:hover{transform:translateY(-1px)}
+
+.b1{padding:10px 22px;background:#1a5c52;color:#fff;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;border-radius:5px;text-decoration:none}
 .b1:hover{background:#144a42}
 .b2{padding:10px 22px;border:1px solid #a8a090;color:#4a6460;font-family:'Inter',sans-serif;font-size:13px;border-radius:5px;text-decoration:none;transition:all .2s}
 .b2:hover{border-color:#1a5c52;color:#1a5c52}
 
 .cards{display:flex;flex-direction:column;gap:.75rem}
-.card{background:#fff;border:1px solid #e2ddd0;border-radius:6px;padding:1.35rem;transition:border-color .2s;text-decoration:none;display:block}
-.card:hover{border-color:#1a5c52}
+
+/* Change 7: Card staggered entrance + hover effects */
+.card{opacity:0;transform:translateY(14px);animation:fadeUp 0.5s cubic-bezier(0.4,0,0.2,1) forwards;position:relative;overflow:hidden;transition:border-color .2s,box-shadow .2s,transform .2s}
+.card:nth-child(1){animation-delay:0.18s}
+.card:nth-child(2){animation-delay:0.28s}
+.card:nth-child(3){animation-delay:0.38s}
+.card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:#1a5c52;transform:scaleY(0);transform-origin:bottom;transition:transform 0.22s cubic-bezier(0.4,0,0.2,1)}
+.card:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(26,92,82,0.1)}
+.card:hover::before{transform:scaleY(1)}
+.card:hover .ctitle{color:#1a5c52}
+
+.card{background:#fff;border:1px solid #e2ddd0;border-radius:6px;padding:1.35rem;text-decoration:none;display:block}
 .ctag{font-family:'Inter',sans-serif;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#1a5c52;margin-bottom:.4rem}
 .ctitle{font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:#0f2220;margin-bottom:.45rem;line-height:1.35}
 .cmeta{font-family:'JetBrains Mono',monospace;font-size:11px;color:#8aa49e}
@@ -39,6 +88,16 @@ h1 em{font-style:italic;color:#1a5c52}
 .section-label{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:#0f2220;letter-spacing:.12em;text-transform:uppercase}
 .section-link{font-family:'Inter',sans-serif;font-size:12px;color:#1a5c52;font-weight:500;text-decoration:none}
 .section-link:hover{text-decoration:underline}
+
+/* Change 10: Scroll-reveal on log rows */
+.log-row{opacity:0;transform:translateX(-12px);transition:opacity 0.45s cubic-bezier(0.4,0,0.2,1),transform 0.45s cubic-bezier(0.4,0,0.2,1)}
+.log-row.visible{opacity:1;transform:translateX(0)}
+.log-row:nth-child(1){transition-delay:0.00s}
+.log-row:nth-child(2){transition-delay:0.07s}
+.log-row:nth-child(3){transition-delay:0.14s}
+.log-row:nth-child(4){transition-delay:0.21s}
+@media(max-width:480px){.log-row{transition-delay:0s!important}}
+
 .log-row{display:flex;gap:1.75rem;padding:1rem 0;border-top:1px solid #f0ece2;align-items:baseline}
 .log-row:first-of-type{border-top:1px solid #e2ddd0}
 .log-date{font-family:'JetBrains Mono',monospace;font-size:11px;color:#aaa9a0;min-width:72px;flex-shrink:0;padding-top:1px}
@@ -47,6 +106,12 @@ h1 em{font-style:italic;color:#1a5c52}
 .log-tag{font-family:'Inter',sans-serif;font-size:10px;font-weight:600;padding:2px 9px;border-radius:3px;white-space:nowrap;flex-shrink:0}
 .tag-pub{background:rgba(26,92,82,.1);color:#1a5c52}
 .tag-wip{background:rgba(160,144,112,.1);color:#8a7a60}
+
+/* Change 11: Log row hover arrow reveal */
+.log-arrow{opacity:0;transition:opacity 0.2s,transform 0.2s}
+.log-row:hover .log-arrow{opacity:1;transform:translateX(3px)}
+.log-row:hover .log-title{color:#1a5c52}
+
 .log-arrow{font-family:'Inter',sans-serif;font-size:12px;color:#1a5c52;text-decoration:none;margin-left:auto;padding-left:1rem;white-space:nowrap;flex-shrink:0}
 .log-arrow:hover{text-decoration:underline}
 
@@ -65,6 +130,22 @@ h1 em{font-style:italic;color:#1a5c52}
 footer{background:#0f2220;padding:1.5rem 2.5rem;display:flex;justify-content:space-between;align-items:center}
 .footer-logo{font-family:'Inter',sans-serif;font-style:normal;font-weight:500;font-size:13px;color:rgba(255,255,255,.5)}
 .footer-copy{font-family:'Inter',sans-serif;font-size:11px;color:rgba(255,255,255,.3)}
+
+/* Change 9: Stats strip */
+.stats-strip{background:#0f2220;padding:2rem 2.5rem;display:grid;grid-template-columns:repeat(4,1fr)}
+.stat-cell{padding:0 2rem;border-right:1px solid rgba(255,255,255,0.08)}
+.stat-cell:first-child{padding-left:0}
+.stat-cell:last-child{border-right:none}
+.stat-num{font-family:'Fraunces',serif;font-size:2rem;font-style:italic;font-weight:300;color:rgba(168,198,190,0.75);line-height:1;margin-bottom:0.3rem}
+.stat-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.1em;text-transform:uppercase}
+@media(max-width:768px){.stats-strip{grid-template-columns:1fr 1fr;gap:1.25rem;padding:1.5rem 1.25rem}.stat-cell{padding:0;border-right:none}}
+
+/* Change 13 (partial): Stats strip and contact section scroll-reveal */
+.stats-strip,.contact-section{opacity:0;transform:translateY(12px);transition:opacity 0.5s ease,transform 0.5s ease}
+.stats-strip.visible,.contact-section.visible{opacity:1;transform:translateY(0)}
+
+/* Change 12: Prefers-reduced-motion */
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
 
 @media(max-width:768px){
   .nav{padding:0 1.25rem}
@@ -112,14 +193,6 @@ const REPORTS = [
     meta: "68% win rate · Sharpe 1.4+ · 2015–2024",
     url: "/research/short-straddle/",
     status: "published"
-  },
-  {
-    date: "Coming",
-    title: "IV Crush Universe Expansion — Composite Scoring Model",
-    tag: "Universe · In Progress",
-    meta: "Expanding beyond Mag 7 · Coming soon",
-    url: null,
-    status: "wip"
   }
 ];
 
@@ -142,7 +215,7 @@ function renderCards() {
 }
 
 function renderLog() {
-  return REPORTS.slice(0, 5).map(r => {
+  return REPORTS.filter(r => r.status === 'published').map(r => {
     const tag = r.status === "published"
       ? `<span class="log-tag tag-pub">Published</span>`
       : `<span class="log-tag tag-wip">In progress</span>`;
@@ -164,6 +237,16 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('hero-cards').innerHTML = renderCards();
   document.getElementById('log-rows').innerHTML = renderLog();
 });
+
+// Change 13: Frosted nav on scroll
+const navEl = document.querySelector('.nav');
+window.addEventListener('scroll', () => { navEl.classList.toggle('scrolled', window.scrollY > 10); }, { passive: true });
+
+// Change 13: Scroll-reveal for log rows, stats strip, contact section
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); io.unobserve(entry.target); } });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.log-row, .stats-strip, .contact-section').forEach(el => io.observe(el));
 </script>
 
 <!-- NAV -->
@@ -189,6 +272,14 @@ document.addEventListener('DOMContentLoaded', () => {
   </div>
   <div class="cards" id="hero-cards"></div>
 </section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stat-cell"><div class="stat-num">4</div><div class="stat-lbl">Published Studies</div></div>
+  <div class="stat-cell"><div class="stat-num">23yr</div><div class="stat-lbl">Longest Backtest</div></div>
+  <div class="stat-cell"><div class="stat-num">1.33</div><div class="stat-lbl">Best Sharpe Ratio</div></div>
+  <div class="stat-cell"><div class="stat-num">WRDS</div><div class="stat-lbl">Data Platform (LSE)</div></div>
+</div>
 
 <!-- RESEARCH LOG -->
 <section class="log-section">

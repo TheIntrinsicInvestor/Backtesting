@@ -26,7 +26,7 @@
     body { background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; line-height: 1.6; }
 
     /* Nav */
-    nav { background: var(--ink); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 52px; position: sticky; top: 0; z-index: 100; }
+    nav { background: rgba(15,34,32,0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: box-shadow 0.3s; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 52px; position: sticky; top: 0; z-index: 100; }
     .nav-logo { font-family: 'Fraunces', serif; font-style: italic; font-weight: 400; font-size: 15px; color: rgba(255,255,255,0.9); text-decoration: none; }
     .nav-links { display: flex; gap: 28px; list-style: none; }
     .nav-links a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 13px; font-weight: 400; letter-spacing: 0.01em; transition: color 0.15s; }
@@ -146,10 +146,107 @@
       .footer-top { flex-direction: column; }
       .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
       .table-wrap { overflow-x: auto; }
+      .section-counter { display: none; }
     }
+
+    /* G1: Paper grain */
+    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23noise)' opacity='0.07'/%3E%3C/svg%3E");mix-blend-mode:multiply;opacity:0.5}
+
+    /* G2: Frosted nav */
+    nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,0.2)}
+
+    /* G3: Nav underlines */
+    .nav-links a{position:relative;padding-bottom:2px}
+    .nav-links a::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:rgba(90,181,165,0.6);transform:scaleX(0);transform-origin:left;transition:transform 0.25s cubic-bezier(0.4,0,0.2,1)}
+    .nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1)}
+
+    /* G4: Prefers-reduced-motion */
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
+
+    /* R1: Progress bar */
+    #progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,#1a5c52,#2d9d8f);z-index:9998;transition:width 0.1s linear;box-shadow:0 0 8px rgba(26,92,82,0.4)}
+
+    /* R2: Hero texture + entrance animation */
+    .hero{position:relative;overflow:hidden}
+    .hero::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(-55deg,transparent,transparent 40px,rgba(255,255,255,0.013) 40px,rgba(255,255,255,0.013) 41px);pointer-events:none;z-index:0}
+    .hero-inner{position:relative;z-index:1}
+    .eyebrow{opacity:0;animation:fadeUp 0.5s ease 0.05s forwards}
+    .hero h1{opacity:0;animation:fadeUp 0.5s ease 0.12s forwards}
+    .hero-subtitle{opacity:0;animation:fadeUp 0.5s ease 0.20s forwards}
+    .hero-meta{opacity:0;animation:fadeUp 0.5s ease 0.28s forwards}
+    .kpi-strip{opacity:0;animation:fadeUp 0.55s ease 0.35s forwards}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+    /* R3: Section scroll-reveal */
+    .section{opacity:0;transform:translateY(20px);transition:opacity 0.6s cubic-bezier(0.4,0,0.2,1),transform 0.6s cubic-bezier(0.4,0,0.2,1)}
+    .section.visible{opacity:1;transform:translateY(0)}
+    .callout{opacity:0;transform:translateX(-8px);transition:opacity 0.5s ease,transform 0.5s ease}
+    .callout.visible{opacity:1;transform:translateX(0)}
+
+    /* R4: Table row animation */
+    table.revealed tbody tr{opacity:0;transform:translateX(-8px);animation:rowReveal 0.35s ease forwards}
+    @keyframes rowReveal{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
+    table.revealed tbody tr:nth-child(1){animation-delay:0.03s}
+    table.revealed tbody tr:nth-child(2){animation-delay:0.07s}
+    table.revealed tbody tr:nth-child(3){animation-delay:0.11s}
+    table.revealed tbody tr:nth-child(4){animation-delay:0.15s}
+    table.revealed tbody tr:nth-child(5){animation-delay:0.19s}
+    table.revealed tbody tr:nth-child(6){animation-delay:0.23s}
+    table.revealed tbody tr:nth-child(7){animation-delay:0.27s}
+    table.revealed tbody tr:nth-child(8){animation-delay:0.31s}
+    table.revealed tbody tr:nth-child(9){animation-delay:0.35s}
+
+    /* R5: Chart + highlight box hover */
+    .chart-box{transition:box-shadow 0.2s}
+    .chart-box:hover{box-shadow:0 4px 20px rgba(15,34,32,0.06)}
+    .highlight-box{transition:transform 0.2s,box-shadow 0.2s}
+    .highlight-box:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(15,34,32,0.15)}
+
+    /* R6: Dot nav */
+    .section-nav{position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);z-index:300;display:flex;flex-direction:column;gap:8px}
+    .sn-dot{width:8px;height:8px;border-radius:50%;border:1.5px solid rgba(138,164,158,0.5);background:transparent;cursor:pointer;transition:all 0.2s;position:relative}
+    .sn-dot:hover,.sn-dot.active{background:#5ab5a5;border-color:#5ab5a5;transform:scale(1.25)}
+    .sn-dot::before{content:attr(data-label);position:absolute;right:calc(100% + 8px);top:50%;transform:translateY(-50%);background:#0f2220;color:rgba(255,255,255,0.85);font-size:10px;font-weight:500;padding:3px 8px;border-radius:3px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.15s;border:1px solid rgba(255,255,255,0.08)}
+    .sn-dot:hover::before{opacity:1}
+    @media(max-width:900px){.section-nav{display:none}}
+
+    /* R7: Ghost section counters */
+    .section-label{position:relative}
+    .section-counter{position:absolute;left:-3.5rem;top:50%;transform:translateY(-50%);font-family:'Fraunces',serif;font-size:3.5rem;font-weight:600;font-style:italic;color:rgba(26,92,82,0.07);line-height:1;pointer-events:none;user-select:none;letter-spacing:-0.02em}
+
+    /* G5: Hero tag / sub / stats selectors */
+    .hero-tag{animation:fadeUp .6s ease both}
+    .hero-sub,.hero-desc,.hero-stats{animation:fadeUp .6s .2s ease both}
+
+    /* G6: chart-wrap hover lift */
+    .chart-wrap{transition:box-shadow .2s,transform .2s}
+    .chart-wrap:hover{box-shadow:0 4px 20px rgba(0,0,0,0.15);transform:translateY(-1px)}
+
+    /* G7: note / insight / highlight-box scroll-reveal */
+    .note,.insight,.highlight-box{opacity:0;transform:translateX(-8px);transition:opacity .45s ease,transform .45s ease}
+    .note.visible,.insight.visible,.highlight-box.visible{opacity:1;transform:none}
+
+    /* G8: tbody tr visibility classes (complement existing rowReveal) */
+    tbody tr{opacity:0;transform:translateY(6px);transition:opacity .35s ease,transform .35s ease}
+    tbody tr.visible{opacity:1;transform:none}
+
+    /* G9: #dot-nav alias styles (mirrors .section-nav for spec compliance) */
+    #dot-nav{position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:50}
+    #dot-nav a{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);display:block;transition:background .2s,transform .2s}
+    #dot-nav a.active{background:#5ab5a5;transform:scale(1.35)}
+    @media(max-width:860px){#dot-nav{display:none}}
   </style>
 </head>
 <body>
+<div id="progress-bar"></div>
+<div class="section-nav">
+  <div class="sn-dot" data-label="Study Design" data-target="sec-design"></div>
+  <div class="sn-dot" data-label="Event Filter" data-target="sec-events"></div>
+  <div class="sn-dot" data-label="IV Profile" data-target="sec-profile"></div>
+  <div class="sn-dot" data-label="Instrument Divergence" data-target="sec-divergence"></div>
+  <div class="sn-dot" data-label="Strategy" data-target="sec-strategy"></div>
+  <div class="sn-dot" data-label="Conclusions" data-target="sec-conclusions"></div>
+</div>
 
 <!-- ── Nav ── -->
 <nav>
@@ -247,9 +344,9 @@
 </div>
 
 <!-- ── Section 1: Research Design ── -->
-<section class="section">
+<section class="section" id="sec-design">
   <div class="section-inner">
-    <div class="section-label"><span>Study Design</span></div>
+    <div class="section-label"><span class="section-counter">01</span><span>Study Design</span></div>
     <h2>Why <em>Iran and energy options</em></h2>
 
     <p>
@@ -291,9 +388,9 @@
 </section>
 
 <!-- ── Section 2: Event Filter Results ── -->
-<section class="section" style="background:var(--bg2)">
+<section class="section" id="sec-events" style="background:var(--bg2)">
   <div class="section-inner">
-    <div class="section-label"><span>Event Filter</span></div>
+    <div class="section-label"><span class="section-counter">02</span><span>Event Filter</span></div>
     <h2>Fifteen events, <em>eleven pass</em> the market reaction test</h2>
 
     <p>
@@ -459,9 +556,9 @@
 </section>
 
 <!-- ── Section 3: Average IV Profile ── -->
-<section class="section">
+<section class="section" id="sec-profile">
   <div class="section-inner">
-    <div class="section-label"><span>Average IV Profile</span></div>
+    <div class="section-label"><span class="section-counter">03</span><span>Average IV Profile</span></div>
     <h2>The peak arrives at <em>T+2, not T0</em></h2>
 
     <p>
@@ -521,9 +618,9 @@
 </section>
 
 <!-- ── Section 4: Instrument Divergence ── -->
-<section class="section" style="background:var(--bg2)">
+<section class="section" id="sec-divergence" style="background:var(--bg2)">
   <div class="section-inner">
-    <div class="section-label"><span>Instrument Divergence</span></div>
+    <div class="section-label"><span class="section-counter">04</span><span>Instrument Divergence</span></div>
     <h2>USO leads; <em>equity names lag and dampen</em></h2>
 
     <p>
@@ -595,9 +692,9 @@
 </section>
 
 <!-- ── Section 5: Strategy ── -->
-<section class="section">
+<section class="section" id="sec-strategy">
   <div class="section-inner">
-    <div class="section-label"><span>Strategy</span></div>
+    <div class="section-label"><span class="section-counter">05</span><span>Strategy</span></div>
     <h2>Short vol at T0 close, <em>exit at T+20</em></h2>
 
     <p>
@@ -789,9 +886,9 @@
 </section>
 
 <!-- ── Section 6: Conclusions ── -->
-<section class="section" style="background:var(--bg2)">
+<section class="section" id="sec-conclusions" style="background:var(--bg2)">
   <div class="section-inner">
-    <div class="section-label"><span>Conclusions</span></div>
+    <div class="section-label"><span class="section-counter">06</span><span>Conclusions</span></div>
     <h2>Four takeaways from <em>a small but structured dataset</em></h2>
 
     <div class="callout green">
@@ -1037,6 +1134,101 @@ new Chart(pnlCtx, {
     }
   }
 });
+</script>
+
+<script>
+// Nav scroll
+const nav = document.querySelector('nav');
+window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 10); }, { passive: true });
+
+// Progress bar
+const progressBar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const d = document.documentElement.scrollHeight - window.innerHeight;
+  progressBar.style.width = (d > 0 ? (window.scrollY / d) * 100 : 0) + '%';
+}, { passive: true });
+
+// Section + callout reveal
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      entry.target.querySelectorAll('table').forEach(t => t.classList.add('revealed'));
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.section, .callout').forEach(el => revealObserver.observe(el));
+
+// Dot nav
+const dots = document.querySelectorAll('.sn-dot');
+dots.forEach(dot => {
+  dot.addEventListener('click', () => {
+    const target = document.getElementById(dot.dataset.target);
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      dots.forEach(d => d.classList.remove('active'));
+      const activeDot = document.querySelector(`.sn-dot[data-target="${entry.target.id}"]`);
+      if (activeDot) activeDot.classList.add('active');
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.section[id]').forEach(el => sectionObserver.observe(el));
+</script>
+
+<div id="dot-nav"></div>
+<script>
+// G: Progress bar (spec-compliant handler)
+const pb = document.getElementById('progress-bar');
+if (pb) {
+  window.addEventListener('scroll', () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    pb.style.width = (max > 0 ? window.scrollY / max * 100 : 0) + '%';
+  }, { passive: true });
+}
+
+// G: #dot-nav population
+const dotNav = document.getElementById('dot-nav');
+const allSections = document.querySelectorAll('.section');
+if (dotNav && allSections.length) {
+  allSections.forEach((s, i) => {
+    if (!s.id) s.id = 'sec-' + i;
+    const a = document.createElement('a');
+    a.href = '#' + s.id;
+    const heading = s.querySelector('h2,h3');
+    a.title = heading ? heading.textContent.trim() : '';
+    dotNav.appendChild(a);
+  });
+}
+
+// G: highlight-box / note / insight reveal via existing observer
+const gReveal = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.note,.insight,.highlight-box').forEach((c, i) => {
+        setTimeout(() => c.classList.add('visible'), i * 80);
+      });
+      e.target.querySelectorAll('tbody tr').forEach((tr, i) => {
+        setTimeout(() => tr.classList.add('visible'), i * 40);
+      });
+    }
+  });
+}, { threshold: 0.08 });
+allSections.forEach(s => gReveal.observe(s));
+
+// G: #dot-nav active state
+const dotLinks = dotNav ? dotNav.querySelectorAll('a') : [];
+const ioNav = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    const idx = Array.from(allSections).indexOf(e.target);
+    if (idx >= 0 && dotLinks[idx]) dotLinks[idx].classList.toggle('active', e.isIntersecting);
+  });
+}, { threshold: 0.3 });
+allSections.forEach(s => ioNav.observe(s));
 </script>
 </body>
 </html>
