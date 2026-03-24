@@ -42,7 +42,7 @@ theintrinsicinvestor/
 │   │   ├── 02_pull_options.py
 │   │   └── 03_strategy.py
 │   └── iran-iv-study/
-│       ├── index.html                  # Report: Iran IV event study (in progress)
+│       ├── index.html                  # Report: Iran IV event study (published)
 │       ├── events.py
 │       ├── 01_data_check.py
 │       ├── 02_secid_mapper.py
@@ -271,43 +271,29 @@ Active link gets class `on`. Logo is never a link — just a div.
 | Exploiting Leveraged ETF Decay | `/research/leveraged-etf-strategy/` | Published |
 | SPY Wheel Strategy Backtest | `/research/wheel-strategy/` | Published |
 | Selling Earnings Volatility (Mag7 Straddles) | `/research/short-straddle/` | Published |
-| Iran Geopolitical IV Event Study | `/research/iran-iv-study/` | In progress |
+| Iran Geopolitical IV Event Study | `/research/iran-iv-study/` | Published |
 
 **WIP reports are NOT shown on the homepage or research listing page** until published. Filter by `status === 'published'` in the JS render functions.
 
 ---
 
-## Iran IV Study — Current Research Project
-
-The active research project. Full context:
+## Iran IV Study — Completed
 
 **Title:** "IV Behaviour in Energy Sector Options Around Iran-Related Geopolitical Events"
+**Status:** Published at `/research/iran-iv-study/`
 
-**Instruments:** XLE, USO, XOM, CVX — 30-day constant maturity ATM IV from OptionMetrics via WRDS (`optionm_all` schema, `vsurfd{year}` tables). ATM = delta 50 (stored as integers). XLE secid = 110011. USO/XOM/CVX secids confirmed via `02_secid_mapper.py`.
-
-**WRDS:** credentials stored locally via pgpass (not in code)
-
-**Events:** 15 events (2003–2026) across 6 clusters — Gulf War II, Strait of Hormuz escalations, Soleimani assassination, Iran-Israel 2024, Twelve-Day War 2025, 2026 conflict. Defined in `events.py`.
-
-**Window:** T-20 to T+30 trading days. IV normalised to 100 at T-20.
-
-**Event filter:** Hybrid — remove events where instruments didn't move ≥1.5% on T0 or T+1.
-
-**Script sequence:**
-1. `01_data_check.py` — confirms WRDS access ✓
-2. `02_secid_mapper.py` — maps tickers to secids ✓
-3. `03_iv_pull.py` — pulls IV data, caches to parquet
-4. `04_price_pull.py` — pulls underlying prices, caches to parquet
-5. `05_event_study.py` — event study engine, normalisation, filter
-6. `06_analysis_charts.py` — Chart.js output
-
-**Key rules:** Never re-query WRDS if parquet cache exists. Flag all data gaps and anomalies explicitly. 2026 event is an incomplete observation — label it clearly. Statistical limits of 15 events must be disclosed.
+All 6 scripts completed. Report live on the site.
 
 ---
 
 ## Data & Infrastructure
 
-**WRDS access:** Python `wrds` library — username set via `WRDS_USERNAME` environment variable
+**WRDS access:** Python `wrds` library — username set via `WRDS_USERNAME` environment variable.
+Before running any WRDS script, set this in your terminal first:
+```
+set WRDS_USERNAME=hoovyalert
+```
+Then run the Python script as normal. The password is stored locally in pgpass and never touches the code.
 **Data sources used:** OptionMetrics (IV surfaces), IBES (earnings dates), Compustat (fundamentals), yfinance (price data for ETF study)
 **Parquet caching:** Every WRDS pull is cached immediately — never re-pull if cache exists
 **Charts:** Chart.js (all reports) and Plotly.js (iran-iv-study)
