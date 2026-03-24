@@ -26,13 +26,15 @@ nav{position:sticky;top:0;z-index:100;background:rgba(247,244,236,0.92);backdrop
 nav.scrolled{box-shadow:0 1px 24px rgba(15,34,32,0.06)}
 .nav-logo{font-family:'Fraunces',serif;font-size:21px;font-weight:600;color:var(--ink);text-decoration:none}
 .nav-links{display:flex;gap:2rem}
-.nav-links a{font-size:13px;color:var(--ink);text-decoration:none;font-weight:400;position:relative;padding-bottom:2px}
-.nav-links a::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform 0.25s cubic-bezier(0.4,0,0.2,1)}
+.nav-links a{font-size:13px;color:var(--ink);text-decoration:none;font-weight:400;transition:color .2s;position:relative;padding-bottom:2px}
+.nav-links a::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:#1a5c52;transform:scaleX(0);transform-origin:left;transition:transform 0.25s cubic-bezier(0.4,0,0.2,1)}
 .nav-links a:hover::after{transform:scaleX(1)}
+.nav-links a:hover{color:var(--accent)}
 
 /* HERO */
-.hero{background:var(--ink);color:#fff;padding:72px 0 64px;position:relative}
-.hero-inner{max-width:800px;margin:0 auto;padding:0 2.5rem}
+.hero{background:var(--ink);color:#fff;padding:72px 0 64px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(-55deg,transparent,transparent 40px,rgba(255,255,255,0.013) 40px,rgba(255,255,255,0.013) 41px);pointer-events:none}
+.hero-inner{max-width:800px;margin:0 auto;padding:0 2.5rem;position:relative;z-index:1}
 .hero-tag{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--hint);margin-bottom:1.5rem;display:flex;align-items:center;gap:10px}
 .hero-tag::before{content:'';width:24px;height:1px;background:var(--hint)}
 .hero h1{font-family:'Fraunces',serif;font-size:2.4rem;font-weight:600;line-height:1.2;letter-spacing:-.01em;margin-bottom:1.25rem;color:#fff}
@@ -63,7 +65,7 @@ nav.scrolled{box-shadow:0 1px 24px rgba(15,34,32,0.06)}
 .container{max-width:800px;margin:0 auto;padding:0 2.5rem}
 .section{padding:52px 0;border-bottom:1px solid var(--border)}
 .section:last-of-type{border-bottom:none}
-.section-label{display:flex;align-items:center;gap:10px;font-family:'Inter',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin-bottom:1.25rem}
+.section-label{display:flex;align-items:center;gap:10px;font-family:'Inter',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin-bottom:1.25rem;position:relative}
 .section-label::before{content:'';display:block;width:24px;height:1px;background:var(--accent)}
 .section h2{font-family:'Fraunces',serif;font-size:1.65rem;font-weight:600;letter-spacing:-.01em;color:var(--ink);margin-bottom:1rem}
 .section h3{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:600;color:var(--ink);margin:2rem 0 .75rem}
@@ -100,7 +102,8 @@ strong{font-weight:600;color:var(--ink)}
 .legend{display:flex;gap:1rem;flex-wrap:wrap}
 .legend span{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--hint);font-family:'Inter',sans-serif}
 .legend-dot{width:10px;height:3px;border-radius:2px;display:inline-block}
-.chart-box{position:relative;width:100%;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.25rem}
+.chart-box{position:relative;width:100%;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.25rem;transition:box-shadow 0.2s}
+.chart-box:hover{box-shadow:0 4px 20px rgba(15,34,32,0.06)}
 
 /* REGIME TABLE */
 .rtable-wrap{margin:1.25rem 0;border:1px solid var(--border);border-radius:8px;overflow:hidden}
@@ -145,6 +148,64 @@ footer{background:var(--ink);color:#fff;padding:3rem 2.5rem}
 .footer-sub{font-family:'Inter',sans-serif;font-size:12px;color:rgba(255,255,255,.25);line-height:1.7}
 .footer-bottom{margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,.08);font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.2);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
 
+/* G1 — Paper grain texture */
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23noise)' opacity='0.07'/%3E%3C/svg%3E");mix-blend-mode:multiply;opacity:0.5}
+
+/* G4 — Button lift */
+.b1:hover,.cl-primary:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(26,92,82,0.25)}
+
+/* R1 — Progress bar */
+#progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,#1a5c52,#2d9d8f);z-index:9998;transition:width 0.1s linear;box-shadow:0 0 8px rgba(26,92,82,0.4)}
+
+/* R2 — Hero entrance animation */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.nav-logo{opacity:0;animation:fadeUp 0.5s ease 0.05s forwards}
+.hero h1{opacity:0;animation:fadeUp 0.5s ease 0.12s forwards}
+.hero-sub,.hero p{opacity:0;animation:fadeUp 0.5s ease 0.20s forwards}
+.hero-meta,.hero-tag{opacity:0;animation:fadeUp 0.5s ease 0.28s forwards}
+.kpi-strip{opacity:0;animation:fadeUp 0.55s ease 0.35s forwards}
+
+/* R3 — Section scroll-reveal */
+.section{opacity:0;transform:translateY(20px);transition:opacity 0.6s cubic-bezier(0.4,0,0.2,1),transform 0.6s cubic-bezier(0.4,0,0.2,1)}
+.section.visible{opacity:1;transform:translateY(0)}
+.callout{opacity:0;transform:translateX(-8px);transition:opacity 0.5s ease,transform 0.5s ease}
+.callout.visible{opacity:1;transform:translateX(0)}
+
+/* R4 — Table row animation */
+table.revealed tbody tr{opacity:0;transform:translateX(-8px);animation:rowReveal 0.35s ease forwards}
+@keyframes rowReveal{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
+table.revealed tbody tr:nth-child(1){animation-delay:0.03s}
+table.revealed tbody tr:nth-child(2){animation-delay:0.07s}
+table.revealed tbody tr:nth-child(3){animation-delay:0.11s}
+table.revealed tbody tr:nth-child(4){animation-delay:0.15s}
+table.revealed tbody tr:nth-child(5){animation-delay:0.19s}
+table.revealed tbody tr:nth-child(6){animation-delay:0.23s}
+table.revealed tbody tr:nth-child(7){animation-delay:0.27s}
+table.revealed tbody tr:nth-child(8){animation-delay:0.31s}
+
+/* R6 — Highlight box lift */
+.highlight-box,.hb-grid>div{transition:transform 0.2s,box-shadow 0.2s}
+.highlight-box:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(15,34,32,0.15)}
+
+/* R7 — Scenario cards lift */
+.scenario-card{transition:transform 0.2s,box-shadow 0.2s}
+.scenario-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.08)}
+
+/* R8 — Sticky dot navigation */
+.section-nav{position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);z-index:300;display:flex;flex-direction:column;gap:8px}
+.sn-dot{width:8px;height:8px;border-radius:50%;border:1.5px solid #8aa49e;background:transparent;cursor:pointer;transition:all 0.2s;position:relative}
+.sn-dot:hover,.sn-dot.active{background:#1a5c52;border-color:#1a5c52;transform:scale(1.25)}
+.sn-dot::before{content:attr(data-label);position:absolute;right:calc(100% + 8px);top:50%;transform:translateY(-50%);background:#0f2220;color:#fff;font-size:10px;font-weight:500;padding:3px 8px;border-radius:3px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.15s}
+.sn-dot:hover::before{opacity:1}
+
+/* R9 — Ghost section counters */
+.section-counter{position:absolute;left:-3.5rem;top:50%;transform:translateY(-50%);font-family:'Fraunces',serif;font-size:3.5rem;font-weight:600;font-style:italic;color:rgba(26,92,82,0.07);line-height:1;pointer-events:none;user-select:none;letter-spacing:-0.02em}
+
+/* G5 — Prefers-reduced-motion */
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
+
+@media(max-width:900px){.section-nav{display:none}}
+
 @media(max-width:640px){
   .kpi-panel{grid-template-columns:1fr 1fr}
   .scenario-grid{grid-template-columns:1fr}
@@ -154,32 +215,23 @@ footer{background:var(--ink);color:#fff;padding:3rem 2.5rem}
   .nav-links{gap:16px}
   .table-wrap{overflow-x:auto}
   .footer-bottom{flex-direction:column;gap:8px}
+  .section-counter{display:none}
 }
-body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23noise)' opacity='0.07'/%3E%3C/svg%3E");mix-blend-mode:multiply;opacity:0.5}
-#progress-bar{position:fixed;top:0;left:0;height:2px;background:#1a5c52;width:0%;z-index:200;transition:width .1s linear}
-@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-.hero-tag{animation:fadeUp .6s ease both}
-.hero h1{animation:fadeUp .6s .1s ease both}
-.hero-sub,.hero p{animation:fadeUp .6s .2s ease both}
-.hero-meta{animation:fadeUp .6s .3s ease both}
-.section{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease}
-.section.visible{opacity:1;transform:none}
-.chart-wrap{transition:box-shadow .2s,transform .2s}
-.chart-wrap:hover{box-shadow:0 4px 20px rgba(15,34,32,0.08);transform:translateY(-1px)}
-.callout{opacity:0;transform:translateX(-8px);transition:opacity .45s ease,transform .45s ease}
-.callout.visible{opacity:1;transform:none}
-.dual-table tbody tr{opacity:0;transform:translateY(6px);transition:opacity .35s ease,transform .35s ease}
-.dual-table tbody tr.visible{opacity:1;transform:none}
-#dot-nav{position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:50}
-#dot-nav a{width:8px;height:8px;border-radius:50%;background:var(--border);border:1px solid var(--hint);display:block;transition:background .2s,transform .2s}
-#dot-nav a.active{background:var(--accent);transform:scale(1.35)}
-@media(max-width:860px){#dot-nav{display:none}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
 </style>
 </head>
 <body>
 
-<nav>
+<div id="progress-bar"></div>
+
+<nav class="section-nav">
+  <div class="sn-dot" data-label="The Strategy" data-target="sec-1"></div>
+  <div class="sn-dot" data-label="Methodological Note" data-target="sec-2"></div>
+  <div class="sn-dot" data-label="Backtest Results" data-target="sec-3"></div>
+  <div class="sn-dot" data-label="Regime Analysis" data-target="sec-4"></div>
+  <div class="sn-dot" data-label="Risk Factors" data-target="sec-5"></div>
+</nav>
+
+<nav id="main-nav">
   <div class="nav-logo">The Intrinsic Investor</div>
   <div class="nav-links">
     <a href="/">Home</a>
@@ -230,8 +282,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
 <div style="margin-top:56px">
 <div class="container">
 
-<div class="section">
-  <div class="section-label">The Strategy</div>
+<div class="section" id="sec-1">
+  <div class="section-label"><span class="section-counter">01</span>The Strategy</div>
   <h2>How leveraged ETF financing costs create a carry trade</h2>
   <p>A 2x leveraged ETF promises exactly twice the daily return of its underlying. In practice it consistently delivers less. This gap — the tracking error — is not random noise. It is a structural, predetermined daily deduction built into the product's swap mechanics, and it accrues to the short seller unconditionally regardless of market direction.</p>
   <p>AVL, the T-Rex 2x Broadcom ETF, achieves its 2x exposure through a total return swap. The counterparty delivers 2x AVGO's daily return but charges a financing rate comprising the risk-free rate plus a spread for the difficulty of hedging a single-stock position. This cost is deducted from NAV every trading day — silently, whether AVGO rises or falls.</p>
@@ -250,8 +302,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
   </div>
 </div>
 
-<div class="section">
-  <div class="section-label">Methodological Note</div>
+<div class="section" id="sec-2">
+  <div class="section-label"><span class="section-counter">02</span>Methodological Note</div>
   <h2>The December 2025 problem — and why it matters for honest reporting</h2>
   <p>Before presenting backtest results, it is necessary to address a significant anomaly. December 2025 contributed <strong>$2,157 of the strategy's total $3,149 P&amp;L</strong> — 68% of all profit from a single month out of 18. Any unqualified presentation of headline returns would be misleading without this disclosure.</p>
   <div class="callout amber">
@@ -288,8 +340,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
   </div>
 </div>
 
-<div class="section">
-  <div class="section-label">Backtest Results</div>
+<div class="section" id="sec-3">
+  <div class="section-label"><span class="section-counter">03</span>Backtest Results</div>
   <h2>Full results — daily rebalancing, both bases</h2>
   <p>The backtest runs from AVL's inception (October 10, 2024) through March 13, 2026 across six distinct market regimes. Position: $10,000 long AVGO, $5,000 short AVL, 0.6% annual borrow, rebalanced daily.</p>
   <table class="dual-table">
@@ -340,8 +392,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
   </div>
 </div>
 
-<div class="section">
-  <div class="section-label">Regime Analysis</div>
+<div class="section" id="sec-4">
+  <div class="section-label"><span class="section-counter">04</span>Regime Analysis</div>
   <h2>Performance across six distinct market conditions</h2>
   <p>The strategy was profitable in all six regimes encountered. The daily P&amp;L correlation with AVGO's return was 0.002, confirming that market direction does not determine the sign of returns.</p>
   <div class="rtable-wrap">
@@ -359,8 +411,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
   </div>
 </div>
 
-<div class="section">
-  <div class="section-label">Risk Factors</div>
+<div class="section" id="sec-5">
+  <div class="section-label"><span class="section-counter">05</span>Risk Factors</div>
   <h2>Risks, limitations, and what could go wrong</h2>
   <h3>Sustained directional momentum</h3>
   <p>The primary risk is a prolonged unidirectional move in AVGO. Between daily rebalances the position drifts out of its 2:1 hedge ratio. Synthetic stress tests show the worst case: a +1.5%/day move over 20 consecutive days produces approximately a -4% loss on capital. This risk is symmetric — sustained down moves also hurt through the same drift mechanism.</p>
@@ -470,64 +522,52 @@ new Chart(document.getElementById('monthlyChart'),{
   }
 });
 </script>
-<div id="progress-bar"></div>
-<div id="dot-nav"></div>
+
 <script>
-// Reading progress bar
-const pb = document.getElementById('progress-bar');
+// Nav scroll
+const nav = document.getElementById('main-nav');
+window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 10); }, { passive: true });
+
+// Progress bar
+const progressBar = document.getElementById('progress-bar');
 window.addEventListener('scroll', () => {
-  const max = document.documentElement.scrollHeight - window.innerHeight;
-  pb.style.width = (window.scrollY / max * 100) + '%';
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  progressBar.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
 }, { passive: true });
 
-// Frosted nav
-const navEl = document.querySelector('nav');
-window.addEventListener('scroll', () => { navEl.classList.toggle('scrolled', window.scrollY > 10); }, { passive: true });
+// Section reveal + table reveal
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      // Also reveal tables inside this section
+      entry.target.querySelectorAll('table').forEach(t => t.classList.add('revealed'));
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.section, .callout').forEach(el => revealObserver.observe(el));
 
 // Dot nav
-const sections = document.querySelectorAll('.section');
-const dotNav = document.getElementById('dot-nav');
-if (dotNav && sections.length) {
-  sections.forEach((s, i) => {
-    if (!s.id) s.id = 'sec-' + i;
-    const a = document.createElement('a');
-    a.href = '#' + s.id;
-    a.title = s.querySelector('h2,h3') ? s.querySelector('h2,h3').textContent.trim() : '';
-    dotNav.appendChild(a);
+const sectionEls = document.querySelectorAll('.section[id]');
+const dots = document.querySelectorAll('.sn-dot');
+dots.forEach((dot, i) => {
+  dot.addEventListener('click', () => {
+    const target = document.getElementById(dot.dataset.target);
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
-}
-
-// IntersectionObserver for scroll-reveal
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('visible');
-      // Stagger table rows
-      if (e.target.classList.contains('section')) {
-        e.target.querySelectorAll('.dual-table tbody tr, table tbody tr').forEach((tr, i) => {
-          setTimeout(() => tr.classList.add('visible'), i * 40);
-        });
-        e.target.querySelectorAll('.callout').forEach((c, i) => {
-          setTimeout(() => c.classList.add('visible'), i * 80);
-        });
-      }
+});
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      dots.forEach(d => d.classList.remove('active'));
+      const activeDot = document.querySelector(`.sn-dot[data-target="${entry.target.id}"]`);
+      if (activeDot) activeDot.classList.add('active');
     }
   });
-}, { threshold: 0.08 });
-
-sections.forEach(s => io.observe(s));
-
-// Active dot nav highlight
-const dotLinks = dotNav ? dotNav.querySelectorAll('a') : [];
-const ioNav = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    const idx = Array.from(sections).indexOf(e.target);
-    if (idx >= 0 && dotLinks[idx]) {
-      dotLinks[idx].classList.toggle('active', e.isIntersecting);
-    }
-  });
-}, { threshold: 0.3 });
-sections.forEach(s => ioNav.observe(s));
+}, { threshold: 0.4 });
+sectionEls.forEach(el => sectionObserver.observe(el));
 </script>
 </body>
 </html>

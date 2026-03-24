@@ -20,24 +20,45 @@ html{scroll-behavior:smooth}
 }
 body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.7;font-size:15px}
 
-/* NAV */
-nav{position:sticky;top:0;z-index:100;background:rgba(247,244,236,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:box-shadow 0.3s;border-bottom:1px solid var(--border);padding:0 2.5rem;height:62px;display:flex;align-items:center;justify-content:space-between}
+/* G1 — Paper grain */
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23noise)' opacity='0.07'/%3E%3C/svg%3E");mix-blend-mode:multiply;opacity:0.5}
+
+/* R1 — Progress bar */
+#progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,#1a5c52,#2d9d8f);z-index:9998;transition:width 0.1s linear;box-shadow:0 0 8px rgba(26,92,82,0.4)}
+
+/* NAV — G2 Frosted */
+nav{position:sticky;top:0;z-index:100;background:rgba(247,244,236,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2.5rem;height:62px;display:flex;align-items:center;justify-content:space-between;transition:box-shadow 0.3s}
+nav.scrolled{box-shadow:0 1px 24px rgba(15,34,32,0.06)}
 .nav-logo{font-family:var(--serif);font-size:21px;font-weight:600;color:var(--ink)}
 .nav-links{display:flex;gap:1.5rem}
-.nav-links a{font-size:13px;color:var(--ink);text-decoration:none;font-weight:400;position:relative;padding-bottom:2px}
+
+/* G3 — Nav underlines */
+.nav-links a{font-size:13px;font-weight:400;color:var(--ink);text-decoration:none;transition:color .2s;position:relative;padding-bottom:2px}
+.nav-links a::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:#1a5c52;transform:scaleX(0);transform-origin:left;transition:transform 0.25s cubic-bezier(0.4,0,0.2,1)}
 .nav-links a:hover{color:var(--accent)}
+.nav-links a:hover::after{transform:scaleX(1)}
+
+/* R6 — Dot nav */
+.section-nav{position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);z-index:300;display:flex;flex-direction:column;gap:8px}
+.sn-dot{width:8px;height:8px;border-radius:50%;border:1.5px solid #8aa49e;background:transparent;cursor:pointer;transition:all 0.2s;position:relative}
+.sn-dot:hover,.sn-dot.active{background:#1a5c52;border-color:#1a5c52;transform:scale(1.25)}
+.sn-dot::before{content:attr(data-label);position:absolute;right:calc(100% + 8px);top:50%;transform:translateY(-50%);background:#0f2220;color:#fff;font-size:10px;font-weight:500;padding:3px 8px;border-radius:3px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.15s}
+.sn-dot:hover::before{opacity:1}
+@media(max-width:900px){.section-nav{display:none}}
 
 /* HERO */
-.hero{background:var(--ink);color:#fff;padding:5rem 2.5rem 4rem}
-.hero-inner{max-width:1000px;margin:0 auto}
-.hero-tag{font-family:var(--font);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--hint);margin-bottom:1.5rem;display:flex;align-items:center;gap:10px}
+.hero{background:var(--ink);color:#fff;padding:5rem 2.5rem 4rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(-55deg,transparent,transparent 40px,rgba(255,255,255,0.013) 40px,rgba(255,255,255,0.013) 41px);pointer-events:none}
+.hero-inner{max-width:1000px;margin:0 auto;position:relative;z-index:1}
+.hero-tag{font-family:var(--font);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--hint);margin-bottom:1.5rem;display:flex;align-items:center;gap:10px;opacity:0;animation:fadeUp 0.5s ease 0.05s forwards}
 .hero-tag::before{content:'';width:24px;height:1px;background:var(--hint)}
-.hero h1{font-family:var(--serif);font-size:2.5rem;font-weight:600;line-height:1.2;letter-spacing:-.01em;margin-bottom:1rem;color:#fff}
+.hero h1{font-family:var(--serif);font-size:2.5rem;font-weight:600;line-height:1.2;letter-spacing:-.01em;margin-bottom:1rem;color:#fff;opacity:0;animation:fadeUp 0.5s ease 0.12s forwards}
 .hero h1 em{font-style:italic;color:#5ab5a5}
-.hero-sub{font-size:14px;color:rgba(255,255,255,.55);max-width:700px;margin-bottom:2rem;font-weight:300;line-height:1.8}
-.hero-meta{display:flex;gap:2rem;flex-wrap:wrap}
+.hero-sub{font-size:14px;color:rgba(255,255,255,.55);max-width:700px;margin-bottom:2rem;font-weight:300;line-height:1.8;opacity:0;animation:fadeUp 0.5s ease 0.20s forwards}
+.hero-meta{display:flex;gap:2rem;flex-wrap:wrap;opacity:0;animation:fadeUp 0.5s ease 0.28s forwards}
 .hero-meta-item{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.35)}
 .hero-meta-item strong{font-family:var(--serif);color:rgba(255,255,255,.8);display:block;font-size:1.1rem;font-weight:600;font-style:italic;margin-bottom:2px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 
 /* AUTHOR BAR */
 .author-bar{background:var(--card);border-bottom:1px solid var(--border);padding:.85rem 2.5rem}
@@ -46,7 +67,10 @@ nav{position:sticky;top:0;z-index:100;background:rgba(247,244,236,0.92);backdrop
 
 /* LAYOUT */
 .container{max-width:1000px;margin:0 auto;padding:0 2.5rem}
-.section{padding:4rem 0}
+
+/* R3 — Section scroll-reveal */
+.section{padding:4rem 0;opacity:0;transform:translateY(20px);transition:opacity 0.6s cubic-bezier(0.4,0,0.2,1),transform 0.6s cubic-bezier(0.4,0,0.2,1)}
+.section.visible{opacity:1;transform:translateY(0)}
 .section-alt{background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
 h2{font-family:var(--serif);font-size:1.6rem;font-weight:600;color:var(--ink);margin-bottom:1rem;letter-spacing:-.01em;padding-bottom:.5rem;border-bottom:2px solid var(--accent)}
 h3{font-family:var(--serif);font-size:1.1rem;font-weight:600;color:var(--ink);margin:1.8rem 0 .6rem}
@@ -54,23 +78,26 @@ p{color:var(--muted);margin-bottom:1rem;font-size:14px}
 p strong{color:var(--ink)}
 
 /* ABSTRACT */
-.abstract{background:var(--card);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:1.5rem 2rem;margin:2rem 0;border:1px solid var(--border)}
+.abstract{background:var(--card);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:1.5rem 2rem;margin:2rem 0;border:1px solid var(--border);transition:box-shadow 0.2s}
+.abstract:hover{box-shadow:0 4px 16px rgba(26,92,82,0.08)}
 .abstract-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:.5rem;font-family:var(--font)}
 
 /* STAT CARDS */
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin:2rem 0}
-.stat-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.2rem 1.4rem}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.2rem 1.4rem;transition:transform 0.2s,box-shadow 0.2s}
+.stat-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.08)}
 .stat-card .label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--hint);margin-bottom:.4rem;font-family:var(--font)}
 .stat-card .value{font-family:var(--serif);font-size:1.8rem;font-weight:600;font-style:italic;letter-spacing:-.01em;line-height:1}
 .stat-card .sub{font-size:12px;color:var(--hint);margin-top:.3rem;font-family:var(--font)}
 .val-blue{color:var(--accent)}.val-green{color:var(--green)}.val-red{color:var(--red)}.val-amber{color:var(--amber)}
 
-/* CALLOUTS */
-.callout{border-radius:8px;padding:1.2rem 1.5rem;margin:1.5rem 0;display:flex;gap:1rem;align-items:flex-start}
+/* CALLOUTS — R3 */
+.callout{border-radius:8px;padding:1.2rem 1.5rem;margin:1.5rem 0;display:flex;gap:1rem;align-items:flex-start;opacity:0;transform:translateX(-8px);transition:opacity 0.5s ease,transform 0.5s ease}
 .callout-info{background:var(--blue-bg);border:1px solid var(--blue-border)}
 .callout-warn{background:#FFFBEB;border:1px solid #FDE68A}
 .callout-danger{background:#FEF2F2;border:1px solid #FECACA}
 .callout-success{background:#ECFDF5;border:1px solid #A7F3D0}
+.callout.visible,.callout-info.visible,.callout-warn.visible,.callout-danger.visible,.callout-success.visible{opacity:1;transform:translateX(0)}
 .callout-icon{font-size:1.1rem;margin-top:.1rem}
 .callout-text{font-size:13px;color:var(--muted);line-height:1.65}
 .callout-text strong{display:block;margin-bottom:.2rem;color:var(--ink)}
@@ -92,8 +119,22 @@ tr:hover td{background:var(--bg2)}
 .badge-purple{background:#EDE9FE;color:#5B21B6}
 .tag-best{background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:.1rem .45rem;border-radius:3px;margin-left:.4rem;vertical-align:middle;font-family:var(--font)}
 
-/* CHARTS */
-.chart-wrap{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1.5rem 0}
+/* R4 — Table row animation */
+table.revealed tbody tr{opacity:0;transform:translateX(-8px);animation:rowReveal 0.35s ease forwards}
+@keyframes rowReveal{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
+table.revealed tbody tr:nth-child(1){animation-delay:0.03s}
+table.revealed tbody tr:nth-child(2){animation-delay:0.07s}
+table.revealed tbody tr:nth-child(3){animation-delay:0.11s}
+table.revealed tbody tr:nth-child(4){animation-delay:0.15s}
+table.revealed tbody tr:nth-child(5){animation-delay:0.19s}
+table.revealed tbody tr:nth-child(6){animation-delay:0.23s}
+table.revealed tbody tr:nth-child(7){animation-delay:0.27s}
+table.revealed tbody tr:nth-child(8){animation-delay:0.31s}
+table.revealed tbody tr:nth-child(9){animation-delay:0.35s}
+
+/* CHARTS — R5 */
+.chart-wrap{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1.5rem 0;transition:box-shadow 0.2s}
+.chart-wrap:hover{box-shadow:0 4px 20px rgba(15,34,32,0.06)}
 .chart-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--hint);margin-bottom:1rem;font-family:var(--font)}
 .chart-img{width:100%;border-radius:6px;display:block}
 
@@ -145,32 +186,26 @@ footer strong{color:rgba(255,255,255,.7)}
   nav,.hero-inner,.container,.author-bar{padding-left:1.25rem;padding-right:1.25rem}
   footer{padding:2rem 1.25rem}
 }
-body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23noise)' opacity='0.07'/%3E%3C/svg%3E");mix-blend-mode:multiply;opacity:0.5}
-#progress-bar{position:fixed;top:0;left:0;height:2px;background:#1a5c52;width:0%;z-index:200;transition:width .1s linear}
-nav.scrolled{box-shadow:0 1px 24px rgba(15,34,32,0.06)}
-.nav-links a::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform 0.25s cubic-bezier(0.4,0,0.2,1)}
-.nav-links a:hover::after{transform:scaleX(1)}
-@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-.hero-tag{animation:fadeUp .6s ease both}
-.hero h1{animation:fadeUp .6s .1s ease both}
-.hero p,.hero-sub{animation:fadeUp .6s .2s ease both}
-.hero-meta{animation:fadeUp .6s .3s ease both}
-.section{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease}
-.section.visible{opacity:1;transform:none}
-.chart-wrap{transition:box-shadow .2s,transform .2s}
-.chart-wrap:hover{box-shadow:0 4px 20px rgba(15,34,32,0.08);transform:translateY(-1px)}
-.callout{opacity:0;transform:translateX(-8px);transition:opacity .45s ease,transform .45s ease}
-.callout.visible{opacity:1;transform:none}
-tbody tr{opacity:0;transform:translateY(6px);transition:opacity .35s ease,transform .35s ease}
-tbody tr.visible{opacity:1;transform:none}
-#dot-nav{position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:50}
-#dot-nav a{width:8px;height:8px;border-radius:50%;background:var(--border);border:1px solid var(--hint);display:block;transition:background .2s,transform .2s}
-#dot-nav a.active{background:var(--accent);transform:scale(1.35)}
-@media(max-width:860px){#dot-nav{display:none}}
+
+/* G4 — Prefers-reduced-motion */
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
 </style>
 </head>
 <body>
+
+<div id="progress-bar"></div>
+
+<nav class="section-nav" id="sectionNav">
+  <div class="sn-dot" data-label="Introduction" data-target="introduction"></div>
+  <div class="sn-dot" data-label="Strategy Mechanics" data-target="mechanics"></div>
+  <div class="sn-dot" data-label="Data &amp; Methodology" data-target="methodology"></div>
+  <div class="sn-dot" data-label="Results" data-target="results"></div>
+  <div class="sn-dot" data-label="Year-by-Year" data-target="yearly"></div>
+  <div class="sn-dot" data-label="Optimal Combination" data-target="optimal"></div>
+  <div class="sn-dot" data-label="Breakdown" data-target="breakdown"></div>
+  <div class="sn-dot" data-label="Risks &amp; Limitations" data-target="limitations"></div>
+  <div class="sn-dot" data-label="Conclusion" data-target="conclusion"></div>
+</nav>
 
 <!-- NAV -->
 <nav>
@@ -213,7 +248,7 @@ tbody tr.visible{opacity:1;transform:none}
 </div>
 
 <!-- SECTION 1 -->
-<div class="section">
+<div class="section" id="introduction">
   <div class="container">
     <h2>1. Introduction</h2>
     <p>The Wheel Strategy is one of the most popular systematic options strategies among retail traders — and for good reason. The concept is intuitive: sell a cash-secured put, collect premium, get assigned if the stock falls, then sell covered calls until the shares get called away. Repeat indefinitely.</p>
@@ -270,7 +305,7 @@ tbody tr.visible{opacity:1;transform:none}
 </div>
 
 <!-- SECTION 3 -->
-<div class="section">
+<div class="section" id="methodology">
   <div class="container">
     <h2>3. Data &amp; Methodology</h2>
     <p>All options data is sourced from <strong>OptionMetrics (Ivy DB US)</strong> accessed via the WRDS research platform — the same institutional-grade data used by academic researchers and professional quants. Daily option price records are drawn from the <code style="background:var(--bg3);padding:.1rem .35rem;border-radius:3px;font-family:var(--mono);font-size:.85rem;color:var(--accent)">opprcd{year}</code> tables, with underlying SPY closing prices from <code style="background:var(--bg3);padding:.1rem .35rem;border-radius:3px;font-family:var(--mono);font-size:.85rem;color:var(--accent)">secprd{year}</code>.</p>
@@ -461,7 +496,7 @@ tbody tr.visible{opacity:1;transform:none}
 </div>
 
 <!-- SECTION 9 -->
-<div class="section">
+<div class="section" id="conclusion">
   <div class="container">
     <h2>9. Conclusion</h2>
     <p>The Wheel Strategy on SPY is not a way to beat the market. This backtest makes that clear — across 8 years and 20 parameter combinations, no version of the wheel came close to matching buy-and-hold SPY's 140% total return.</p>
@@ -481,55 +516,6 @@ tbody tr.visible{opacity:1;transform:none}
     <p style="margin-top:1rem;font-size:12px;opacity:.6">This report is for informational and educational purposes only. Nothing here constitutes financial advice. Options trading involves significant risk of loss.</p>
   </div>
 </footer>
-
-<div id="progress-bar"></div>
-<div id="dot-nav"></div>
-<script>
-const pb = document.getElementById('progress-bar');
-window.addEventListener('scroll', () => {
-  const max = document.documentElement.scrollHeight - window.innerHeight;
-  pb.style.width = (window.scrollY / max * 100) + '%';
-}, { passive: true });
-
-const navEl = document.querySelector('nav');
-window.addEventListener('scroll', () => { navEl.classList.toggle('scrolled', window.scrollY > 10); }, { passive: true });
-
-const sections = document.querySelectorAll('.section');
-const dotNav = document.getElementById('dot-nav');
-if (dotNav && sections.length) {
-  sections.forEach((s, i) => {
-    if (!s.id) s.id = 'sec-' + i;
-    const a = document.createElement('a');
-    a.href = '#' + s.id;
-    a.title = s.querySelector('h2,.section-title,.section-label') ? (s.querySelector('h2,.section-title,.section-label').textContent.trim()) : '';
-    dotNav.appendChild(a);
-  });
-}
-
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('visible');
-      e.target.querySelectorAll('tbody tr').forEach((tr, i) => {
-        setTimeout(() => tr.classList.add('visible'), i * 40);
-      });
-      e.target.querySelectorAll('.callout').forEach((c, i) => {
-        setTimeout(() => c.classList.add('visible'), i * 80);
-      });
-    }
-  });
-}, { threshold: 0.08 });
-sections.forEach(s => io.observe(s));
-
-const dotLinks = dotNav ? dotNav.querySelectorAll('a') : [];
-const ioNav = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    const idx = Array.from(sections).indexOf(e.target);
-    if (idx >= 0 && dotLinks[idx]) dotLinks[idx].classList.toggle('active', e.isIntersecting);
-  });
-}, { threshold: 0.3 });
-sections.forEach(s => ioNav.observe(s));
-</script>
 
 <script>
 const combos=[
@@ -590,6 +576,45 @@ const years=[2018,2019,2020,2021,2022,2023,2024,2025];
 const spyRet=[-4.6,31.5,18.4,28.7,-18.2,26.3,23.3,8.1];
 const wheelRet=[3.2,4.1,2.8,5.6,3.4,6.2,7.1,6.4];
 new Chart(document.getElementById('yearlyChart'),{type:'bar',data:{labels:years,datasets:[{label:'SPY Buy & Hold',data:spyRet,backgroundColor:spyRet.map(v=>v>=0?'rgba(14,159,110,.75)':'rgba(224,36,36,.75)'),borderRadius:4,order:2},{label:'Wheel 10Δ / 60 DTE',data:wheelRet,type:'line',borderColor:'#1a5c52',backgroundColor:'rgba(26,92,82,.1)',borderWidth:2.5,pointBackgroundColor:'#1a5c52',pointRadius:5,fill:true,tension:0.3,order:1}]},options:{responsive:true,plugins:{legend:{display:true,position:'top',labels:{font:{size:11}}},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}%`}}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{ticks:{callback:v=>v+'%',font:{size:10}},grid:{color:'rgba(0,0,0,.05)'},title:{display:true,text:'Annual Return (%)',font:{size:10}}}}}});
+
+/* R7 — Interactive JS */
+const mainNav = document.querySelector('nav:not(.section-nav)');
+window.addEventListener('scroll', () => { mainNav.classList.toggle('scrolled', window.scrollY > 10); }, { passive: true });
+
+const progressBar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const d = document.documentElement.scrollHeight - window.innerHeight;
+  progressBar.style.width = (d > 0 ? (window.scrollY / d) * 100 : 0) + '%';
+}, { passive: true });
+
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      entry.target.querySelectorAll('table').forEach(t => t.classList.add('revealed'));
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.section, .callout, .callout-info, .callout-warn, .callout-danger, .callout-success').forEach(el => revealObserver.observe(el));
+
+const dots = document.querySelectorAll('.sn-dot');
+dots.forEach(dot => {
+  dot.addEventListener('click', () => {
+    const target = document.getElementById(dot.dataset.target);
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      dots.forEach(d => d.classList.remove('active'));
+      const activeDot = document.querySelector(`.sn-dot[data-target="${entry.target.id}"]`);
+      if (activeDot) activeDot.classList.add('active');
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.section[id]').forEach(el => sectionObserver.observe(el));
 </script>
 </body>
 </html>
