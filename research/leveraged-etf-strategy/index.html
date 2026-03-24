@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exploiting Leveraged ETF Decay — TheIntrinsicInvestor</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f7f4ec;--bg2:#f0ece2;--bg3:#e8e3d8;
+  --ink:#0f2220;--ink2:#2a3c38;--muted:#4a6460;--hint:#8aa49e;
+  --border:#e2ddd0;--card:#fff;
+  --accent:#1a5c52;--accent2:#144a42;
+  --green:#0d6e4e;--green2:#059669;--green-bg:#ecfdf5;--green-border:#a7f3d0;
+  --red:#991b1b;--red2:#dc2626;--red-bg:#fef2f2;--red-border:#fca5a5;
+  --blue:#1e40af;--blue2:#2563eb;--blue-bg:#eff6ff;--blue-border:#bfdbfe;
+  --amber:#92400e;--amber-bg:#fffbeb;--amber-border:#fcd34d;
+  --purple:#5b21b6;--purple-bg:#f5f3ff;--purple-border:#c4b5fd;
+}
+body{font-family:'Inter',sans-serif;color:var(--ink);background:var(--bg);font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between;height:62px}
+.nav-logo{font-family:'Fraunces',serif;font-size:21px;font-weight:600;color:var(--ink);text-decoration:none}
+.nav-links{display:flex;gap:2rem}
+.nav-links a{font-size:13px;color:var(--ink);text-decoration:none;font-weight:400;transition:color .2s}
+.nav-links a:hover{color:var(--accent)}
+
+/* HERO */
+.hero{background:var(--ink);color:#fff;padding:72px 0 64px;position:relative}
+.hero-inner{max-width:800px;margin:0 auto;padding:0 2.5rem}
+.hero-tag{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--hint);margin-bottom:1.5rem;display:flex;align-items:center;gap:10px}
+.hero-tag::before{content:'';width:24px;height:1px;background:var(--hint)}
+.hero h1{font-family:'Fraunces',serif;font-size:2.4rem;font-weight:600;line-height:1.2;letter-spacing:-.01em;margin-bottom:1.25rem;color:#fff}
+.hero h1 em{font-style:italic;color:#5ab5a5}
+.hero-sub{font-size:14px;line-height:1.8;color:rgba(255,255,255,.55);max-width:640px;margin-bottom:2rem;font-weight:300}
+.hero-meta{display:flex;gap:1.5rem;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.3);border-top:1px solid rgba(255,255,255,.08);padding-top:1.25rem}
+
+/* KPI STRIP */
+.kpi-strip{max-width:800px;margin:-36px auto 0;padding:0 2.5rem;position:relative;z-index:10}
+.kpi-note{background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:8px 8px 0 0;padding:8px 16px;font-size:11.5px;color:var(--amber);display:flex;align-items:center;gap:8px;font-family:'Inter',sans-serif}
+.kpi-note strong{font-weight:600}
+.kpi-tabs{display:flex;background:var(--bg3);border:1px solid var(--border);border-top:none;overflow:hidden}
+.kpi-tab{flex:1;padding:10px 16px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;cursor:pointer;border:none;background:var(--bg3);color:var(--hint);border-bottom:2px solid transparent;transition:all .15s;font-family:'Inter',sans-serif}
+.kpi-tab.active-full{background:var(--card);color:var(--ink);border-bottom:2px solid var(--ink)}
+.kpi-tab.active-adj{background:var(--card);color:var(--accent);border-bottom:2px solid var(--accent)}
+.kpi-grid{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;overflow:hidden}
+.kpi-panel{display:none;grid-template-columns:repeat(4,1fr)}
+.kpi-panel.active{display:grid}
+.kpi-cell{padding:20px;border-right:1px solid var(--border)}
+.kpi-cell:last-child{border-right:none}
+.kpi-cell .k{font-family:'Inter',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--hint);margin-bottom:6px}
+.kpi-cell .v{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:500;line-height:1}
+.kpi-cell .sub{font-size:11px;color:var(--hint);margin-top:5px;font-family:'Inter',sans-serif}
+.kpi-cell .sub.up{color:var(--green2)}.kpi-cell .sub.dn{color:var(--red2)}.kpi-cell .sub.neu{color:var(--blue2)}
+.pos{color:var(--green2)}.neg{color:var(--red2)}.neu{color:var(--blue2)}
+
+/* LAYOUT */
+.container{max-width:800px;margin:0 auto;padding:0 2.5rem}
+.section{padding:52px 0;border-bottom:1px solid var(--border)}
+.section:last-of-type{border-bottom:none}
+.section-label{display:flex;align-items:center;gap:10px;font-family:'Inter',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin-bottom:1.25rem}
+.section-label::before{content:'';display:block;width:24px;height:1px;background:var(--accent)}
+.section h2{font-family:'Fraunces',serif;font-size:1.65rem;font-weight:600;letter-spacing:-.01em;color:var(--ink);margin-bottom:1rem}
+.section h3{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:600;color:var(--ink);margin:2rem 0 .75rem}
+p{color:var(--muted);margin-bottom:1rem;font-size:14px}
+p:last-child{margin-bottom:0}
+strong{font-weight:600;color:var(--ink)}
+
+/* CALLOUTS */
+.callout{border-radius:8px;padding:1rem 1.25rem;margin:1.5rem 0;display:flex;gap:14px}
+.callout-icon{font-size:16px;flex-shrink:0;margin-top:2px}
+.callout p{font-size:13px;margin:0;line-height:1.7}
+.callout.green{background:var(--green-bg);border:1px solid var(--green-border)}
+.callout.red{background:var(--red-bg);border:1px solid var(--red-border)}
+.callout.blue{background:var(--blue-bg);border:1px solid var(--blue-border)}
+.callout.amber{background:var(--amber-bg);border:1px solid var(--amber-border)}
+.callout.purple{background:var(--purple-bg);border:1px solid var(--purple-border)}
+
+/* TABLES */
+.dual-table{width:100%;border-collapse:collapse;font-size:13px;margin:1.5rem 0;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.dual-table thead{background:var(--bg3)}
+.dual-table th{padding:10px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--hint);border-bottom:1px solid var(--border);text-align:left;font-family:'Inter',sans-serif}
+.dual-table th.adj{color:var(--accent);background:rgba(26,92,82,.06)}
+.dual-table td{padding:11px 14px;border-bottom:1px solid var(--border);color:var(--muted)}
+.dual-table tr:last-child td{border-bottom:none}
+.dual-table td.metric{color:var(--hint);font-size:12px}
+.dual-table td.full{font-weight:600;color:var(--ink)}
+.dual-table td.adj{font-weight:600;background:rgba(26,92,82,.04);color:var(--accent)}
+.dual-table td.weekly{font-weight:500;color:var(--hint)}
+
+/* CHARTS */
+.chart-wrap{margin:1.75rem 0}
+.chart-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.75rem;flex-wrap:wrap;gap:8px}
+.chart-title{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--hint)}
+.legend{display:flex;gap:1rem;flex-wrap:wrap}
+.legend span{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--hint);font-family:'Inter',sans-serif}
+.legend-dot{width:10px;height:3px;border-radius:2px;display:inline-block}
+.chart-box{position:relative;width:100%;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.25rem}
+
+/* REGIME TABLE */
+.rtable-wrap{margin:1.25rem 0;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.rtable{width:100%;border-collapse:collapse;font-size:13px}
+.rtable thead{background:var(--bg3)}
+.rtable th{text-align:left;padding:10px 16px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--hint);border-bottom:1px solid var(--border);font-family:'Inter',sans-serif}
+.rtable td{padding:12px 16px;border-bottom:1px solid var(--border);color:var(--muted)}
+.rtable tr:last-child td{border-bottom:none}
+.rtable tr:hover td{background:var(--bg2)}
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;font-family:'Inter',sans-serif}
+.badge.pos{background:var(--green-bg);color:var(--green)}
+.badge.exc{background:#f0fdf4;color:#15803d;border:1px solid #86efac}
+.badge.warn{background:var(--amber-bg);color:var(--amber)}
+
+/* HIGHLIGHT BOX */
+.highlight-box{background:var(--ink);border-radius:8px;padding:2rem;margin:2rem 0;color:#fff}
+.highlight-box .hb-label{font-family:'Inter',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.35);margin-bottom:1.25rem}
+.hb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+.hb-cell .hb-val{font-family:'Fraunces',serif;font-size:1.75rem;font-style:italic;color:#5ab5a5;margin-bottom:.25rem}
+.hb-cell .hb-key{font-family:'Inter',sans-serif;font-size:11px;color:rgba(255,255,255,.35)}
+
+/* SCENARIO GRID */
+.scenario-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin:1.5rem 0}
+.scenario-card{border-radius:8px;padding:1.25rem;border:1px solid var(--border)}
+.scenario-card.best{border-color:var(--green-border);background:var(--green-bg)}
+.scenario-card.mid{border-color:var(--blue-border);background:var(--blue-bg)}
+.scenario-card.worst{border-color:var(--red-border);background:var(--red-bg)}
+.scenario-card .sc-label{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem}
+.scenario-card.best .sc-label{color:var(--green)}
+.scenario-card.mid .sc-label{color:var(--blue2)}
+.scenario-card.worst .sc-label{color:var(--red2)}
+.scenario-card .sc-cagr{font-family:'Fraunces',serif;font-size:1.75rem;font-style:italic;margin-bottom:.25rem}
+.scenario-card.best .sc-cagr{color:var(--green2)}
+.scenario-card.mid .sc-cagr{color:var(--blue2)}
+.scenario-card.worst .sc-cagr{color:var(--red2)}
+.scenario-card .sc-desc{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);line-height:1.6}
+
+/* FOOTER */
+footer{background:var(--ink);color:#fff;padding:3rem 2.5rem}
+.footer-inner{max-width:800px;margin:0 auto}
+.footer-logo{font-family:'Inter',sans-serif;font-size:14px;font-weight:500;color:rgba(255,255,255,.45);margin-bottom:.5rem}
+.footer-sub{font-family:'Inter',sans-serif;font-size:12px;color:rgba(255,255,255,.25);line-height:1.7}
+.footer-bottom{margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,.08);font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.2);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+@media(max-width:640px){
+  .kpi-panel{grid-template-columns:1fr 1fr}
+  .scenario-grid{grid-template-columns:1fr}
+  .hb-grid{grid-template-columns:1fr 1fr}
+  .hero h1{font-size:1.8rem}
+  nav,.hero-inner,.container,.footer-inner,.kpi-strip{padding-left:1.25rem;padding-right:1.25rem}
+  .nav-links{gap:16px}
+  .table-wrap{overflow-x:auto}
+  .footer-bottom{flex-direction:column;gap:8px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">The Intrinsic Investor</div>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/research">Research</a>
+    <a href="/about">About</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Systematic Market Research</div>
+    <h1>Exploiting <em>Leveraged ETF Decay</em>:<br>A Systematic Carry Trade on AVGO / AVL</h1>
+    <div class="hero-sub">Single-stock leveraged ETFs bleed value daily through swap financing costs. This paper constructs a market-neutral carry trade to capture that bleed — and presents results both with and without a one-off December 2025 volatility event that materially distorts the headline figures.</div>
+    <div class="hero-meta">
+      <span>By: Brian Liew (LSE, BSc Accounting and Finance)</span>
+      <span>Oct 2024 – Mar 2026</span>
+      <span>355 trading days</span>
+      <span>Data: Compustat via WRDS</span>
+    </div>
+  </div>
+</div>
+
+<div class="kpi-strip">
+  <div class="kpi-note">
+    <span>&#9888;</span>
+    <strong>Reporting note:</strong>&nbsp;Figures shown on two bases — including and excluding December 2025, a one-off volatility event contributing 68% of total P&amp;L. The adjusted figures are the author's preferred basis.
+  </div>
+  <div class="kpi-tabs">
+    <button class="kpi-tab active-full" onclick="showPanel('full',this)">Full sample (incl. Dec 2025)</button>
+    <button class="kpi-tab" onclick="showPanel('adj',this)">Adjusted (excl. Dec windfall)</button>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi-panel active" id="panel-full">
+      <div class="kpi-cell"><div class="k">CAGR</div><div class="v pos">21.45%</div><div class="sub dn">15.96% adjusted</div></div>
+      <div class="kpi-cell"><div class="k">Sharpe ratio</div><div class="v neu">1.28</div><div class="sub neu">1.33 adjusted</div></div>
+      <div class="kpi-cell"><div class="k">Max drawdown</div><div class="v pos">-0.97%</div><div class="sub neu">Unchanged in both</div></div>
+      <div class="kpi-cell"><div class="k">Beta vs SPY</div><div class="v pos">0.042</div><div class="sub neu">Near market-neutral</div></div>
+    </div>
+    <div class="kpi-panel" id="panel-adj">
+      <div class="kpi-cell"><div class="k">CAGR (adjusted)</div><div class="v pos">15.96%</div><div class="sub up">vs SPY 9.93%</div></div>
+      <div class="kpi-cell"><div class="k">Sharpe (adjusted)</div><div class="v neu">1.33</div><div class="sub neu">Structural carry only</div></div>
+      <div class="kpi-cell"><div class="k">Max drawdown</div><div class="v pos">-0.97%</div><div class="sub up">Sub-1% regardless</div></div>
+      <div class="kpi-cell"><div class="k">Beta vs SPY</div><div class="v pos">0.042</div><div class="sub up">Near market-neutral</div></div>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:56px">
+<div class="container">
+
+<div class="section">
+  <div class="section-label">The Strategy</div>
+  <h2>How leveraged ETF financing costs create a carry trade</h2>
+  <p>A 2x leveraged ETF promises exactly twice the daily return of its underlying. In practice it consistently delivers less. This gap — the tracking error — is not random noise. It is a structural, predetermined daily deduction built into the product's swap mechanics, and it accrues to the short seller unconditionally regardless of market direction.</p>
+  <p>AVL, the T-Rex 2x Broadcom ETF, achieves its 2x exposure through a total return swap. The counterparty delivers 2x AVGO's daily return but charges a financing rate comprising the risk-free rate plus a spread for the difficulty of hedging a single-stock position. This cost is deducted from NAV every trading day — silently, whether AVGO rises or falls.</p>
+  <div class="callout green">
+    <div class="callout-icon">&#128161;</div>
+    <p><strong>Daily mechanics:</strong> If AVGO rises 1%, AVL delivers approximately +1.95% not +2.00%. If AVGO falls 1%, AVL delivers approximately -2.05% not -2.00%. The drag operates in both directions. The correlation of daily strategy P&amp;L with AVGO's return in this backtest is <strong>0.002</strong> — statistically indistinguishable from zero.</p>
+  </div>
+  <p>The position is structured as <strong>$10,000 long AVGO / $5,000 short AVL</strong>, rebalanced daily to maintain delta neutrality. The gross spread — observed tracking error of 23.12% minus borrow cost of 0.6% — is the return available before friction.</p>
+  <div class="highlight-box">
+    <div class="hb-label">Tracking error anatomy — what drives the carry</div>
+    <div class="hb-grid">
+      <div class="hb-cell"><div class="hb-val">~7%</div><div class="hb-key">Risk-free rate passed through</div></div>
+      <div class="hb-cell"><div class="hb-val">~15%</div><div class="hb-key">Bank swap spread (single-stock illiquidity premium)</div></div>
+      <div class="hb-cell"><div class="hb-val">~1%</div><div class="hb-key">ETF expense ratio</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">Methodological Note</div>
+  <h2>The December 2025 problem — and why it matters for honest reporting</h2>
+  <p>Before presenting backtest results, it is necessary to address a significant anomaly. December 2025 contributed <strong>$2,157 of the strategy's total $3,149 P&amp;L</strong> — 68% of all profit from a single month out of 18. Any unqualified presentation of headline returns would be misleading without this disclosure.</p>
+  <div class="callout amber">
+    <div class="callout-icon">&#9888;</div>
+    <p><strong>What caused the December anomaly:</strong> AVGO fell 14.1% in December 2025. The daily compounding mechanic of a 2x leveraged ETF causes losses to compound asymmetrically over sustained directional moves — volatility decay. AVL fell substantially more than 2x over the month, generating outsized tracking error of 17.4% against a typical monthly run-rate of 0.3–1.7%. This P&amp;L was real, but it required a specific confluence of high volatility and directional momentum that cannot be reliably expected to repeat.</p>
+  </div>
+  <div class="chart-wrap">
+    <div class="chart-header">
+      <div class="chart-title">Monthly tracking error (%) — December clearly anomalous</div>
+      <div class="legend">
+        <span><span class="legend-dot" style="background:#059669"></span>Structural carry (typical)</span>
+        <span><span class="legend-dot" style="background:#dc2626"></span>Dec 2025 vol event</span>
+      </div>
+    </div>
+    <div class="chart-box" style="height:230px"><canvas id="teChart"></canvas></div>
+  </div>
+  <p>All results in this paper are presented on two bases: <strong>full sample</strong> (including December) and <strong>adjusted</strong> (December P&amp;L replaced with a structural-TE-only estimate). The adjusted figures are the author's preferred basis for evaluating forward-looking merit.</p>
+  <div class="scenario-grid">
+    <div class="scenario-card best">
+      <div class="sc-label">Conservative estimate</div>
+      <div class="sc-cagr">15.96%</div>
+      <div class="sc-desc">Dec = structural TE only. The repeatable carry. Author's preferred basis.</div>
+    </div>
+    <div class="scenario-card mid">
+      <div class="sc-label">Full sample</div>
+      <div class="sc-cagr">21.45%</div>
+      <div class="sc-desc">All P&amp;L included. Inflated by Dec anomaly. Accurate but not extrapolatable.</div>
+    </div>
+    <div class="scenario-card worst">
+      <div class="sc-label">Dec fully excluded</div>
+      <div class="sc-cagr">~7.0%</div>
+      <div class="sc-desc">December set to zero. Overly harsh — carry still accrued. Shown for completeness.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">Backtest Results</div>
+  <h2>Full results — daily rebalancing, both bases</h2>
+  <p>The backtest runs from AVL's inception (October 10, 2024) through March 13, 2026 across six distinct market regimes. Position: $10,000 long AVGO, $5,000 short AVL, 0.6% annual borrow, rebalanced daily.</p>
+  <table class="dual-table">
+    <thead>
+      <tr>
+        <th>Metric</th>
+        <th>Full sample</th>
+        <th class="adj">Adjusted (excl. Dec windfall)</th>
+        <th>Weekly rebal (full)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="metric">Total return</td><td class="full pos">+31.49%</td><td class="adj pos">+13.39%</td><td class="weekly">+50.07%</td></tr>
+      <tr><td class="metric">CAGR</td><td class="full pos">+21.45%</td><td class="adj pos">+15.96%</td><td class="weekly">+33.40%</td></tr>
+      <tr><td class="metric">SPY CAGR (same period)</td><td class="full">+9.93%</td><td class="adj">+9.93%</td><td class="weekly">+9.93%</td></tr>
+      <tr><td class="metric">Sharpe ratio</td><td class="full">1.28</td><td class="adj">1.33</td><td class="weekly">1.50</td></tr>
+      <tr><td class="metric">Calmar ratio</td><td class="full pos">22.06</td><td class="adj pos">16.45</td><td class="weekly neg">5.38</td></tr>
+      <tr><td class="metric">Max drawdown</td><td class="full pos">-0.97%</td><td class="adj pos">-0.97%</td><td class="weekly neg">-6.21%</td></tr>
+      <tr><td class="metric">Beta vs SPY</td><td class="full pos">0.042</td><td class="adj pos">0.042</td><td class="weekly neg">0.222</td></tr>
+      <tr><td class="metric">Win rate</td><td class="full">60.3%</td><td class="adj">60.3%</td><td class="weekly">55.5%</td></tr>
+      <tr><td class="metric">Win / loss ratio</td><td class="full">1.95x</td><td class="adj">1.95x</td><td class="weekly">1.33x</td></tr>
+    </tbody>
+  </table>
+  <div class="callout purple">
+    <div class="callout-icon">&#128204;</div>
+    <p><strong>Why daily rebalancing dominates on a risk-adjusted basis:</strong> Weekly produces a higher headline CAGR (33.4% vs 21.5%), but 87% of that advantage came from a single month. On an adjusted basis both are comparable in CAGR, while daily carries 6x less drawdown and a beta of 0.04 vs 0.22. The weekly strategy's superior headline figures reflect a momentum windfall, not structural edge.</p>
+  </div>
+  <div class="chart-wrap">
+    <div class="chart-header">
+      <div class="chart-title">Cumulative P&amp;L — daily vs weekly rebalancing</div>
+      <div class="legend">
+        <span><span class="legend-dot" style="background:#059669"></span>Daily rebalancing</span>
+        <span><span class="legend-dot" style="background:#93c5fd"></span>Weekly (comparison)</span>
+      </div>
+    </div>
+    <div class="chart-box" style="height:280px"><canvas id="cumChart"></canvas></div>
+  </div>
+  <h3>Monthly P&amp;L — December highlighted as anomaly</h3>
+  <div class="chart-wrap">
+    <div class="chart-header">
+      <div class="chart-title">Monthly P&amp;L, $10,000 initial capital</div>
+      <div class="legend">
+        <span><span class="legend-dot" style="background:#059669"></span>Normal carry months</span>
+        <span><span class="legend-dot" style="background:#dc2626"></span>Dec 2025 vol event</span>
+      </div>
+    </div>
+    <div class="chart-box" style="height:250px"><canvas id="monthlyChart"></canvas></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">Regime Analysis</div>
+  <h2>Performance across six distinct market conditions</h2>
+  <p>The strategy was profitable in all six regimes encountered. The daily P&amp;L correlation with AVGO's return was 0.002, confirming that market direction does not determine the sign of returns.</p>
+  <div class="rtable-wrap">
+    <table class="rtable">
+      <thead><tr><th>Event</th><th>AVGO return</th><th>Strategy P&amp;L</th><th>Classification</th></tr></thead>
+      <tbody>
+        <tr><td>AVGO bull run (Oct–Dec 2024)</td><td class="pos">+27.7%</td><td class="pos">+$115</td><td><span class="badge pos">Normal carry</span></td></tr>
+        <tr><td>DeepSeek crash (Jan 2025)</td><td class="neg">-6.4%</td><td class="pos">+$42</td><td><span class="badge pos">Normal carry</span></td></tr>
+        <tr><td>Liberation Day (Apr 2025)</td><td class="pos">+7.6%</td><td class="pos">+$39</td><td><span class="badge pos">Normal carry</span></td></tr>
+        <tr><td>AVGO earnings spike (Sep 2025)</td><td class="pos">+22.1%</td><td class="pos">+$48</td><td><span class="badge pos">Normal carry</span></td></tr>
+        <tr><td>December 2025 selloff</td><td class="neg">-17.6%</td><td class="pos">+$2,102</td><td><span class="badge warn">Vol decay event — not repeatable</span></td></tr>
+        <tr><td>2026 YTD (to Mar 13)</td><td class="neg">-7.3%</td><td class="pos">+$195</td><td><span class="badge pos">Normal carry</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">Risk Factors</div>
+  <h2>Risks, limitations, and what could go wrong</h2>
+  <h3>Sustained directional momentum</h3>
+  <p>The primary risk is a prolonged unidirectional move in AVGO. Between daily rebalances the position drifts out of its 2:1 hedge ratio. Synthetic stress tests show the worst case: a +1.5%/day move over 20 consecutive days produces approximately a -4% loss on capital. This risk is symmetric — sustained down moves also hurt through the same drift mechanism.</p>
+  <div class="callout red">
+    <div class="callout-icon">&#9889;</div>
+    <p><strong>Momentum risk is symmetric.</strong> The ideal environment is choppy and mean-reverting, where both structural carry and volatility decay accrue. A trending market in either direction gradually unwinds the hedge. Daily rebalancing substantially reduces but does not eliminate this exposure.</p>
+  </div>
+  <h3>Borrow cost uncertainty</h3>
+  <p>The 0.6% borrow cost estimate reflects current market conditions and is not fixed. Borrow costs for single-stock ETFs can spike when the underlying moves strongly — potentially forcing closure at an inopportune time. This should be monitored daily through your prime broker.</p>
+  <h3>Short data history</h3>
+  <p>AVL launched in October 2024, giving this backtest only 17 months of live data. The sample does not include a prolonged bear market or rising-rate environment. The structural tracking error argument is robust, but its specific magnitude in different regimes remains untested.</p>
+  <h3>Conclusion</h3>
+  <p>On the adjusted basis — stripping the December volatility windfall — this strategy produced a CAGR of approximately 15.96% at near-zero market beta and a maximum drawdown under 1%. That is a genuinely attractive risk-adjusted profile, and it rests on a structural argument that is observable and persistent across all 17 months of available data.</p>
+  <p>The full-sample CAGR of 21.45% is accurate but misleading as a forward-looking estimate. The author's view is that the honest expected return is in the range of 11–16% annually — the lower bound representing conservative structural carry, the upper bound allowing for occasional volatility decay events. <strong>Investors should base any allocation decision on the adjusted figures presented here, not the headline number.</strong></p>
+</div>
+
+</div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">The Intrinsic Investor</div>
+    <div class="footer-sub">Systematic research at the intersection of quantitative finance and public markets.<br>Published by Brian Liew, BSc Accounting and Finance, London School of Economics.</div>
+    <div class="footer-bottom">
+      <span>Data: Compustat / WRDS · Oct 2024 – Mar 2026 · 355 trading days</span>
+      <span>For informational purposes only. Not investment advice.</span>
+    </div>
+  </div>
+</footer>
+
+<script id="chartData" type="application/json">
+{"dates":["2024-10-13","2024-10-20","2024-10-27","2024-11-03","2024-11-10","2024-11-17","2024-11-24","2024-12-01","2024-12-08","2024-12-15","2024-12-22","2024-12-29","2025-01-05","2025-01-12","2025-01-19","2025-01-26","2025-02-02","2025-02-09","2025-02-16","2025-02-23","2025-03-02","2025-03-09","2025-03-16","2025-03-23","2025-03-30","2025-04-06","2025-04-13","2025-04-20","2025-04-27","2025-05-04","2025-05-11","2025-05-18","2025-05-25","2025-06-01","2025-06-08","2025-06-15","2025-06-22","2025-06-29","2025-07-06","2025-07-13","2025-07-20","2025-07-27","2025-08-03","2025-08-10","2025-08-17","2025-08-24","2025-08-31","2025-09-07","2025-09-14","2025-09-21","2025-09-28","2025-10-05","2025-10-12","2025-10-19","2025-10-26","2025-11-02","2025-11-09","2025-11-16","2025-11-23","2025-11-30","2025-12-07","2025-12-14","2025-12-21","2025-12-28","2026-01-04","2026-01-11","2026-01-18","2026-01-25","2026-02-01","2026-02-08","2026-02-15","2026-02-22","2026-03-01","2026-03-08","2026-03-15"],"daily":[-5.98,-11.3,30.33,38.23,48.29,41.32,52.67,75.59,69.56,94.09,87.63,93.55,138.07,135.49,136.01,162.76,164.27,178.18,207.18,222.43,205.83,240.82,252.02,241.38,275.36,292.19,310.05,312.34,330.16,335.15,341.47,347.35,373.17,361.22,372.89,391.87,363.28,461.27,440.1,438.67,450.95,469.35,500.52,502.14,523.92,548.35,556.21,591.33,592.55,627.05,633.52,652.98,660.86,677.09,706.61,720.3,741.31,778.18,830.56,797.36,825.69,2893.35,2945.63,2954.88,2979.85,2997.58,3018.71,3023.75,3037.84,3069.14,3090.12,3111.39,3106.61,3145.76,3149.42],"weekly":[-5.98,-3.23,22.7,24.2,98.8,21.33,27.9,36.19,150.6,364.32,496.74,392.55,520.58,575.89,511.53,484.36,917.75,950.33,978.1,1013.89,987.17,1040.95,1079.71,1046.86,815.94,463.12,1214.6,1048.05,1407.08,1551.16,1607.55,1800.93,1826.26,1884.36,1938.57,1974.93,1953.47,2066.02,2058.17,2064.34,2056.22,2062.35,2116.84,2039.9,2064.38,2183.48,2196.4,1985.34,1759.74,2038.0,2172.47,2159.24,2351.19,2220.97,2211.2,2048.95,2368.54,2515.63,2619.38,1835.6,2142.4,4626.7,4705.69,4748.66,4763.82,4794.68,4859.58,4739.28,4832.43,4928.83,4915.89,4990.84,4902.59,5040.78,5007.19],"months":["Oct 24","Nov 24","Dec 24","Jan 25","Feb 25","Mar 25","Apr 25","May 25","Jun 25","Jul 25","Aug 25","Sep 25","Oct 25","Nov 25","Dec 25","Jan 26","Feb 26","Mar 26"],"mpnl":[13.03,62.55,39.66,49.02,41.56,70.36,53.97,31.06,54.89,70.36,69.74,78.97,85.13,77.06,2157.28,83.2,68.77,42.81],"te":[0.331,1.522,0.653,0.874,0.632,1.717,1.339,0.597,0.846,0.931,0.86,0.895,0.912,0.794,17.361,0.974,0.813,0.513]}
+</script>
+
+<script>
+var D = JSON.parse(document.getElementById('chartData').textContent);
+var gc = 'rgba(0,0,0,.05)';
+var tf = {size:11,family:'Inter'};
+var tf10 = {size:10,family:'Inter'};
+var MN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function showPanel(type, btn) {
+  var panels = document.querySelectorAll('.kpi-panel');
+  for (var i=0;i<panels.length;i++) panels[i].classList.remove('active');
+  var tabs = document.querySelectorAll('.kpi-tab');
+  for (var i=0;i<tabs.length;i++) tabs[i].classList.remove('active-full','active-adj');
+  document.getElementById('panel-'+type).classList.add('active');
+  btn.classList.add('active-'+type);
+}
+
+function fmtD(d) {
+  var p = d.split('-');
+  return MN[parseInt(p[1],10)-1]+' '+p[0].slice(2);
+}
+
+var dlabels = [];
+for (var i=0;i<D.dates.length;i++) dlabels.push(fmtD(D.dates[i]));
+
+var tec = [];
+for (var i=0;i<D.te.length;i++) tec.push(D.te[i]>5?'rgba(220,38,38,.8)':'rgba(5,150,105,.7)');
+
+var mpN = [], mpDec = [];
+for (var i=0;i<D.mpnl.length;i++){
+  mpN.push(i===14?0:D.mpnl[i]);
+  mpDec.push(i===14?D.mpnl[i]:0);
+}
+
+new Chart(document.getElementById('cumChart'),{
+  type:'line',
+  data:{labels:dlabels,datasets:[
+    {data:D.daily,borderColor:'#059669',backgroundColor:'rgba(5,150,105,.07)',borderWidth:2,pointRadius:0,fill:true,tension:0.4},
+    {data:D.weekly,borderColor:'#93c5fd',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false,tension:0.4}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:function(c){return ' $'+c.parsed.y.toFixed(0);}}}},
+    scales:{
+      x:{ticks:{maxTicksLimit:10,font:tf,color:'#9ca3af'},grid:{display:false},border:{display:false}},
+      y:{ticks:{callback:function(v){return '$'+v.toFixed(0);},font:tf,color:'#9ca3af'},grid:{color:gc},border:{display:false}}
+    }
+  }
+});
+
+new Chart(document.getElementById('teChart'),{
+  type:'bar',
+  data:{labels:D.months,datasets:[{data:D.te,backgroundColor:tec,borderRadius:4,borderSkipped:false}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return ' '+c.parsed.y.toFixed(2)+'%';}}}},
+    scales:{
+      x:{ticks:{font:tf10,color:'#9ca3af',maxRotation:45},grid:{display:false},border:{display:false}},
+      y:{ticks:{callback:function(v){return v.toFixed(1)+'%';},font:tf,color:'#9ca3af'},grid:{color:gc},border:{display:false}}
+    }
+  }
+});
+
+new Chart(document.getElementById('monthlyChart'),{
+  type:'bar',
+  data:{labels:D.months,datasets:[
+    {data:mpN,backgroundColor:'rgba(5,150,105,.7)',borderRadius:4,borderSkipped:false,stack:'a'},
+    {data:mpDec,backgroundColor:'rgba(220,38,38,.7)',borderRadius:4,borderSkipped:false,stack:'a'}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:function(c){if(c.parsed.y===0)return null;return ' $'+c.parsed.y.toFixed(0);}}}},
+    scales:{
+      x:{stacked:true,ticks:{font:tf10,color:'#9ca3af',maxRotation:45},grid:{display:false},border:{display:false}},
+      y:{stacked:true,ticks:{callback:function(v){return '$'+v.toFixed(0);},font:tf,color:'#9ca3af'},grid:{color:gc},border:{display:false}}
+    }
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f7f4ec;font-family:'Inter',sans-serif;color:#0f2220}
+
+.nav{background:#f7f4ec;border-bottom:1px solid #e2ddd0;padding:0 2.5rem;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.logo{font-family:'Fraunces',serif;font-size:21px;font-weight:600;color:#0f2220}
+.nl{display:flex;gap:2.25rem;list-style:none}
+.nl a{color:#0f2220;font-size:13px;font-weight:400;text-decoration:none;transition:color .2s}
+.nl a.on{font-weight:500}
+.nl a:hover{color:#1a5c52}
+
+.hero{padding:4rem 2.5rem 3.5rem;display:grid;grid-template-columns:1.15fr 1fr;gap:3.5rem;align-items:start;max-width:1200px;margin:0 auto}
+.eyebrow{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:#1a5c52;letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.25rem;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:'';width:24px;height:1px;background:#1a5c52}
+h1{font-family:'Fraunces',serif;font-size:2.35rem;font-weight:600;color:#0f2220;line-height:1.2;margin-bottom:1rem}
+h1 em{font-style:italic;color:#1a5c52}
+.sub{font-family:'Inter',sans-serif;font-size:13.5px;color:#4a6460;line-height:1.85;margin-bottom:1.75rem;font-weight:400}
+.btns{display:flex;gap:.75rem}
+.b1{padding:10px 22px;background:#1a5c52;color:#fff;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;border-radius:5px;text-decoration:none;transition:background .2s}
+.b1:hover{background:#144a42}
+.b2{padding:10px 22px;border:1px solid #a8a090;color:#4a6460;font-family:'Inter',sans-serif;font-size:13px;border-radius:5px;text-decoration:none;transition:all .2s}
+.b2:hover{border-color:#1a5c52;color:#1a5c52}
+
+.cards{display:flex;flex-direction:column;gap:.75rem}
+.card{background:#fff;border:1px solid #e2ddd0;border-radius:6px;padding:1.35rem;transition:border-color .2s;text-decoration:none;display:block}
+.card:hover{border-color:#1a5c52}
+.ctag{font-family:'Inter',sans-serif;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#1a5c52;margin-bottom:.4rem}
+.ctitle{font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:#0f2220;margin-bottom:.45rem;line-height:1.35}
+.cmeta{font-family:'JetBrains Mono',monospace;font-size:11px;color:#8aa49e}
+
+.log-section{border-top:1px solid #e2ddd0;padding:2.75rem 2.5rem 0;max-width:1200px;margin:0 auto}
+.section-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1.25rem}
+.section-label{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:#0f2220;letter-spacing:.12em;text-transform:uppercase}
+.section-link{font-family:'Inter',sans-serif;font-size:12px;color:#1a5c52;font-weight:500;text-decoration:none}
+.section-link:hover{text-decoration:underline}
+.log-row{display:flex;gap:1.75rem;padding:1rem 0;border-top:1px solid #f0ece2;align-items:baseline}
+.log-row:first-of-type{border-top:1px solid #e2ddd0}
+.log-date{font-family:'JetBrains Mono',monospace;font-size:11px;color:#aaa9a0;min-width:72px;flex-shrink:0;padding-top:1px}
+.log-body{display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap;flex:1}
+.log-title{font-family:'Inter',sans-serif;font-size:13.5px;color:#0f2220;font-weight:400}
+.log-tag{font-family:'Inter',sans-serif;font-size:10px;font-weight:600;padding:2px 9px;border-radius:3px;white-space:nowrap;flex-shrink:0}
+.tag-pub{background:rgba(26,92,82,.1);color:#1a5c52}
+.tag-wip{background:rgba(160,144,112,.1);color:#8a7a60}
+.log-arrow{font-family:'Inter',sans-serif;font-size:12px;color:#1a5c52;text-decoration:none;margin-left:auto;padding-left:1rem;white-space:nowrap;flex-shrink:0}
+.log-arrow:hover{text-decoration:underline}
+
+.contact-section{padding:2.75rem 2.5rem;border-top:1px solid #e2ddd0;margin-top:2.75rem;display:grid;grid-template-columns:1fr auto;align-items:center;gap:2rem;max-width:1200px;margin-left:auto;margin-right:auto}
+.contact-kicker{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:#1a5c52;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+.contact-heading{font-family:'Fraunces',serif;font-size:1.35rem;font-weight:600;color:#0f2220;line-height:1.35}
+.contact-heading em{font-style:italic;color:#1a5c52}
+.contact-links{display:flex;gap:.65rem;flex-wrap:wrap}
+.cl{display:flex;align-items:center;gap:7px;padding:9px 18px;border-radius:5px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;text-decoration:none;transition:all .2s;white-space:nowrap}
+.cl-primary{background:#1a5c52;color:#fff}
+.cl-primary:hover{background:#144a42}
+.cl-secondary{border:1px solid #c8c2b0;color:#4a6460}
+.cl-secondary:hover{border-color:#1a5c52;color:#1a5c52}
+.cl-icon{width:15px;height:15px;flex-shrink:0}
+
+footer{background:#0f2220;padding:1.5rem 2.5rem;display:flex;justify-content:space-between;align-items:center}
+.footer-logo{font-family:'Inter',sans-serif;font-style:normal;font-weight:500;font-size:13px;color:rgba(255,255,255,.5)}
+.footer-copy{font-family:'Inter',sans-serif;font-size:11px;color:rgba(255,255,255,.3)}
+
+@media(max-width:768px){
+  .nav{padding:0 1.25rem}
+  .logo{font-size:17px}
+  .nl{gap:1.25rem}
+  .hero{grid-template-columns:1fr;padding:2.5rem 1.25rem 2rem;gap:2rem}
+  .log-section{padding:2rem 1.25rem 0}
+  .contact-section{grid-template-columns:1fr;padding:2rem 1.25rem;margin-top:0}
+  footer{flex-direction:column;align-items:flex-start;gap:.4rem;padding:1.25rem}
+}
+</style>
+</head>
+<body>
+
+<script>
+const REPORTS = [
+  {
+    date: "Mar 2026",
+    title: "IV Behaviour in Energy Sector Options Around Iran-Related Geopolitical Events",
+    tag: "XLE / USO / XOM / CVX · Geopolitical IV",
+    meta: "90% win rate · T+20 short vol · 11 events · 23-year study",
+    url: "/research/iran-iv-study/",
+    status: "published"
+  },
+  {
+    date: "Mar 2026",
+    title: "Exploiting Leveraged ETF Decay: A Systematic Carry Trade on AVGO / AVL",
+    tag: "AVGO / AVL · Leveraged ETF",
+    meta: "Systematic carry trade · Decay exploitation",
+    url: "/research/leveraged-etf-strategy/",
+    status: "published"
+  },
+  {
+    date: "Feb 2026",
+    title: "The Wheel Strategy on SPY: A Systematic Backtest",
+    tag: "SPY · Options Strategy",
+    meta: "10Δ / 60 DTE optimal · 2018–2025 backtest",
+    url: "/research/wheel-strategy/",
+    status: "published"
+  },
+  {
+    date: "Jan 2026",
+    title: "Selling Earnings Volatility: A Short Straddle Strategy Across the Magnificent Seven",
+    tag: "Mag 7 · Earnings",
+    meta: "68% win rate · Sharpe 1.4+ · 2015–2024",
+    url: "/research/short-straddle/",
+    status: "published"
+  },
+  {
+    date: "Coming",
+    title: "IV Crush Universe Expansion — Composite Scoring Model",
+    tag: "Universe · In Progress",
+    meta: "Expanding beyond Mag 7 · Coming soon",
+    url: null,
+    status: "wip"
+  }
+];
+
+function renderCards() {
+  return REPORTS.slice(0, 3).map(r => {
+    const isWip = r.status === "wip";
+    const style = isWip
+      ? 'style="background:#f7f4ec;border:1px dashed #d0c9b8;display:block;border-radius:6px;padding:1.35rem;text-decoration:none"'
+      : 'class="card"';
+    const tag = isWip
+      ? `<div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#8a7a60;margin-bottom:.4rem">${r.tag}</div>`
+      : `<div class="ctag">${r.tag}</div>`;
+    const title = isWip
+      ? `<div style="font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:#8aa49e;margin-bottom:.45rem;line-height:1.35">${r.title}</div>`
+      : `<div class="ctitle">${r.title}</div>`;
+    const el = r.url ? `<a href="${r.url}" ${style}>` : `<div ${style}>`;
+    const close = r.url ? `</a>` : `</div>`;
+    return `${el}${tag}${title}<div class="cmeta">${r.meta}</div>${close}`;
+  }).join('');
+}
+
+function renderLog() {
+  return REPORTS.slice(0, 5).map(r => {
+    const tag = r.status === "published"
+      ? `<span class="log-tag tag-pub">Published</span>`
+      : `<span class="log-tag tag-wip">In progress</span>`;
+    const arrow = r.url
+      ? `<a class="log-arrow" href="${r.url}">Read →</a>`
+      : '';
+    return `<div class="log-row">
+      <div class="log-date">${r.date}</div>
+      <div class="log-body">
+        <span class="log-title">${r.title}</span>
+        ${tag}
+        ${arrow}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('hero-cards').innerHTML = renderCards();
+  document.getElementById('log-rows').innerHTML = renderLog();
+});
+</script>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="logo">The Intrinsic Investor</div>
+  <ul class="nl">
+    <li><a href="/" class="on">Home</a></li>
+    <li><a href="/research">Research</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="eyebrow">Systematic Market Research</div>
+    <h1>Rigorous analysis.<br>Independently <em>published.</em></h1>
+    <p class="sub">Data-driven research into systematic trading strategies — built on institutional-grade market data, written for investors who think carefully.</p>
+    <div class="btns">
+      <a class="b1" href="/research">Explore Research</a>
+      <a class="b2" href="/about">About Me</a>
+    </div>
+  </div>
+  <div class="cards" id="hero-cards"></div>
+</section>
+
+<!-- RESEARCH LOG -->
+<section class="log-section">
+  <div class="section-header">
+    <div class="section-label">Research log</div>
+    <a class="section-link" href="/research">View all research →</a>
+  </div>
+  <div id="log-rows"></div>
+</section>
+
+<!-- CONTACT STRIP -->
+<section class="contact-section">
+  <div>
+    <div class="contact-kicker">Get in touch</div>
+    <div class="contact-heading">Interested in the research?<br><em>Let's connect.</em></div>
+  </div>
+  <div class="contact-links">
+    <a class="cl cl-primary" href="https://www.linkedin.com/in/brianliewrz" target="_blank">
+      <svg class="cl-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0H5a5 5 0 00-5 5v14a5 5 0 005 5h14a5 5 0 005-5V5a5 5 0 00-5-5zM8 19H5V8h3v11zM6.5 6.73a1.77 1.77 0 110-3.54 1.77 1.77 0 010 3.54zM20 19h-3v-5.6c0-3.37-4-3.12-4 0V19h-3V8h3v1.77C14.4 7.2 20 7.02 20 12.35V19z"/></svg>
+      LinkedIn
+    </a>
+    <a class="cl cl-secondary" href="mailto:brianliew.rz@gmail.com">
+      <svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+      Email
+    </a>
+    <a class="cl cl-secondary" href="https://github.com/TheIntrinsicInvestor/Backtesting-Codes" target="_blank">
+      <svg class="cl-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.25 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      GitHub
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">The Intrinsic Investor</div>
+  <div class="footer-copy">© Brian Liew · BSc Accounting & Finance, London School of Economics</div>
+</footer>
+
+</body>
+</html>

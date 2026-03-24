@@ -1,0 +1,17 @@
+EVENTS = [
+    {"id": 1,  "date": "2003-03-20", "label": "US invasion of Iraq",                       "cluster": "Gulf War II",           "instruments": ["XLE","XOM","CVX"]},
+    {"id": 2,  "date": "2008-01-06", "label": "Iranian speedboats confront US Navy",        "cluster": "Strait of Hormuz",      "instruments": ["XLE","USO","XOM","CVX"]},
+    {"id": 3,  "date": "2012-01-23", "label": "Iran threatens to close Strait",             "cluster": "Strait of Hormuz",      "instruments": ["XLE","USO","XOM","CVX"]},
+    {"id": 4,  "date": "2019-05-12", "label": "Four tankers sabotaged off UAE",             "cluster": "Strait of Hormuz",      "instruments": ["XLE","USO","XOM","CVX"]},
+    {"id": 5,  "date": "2019-06-13", "label": "Two tankers attacked in Gulf of Oman",       "cluster": "Strait of Hormuz",      "instruments": ["XLE","USO","XOM","CVX"]},
+    {"id": 6,  "date": "2019-06-20", "label": "Iran shoots down US RQ-4 drone",             "cluster": "Strait of Hormuz",      "instruments": ["XLE","USO","XOM","CVX"]},
+    {"id": 7,  "date": "2019-07-19", "label": "Iran seizes UK tanker Stena Impero",         "cluster": "Strait of Hormuz",      "instruments": ["XLE","USO","XOM","CVX"]},
+    {"id": 8,  "date": "2020-01-03", "label": "Soleimani assassination",                    "cluster": "Soleimani",             "instruments": ["XLE","USO","XOM","CVX"]},
+    {"id": 9,  "date": "2024-04-01", "label": "Israel strikes Iranian consulate Damascus",  "cluster": "Iran-Israel 2024",      "instruments": ["XLE","USO","XOM","CVX"]},
+    {"id": 10, "date": "2024-04-13", "label": "Iran launches 300+ missiles at Israel",      "cluster": "Iran-Israel 2024",      "instruments": ["XLE","USO","XOM","CVX"]},
+    {"id": 11, "date": "2024-10-01", "label": "Iran ballistic missile strike on Israel",    "cluster": "Iran-Israel 2024",      "instruments": ["XLE","USO","XOM","CVX"]},
+    {"id": 12, "date": "2024-10-26", "label": "Israel strikes Iran directly",               "cluster": "Iran-Israel 2024",      "instruments": ["XLE","USO","XOM","CVX"]},
+    {"id": 13, "date": "2025-06-13", "label": "Twelve-Day War begins — Israel strikes Iran","cluster": "Twelve-Day War 2025",   "instruments": ["XLE","USO","XOM","CVX"]},
+    {"id": 14, "date": "2025-06-24", "label": "Ceasefire — Twelve-Day War ends",            "cluster": "Twelve-Day War 2025",   "instruments": ["XLE","USO","XOM","CVX"]},
+    {"id": 15, "date": "2026-02-28", "label": "US-Israel strike Iran, Khamenei killed",     "cluster": "2026 Conflict",         "instruments": ["XLE","USO","XOM","CVX"]},
+]

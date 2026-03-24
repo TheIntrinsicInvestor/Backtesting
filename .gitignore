@@ -1,0 +1,5 @@
+_backups/
+__pycache__/
+*.pyc
+.claude/
+*.parquet

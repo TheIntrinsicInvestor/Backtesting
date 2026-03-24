@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Research — TheIntrinsicInvestor</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f7f4ec;font-family:'Inter',sans-serif;color:#0f2220;min-height:100vh}
+
+/* ── NAV ── */
+nav{background:#f7f4ec;border-bottom:1px solid #e2ddd0;padding:0 2.5rem;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.nav-logo{font-family:'Fraunces',serif;font-size:21px;font-weight:600;color:#0f2220}
+.nl{display:flex;gap:2.25rem;list-style:none}
+.nl a{font-size:13px;color:#0f2220;text-decoration:none;font-weight:400;transition:color .2s}
+.nl a:hover,.nl a.on{color:#1a5c52}
+.nl a.on{font-weight:500}
+
+/* ── PAGE HEADER ── */
+.page-header{padding:3.5rem 2.5rem 3rem;border-bottom:1px solid #e2ddd0;max-width:1200px;margin:0 auto}
+.eyebrow{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:#1a5c52;letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.25rem;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:'';width:24px;height:1px;background:#1a5c52}
+h1{font-family:'Fraunces',serif;font-size:2.25rem;font-weight:600;color:#0f2220;line-height:1.2;margin-bottom:.75rem}
+h1 em{font-style:italic;color:#1a5c52}
+.page-sub{font-size:13.5px;color:#4a6460;line-height:1.8;max-width:480px}
+
+/* ── BODY GRID ── */
+.body-grid{display:grid;grid-template-columns:1fr 240px;gap:0;max-width:1200px;margin:0 auto;align-items:start}
+
+/* ── MAIN LIST ── */
+.main-list{padding:2rem 2.5rem;border-right:1px solid #e2ddd0}
+
+.report-row{padding:1.75rem 0;border-top:1px solid #f0ece2;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:start;text-decoration:none;transition:opacity .2s;display:grid}
+.report-row:first-of-type{border-top:1px solid #e2ddd0}
+.report-row:hover .report-title{color:#1a5c52}
+.report-row.wip{opacity:.5;cursor:default}
+
+.report-left{}
+.report-right{text-align:right;flex-shrink:0;padding-top:2px}
+
+.ctag{font-family:'Inter',sans-serif;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#1a5c52;margin-bottom:.4rem}
+.ctag-wip{color:#8a7a60}
+.report-title{font-family:'Fraunces',serif;font-size:16px;font-weight:600;color:#0f2220;line-height:1.35;margin-bottom:.5rem;transition:color .2s}
+.report-title-wip{color:#8aa49e}
+.report-desc{font-size:13px;color:#4a6460;line-height:1.75;margin-bottom:.75rem;max-width:580px}
+.report-metrics{display:flex;gap:1.5rem;flex-wrap:wrap}
+.rm{display:flex;flex-direction:column;gap:2px}
+.rm-val{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;color:#0f2220}
+.rm-lbl{font-size:9px;font-family:'Inter',sans-serif;color:#8aa49e;text-transform:uppercase;letter-spacing:.07em}
+
+.report-date{font-family:'JetBrains Mono',monospace;font-size:11px;color:#8aa49e;margin-bottom:.5rem}
+.pub-tag{font-family:'Inter',sans-serif;font-size:10px;font-weight:600;padding:2px 9px;border-radius:3px;background:rgba(26,92,82,.1);color:#1a5c52;display:inline-block}
+.wip-tag{font-family:'Inter',sans-serif;font-size:10px;font-weight:600;padding:2px 9px;border-radius:3px;background:rgba(160,144,112,.1);color:#8a7a60;display:inline-block}
+.read-link{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#1a5c52;text-decoration:none;display:inline-flex;align-items:center;gap:4px;margin-top:.6rem;transition:gap .2s}
+.read-link:hover{gap:8px}
+
+/* ── SIDEBAR ── */
+.sidebar{padding:2rem 1.75rem}
+.sb-block{margin-bottom:2rem}
+.sb-label{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#8aa49e;margin-bottom:1.25rem}
+
+.sb-stat{margin-bottom:1.25rem}
+.sb-stat-num{font-family:'Fraunces',serif;font-size:1.6rem;font-style:italic;color:#1a5c52;font-weight:600;line-height:1}
+.sb-stat-lbl{font-family:'Inter',sans-serif;font-size:12px;color:#4a6460;margin-top:.25rem}
+
+.sb-divider{height:1px;background:#e2ddd0;margin:1.5rem 0}
+
+.sb-sources{}
+.sb-source-item{font-family:'Inter',sans-serif;font-size:12px;color:#4a6460;padding:.4rem 0;border-bottom:1px solid #f0ece2;line-height:1.5}
+.sb-source-item:last-child{border:none}
+.sb-source-name{font-weight:500;color:#0f2220}
+
+/* ── CONTACT STRIP ── */
+.contact-section{padding:2.75rem 2.5rem;border-top:1px solid #e2ddd0;margin-top:0;display:grid;grid-template-columns:1fr auto;align-items:center;gap:2rem;max-width:1200px;margin-left:auto;margin-right:auto}
+.contact-kicker{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:#1a5c52;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+.contact-heading{font-family:'Fraunces',serif;font-size:1.35rem;font-weight:600;color:#0f2220;line-height:1.35}
+.contact-heading em{font-style:italic;color:#1a5c52}
+.contact-links{display:flex;gap:.65rem;flex-wrap:wrap}
+.cl{display:flex;align-items:center;gap:7px;padding:9px 18px;border-radius:5px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;text-decoration:none;transition:all .2s;white-space:nowrap}
+.cl-primary{background:#1a5c52;color:#fff}
+.cl-primary:hover{background:#144a42}
+.cl-secondary{border:1px solid #c8c2b0;color:#4a6460}
+.cl-secondary:hover{border-color:#1a5c52;color:#1a5c52}
+.cl-icon{width:15px;height:15px;flex-shrink:0}
+
+/* ── FOOTER ── */
+footer{background:#0f2220;padding:1.5rem 2.5rem;display:flex;justify-content:space-between;align-items:center}
+.footer-logo{font-family:'Inter',sans-serif;font-weight:500;font-size:13px;color:rgba(255,255,255,.45)}
+.footer-copy{font-family:'Inter',sans-serif;font-size:11px;color:rgba(255,255,255,.25)}
+
+@media(max-width:768px){
+  .body-grid{grid-template-columns:1fr}
+  .sidebar{border-top:1px solid #e2ddd0;display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;padding:1.5rem 1.25rem}
+  .sb-block:last-child{display:none}
+  .contact-section{grid-template-columns:1fr}
+  nav{padding:0 1.25rem}
+  .nav-logo{font-size:17px}
+  .nl{gap:1.25rem}
+  .page-header,.main-list,.contact-section{padding-left:1.25rem;padding-right:1.25rem}
+  .report-row{grid-template-columns:1fr;gap:.5rem}
+  .report-right{text-align:left;display:flex;align-items:center;gap:.75rem}
+  footer{flex-direction:column;align-items:flex-start;gap:.4rem;padding:1.25rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">The Intrinsic Investor</div>
+  <ul class="nl">
+    <li><a href="/">Home</a></li>
+    <li><a href="/research" class="on">Research</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="eyebrow">Published Research</div>
+  <h1>All <em>Reports</em></h1>
+  <p class="page-sub">Systematic backtests built on institutional-grade market data — each study published with full methodology and honest risk disclosure.</p>
+</div>
+
+<!-- BODY -->
+<div class="body-grid">
+
+  <!-- MAIN LIST -->
+  <div class="main-list">
+
+    <a class="report-row" href="/research/iran-iv-study/">
+      <div class="report-left">
+        <div class="ctag">XLE / USO / XOM / CVX · Geopolitical IV</div>
+        <div class="report-title">IV Behaviour in Energy Sector Options Around Iran-Related Geopolitical Events</div>
+        <div class="report-desc">An event study of 30-day ATM implied volatility across four energy instruments around fifteen Iran-related escalation events from 2003 to 2026. IV peaks at T+2 and mean-reverts by T+17 — supporting a short vol strategy with a 90% win rate at a T+20 exit (ex-GFC, n=10).</div>
+        <div class="report-metrics">
+          <div class="rm"><div class="rm-val">90%</div><div class="rm-lbl">Win rate (ex-GFC)</div></div>
+          <div class="rm"><div class="rm-val">+9.08</div><div class="rm-lbl">Avg P&L (IV pts)</div></div>
+          <div class="rm"><div class="rm-val">11</div><div class="rm-lbl">Events analysed</div></div>
+          <div class="rm"><div class="rm-val">23 yr</div><div class="rm-lbl">Study period</div></div>
+        </div>
+        <span class="read-link">Read report →</span>
+      </div>
+      <div class="report-right">
+        <div class="report-date">Mar 2026</div>
+        <span class="pub-tag">Published</span>
+      </div>
+    </a>
+
+    <a class="report-row" href="/research/leveraged-etf-strategy/">
+      <div class="report-left">
+        <div class="ctag">AVGO / AVL · Leveraged ETF</div>
+        <div class="report-title">Exploiting Leveraged ETF Decay: A Systematic Carry Trade on AVGO / AVL</div>
+        <div class="report-desc">Single-stock leveraged ETFs bleed value daily through swap financing costs. This paper constructs a market-neutral carry trade to capture that bleed — results presented on both full-sample and volatility-adjusted bases.</div>
+        <div class="report-metrics">
+          <div class="rm"><div class="rm-val">15.96%</div><div class="rm-lbl">CAGR (adj.)</div></div>
+          <div class="rm"><div class="rm-val">1.33</div><div class="rm-lbl">Sharpe</div></div>
+          <div class="rm"><div class="rm-val">−0.97%</div><div class="rm-lbl">Max DD</div></div>
+          <div class="rm"><div class="rm-val">0.042</div><div class="rm-lbl">Beta vs SPY</div></div>
+        </div>
+        <span class="read-link">Read report →</span>
+      </div>
+      <div class="report-right">
+        <div class="report-date">Mar 2026</div>
+        <span class="pub-tag">Published</span>
+      </div>
+    </a>
+
+    <a class="report-row" href="/research/wheel-strategy/">
+      <div class="report-left">
+        <div class="ctag">SPY · Options Strategy</div>
+        <div class="report-title">The Wheel Strategy on SPY: A Systematic Backtest</div>
+        <div class="report-desc">A full parameter sweep across 20 delta and DTE combinations from 2018–2025. The optimal risk-adjusted combination is 10Δ / 60 DTE — 100% win rate, Sharpe 0.65, max drawdown −11.6%.</div>
+        <div class="report-metrics">
+          <div class="rm"><div class="rm-val">10Δ / 60 DTE</div><div class="rm-lbl">Optimal combo</div></div>
+          <div class="rm"><div class="rm-val">0.65</div><div class="rm-lbl">Best Sharpe</div></div>
+          <div class="rm"><div class="rm-val">100%</div><div class="rm-lbl">Win rate</div></div>
+          <div class="rm"><div class="rm-val">8 yr</div><div class="rm-lbl">Data history</div></div>
+        </div>
+        <span class="read-link">Read report →</span>
+      </div>
+      <div class="report-right">
+        <div class="report-date">Feb 2026</div>
+        <span class="pub-tag">Published</span>
+      </div>
+    </a>
+
+    <a class="report-row" href="/research/short-straddle/">
+      <div class="report-left">
+        <div class="ctag">Mag 7 · Earnings</div>
+        <div class="report-title">Selling Earnings Volatility: A Short Straddle Strategy Across the Magnificent Seven</div>
+        <div class="report-desc">An empirical analysis of 168 earnings events from 2019–2024. MSFT is the standout: 75% win rate, Calmar ratio 7.97, and positive P&L in every calendar year including 2022.</div>
+        <div class="report-metrics">
+          <div class="rm"><div class="rm-val">68%</div><div class="rm-lbl">Win rate</div></div>
+          <div class="rm"><div class="rm-val">1.4+</div><div class="rm-lbl">Avg Sharpe</div></div>
+          <div class="rm"><div class="rm-val">7.97</div><div class="rm-lbl">Best Calmar</div></div>
+          <div class="rm"><div class="rm-val">168</div><div class="rm-lbl">Events</div></div>
+        </div>
+        <span class="read-link">Read report →</span>
+      </div>
+      <div class="report-right">
+        <div class="report-date">Jan 2026</div>
+        <span class="pub-tag">Published</span>
+      </div>
+    </a>
+
+    <div class="report-row wip">
+      <div class="report-left">
+        <div class="ctag ctag-wip">Universe Expansion · In Progress</div>
+        <div class="report-title report-title-wip">IV Crush Strategy — Composite Scoring Model</div>
+        <div class="report-desc">Extending the short straddle earnings strategy beyond the Magnificent Seven using a composite edge scoring model: win rate, average edge, Calmar ratio, and return on margin.</div>
+        <div style="margin-top:.75rem"><span class="wip-tag">In progress</span></div>
+      </div>
+      <div class="report-right">
+        <div class="report-date">Coming</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sb-block">
+      <div class="sb-label">By the numbers</div>
+      <div class="sb-stat">
+        <div class="sb-stat-num">4</div>
+        <div class="sb-stat-lbl">Published studies</div>
+      </div>
+      <div class="sb-stat">
+        <div class="sb-stat-num">23 yr</div>
+        <div class="sb-stat-lbl">Longest study period</div>
+      </div>
+      <div class="sb-stat">
+        <div class="sb-stat-num">168</div>
+        <div class="sb-stat-lbl">Earnings events analysed</div>
+      </div>
+      <div class="sb-stat">
+        <div class="sb-stat-num">15</div>
+        <div class="sb-stat-lbl">Geopolitical events identified</div>
+      </div>
+      <div class="sb-stat">
+        <div class="sb-stat-num">1.33</div>
+        <div class="sb-stat-lbl">Highest Sharpe achieved</div>
+      </div>
+    </div>
+
+    <div class="sb-divider"></div>
+
+    <div class="sb-block">
+      <div class="sb-label">Data sources</div>
+      <div class="sb-source-item"><div class="sb-source-name">OptionMetrics / IvyDB</div>Options pricing & implied vol</div>
+      <div class="sb-source-item"><div class="sb-source-name">IBES Actuals</div>Earnings announcement dates</div>
+      <div class="sb-source-item"><div class="sb-source-name">Compustat</div>Equity & ETF price data</div>
+      <div class="sb-source-item"><div class="sb-source-name">yfinance</div>Underlying price data</div>
+      <div class="sb-source-item"><div class="sb-source-name">WRDS Platform</div>All data accessed via LSE</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- CONTACT STRIP -->
+<section class="contact-section">
+  <div>
+    <div class="contact-kicker">Get in touch</div>
+    <div class="contact-heading">Interested in the research?<br><em>Let's connect.</em></div>
+  </div>
+  <div class="contact-links">
+    <a class="cl cl-primary" href="https://www.linkedin.com/in/brianliewrz" target="_blank">
+      <svg class="cl-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0H5a5 5 0 00-5 5v14a5 5 0 005 5h14a5 5 0 005-5V5a5 5 0 00-5-5zM8 19H5V8h3v11zM6.5 6.73a1.77 1.77 0 110-3.54 1.77 1.77 0 010 3.54zM20 19h-3v-5.6c0-3.37-4-3.12-4 0V19h-3V8h3v1.77C14.4 7.2 20 7.02 20 12.35V19z"/></svg>
+      LinkedIn
+    </a>
+    <a class="cl cl-secondary" href="mailto:brianliew.rz@gmail.com">
+      <svg class="cl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+      Email
+    </a>
+    <a class="cl cl-secondary" href="https://github.com/TheIntrinsicInvestor/Backtesting-Codes" target="_blank">
+      <svg class="cl-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.25 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      GitHub
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">The Intrinsic Investor</div>
+  <div class="footer-copy">© Brian Liew · BSc Accounting & Finance, London School of Economics</div>
+</footer>
+
+</body>
+</html>

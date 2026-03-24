@@ -1,0 +1,227 @@
+{
+  "strategy_label": "Short IV at T0 close, exit at T+17",
+  "exit_t": 17,
+  "distorted_events": {
+    "2": "Event 2 (Iranian speedboats, Jan 2008): T+10 IV spike likely driven by GFC vol regime, not geopolitical premium."
+  },
+  "events_full": [
+    {
+      "event_id": 2,
+      "label": "Iranian speedboats confront US Navy",
+      "cluster": "Strait of Hormuz",
+      "iv_t0": 110.37,
+      "iv_exit": 112.2,
+      "pnl": -1.84,
+      "cum_pnl": -1.84,
+      "distorted": true
+    },
+    {
+      "event_id": 3,
+      "label": "Iran threatens to close Strait",
+      "cluster": "Strait of Hormuz",
+      "iv_t0": 88.14,
+      "iv_exit": 92.76,
+      "pnl": -4.62,
+      "cum_pnl": -6.46,
+      "distorted": false
+    },
+    {
+      "event_id": 4,
+      "label": "Four tankers sabotaged off UAE",
+      "cluster": "Strait of Hormuz",
+      "iv_t0": 118.43,
+      "iv_exit": 122.63,
+      "pnl": -4.2,
+      "cum_pnl": -10.66,
+      "distorted": false
+    },
+    {
+      "event_id": 5,
+      "label": "Two tankers attacked in Gulf of Oman",
+      "cluster": "Strait of Hormuz",
+      "iv_t0": 118.16,
+      "iv_exit": 96.84,
+      "pnl": 21.32,
+      "cum_pnl": 10.66,
+      "distorted": false
+    },
+    {
+      "event_id": 6,
+      "label": "Iran shoots down US RQ-4 drone",
+      "cluster": "Strait of Hormuz",
+      "iv_t0": 121.37,
+      "iv_exit": 103.91,
+      "pnl": 17.46,
+      "cum_pnl": 28.12,
+      "distorted": false
+    },
+    {
+      "event_id": 8,
+      "label": "Soleimani assassination",
+      "cluster": "Soleimani",
+      "iv_t0": 100.67,
+      "iv_exit": 109.63,
+      "pnl": -8.95,
+      "cum_pnl": 19.17,
+      "distorted": false
+    },
+    {
+      "event_id": 9,
+      "label": "Israel strikes Iranian consulate Damascus",
+      "cluster": "Iran-Israel 2024",
+      "iv_t0": 95.18,
+      "iv_exit": 105.11,
+      "pnl": -9.92,
+      "cum_pnl": 9.25,
+      "distorted": false
+    },
+    {
+      "event_id": 11,
+      "label": "Iran ballistic missile strike on Israel",
+      "cluster": "Iran-Israel 2024",
+      "iv_t0": 118.52,
+      "iv_exit": 121.97,
+      "pnl": -3.45,
+      "cum_pnl": 5.8,
+      "distorted": false
+    },
+    {
+      "event_id": 12,
+      "label": "Israel strikes Iran directly",
+      "cluster": "Iran-Israel 2024",
+      "iv_t0": 104.95,
+      "iv_exit": 83.16,
+      "pnl": 21.78,
+      "cum_pnl": 27.58,
+      "distorted": false
+    },
+    {
+      "event_id": 13,
+      "label": "Twelve-Day War begins \u2014 Israel strikes Iran",
+      "cluster": "Twelve-Day War 2025",
+      "iv_t0": 125.09,
+      "iv_exit": 96.1,
+      "pnl": 28.98,
+      "cum_pnl": 56.56,
+      "distorted": false
+    },
+    {
+      "event_id": 14,
+      "label": "Ceasefire \u2014 Twelve-Day War ends",
+      "cluster": "Twelve-Day War 2025",
+      "iv_t0": 98.49,
+      "iv_exit": 87.41,
+      "pnl": 11.08,
+      "cum_pnl": 67.64,
+      "distorted": false
+    }
+  ],
+  "events_adjusted": [
+    {
+      "event_id": 3,
+      "label": "Iran threatens to close Strait",
+      "cluster": "Strait of Hormuz",
+      "iv_t0": 88.14,
+      "iv_exit": 92.76,
+      "pnl": -4.62,
+      "cum_pnl": -4.62
+    },
+    {
+      "event_id": 4,
+      "label": "Four tankers sabotaged off UAE",
+      "cluster": "Strait of Hormuz",
+      "iv_t0": 118.43,
+      "iv_exit": 122.63,
+      "pnl": -4.2,
+      "cum_pnl": -8.82
+    },
+    {
+      "event_id": 5,
+      "label": "Two tankers attacked in Gulf of Oman",
+      "cluster": "Strait of Hormuz",
+      "iv_t0": 118.16,
+      "iv_exit": 96.84,
+      "pnl": 21.32,
+      "cum_pnl": 12.5
+    },
+    {
+      "event_id": 6,
+      "label": "Iran shoots down US RQ-4 drone",
+      "cluster": "Strait of Hormuz",
+      "iv_t0": 121.37,
+      "iv_exit": 103.91,
+      "pnl": 17.46,
+      "cum_pnl": 29.96
+    },
+    {
+      "event_id": 8,
+      "label": "Soleimani assassination",
+      "cluster": "Soleimani",
+      "iv_t0": 100.67,
+      "iv_exit": 109.63,
+      "pnl": -8.95,
+      "cum_pnl": 21.01
+    },
+    {
+      "event_id": 9,
+      "label": "Israel strikes Iranian consulate Damascus",
+      "cluster": "Iran-Israel 2024",
+      "iv_t0": 95.18,
+      "iv_exit": 105.11,
+      "pnl": -9.92,
+      "cum_pnl": 11.09
+    },
+    {
+      "event_id": 11,
+      "label": "Iran ballistic missile strike on Israel",
+      "cluster": "Iran-Israel 2024",
+      "iv_t0": 118.52,
+      "iv_exit": 121.97,
+      "pnl": -3.45,
+      "cum_pnl": 7.64
+    },
+    {
+      "event_id": 12,
+      "label": "Israel strikes Iran directly",
+      "cluster": "Iran-Israel 2024",
+      "iv_t0": 104.95,
+      "iv_exit": 83.16,
+      "pnl": 21.78,
+      "cum_pnl": 29.42
+    },
+    {
+      "event_id": 13,
+      "label": "Twelve-Day War begins \u2014 Israel strikes Iran",
+      "cluster": "Twelve-Day War 2025",
+      "iv_t0": 125.09,
+      "iv_exit": 96.1,
+      "pnl": 28.98,
+      "cum_pnl": 58.4
+    },
+    {
+      "event_id": 14,
+      "label": "Ceasefire \u2014 Twelve-Day War ends",
+      "cluster": "Twelve-Day War 2025",
+      "iv_t0": 98.49,
+      "iv_exit": 87.41,
+      "pnl": 11.08,
+      "cum_pnl": 69.48
+    }
+  ],
+  "summary_full": {
+    "n_events": 11,
+    "win_rate": 0.4545,
+    "avg_pnl": 6.15,
+    "total_pnl": 67.64,
+    "max_loss": -9.92,
+    "max_gain": 28.98
+  },
+  "summary_adjusted": {
+    "n_events": 10,
+    "win_rate": 0.5,
+    "avg_pnl": 6.95,
+    "total_pnl": 69.48,
+    "max_loss": -9.92,
+    "max_gain": 28.98
+  }
+}

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>IV Behaviour Around Iran Geopolitical Events — Preview</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  body { background:#0d1117; color:#e6edf3; font-family:'Segoe UI',sans-serif; margin:0; padding:24px; }
+  h1   { font-size:20px; color:#58a6ff; margin-bottom:4px }
+  h2   { font-size:15px; color:#8b949e; margin:32px 0 8px }
+  p.note { font-size:12px; color:#8b949e; margin:4px 0 16px }
+  .chart-wrap { background:#161b22; border:1px solid #30363d; border-radius:8px; padding:20px; margin-bottom:32px }
+  .stat { display:inline-block; background:#21262d; border:1px solid #30363d; border-radius:6px;
+           padding:8px 16px; margin:4px; font-size:13px }
+  .stat span { color:#58a6ff; font-weight:600 }
+</style>
+</head>
+<body>
+<h1>IV Behaviour in Energy Sector Options Around Iran-Related Geopolitical Events</h1>
+<p class="note">
+  Preview — 11 events included (3 filtered by &lt;1.5% price move; 1 excluded — no WRDS data post-2025-08-29).
+  IV normalised to 100 at T-20. Instruments: XLE, USO, XOM, CVX.
+</p>
+
+<!-- ── CHART 1: Average IV Profile ── -->
+<h2>Chart 1 — Average Normalised IV Profile (T-20 to T+30)</h2>
+<p class="note">
+  Mean composite IV across 11 events ± 1 std dev. Composite = equal-weight average of available
+  tickers per event. Shaded band reflects cross-event dispersion, not a statistical confidence interval
+  (n=11 events — interpret with appropriate caution).
+</p>
+<div class="chart-wrap">
+  <canvas id="profileChart" height="90"></canvas>
+</div>
+
+<!-- ── CHART 2: Heatmap ── -->
+<h2>Chart 2 — Event × Instrument IV Change from T-20 Baseline</h2>
+
+    <table style="border-collapse:collapse;width:100%;font-family:sans-serif">
+      <thead>
+        <tr>
+          <th style="padding:6px 10px;text-align:left">Event</th>
+          <th colspan="4" style="text-align:center;padding:4px 8px;border-right:1px solid #333">XLE</th><th colspan="4" style="text-align:center;padding:4px 8px;border-right:1px solid #333">USO</th><th colspan="4" style="text-align:center;padding:4px 8px;border-right:1px solid #333">XOM</th><th colspan="4" style="text-align:center;padding:4px 8px;border-right:1px solid #333">CVX</th>
+        </tr>
+        <tr>
+          <th></th><th style="padding:3px 5px;font-size:11px;color:#aaa">T0</th><th style="padding:3px 5px;font-size:11px;color:#aaa">T+5</th><th style="padding:3px 5px;font-size:11px;color:#aaa">T+10</th><th style="padding:3px 5px;font-size:11px;color:#aaa">T+30</th><th style="padding:3px 5px;font-size:11px;color:#aaa">T0</th><th style="padding:3px 5px;font-size:11px;color:#aaa">T+5</th><th style="padding:3px 5px;font-size:11px;color:#aaa">T+10</th><th style="padding:3px 5px;font-size:11px;color:#aaa">T+30</th><th style="padding:3px 5px;font-size:11px;color:#aaa">T0</th><th style="padding:3px 5px;font-size:11px;color:#aaa">T+5</th><th style="padding:3px 5px;font-size:11px;color:#aaa">T+10</th><th style="padding:3px 5px;font-size:11px;color:#aaa">T+30</th><th style="padding:3px 5px;font-size:11px;color:#aaa">T0</th><th style="padding:3px 5px;font-size:11px;color:#aaa">T+5</th><th style="padding:3px 5px;font-size:11px;color:#aaa">T+10</th><th style="padding:3px 5px;font-size:11px;color:#aaa">T+30</th>
+        </tr>
+      </thead>
+      <tbody><tr><td style="padding:4px 10px;font-size:12px;white-space:nowrap;background:#1a3a4a">Iranian speedboats confront US Navy</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+12.2</td><td style="padding:4px 6px;text-align:right;background:#e67e22;color:#fff;font-size:12px;font-family:monospace">+7.2</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+55.4</td><td style="padding:4px 6px;text-align:right;background:#e67e22;color:#fff;font-size:12px;font-family:monospace">+3.6</td><td style="padding:4px 6px;text-align:right;background:#e67e22;color:#fff;font-size:12px;font-family:monospace">+3.1</td><td style="padding:4px 6px;text-align:right;background:#2c3e50;color:#ccc;font-size:12px;font-family:monospace">-1.7</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+14.3</td><td style="padding:4px 6px;text-align:right;background:#e67e22;color:#fff;font-size:12px;font-family:monospace">+5.8</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+13.0</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+13.5</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+48.7</td><td style="padding:4px 6px;text-align:right;background:#1a5276;color:#fff;font-size:12px;font-family:monospace">-3.5</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+13.1</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+12.9</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+57.3</td><td style="padding:4px 6px;text-align:right;background:#e67e22;color:#fff;font-size:12px;font-family:monospace">+7.2</td></tr><tr><td style="padding:4px 10px;font-size:12px;white-space:nowrap;background:#1a3a4a">Iran threatens to close Strait</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-22.9</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-9.7</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-16.6</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-11.8</td><td style="padding:4px 6px;text-align:right;background:#1a5276;color:#fff;font-size:12px;font-family:monospace">-7.2</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-8.9</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-10.1</td><td style="padding:4px 6px;text-align:right;background:#2c3e50;color:#ccc;font-size:12px;font-family:monospace">-0.7</td><td style="padding:4px 6px;text-align:right;background:#1a5276;color:#fff;font-size:12px;font-family:monospace">-7.9</td><td style="padding:4px 6px;text-align:right;background:#e67e22;color:#fff;font-size:12px;font-family:monospace">+3.3</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-11.9</td><td style="padding:4px 6px;text-align:right;background:#1a5276;color:#fff;font-size:12px;font-family:monospace">-6.3</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-9.4</td><td style="padding:4px 6px;text-align:right;background:#1a5276;color:#fff;font-size:12px;font-family:monospace">-5.5</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-14.6</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-12.6</td></tr><tr><td style="padding:4px 10px;font-size:12px;white-space:nowrap;background:#1a3a4a">Four tankers sabotaged off UAE</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+35.6</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+8.5</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+18.0</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+15.6</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+31.1</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+14.5</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+34.5</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+64.5</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+11.7</td><td style="padding:4px 6px;text-align:right;background:#1a5276;color:#fff;font-size:12px;font-family:monospace">-4.9</td><td style="padding:4px 6px;text-align:right;background:#e67e22;color:#fff;font-size:12px;font-family:monospace">+6.9</td><td style="padding:4px 6px;text-align:right;background:#e67e22;color:#fff;font-size:12px;font-family:monospace">+5.7</td><td style="padding:4px 6px;text-align:right;background:#1a5276;color:#fff;font-size:12px;font-family:monospace">-4.8</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-23.0</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-13.5</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-13.7</td></tr><tr><td style="padding:4px 10px;font-size:12px;white-space:nowrap;background:#1a3a4a">Two tankers attacked in Gulf of Oman</td><td style="padding:4px 6px;text-align:right;background:#2c3e50;color:#ccc;font-size:12px;font-family:monospace">+2.6</td><td style="padding:4px 6px;text-align:right;background:#2c3e50;color:#ccc;font-size:12px;font-family:monospace">+1.6</td><td style="padding:4px 6px;text-align:right;background:#2c3e50;color:#ccc;font-size:12px;font-family:monospace">+1.2</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-17.7</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+51.6</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+43.3</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+28.1</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+9.6</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+9.3</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+10.4</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+14.0</td><td style="padding:4px 6px;text-align:right;background:#2c3e50;color:#ccc;font-size:12px;font-family:monospace">+1.2</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+9.1</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+8.9</td><td style="padding:4px 6px;text-align:right;background:#e67e22;color:#fff;font-size:12px;font-family:monospace">+7.6</td><td style="padding:4px 6px;text-align:right;background:#2c3e50;color:#ccc;font-size:12px;font-family:monospace">+0.7</td></tr><tr><td style="padding:4px 10px;font-size:12px;white-space:nowrap;background:#1a3a4a">Iran shoots down US RQ-4 drone</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+12.1</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+11.7</td><td style="padding:4px 6px;text-align:right;background:#1a5276;color:#fff;font-size:12px;font-family:monospace">-5.1</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+22.9</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+44.9</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+29.6</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+19.4</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+23.7</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+15.1</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+18.8</td><td style="padding:4px 6px;text-align:right;background:#2c3e50;color:#ccc;font-size:12px;font-family:monospace">-0.2</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+20.9</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+13.4</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+12.0</td><td style="padding:4px 6px;text-align:right;background:#2c3e50;color:#ccc;font-size:12px;font-family:monospace">+0.3</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+21.0</td></tr><tr><td style="padding:4px 10px;font-size:12px;white-space:nowrap;background:#4a3a1a">Soleimani assassination</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-8.3</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-15.5</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-23.2</td><td style="padding:4px 6px;text-align:right;background:#1a5276;color:#fff;font-size:12px;font-family:monospace">-3.5</td><td style="padding:4px 6px;text-align:right;background:#1a5276;color:#fff;font-size:12px;font-family:monospace">-8.0</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-12.4</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-20.3</td><td style="padding:4px 6px;text-align:right;background:#e67e22;color:#fff;font-size:12px;font-family:monospace">+6.2</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+15.3</td><td style="padding:4px 6px;text-align:right;background:#e67e22;color:#fff;font-size:12px;font-family:monospace">+6.1</td><td style="padding:4px 6px;text-align:right;background:#1a5276;color:#fff;font-size:12px;font-family:monospace">-5.5</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+19.7</td><td style="padding:4px 6px;text-align:right;background:#e67e22;color:#fff;font-size:12px;font-family:monospace">+3.7</td><td style="padding:4px 6px;text-align:right;background:#2c3e50;color:#ccc;font-size:12px;font-family:monospace">+0.7</td><td style="padding:4px 6px;text-align:right;background:#1a5276;color:#fff;font-size:12px;font-family:monospace">-7.3</td><td style="padding:4px 6px;text-align:right;background:#e67e22;color:#fff;font-size:12px;font-family:monospace">+5.2</td></tr><tr><td style="padding:4px 10px;font-size:12px;white-space:nowrap;background:#1a4a3a">Israel strikes Iranian consulate Damascus</td><td style="padding:4px 6px;text-align:right;background:#2c3e50;color:#ccc;font-size:12px;font-family:monospace">-1.6</td><td style="padding:4px 6px;text-align:right;background:#e67e22;color:#fff;font-size:12px;font-family:monospace">+3.5</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+14.8</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-11.7</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-15.8</td><td style="padding:4px 6px;text-align:right;background:#e67e22;color:#fff;font-size:12px;font-family:monospace">+3.1</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+13.6</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-15.8</td><td style="padding:4px 6px;text-align:right;background:#2c3e50;color:#ccc;font-size:12px;font-family:monospace">-1.8</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+8.1</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+21.4</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-11.3</td><td style="padding:4px 6px;text-align:right;background:#2c3e50;color:#ccc;font-size:12px;font-family:monospace">-0.1</td><td style="padding:4px 6px;text-align:right;background:#e67e22;color:#fff;font-size:12px;font-family:monospace">+4.8</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+23.0</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-13.5</td></tr><tr><td style="padding:4px 10px;font-size:12px;white-space:nowrap;background:#1a4a3a">Iran ballistic missile strike on Israel</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+13.9</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+33.6</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+16.9</td><td style="padding:4px 6px;text-align:right;background:#2c3e50;color:#ccc;font-size:12px;font-family:monospace">-2.2</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+24.3</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+55.8</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+43.5</td><td style="padding:4px 6px;text-align:right;background:#1a5276;color:#fff;font-size:12px;font-family:monospace">-4.3</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+15.5</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+23.3</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+12.3</td><td style="padding:4px 6px;text-align:right;background:#1a5276;color:#fff;font-size:12px;font-family:monospace">-6.8</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+20.3</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+32.6</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+23.0</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-11.2</td></tr><tr><td style="padding:4px 10px;font-size:12px;white-space:nowrap;background:#1a4a3a">Israel strikes Iran directly</td><td style="padding:4px 6px;text-align:right;background:#2c3e50;color:#ccc;font-size:12px;font-family:monospace">+2.3</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+10.2</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-12.7</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-17.4</td><td style="padding:4px 6px;text-align:right;background:#2c3e50;color:#ccc;font-size:12px;font-family:monospace">+0.6</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+11.5</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-8.9</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-21.9</td><td style="padding:4px 6px;text-align:right;background:#e67e22;color:#fff;font-size:12px;font-family:monospace">+6.0</td><td style="padding:4px 6px;text-align:right;background:#2c3e50;color:#ccc;font-size:12px;font-family:monospace">-0.2</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-15.2</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-13.2</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+10.9</td><td style="padding:4px 6px;text-align:right;background:#1a5276;color:#fff;font-size:12px;font-family:monospace">-4.6</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-24.1</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-21.6</td></tr><tr><td style="padding:4px 10px;font-size:12px;white-space:nowrap;background:#3a1a4a">Twelve-Day War begins — Israel strikes Iran</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+14.7</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+9.9</td><td style="padding:4px 6px;text-align:right;background:#2c3e50;color:#ccc;font-size:12px;font-family:monospace">-0.6</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-8.6</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+50.7</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+37.1</td><td style="padding:4px 6px;text-align:right;background:#1a5276;color:#fff;font-size:12px;font-family:monospace">-5.7</td><td style="padding:4px 6px;text-align:right;background:#2c3e50;color:#ccc;font-size:12px;font-family:monospace">-0.1</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+18.7</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+8.1</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+9.4</td><td style="padding:4px 6px;text-align:right;background:#2c3e50;color:#ccc;font-size:12px;font-family:monospace">+1.5</td><td style="padding:4px 6px;text-align:right;background:#7f0000;color:#fff;font-size:12px;font-family:monospace">+16.3</td><td style="padding:4px 6px;text-align:right;background:#e67e22;color:#fff;font-size:12px;font-family:monospace">+7.1</td><td style="padding:4px 6px;text-align:right;background:#e67e22;color:#fff;font-size:12px;font-family:monospace">+6.6</td><td style="padding:4px 6px;text-align:right;background:#1a5276;color:#fff;font-size:12px;font-family:monospace">-5.8</td></tr><tr><td style="padding:4px 10px;font-size:12px;white-space:nowrap;background:#3a1a4a">Ceasefire — Twelve-Day War ends</td><td style="padding:4px 6px;text-align:right;background:#1a5276;color:#fff;font-size:12px;font-family:monospace">-4.1</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-11.7</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-10.2</td><td style="padding:4px 6px;text-align:right;background:#1a5276;color:#fff;font-size:12px;font-family:monospace">-7.1</td><td style="padding:4px 6px;text-align:right;background:#c0392b;color:#fff;font-size:12px;font-family:monospace">+8.4</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-11.2</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-20.2</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-13.1</td><td style="padding:4px 6px;text-align:right;background:#1a5276;color:#fff;font-size:12px;font-family:monospace">-5.9</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-13.8</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-13.2</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-11.4</td><td style="padding:4px 6px;text-align:right;background:#1a5276;color:#fff;font-size:12px;font-family:monospace">-4.5</td><td style="padding:4px 6px;text-align:right;background:#1a5276;color:#fff;font-size:12px;font-family:monospace">-8.0</td><td style="padding:4px 6px;text-align:right;background:#2c3e50;color:#ccc;font-size:12px;font-family:monospace">+1.1</td><td style="padding:4px 6px;text-align:right;background:#0d2137;color:#fff;font-size:12px;font-family:monospace">-16.5</td></tr></tbody>
+    </table>
+    <p style="font-size:11px;color:#888;margin-top:8px">
+      Values are IV change from T-20 baseline (normalised to 100). Colour: red = IV elevated, blue = IV suppressed.
+    </p>
+
+<!-- ── CHART 3: Strategy P&L ── -->
+<h2>Chart 3 — Strategy Backtest: Short IV at T0 Close, Exit T+17</h2>
+<p class="note">
+  Strategy derived from average IV profile: composite IV peaks near T0, mean-reverts to baseline by T+17.
+  P&L = IV points gained/lost (short: profit when IV falls). Equal-weight, one unit per event.
+  <strong>Note: simplified vega-proxy backtest — not an exact options P&amp;L.</strong><br>
+  <span style="color:#f0a500">&#9888;</span>
+  <strong style="color:#f0a500">Event 2 flagged (amber bars):</strong>
+  Iranian speedboats Jan 2008 — T+10 IV spike of +48–57 pts likely driven by GFC vol regime
+  (Bear Stearns Mar 2008), not geopolitical premium. Full-sample and ex-event-2 cumulative lines shown separately.
+</p>
+<p style="font-size:12px;color:#8b949e;margin:4px 0">Full sample (11 events)</p>
+<div style="margin-bottom:8px">
+  <div class="stat">Win rate <span>45%</span></div>
+  <div class="stat">Avg P&L <span>+6.15 pts</span></div>
+  <div class="stat">Total P&L <span>+67.64 pts</span></div>
+  <div class="stat">Max loss <span>-9.92 pts</span></div>
+</div>
+<p style="font-size:12px;color:#8b949e;margin:4px 0">Ex-event-2 / ex-GFC (10 events)</p>
+<div style="margin-bottom:16px">
+  <div class="stat">Win rate <span>50%</span></div>
+  <div class="stat">Avg P&L <span>+6.95 pts</span></div>
+  <div class="stat">Total P&L <span>+69.48 pts</span></div>
+  <div class="stat">Max loss <span>-9.92 pts</span></div>
+</div>
+<div class="chart-wrap">
+  <canvas id="pnlChart" height="100"></canvas>
+</div>
+
+<script>
+// ── Chart 1: IV Profile ──────────────────────────────────────────────────────
+const profileCtx = document.getElementById('profileChart').getContext('2d');
+new Chart(profileCtx, {
+  data: {
+    labels: ["T-20", "T-19", "T-18", "T-17", "T-16", "T-15", "T-14", "T-13", "T-12", "T-11", "T-10", "T-9", "T-8", "T-7", "T-6", "T-5", "T-4", "T-3", "T-2", "T-1", "T0", "T+1", "T+2", "T+3", "T+4", "T+5", "T+6", "T+7", "T+8", "T+9", "T+10", "T+11", "T+12", "T+13", "T+14", "T+15", "T+16", "T+17", "T+18", "T+19", "T+20", "T+21", "T+22", "T+23", "T+24", "T+25", "T+26", "T+27", "T+28", "T+29", "T+30"],
+    datasets: [
+      {
+        type: 'line',
+        label: 'Upper band (mean + 1σ)',
+        data: [100.0, 108.71, 106.34, 112.04, 112.89, 114.24, 121.24, 120.72, 116.55, 118.09, 115.2, 116.13, 117.04, 113.43, 116.86, 114.93, 119.42, 118.41, 116.23, 116.65, 121.28, 119.61, 126.36, 123.69, 121.67, 120.87, 116.85, 117.43, 121.25, 118.88, 124.45, 122.63, 117.59, 122.78, 123.37, 118.91, 117.85, 115.95, 116.6, 116.28, 117.88, 118.08, 118.82, 114.06, 115.02, 113.42, 110.96, 109.95, 108.25, 112.77, 111.67],
+        borderColor: 'transparent',
+        backgroundColor: 'rgba(88,166,255,0.12)',
+        pointRadius: 0,
+        fill: '+1',
+        order: 3,
+      },
+      {
+        type: 'line',
+        label: 'Mean composite IV',
+        data: [100.0, 101.7, 99.6, 102.57, 103.11, 103.45, 107.11, 106.54, 104.48, 104.37, 103.03, 101.7, 102.97, 102.25, 104.6, 103.85, 107.81, 107.09, 106.01, 105.74, 109.03, 107.41, 109.39, 109.24, 107.71, 107.28, 104.74, 104.24, 105.82, 103.34, 105.73, 104.95, 103.87, 105.73, 106.82, 104.4, 103.91, 102.88, 102.89, 101.81, 101.82, 102.35, 102.17, 99.72, 101.34, 101.25, 99.79, 98.44, 96.46, 98.23, 98.9],
+        borderColor: '#58a6ff',
+        backgroundColor: 'transparent',
+        borderWidth: 2.5,
+        pointRadius: 0,
+        tension: 0.3,
+        order: 1,
+      },
+      {
+        type: 'line',
+        label: 'Lower band (mean − 1σ)',
+        data: [100.0, 94.69, 92.85, 93.1, 93.33, 92.67, 92.98, 92.35, 92.4, 90.65, 90.85, 87.27, 88.91, 91.08, 92.34, 92.78, 96.19, 95.76, 95.8, 94.82, 96.79, 95.2, 92.42, 94.78, 93.74, 93.7, 92.62, 91.04, 90.39, 87.8, 87.02, 87.27, 90.15, 88.69, 90.27, 89.9, 89.98, 89.82, 89.18, 87.34, 85.76, 86.62, 85.52, 85.39, 87.66, 89.07, 88.62, 86.93, 84.68, 83.68, 86.13],
+        borderColor: 'transparent',
+        backgroundColor: 'rgba(88,166,255,0.12)',
+        pointRadius: 0,
+        fill: '-1',
+        order: 3,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { labels: { color: '#8b949e', filter: item => item.label === 'Mean composite IV' } },
+      tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y?.toFixed(1)}` } },
+      annotation: { annotations: {
+        t0Line: {
+          type: 'line', xMin: 20, xMax: 20,
+          borderColor: 'rgba(248,81,73,0.7)', borderWidth: 1.5, borderDash: [4,4],
+          label: { content: 'T0', display: true, color: '#f85149', font: { size: 11 } }
+        },
+        baseline: {
+          type: 'line', yMin: 100, yMax: 100,
+          borderColor: 'rgba(139,148,158,0.3)', borderWidth: 1, borderDash: [4,4],
+        }
+      } }
+    },
+    scales: {
+      x: { ticks: { color: '#8b949e', maxTicksLimit: 11, font: { size: 11 } }, grid: { color: '#21262d' } },
+      y: { ticks: { color: '#8b949e', font: { size: 11 } }, grid: { color: '#21262d' },
+           title: { display: true, text: 'Normalised IV (100 = T-20 level)', color: '#8b949e', font: { size: 11 } } }
+    }
+  }
+});
+
+// ── Chart 3: Strategy P&L ────────────────────────────────────────────────────
+const pnlCtx = document.getElementById('pnlChart').getContext('2d');
+new Chart(pnlCtx, {
+  data: {
+    labels: ["Iranian speedboats confront US Navy", "Iran threatens to close Strait", "Four tankers sabotaged off UAE", "Two tankers attacked in Gulf of Oman", "Iran shoots down US RQ-4 drone", "Soleimani assassination", "Israel strikes Iranian consulate Damascus", "Iran ballistic missile strike on Israel", "Israel strikes Iran directly", "Twelve-Day War begins \u2014 Israel strikes Iran", "Ceasefire \u2014 Twelve-Day War ends"],
+    datasets: [
+      {
+        type: 'bar',
+        label: 'Per-event P&L (IV points)',
+        data: [-1.84, -4.62, -4.2, 21.32, 17.46, -8.95, -9.92, -3.45, 21.78, 28.98, 11.08],
+        backgroundColor: ["rgba(180,120,0,0.6)", "rgba(192,57,43,0.8)", "rgba(192,57,43,0.8)", "rgba(39,174,96,0.8)", "rgba(39,174,96,0.8)", "rgba(192,57,43,0.8)", "rgba(192,57,43,0.8)", "rgba(192,57,43,0.8)", "rgba(39,174,96,0.8)", "rgba(39,174,96,0.8)", "rgba(39,174,96,0.8)"],
+        order: 2,
+        yAxisID: 'y',
+      },
+      {
+        type: 'line',
+        label: 'Cumulative P&L (full sample)',
+        data: [-1.84, -6.46, -10.66, 10.66, 28.12, 19.17, 9.25, 5.8, 27.58, 56.56, 67.64],
+        borderColor: '#f0a500',
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        pointRadius: 3,
+        tension: 0.1,
+        order: 1,
+        yAxisID: 'y2',
+      },
+      {
+        type: 'line',
+        label: 'Cumulative P&L (ex-event-2)',
+        data: [null, -6.46, -10.66, 10.66, 28.12, 19.17, 9.25, 5.8, 27.58, 56.56, 67.64],
+        borderColor: '#58a6ff',
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        borderDash: [5, 3],
+        pointRadius: 3,
+        tension: 0.1,
+        order: 1,
+        yAxisID: 'y2',
+        spanGaps: false,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { labels: { color: '#8b949e' } },
+      tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y?.toFixed(2)}` } }
+    },
+    scales: {
+      x: { ticks: { color: '#8b949e', font: { size: 10 }, maxRotation: 45 }, grid: { color: '#21262d' } },
+      y: {
+        position: 'left',
+        ticks: { color: '#8b949e', font: { size: 11 } },
+        grid:  { color: '#21262d' },
+        title: { display: true, text: 'Per-event P&L (IV pts)', color: '#8b949e', font: { size: 11 } }
+      },
+      y2: {
+        position: 'right',
+        ticks: { color: '#f0a500', font: { size: 11 } },
+        grid:  { drawOnChartArea: false },
+        title: { display: true, text: 'Cumulative P&L (IV pts)', color: '#f0a500', font: { size: 11 } }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
