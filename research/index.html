@@ -41,6 +41,7 @@ h1 em{font-style:italic;color:#1a5c52}
 .report-row:nth-child(2){transition-delay:0.08s}
 .report-row:nth-child(3){transition-delay:0.16s}
 .report-row:nth-child(4){transition-delay:0.24s}
+.report-row:nth-child(5){transition-delay:0.32s}
 .report-row:first-of-type{border-top:1px solid #e2ddd0}
 .report-row:hover .report-title{color:#1a5c52}
 .report-row.wip{opacity:.5;cursor:default}
@@ -142,6 +143,25 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
   <!-- MAIN LIST -->
   <div class="main-list">
 
+    <a class="report-row" href="/research/etf-factor-sector-rotation-strategy/">
+      <div class="report-left">
+        <div class="ctag">13 ETFs · Factor &amp; Sector Rotation</div>
+        <div class="report-title">Factor &amp; Sector Rotation: A Systematic Parameter Optimisation</div>
+        <div class="report-desc">A monthly ETF rotation strategy across a Factor sleeve (MTUM, QUAL, IWD, IWM) and a Sector sleeve (nine SPDRs), tested across 60 parameter combinations — 5 momentum lookbacks, 6 SPY drawdown filters, and 2 sleeve allocation rules. Full sensitivity analysis with Sharpe heatmaps. SPY outperforms the best combo in this window — reported honestly.</div>
+        <div class="report-metrics">
+          <div class="rm"><div class="rm-val">0.771</div><div class="rm-lbl">Best Sharpe</div></div>
+          <div class="rm"><div class="rm-val">11.25%</div><div class="rm-lbl">Best CAGR</div></div>
+          <div class="rm"><div class="rm-val">60</div><div class="rm-lbl">Combinations tested</div></div>
+          <div class="rm"><div class="rm-val">~12 yr</div><div class="rm-lbl">Backtest period</div></div>
+        </div>
+        <span class="read-link">Read report →</span>
+      </div>
+      <div class="report-right">
+        <div class="report-date">Mar 2026</div>
+        <span class="pub-tag">Published</span>
+      </div>
+    </a>
+
     <a class="report-row" href="/research/iran-iv-study/">
       <div class="report-left">
         <div class="ctag">XLE / USO / XOM / CVX · Geopolitical IV</div>
@@ -225,7 +245,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
     <div class="sb-block">
       <div class="sb-label">By the numbers</div>
       <div class="sb-stat">
-        <div class="sb-stat-num">4</div>
+        <div class="sb-stat-num">5</div>
         <div class="sb-stat-lbl">Published studies</div>
       </div>
       <div class="sb-stat">
