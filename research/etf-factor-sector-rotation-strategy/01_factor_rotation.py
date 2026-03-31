@@ -806,7 +806,7 @@ td.muted-cell{{color:var(--hint);font-size:.83rem}}
   padding:.15rem .55rem;border-radius:3px}}
 .sleeve-badge.factor{{background:var(--blue-bg);color:var(--blue)}}
 .sleeve-badge.sector{{background:var(--purple-bg);color:var(--purple)}}
-.chart-box{{background:var(--card);border:1px solid var(--border);
+.chart-box{{background:var(--bg2);border:1px solid var(--border);
   border-radius:4px;padding:1.5rem;margin:1.5rem 0}}
 .chart-title{{font-size:.85rem;font-weight:600;color:var(--ink);
   margin-bottom:1rem;letter-spacing:.02em}}
@@ -828,7 +828,7 @@ td.muted-cell{{color:var(--hint);font-size:.83rem}}
 .hm-cell strong{{font-weight:600}}
 .stat-grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));
   gap:1rem;margin:1.5rem 0}}
-.stat-card{{background:var(--card);border:1px solid var(--border);
+.stat-card{{background:var(--bg2);border:1px solid var(--border);
   border-radius:4px;padding:1.25rem}}
 .stat-label{{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
   color:var(--hint);margin-bottom:.4rem}}
@@ -838,7 +838,7 @@ td.muted-cell{{color:var(--hint);font-size:.83rem}}
 .stat-value.red{{color:var(--red2)}}
 .stat-sub{{font-size:.78rem;color:var(--muted)}}
 .param-grid{{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.5rem 0}}
-.param-card{{background:var(--card);border:1px solid var(--border);
+.param-card{{background:var(--bg2);border:1px solid var(--border);
   border-radius:4px;padding:1.25rem}}
 .param-label{{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
   color:var(--hint);margin-bottom:.75rem}}
@@ -865,6 +865,11 @@ footer{{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}}
 .footer-right{{font-size:.8rem;text-align:right}}
 .footer-right a{{color:rgba(255,255,255,.5);text-decoration:none;margin-left:1.2rem}}
 .footer-right a:hover{{color:rgba(255,255,255,.85)}}
+.gh-btn{{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);
+  font-size:.68rem;color:rgba(255,255,255,.5);text-decoration:none;
+  border:1px solid rgba(255,255,255,.2);padding:3px 9px;border-radius:3px;
+  transition:all .2s;letter-spacing:.02em;align-self:center}}
+.gh-btn:hover{{color:#fff;border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.08)}}
 @media(max-width:860px){{
   #side-nav{{display:none}}
   .kpi-grid{{grid-template-columns:repeat(2,1fr)}}
@@ -904,7 +909,8 @@ footer{{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}}
       <div class="hero-meta-item"><strong>{N_MONTHS} Months</strong>Observations</div>
       <div class="hero-meta-item"><strong>60 Combinations</strong>5 lookbacks &times; 6 filters &times; 2 splits</div>
       <div class="hero-meta-item"><strong>Compustat / WRDS</strong>Data Source</div>
-      <div class="hero-meta-item"><strong>{RUN_DATE}</strong>Report Date</div>
+      <div class="hero-meta-item"><strong>April 2026</strong>Published</div>
+      <a class="gh-btn" href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/etf-factor-sector-rotation-strategy" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg> Code</a>
     </div>
   </div>
 </div>
