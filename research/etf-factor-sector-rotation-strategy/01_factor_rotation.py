@@ -41,9 +41,11 @@ FILTER_NAMES = {
     1: '12m return < 0',
     2: 'Price < 10m SMA',
     3: 'Price < 200d SMA',
-    4: '1m close < 10m SMA',
+    4: '1m SMA < 10m SMA',
     5: 'Death cross (50d<200d)',
 }
+# Filters that use daily intra-month signals (exit/re-enter at day close)
+DAILY_FILTERS = {3, 4, 5}
 
 CACHE_DAILY   = 'prices_daily.parquet'
 CACHE_MONTHLY = 'prices_monthly.parquet'
@@ -112,7 +114,9 @@ if missing:
     sys.exit(1)
 daily_tri = daily_tri[TICKERS]
 
-spy_daily_tri = daily_tri[['SPY']].dropna()
+spy_daily_tri  = daily_tri[['SPY']].dropna()
+all_daily_tri  = daily_tri.copy()                      # all tickers, daily TRI
+all_daily_ret  = all_daily_tri.pct_change()            # daily total returns
 
 if os.path.exists(CACHE_MONTHLY):
     print(f"  [CACHE] Loading monthly TRI from {CACHE_MONTHLY}")
@@ -154,6 +158,7 @@ print("\n[FILTER] Computing SPY drawdown signals...")
 spy_m    = monthly_tri['SPY']
 spy_mr   = monthly_ret['SPY']
 
+# ── Monthly signals (F0, F1, F2): checked at month-start, hold all month ──
 f0 = pd.Series(False, index=month_ends, dtype=bool)
 
 spy_12m = spy_mr.rolling(12).apply(lambda x: (1 + x).prod() - 1, raw=True)
@@ -162,21 +167,40 @@ f1 = (spy_12m < 0).fillna(False)
 spy_10m_sma = spy_m.rolling(10).mean()
 f2 = (spy_m < spy_10m_sma).fillna(False)
 
-spy_200d   = spy_daily_tri['SPY'].rolling(200).mean()
-flag3_daily = (spy_daily_tri['SPY'] < spy_200d)
-f3 = flag3_daily.resample(_MEND).last().reindex(month_ends, method='ffill').fillna(False)
+# Monthly cash_signals for F0/F1/F2 (used for month-start check and % reporting)
+cash_signals_monthly = pd.DataFrame({0: f0, 1: f1, 2: f2}, index=month_ends)
 
-f4 = f2.copy()  # identical signal: last close vs 10m SMA
+# ── Daily signals (F3, F4, F5): intra-month exits/entries at day close ──
+# Position on day D determined by signal at close of day D-1 (shift 1 day)
+spy_d = spy_daily_tri['SPY']
 
-spy_50d   = spy_daily_tri['SPY'].rolling(50).mean()
-flag5_daily = (spy_50d < spy_200d)
-f5 = flag5_daily.resample(_MEND).last().reindex(month_ends, method='ffill').fillna(False)
+spy_sma200 = spy_d.rolling(200).mean()
+spy_sma50  = spy_d.rolling(50).mean()
+spy_sma21  = spy_d.rolling(21).mean()   # ≈ 1-month SMA
+spy_sma210 = spy_d.rolling(210).mean()  # ≈ 10-month SMA
 
-cash_signals = pd.DataFrame({0: f0, 1: f1, 2: f2, 3: f3, 4: f4, 5: f5}, index=month_ends)
+# Raw daily signal: True = should be in cash today
+f3_raw = (spy_d    < spy_sma200).fillna(False)
+f4_raw = (spy_sma21 < spy_sma210).fillna(False)
+f5_raw = (spy_sma50 < spy_sma200).fillna(False)
 
+# Shift 1 day: on day D, use signal from day D-1 close
+f3_daily = f3_raw.shift(1).fillna(False).astype(bool)
+f4_daily = f4_raw.shift(1).fillna(False).astype(bool)
+f5_daily = f5_raw.shift(1).fillna(False).astype(bool)
+
+daily_cash_signals = {3: f3_daily, 4: f4_daily, 5: f5_daily}
+
+# Report % cash for all filters (daily filters: fraction of trading days in cash)
+f3_mo = f3_raw.resample(_MEND).last().reindex(month_ends, method='ffill').fillna(False)
+f4_mo = f4_raw.resample(_MEND).last().reindex(month_ends, method='ffill').fillna(False)
+f5_mo = f5_raw.resample(_MEND).last().reindex(month_ends, method='ffill').fillna(False)
+cash_signals = pd.DataFrame({0: f0, 1: f1, 2: f2, 3: f3_mo, 4: f4_mo, 5: f5_mo},
+                             index=month_ends)
 for fid in range(6):
     pct = cash_signals[fid].mean() * 100
-    print(f"  Filter {fid} ({FILTER_NAMES[fid]}): cash {pct:.1f}% of months")
+    src = 'days' if fid in DAILY_FILTERS else 'months'
+    print(f"  Filter {fid} ({FILTER_NAMES[fid]}): cash {pct:.1f}% of {src}")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -214,11 +238,43 @@ print(f"  Backtest: {common_start.date()} to {bt_monthly_tri.index[-1].date()} (
 # ─────────────────────────────────────────────────────────────────────────────
 print("\n[GRID] Running 60-combination grid search...")
 
-# Pre-compute momentum scores for all lookbacks (vectorised)
+# Pre-compute momentum scores for all lookbacks
 mom_cache = {}
 for lb in LOOKBACKS:
     scores = monthly_tri.pct_change(lb)
     mom_cache[lb] = scores.loc[bt_monthly_tri.index]
+
+# Pre-index daily data by (year, month) for fast intra-month lookup
+_daily_idx = all_daily_ret.index
+_ym_to_days = {}
+for day in _daily_idx:
+    key_ym = (day.year, day.month)
+    _ym_to_days.setdefault(key_ym, []).append(day)
+
+def sleeve_return_daily(etf, month_end, cash_signal_d):
+    """
+    Compound daily returns for `etf` over the calendar month of `month_end`,
+    going to cash (0%) on days where cash_signal_d is True.
+    Returns (float monthly_return, float fraction_days_invested).
+    """
+    days = _ym_to_days.get((month_end.year, month_end.month), [])
+    if not days or etf not in all_daily_ret.columns:
+        return 0.0, 0.0
+    compound   = 1.0
+    days_in    = 0
+    days_total = 0
+    for day in days:
+        if day not in cash_signal_d.index:
+            continue
+        days_total += 1
+        if not cash_signal_d[day]:
+            r = all_daily_ret.at[day, etf] if day in all_daily_ret.index else 0.0
+            if pd.isna(r):
+                r = 0.0
+            compound *= (1.0 + r)
+            days_in  += 1
+    frac_in = days_in / days_total if days_total > 0 else 0.0
+    return float(compound - 1), frac_in
 
 all_port_rets = {}
 all_in_market = {}
@@ -227,55 +283,70 @@ done = 0
 for lookback, filter_id, split in product(LOOKBACKS, FILTER_IDS, SPLITS):
     key = (lookback, filter_id, split)
 
-    # Shift signals by 1 month: at date dt, use the signal from dt-1 (prior month-end)
-    # to select the ETF whose return is then earned over dt-1 → dt.
-    # This eliminates look-ahead bias: the selection is made BEFORE the return is observed.
-    cash_flag = bt_cash[filter_id].shift(1).fillna(False)
-
     m = mom_cache[lookback]
-    factor_scores  = m[FACTOR_ETFS]
-    sector_scores  = m[SECTOR_ETFS]
-    # .shift(1): value at position i = idxmax/max that was at position i-1
-    # First row becomes NaN (handled below with fallback to 0 return)
+    factor_scores   = m[FACTOR_ETFS]
+    sector_scores   = m[SECTOR_ETFS]
+    # shift(1): selection known at prior month-end, applied to this month
     factor_selected = factor_scores.idxmax(axis=1).shift(1)
     sector_selected = sector_scores.idxmax(axis=1).shift(1)
-    factor_mom = factor_scores.max(axis=1).shift(1).fillna(0.0)
-    sector_mom = sector_scores.max(axis=1).shift(1).fillna(0.0)
 
-    if split == 'A':
-        w_f = 0.5
-        w_s = 0.5
+    is_daily = filter_id in DAILY_FILTERS
+    if is_daily:
+        cash_signal_d = daily_cash_signals[filter_id]
     else:
-        f_fl = factor_mom.clip(lower=0)
-        s_fl = sector_mom.clip(lower=0)
-        total = f_fl + s_fl
-        both_neg = (factor_mom <= 0) & (sector_mom <= 0)
-        w_f_arr = np.where(both_neg, 0.5, np.where(total > 0, f_fl / total, 0.5))
-        w_s_arr = 1.0 - w_f_arr
-        w_f = pd.Series(w_f_arr, index=bt_monthly_tri.index)
-        w_s = pd.Series(w_s_arr, index=bt_monthly_tri.index)
+        # Monthly filter: shift(1) so month-start position = prior month-end signal
+        cash_flag_m = cash_signals_monthly[filter_id].shift(1).fillna(False)
 
-    # NaN selection on the first row (due to shift) → 0 return for that month
-    factor_ret = pd.Series(
-        [bt_monthly_ret.at[dt, factor_selected.at[dt]]
-         if pd.notna(factor_selected.at[dt]) else 0.0
-         for dt in bt_monthly_tri.index],
-        index=bt_monthly_tri.index, dtype=float
-    )
-    sector_ret = pd.Series(
-        [bt_monthly_ret.at[dt, sector_selected.at[dt]]
-         if pd.notna(sector_selected.at[dt]) else 0.0
-         for dt in bt_monthly_tri.index],
-        index=bt_monthly_tri.index, dtype=float
-    )
+    port_rets = []
+    f_ins     = []
+    s_ins     = []
+    prev_f_ret = 0.0   # for Split B: prior month actual sleeve returns
+    prev_s_ret = 0.0
 
-    f_in = ~cash_flag
-    s_in = ~cash_flag
-    port_ret = (w_f * factor_ret.where(f_in, 0.0) +
-                w_s * sector_ret.where(s_in, 0.0))
+    for i, dt in enumerate(bt_monthly_tri.index):
+        f_etf = factor_selected.at[dt] if pd.notna(factor_selected.at[dt]) else None
+        s_etf = sector_selected.at[dt] if pd.notna(sector_selected.at[dt]) else None
 
-    all_port_rets[key] = port_ret
-    all_in_market[key] = (f_in.astype(float), s_in.astype(float))
+        # ── Sleeve returns and in-market fractions ──
+        if is_daily:
+            f_ret, f_in = (sleeve_return_daily(f_etf, dt, cash_signal_d)
+                           if f_etf else (0.0, 0.0))
+            s_ret, s_in = (sleeve_return_daily(s_etf, dt, cash_signal_d)
+                           if s_etf else (0.0, 0.0))
+        else:
+            in_mkt = not bool(cash_flag_m.at[dt])
+            f_ret  = float(bt_monthly_ret.at[dt, f_etf]) if (f_etf and in_mkt) else 0.0
+            s_ret  = float(bt_monthly_ret.at[dt, s_etf]) if (s_etf and in_mkt) else 0.0
+            if pd.isna(f_ret): f_ret = 0.0
+            if pd.isna(s_ret): s_ret = 0.0
+            f_in   = 1.0 if in_mkt else 0.0
+            s_in   = 1.0 if in_mkt else 0.0
+
+        # ── Sleeve weights ──
+        if split == 'A':
+            w_f, w_s = 0.5, 0.5
+        else:
+            # Split B: weight by prior month's actual sleeve returns (floored at 0)
+            if i == 0:
+                w_f, w_s = 0.5, 0.5
+            else:
+                wf = max(0.0, prev_f_ret)
+                ws = max(0.0, prev_s_ret)
+                tot = wf + ws
+                if tot <= 0.0:
+                    w_f, w_s = 0.5, 0.5
+                else:
+                    w_f, w_s = wf / tot, ws / tot
+
+        port_rets.append(w_f * f_ret + w_s * s_ret)
+        f_ins.append(f_in)
+        s_ins.append(s_in)
+        prev_f_ret = f_ret
+        prev_s_ret = s_ret
+
+    all_port_rets[key] = pd.Series(port_rets, index=bt_monthly_tri.index, dtype=float)
+    all_in_market[key] = (pd.Series(f_ins, index=bt_monthly_tri.index),
+                          pd.Series(s_ins, index=bt_monthly_tri.index))
 
     done += 1
     if done % 12 == 0:
