@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Gamma Trap: How 0DTE Options Reshape Intraday SPX Dynamics | The Intrinsic Investor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root{
+  --bg:#f7f4ec;--bg2:#f0ece2;--bg3:#e8e3d8;--card:#fff;
+  --ink:#0f2220;--muted:#4a6460;--hint:#8aa49e;
+  --border:#e2ddd0;--accent:#1a5c52;--accent2:#144a42;
+  --green:#0E9F6E;--green2:#059669;--green-bg:#ecfdf5;--green-border:#a7f3d0;
+  --red:#E02424;--red2:#dc2626;--red-bg:#fef2f2;--red-border:#fca5a5;
+  --blue:#1e40af;--blue2:#2563eb;--blue-bg:#eff6ff;--blue-border:#bfdbfe;
+  --amber:#E3A008;--amber-bg:#fffbeb;--amber-border:#fcd34d;
+  --purple:#7E3AF2;--purple-bg:#f5f3ff;--purple-border:#c4b5fd;
+  --font:'Inter',sans-serif;--serif:'Fraunces',serif;--mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.7}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+  mix-blend-mode:multiply;opacity:0.5}
+#progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;
+  background:linear-gradient(90deg,#1a5c52,#2d9d8f);z-index:9998;transition:width .1s linear}
+nav{position:sticky;top:0;z-index:100;height:62px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 2rem;
+  background:rgba(247,244,236,.92);backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
+  transition:box-shadow .3s}
+nav.scrolled{box-shadow:0 1px 24px rgba(15,34,32,.06)}
+.nav-logo{font-family:var(--serif);font-weight:600;font-size:1.1rem;color:var(--ink);letter-spacing:-.01em}
+.nav-links{display:flex;gap:1.75rem;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:500;
+  position:relative;padding-bottom:2px;transition:color .2s}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
+  background:var(--accent);transform:scaleX(0);transform-origin:left;
+  transition:transform .25s cubic-bezier(.4,0,.2,1)}
+.nav-links a:hover::after{transform:scaleX(1)}
+.hero{background:var(--ink);padding:5rem 2rem 4rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:repeating-linear-gradient(-55deg,transparent,transparent 40px,
+    rgba(255,255,255,.013) 40px,rgba(255,255,255,.013) 41px)}
+.hero-inner{max-width:860px;margin:0 auto;position:relative}
+.hero-tag{display:inline-block;font-family:var(--mono);font-size:.72rem;color:var(--accent);
+  letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(26,92,82,.4);
+  padding:.25rem .75rem;border-radius:2px;margin-bottom:1.5rem;
+  animation:fadeUp .6s ease both}
+.hero h1{font-family:var(--serif);font-size:clamp(1.9rem,4.5vw,3.2rem);font-weight:600;
+  color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:1.25rem;
+  animation:fadeUp .6s .1s ease both}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero-sub{font-size:1rem;color:rgba(255,255,255,.65);max-width:620px;line-height:1.7;
+  margin-bottom:2rem;animation:fadeUp .6s .2s ease both}
+.hero-meta{display:flex;flex-wrap:wrap;gap:2rem;font-family:var(--mono);font-size:.75rem;
+  color:rgba(255,255,255,.5);border-top:1px solid rgba(255,255,255,.1);
+  padding-top:1.5rem;animation:fadeUp .6s .3s ease both}
+.hero-meta-item strong{display:block;color:rgba(255,255,255,.85);font-size:.85rem;margin-bottom:.15rem}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.kpi-strip{background:var(--card);border-bottom:1px solid var(--border);padding:2rem}
+.kpi-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.kpi-cell{padding:1.5rem;border-right:1px solid var(--border)}
+.kpi-cell:last-child{border-right:none}
+.kpi-label{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--hint);margin-bottom:.5rem}
+.kpi-value{font-family:var(--mono);font-size:1.9rem;font-weight:500;color:var(--ink);
+  line-height:1;margin-bottom:.4rem}
+.kpi-value.green{color:var(--green2)}
+.kpi-value.red{color:var(--red2)}
+.kpi-value.blue{color:var(--blue2)}
+.kpi-sub{font-size:.78rem;color:var(--muted)}
+.container{max-width:860px;margin:0 auto;padding:0 2rem}
+.section{opacity:0;transform:translateY(16px);
+  transition:opacity .55s ease,transform .55s ease;
+  padding:4.5rem 0;border-bottom:1px solid var(--border)}
+.section.visible{opacity:1;transform:none}
+.section:last-of-type{border-bottom:none}
+.section-label{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem}
+.section-counter{font-family:var(--mono);font-size:.72rem;color:var(--hint);letter-spacing:.04em}
+.section-label span:last-child{font-size:.72rem;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--hint)}
+h2{font-family:var(--serif);font-size:clamp(1.5rem,3vw,2.1rem);font-weight:600;
+  color:var(--ink);line-height:1.25;letter-spacing:-.02em;margin-bottom:1.25rem}
+h2 em{font-style:italic;color:var(--accent)}
+h3{font-family:var(--serif);font-size:1.15rem;font-weight:600;color:var(--ink);margin:2rem 0 .75rem}
+p{color:var(--muted);line-height:1.75;margin-bottom:1rem;text-align:justify;hyphens:auto}
+p:last-child{margin-bottom:0}
+.callout{display:flex;gap:1rem;padding:1.25rem 1.5rem;border-radius:4px;
+  margin:1.5rem 0;border-left:3px solid}
+.callout.green{background:var(--green-bg);border-color:var(--green2)}
+.callout.amber{background:var(--amber-bg);border-color:var(--amber)}
+.callout.red{background:var(--red-bg);border-color:var(--red2)}
+.callout.blue{background:var(--blue-bg);border-color:var(--blue2)}
+.callout.purple{background:var(--purple-bg);border-color:var(--purple)}
+.callout-icon{font-size:1.1rem;flex-shrink:0;margin-top:.1rem}
+.callout-body{font-size:.9rem;color:var(--ink);line-height:1.6}
+.callout-body strong{font-weight:600}
+.highlight-box{background:var(--ink);border-radius:4px;padding:2rem;margin:1.5rem 0}
+.hl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.hl-cell{padding:0 1.5rem;border-right:1px solid rgba(255,255,255,.1)}
+.hl-cell:first-child{padding-left:0}
+.hl-cell:last-child{border-right:none}
+.hl-label{font-size:.7rem;font-weight:500;color:rgba(255,255,255,.35);text-transform:uppercase;
+  letter-spacing:.1em;margin-bottom:.5rem}
+.hl-value{font-family:var(--serif);font-style:italic;font-size:1.75rem;color:#5ab5a5;line-height:1.1}
+.hl-sub{font-size:.75rem;color:rgba(255,255,255,.3);margin-top:.3rem}
+.chart-box{background:var(--bg2);border:1px solid var(--border);
+  border-radius:4px;padding:1.5rem;margin:1.5rem 0}
+.chart-title{font-size:.85rem;font-weight:600;color:var(--ink);
+  margin-bottom:1rem;letter-spacing:.02em}
+.chart-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.legend-line{width:16px;height:2px;flex-shrink:0}
+.table-wrap{overflow-x:auto;margin:1.5rem 0;border-radius:4px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:.875rem}
+thead tr{background:var(--ink);color:#fff}
+thead th{padding:.7rem .9rem;text-align:left;font-weight:500;font-size:.75rem;letter-spacing:.04em}
+tbody tr{border-bottom:1px solid var(--border)}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--bg2)}
+td{padding:.65rem .9rem;color:var(--muted);vertical-align:middle}
+.mono{font-family:var(--mono);font-size:.82rem}
+.badge{display:inline-block;padding:2px 8px;border-radius:3px;font-size:.72rem;font-weight:600}
+.badge.red{background:var(--red-bg);color:var(--red2)}
+.badge.amber{background:var(--amber-bg);color:var(--amber)}
+.badge.green{background:var(--green-bg);color:var(--green2)}
+#side-nav{position:fixed;right:0;top:50%;transform:translateY(-50%);
+  z-index:50;display:flex;flex-direction:column;gap:2px;padding:10px 6px}
+#side-nav a{display:flex;align-items:center;justify-content:flex-end;gap:7px;
+  text-decoration:none;padding:5px 8px;border-radius:4px;transition:background .2s}
+#side-nav a:hover{background:rgba(26,92,82,.07)}
+.sn-label{font-size:.67rem;font-weight:500;color:var(--hint);white-space:nowrap;
+  letter-spacing:.02em;font-family:var(--font);transition:color .2s;text-align:right}
+.sn-dot{width:5px;height:5px;border-radius:50%;background:var(--border);
+  flex-shrink:0;transition:all .2s}
+#side-nav a.active .sn-label{color:var(--accent);font-weight:600}
+#side-nav a.active .sn-dot{background:var(--accent);transform:scale(1.5)}
+#side-nav a:hover .sn-label{color:var(--ink)}
+#side-nav a:hover .sn-dot{background:var(--muted)}
+footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
+.footer-inner{max-width:860px;margin:0 auto;display:flex;
+  justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.footer-name{font-family:var(--serif);font-weight:600;font-size:1rem;color:rgba(255,255,255,.9)}
+.footer-right{font-size:.8rem;text-align:right}
+.footer-right a{color:rgba(255,255,255,.5);text-decoration:none;margin-left:1.2rem}
+.footer-right a:hover{color:rgba(255,255,255,.85)}
+.gh-btn{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);
+  font-size:.68rem;color:rgba(255,255,255,.5);text-decoration:none;
+  border:1px solid rgba(255,255,255,.2);padding:3px 9px;border-radius:3px;
+  transition:all .2s;letter-spacing:.02em;align-self:center}
+.gh-btn:hover{color:#fff;border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.08)}
+@media(max-width:860px){
+  #side-nav{display:none}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-inner{flex-direction:column;text-align:center}
+  .footer-right{text-align:center}
+}
+@media(max-width:560px){
+  .kpi-cell{border-right:none;border-bottom:1px solid var(--border)}
+  .hl-grid{grid-template-columns:1fr;gap:1rem}
+  .hl-cell{border-right:none;padding:0;border-bottom:1px solid rgba(255,255,255,.08);padding-bottom:1rem}
+  .hl-cell:last-child{border-bottom:none}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<nav>
+  <div class="nav-logo">The Intrinsic Investor</div>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/research">Research</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">0DTE Options Research</div>
+    <h1>The Gamma Trap: <em>How 0DTE Options Reshape Intraday SPX Dynamics</em></h1>
+    <p class="hero-sub">Every day, dealers who sell zero-days-to-expiry SPX options must hedge their positions in real time. When their aggregate gamma exposure turns negative, that hedging mechanically amplifies intraday moves. We measure this effect empirically using OptionMetrics and TAQ data across 722 trading days.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><strong>Brian Liew</strong>LSE, BSc Accounting and Finance</div>
+      <div class="hero-meta-item"><strong>Jan 2022 &ndash; Aug 2025</strong>Sample Period</div>
+      <div class="hero-meta-item"><strong>722 Trading Days</strong>Observations</div>
+      <div class="hero-meta-item"><strong>OptionMetrics &amp; TAQ via WRDS</strong>Data Sources</div>
+      <div class="hero-meta-item"><strong>April 2026</strong>Published</div>
+      <a class="gh-btn" href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/0dte-gamma-trap" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg> Code</a>
+    </div>
+  </div>
+</div>
+
+<div class="kpi-strip">
+  <div class="kpi-grid">
+    <div class="kpi-cell">
+      <div class="kpi-label">Vol Premium (Neg vs High GEX)</div>
+      <div class="kpi-value red">+42%</div>
+      <div class="kpi-sub">higher intraday vol when GEX negative</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">R&#178; (GEX vs RVol)</div>
+      <div class="kpi-value blue">0.054</div>
+      <div class="kpi-sub">OLS regression, 722 day sample</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">p-value (t-test)</div>
+      <div class="kpi-value green">0.0000</div>
+      <div class="kpi-sub">Neg GEX vs High GEX, Welch&#8217;s t</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">Days with Positive GEX</div>
+      <div class="kpi-value green">52%</div>
+      <div class="kpi-sub">of the 722-day sample</div>
+    </div>
+  </div>
+</div>
+
+<section class="section" id="s1">
+<div class="container">
+  <div class="section-label"><span class="section-counter">01</span><span>Background</span></div>
+    <h2>What is Dealer Gamma Exposure?</h2>
+
+    <p>
+      Zero-days-to-expiry (0DTE) SPX options — contracts that expire the same calendar day they
+      are traded — have grown from a curiosity to a dominant force in US equity markets. Since the
+      CBOE introduced daily SPX expirations in May 2022, 0DTE options now routinely account for
+      more than 40% of total SPX options volume. Behind every one of those contracts is a market
+      maker who has sold it and must now manage the resulting risk.
+    </p>
+
+    <h3>Delta-hedging and the gamma feedback loop</h3>
+
+    <p>
+      When a dealer sells an option, they delta-hedge their exposure by taking an offsetting
+      position in the underlying. As the underlying price moves, delta changes, and the dealer
+      must adjust their hedge continuously. The rate at which delta changes with price is gamma
+      (&#915;). A dealer who is <em>long</em> gamma profits from this adjustment process &#8212;
+      they buy when prices fall and sell when prices rise, acting as a natural stabiliser.
+      A dealer who is <em>short</em> gamma must do the opposite: buy as prices rise and sell
+      as prices fall. Their hedging <em>amplifies</em> the very moves they are trying to hedge.
+    </p>
+
+    <p>
+      Dealer Gamma Exposure (GEX) aggregates this effect across all open 0DTE contracts.
+      Under the standard assumption &#8212; that all open interest represents customer-bought
+      positions with dealers on the other side &#8212; GEX is computed as:
+    </p>
+
+    <div class="callout blue">
+      <div class="callout-icon">&#402;</div>
+      <div class="callout-body">
+        <strong>GEX = &#931; (Call OI &#215; &#915;<sub>call</sub> &#8722; Put OI &#215; &#915;<sub>put</sub>) &#215; 100 &#215; S / 10&#185;&#8313;</strong><br>
+        where &#915; is the Black-Scholes gamma per share, OI is open interest in contracts,
+        100 is the standard multiplier, S is the spot price, and the result is expressed
+        in billions of dollars of underlying per 1% move. <strong>Positive GEX</strong> means
+        dealers are net long gamma (vol suppressing). <strong>Negative GEX</strong> means
+        dealers are net short gamma (vol amplifying).
+      </div>
+    </div>
+
+    <p>
+      The call-minus-put sign convention reflects empirical observation: SPX call open interest
+      is predominantly driven by customer hedgers and income sellers, while put open interest is
+      dominated by protective buyers. Dealers tend to be net short calls and net long puts in
+      aggregate, yielding positive net gamma under normal conditions. But 0DTE options are
+      different &#8212; they expire the same day, so open interest at the start of the session
+      represents only same-day speculative and hedging activity, with a sharper intraday
+      gamma profile than any multi-day contract.
+    </p>
+
+    <div class="callout amber">
+      <div class="callout-icon">&#9888;</div>
+      <div class="callout-body">
+        <strong>Methodology caveat:</strong> The standard GEX assumption treats all open interest
+        as customer-long. In reality, dealers both buy and sell options. This approach is used
+        throughout industry (SpotGamma, Squeezemetrics) because signed OI data is not publicly
+        available at the required granularity. GEX should be interpreted as a <em>directional
+        signal</em> rather than a precise measure of dealer positioning.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="s2">
+<div class="container">
+  <div class="section-label"><span class="section-counter">02</span><span>Data &amp; GEX</span></div>
+    <h2>Building the GEX Time Series</h2>
+
+    <p>
+      We pull every SPX 0DTE option record from OptionMetrics via WRDS for the period
+      Jan 2022 to Dec 2024. A contract qualifies as 0DTE if its expiration date
+      equals the quote date. For each trading day, we sum the signed gamma&#8202;&#215;&#8202;OI
+      product across all qualifying strikes and apply the GEX formula above, using the
+      SPY closing price as a proxy for the SPX spot price in dollar-normalisation.
+    </p>
+
+    <p>
+      Realized intraday volatility is computed from TAQ consolidated trades for SPY.
+      For each day, we aggregate individual trades into five-minute VWAP bars from
+      9:30&#8202;am to 4:00&#8202;pm EST (78 intervals), compute the sequence of log returns,
+      and annualise the realised variance: <em>&#963; = &#8730;(&#8721; r&#8202;&#178; &#215; 252 &#215; 78)</em>.
+      This measure captures intraday price variability without contamination from
+      overnight gap risk.
+    </p>
+
+    <div class="chart-box">
+      <div class="chart-title">Chart 1 &#8202;&#8212;&#8202; Daily SPX 0DTE GEX, Jan 2022&#8202;&#8211;&#8202;Dec 2024</div>
+      <canvas id="gexChart" height="80"></canvas>
+      <div class="chart-legend">
+        <div class="legend-item"><span class="legend-dot" style="background:#059669"></span>Positive GEX (dealers long gamma)</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#dc2626"></span>Negative GEX (dealers short gamma)</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>Low positive GEX</div>
+      </div>
+    </div>
+
+    <p>
+      Over the full sample, <strong>52%</strong> of trading days had positive GEX &#8212;
+      meaning dealers were net long gamma on the majority of sessions. The distribution is
+      right-skewed: large positive GEX readings (dealers very long gamma) are more common than
+      deeply negative ones. Negative GEX days tend to cluster around macro events, FOMC
+      announcements, and periods of elevated VIX, when put buyers dominate 0DTE flow.
+    </p>
+  </div>
+</div>
+
+<section class="section" id="s3">
+<div class="container">
+  <div class="section-label"><span class="section-counter">03</span><span>The Two Regimes</span></div>
+    <h2>Negative GEX Days Are Structurally More Volatile</h2>
+
+    <p>
+      We classify each trading day into one of three regimes based on daily GEX:
+      <strong>Negative GEX</strong> (gex &lt; 0), <strong>Low GEX</strong>
+      (0 &#8804; gex &lt; 33rd percentile of positive days), and <strong>High GEX</strong>
+      (gex &#8805; 33rd percentile). The key comparison is between the extremes.
+    </p>
+
+    <div class="highlight-box">
+      <div class="hl-grid">
+        <div class="hl-cell">
+          <div class="hl-label">Neg GEX mean annualised RVol</div>
+          <div class="hl-value">13.3%</div>
+          <div class="hl-sub">dealers short gamma &#8594; amplifying</div>
+        </div>
+        <div class="hl-cell">
+          <div class="hl-label">High GEX mean annualised RVol</div>
+          <div class="hl-value">9.4%</div>
+          <div class="hl-sub">dealers long gamma &#8594; suppressing</div>
+        </div>
+        <div class="hl-cell">
+          <div class="hl-label">Vol premium</div>
+          <div class="hl-value">+42%</div>
+          <div class="hl-sub">p=0.0000, t=7.66, Welch&#8217;s t-test</div>
+        </div>
+      </div>
+    </div>
+
+    <p>
+      The vol premium is <strong>statistically significant</strong>. On negative-GEX days, mean annualised
+      intraday realised volatility is 13.3%, compared with 9.4%
+      on high-GEX days &#8212; a difference of roughly 42 percentage points.
+      This is not merely a reflection of regime selection bias (e.g., negative GEX days
+      happening to coincide with scheduled macro events). The chart below shows the
+      distribution of intraday vol across all three regimes.
+    </p>
+
+    <div class="chart-box">
+      <div class="chart-title">Chart 2 &#8202;&#8212;&#8202; Intraday Realised Vol Distribution by GEX Regime</div>
+      <canvas id="regimeChart" height="70"></canvas>
+      <div class="chart-legend">
+        <div class="legend-item"><span class="legend-dot" style="background:#dc2626"></span>Negative GEX (n=349)</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>Low GEX (n=123)</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#059669"></span>High GEX (n=250)</div>
+        <div class="legend-item" style="margin-left:8px;color:var(--hint)">Bars show median; error bars show p25&#8202;&#8211;&#8202;p75</div>
+      </div>
+    </div>
+
+    <div class="chart-box">
+      <div class="chart-title">Chart 3 &#8202;&#8212;&#8202; GEX vs Intraday Realised Vol (Daily, Jan 2022&#8202;&#8211;&#8202;Dec 2024)</div>
+      <canvas id="scatterChart" height="80"></canvas>
+      <div class="chart-legend">
+        <div class="legend-item"><span class="legend-dot" style="background:#dc2626"></span>Negative GEX</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>Low GEX</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#059669"></span>High GEX</div>
+        <div class="legend-item"><span class="legend-line" style="background:#1e40af"></span>OLS regression (R&#178;&#8202;=&#8202;0.054)</div>
+      </div>
+    </div>
+
+    <p>
+      The scatter plot reveals a clear negative relationship: higher GEX is associated with lower
+      intraday vol. The OLS regression has R&#178;&nbsp;=&nbsp;0.054, meaning GEX explains
+      approximately 5% of the cross-day variation in intraday realised vol.
+      While modest in absolute terms, this is a meaningful signal given the number of other
+      factors (scheduled news, VIX regime, time-of-year) that also drive intraday vol.
+    </p>
+  </div>
+</div>
+
+<section class="section" id="s4">
+<div class="container">
+  <div class="section-label"><span class="section-counter">04</span><span>Intraday Dynamics</span></div>
+    <h2>The Effect Is Strongest in the Final Hour</h2>
+
+    <p>
+      GEX is not uniform through the trading day. As a 0DTE option approaches expiry,
+      its gamma profile changes dramatically. Near-the-money options develop very high
+      gamma in the final hour &#8212; small price moves create large delta swings that
+      dealers must hedge immediately. Simultaneously, the &#8220;charm&#8221; effect
+      (d&#916;/dt) forces dealers to adjust their hedges simply because time is passing,
+      even without price movement.
+    </p>
+
+    <p>
+      To capture the intraday pattern, we split each trading day into 30-minute buckets
+      (9:30, 10:00, &#8230;, 15:30) and compute the average realised vol within each bucket,
+      grouped by GEX regime.
+    </p>
+
+    <div class="chart-box">
+      <div class="chart-title">Chart 4 &#8202;&#8212;&#8202; Average Intraday Realised Vol by 30-min Bucket and GEX Regime</div>
+      <canvas id="profileChart" height="80"></canvas>
+      <div class="chart-legend">
+        <div class="legend-item"><span class="legend-line" style="background:#dc2626"></span>Negative GEX</div>
+        <div class="legend-item"><span class="legend-line" style="background:#f59e0b"></span>Low GEX</div>
+        <div class="legend-item"><span class="legend-line" style="background:#059669"></span>High GEX</div>
+      </div>
+    </div>
+
+    <p>
+      The divergence between regimes is most pronounced in the 3:00&#8202;pm&#8202;&#8211;&#8202;4:00&#8202;pm
+      window. This is consistent with the mechanics of 0DTE expiry: as the market approaches
+      close, gamma spikes for near-the-money contracts and dealers must make progressively
+      larger hedge adjustments per unit of price movement. On negative-GEX days, this creates
+      a feedback loop where dealer selling (or buying) into already-thin late-day liquidity
+      exacerbates the move.
+    </p>
+
+    <p>
+      The morning (9:30&#8202;&#8211;&#8202;10:00) also shows an elevated vol spread between
+      regimes. This reflects the opening print dynamics: on negative-GEX days, dealers
+      entering the session with inherited short-gamma positions from overnight activity
+      must hedge aggressively into the open, when bid-ask spreads are widest.
+    </p>
+
+    <div class="callout green">
+      <div class="callout-icon">&#10003;</div>
+      <div class="callout-body">
+        <strong>Practical implication:</strong> The regime difference is not spread uniformly
+        through the day. If you are trading intraday and GEX is negative, the first 30 minutes
+        and the final 60 minutes carry disproportionate vol risk. Position sizing should account
+        for this asymmetry &#8212; not just the overall GEX level.
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="section" id="s5">
+<div class="container">
+  <div class="section-label"><span class="section-counter">05</span><span>Trading Signal</span></div>
+    <h2>A Concrete Intraday Vol Signal</h2>
+
+    <p>
+      The GEX regime classification translates directly into a practical position-sizing
+      rule. The logic is simple: if you know that negative-GEX days have systematically
+      higher intraday vol, you can scale intraday position sizes inversely to the vol
+      forecast. Rather than adjusting to a point forecast, we use the regime median as
+      a baseline.
+    </p>
+
+    <div class="callout blue">
+      <div class="callout-icon">&#9654;</div>
+      <div class="callout-body">
+        <strong>Signal rule:</strong> At the start of each session, compute the net 0DTE
+        GEX from OptionMetrics (or a real-time proxy). If GEX&nbsp;&lt;&nbsp;0,
+        apply a volatility scalar of <strong>1.42&#215;</strong> to
+        your intraday stop widths (or equivalently, reduce position size by
+        <strong>1&#8202;/&#8202;1.42&#8202;=&#8202;70%</strong>
+        of normal). The scalar is derived from the observed vol premium of negative-GEX
+        days over high-GEX days in this study.
+      </div>
+    </div>
+
+    <div class="chart-box">
+      <div class="chart-title">Chart 5 &#8202;&#8212;&#8202; Daily Intraday Realised Vol with GEX Regime Shading</div>
+      <canvas id="backtestChart" height="80"></canvas>
+      <div class="chart-legend">
+        <div class="legend-item"><span class="legend-dot" style="background:#dc2626"></span>Negative GEX day (vol amplifying)</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#059669"></span>Positive GEX day (vol suppressing)</div>
+        <div class="legend-item"><span class="legend-line" style="background:#1e40af;height:1px"></span>60-day rolling mean rvol</div>
+      </div>
+    </div>
+
+    <p>
+      The time-series chart confirms the pattern holds out-of-sample throughout the
+      period &#8212; negative-GEX days (shown in red) consistently cluster around the
+      higher end of the daily vol distribution. The effect is most visible during
+      2022&#8202;&#8211;&#8202;2023, when the combination of Fed rate hikes and elevated
+      VIX produced frequent negative-GEX days. During the calmer 2024 bull market,
+      positive GEX dominated and intraday vol remained suppressed for extended stretches.
+    </p>
+
+    <div class="highlight-box">
+      <div class="hl-grid">
+        <div class="hl-cell">
+          <div class="hl-label">Negative GEX days</div>
+          <div class="hl-value">13.3%</div>
+          <div class="hl-sub">mean annualised intraday vol</div>
+        </div>
+        <div class="hl-cell">
+          <div class="hl-label">High GEX days</div>
+          <div class="hl-value">9.4%</div>
+          <div class="hl-sub">mean annualised intraday vol</div>
+        </div>
+        <div class="hl-cell">
+          <div class="hl-label">Scalar adjustment</div>
+          <div class="hl-value">1.42&#215;</div>
+          <div class="hl-sub">recommended stop width on neg-GEX days</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="section" id="s6">
+<div class="container">
+  <div class="section-label"><span class="section-counter">06</span><span>Caveats</span></div>
+    <h2>What This Study Cannot Tell You</h2>
+
+    <p>
+      Several important limitations apply to the findings above.
+    </p>
+
+    <p>
+      <strong>The standard GEX assumption is a simplification.</strong> We assume all
+      open interest is customer-bought. In practice, dealers take two-sided positions,
+      and some customers are net sellers of 0DTE options (income-generating strategies,
+      institutional hedges). Without signed order-flow data at the individual trade level,
+      we cannot construct a precise estimate of net dealer gamma. The bias introduced by
+      this assumption is likely to <em>overstate</em> the magnitude of GEX swings but
+      should preserve the directional signal.
+    </p>
+
+    <p>
+      <strong>Correlation is not causation.</strong> The relationship between negative GEX
+      and elevated vol could partly reflect reverse causation: high-vol days attract more
+      put buyers (generating negative GEX), rather than negative GEX causing higher vol.
+      Disentangling this would require intraday GEX snapshots taken at the open, before
+      the day&#8217;s vol is realised &#8212; a data exercise beyond the scope of this study.
+    </p>
+
+    <p>
+      <strong>GEX flips intraday.</strong> We use beginning-of-day GEX computed from
+      OptionMetrics daily snapshots. In reality, large trades or sharp price moves can
+      shift the aggregate GEX level substantially within a session. A more sophisticated
+      implementation would use intraday GEX updates from a real-time options feed.
+    </p>
+
+    <div class="callout amber">
+      <div class="callout-icon">&#9888;</div>
+      <div class="callout-body">
+        <strong>This is not investment advice.</strong> The signal described above is a
+        research finding, not a trading recommendation. Past patterns in GEX-driven vol
+        may not persist as market participants adapt to the 0DTE ecosystem. Position sizing
+        rules derived from historical averages carry model risk.
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="section" id="s7">
+<div class="container">
+  <div class="section-label"><span class="section-counter">07</span><span>Conclusion</span></div>
+    <h2>The Options Market Now Co-Authors Intraday Price Action</h2>
+
+    <p>
+      Zero-days-to-expiry options have fundamentally changed the microstructure of the SPX.
+      The daily flow of 0DTE gamma from dealers to customers &#8212; and the resulting
+      obligation on dealers to delta-hedge in real time &#8212; creates a structural,
+      measurable regime effect on intraday volatility. When dealer gamma is positive,
+      they act as a dampener on price moves. When it turns negative, they become
+      amplifiers.
+    </p>
+
+    <p>
+      Across 722 trading days from Jan 2022 to Dec 2024, negative-GEX days
+      experienced mean intraday realised vol of 13.3%, compared with 9.4%
+      on high-GEX days. The difference is statistically significant (p&#8202;=&#8202;0.0000), and the
+      pattern is persistent through time rather than driven by a handful of outlier sessions.
+      The regime divergence peaks in the final hour of trading &#8212; precisely when 0DTE
+      gamma is highest and dealer hedging is most urgent.
+    </p>
+
+    <p>
+      For practitioners, this translates into a simple, computable signal: check the sign
+      of aggregate 0DTE GEX before the open. On negative-GEX days, the market is more
+      likely to exhibit volatile, whipsaw intraday price action. Widen stops, reduce
+      intraday position sizes, and treat apparent support and resistance levels with
+      greater scepticism.
+    </p>
+  </div>
+</section>
+
+<div id="side-nav"></div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-name">The Intrinsic Investor</div>
+    <div class="footer-right">
+      <a href="/">Home</a>
+      <a href="/research">Research</a>
+      <a href="/about">About</a>
+      <div style="margin-top:.5rem;color:rgba(255,255,255,.25)">&copy; 2026 Brian Liew &mdash; For research purposes only. Not financial advice.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Shared chart defaults ─────────────────────────────────────────────────────
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = '#8aa49e';
+Chart.defaults.animation = false;
+
+Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(15,34,32,0.96)';
+Chart.defaults.plugins.tooltip.titleColor = 'rgba(255,255,255,0.92)';
+Chart.defaults.plugins.tooltip.bodyColor = 'rgba(255,255,255,0.62)';
+Chart.defaults.plugins.tooltip.borderColor = 'rgba(255,255,255,0.09)';
+Chart.defaults.plugins.tooltip.borderWidth = 1;
+Chart.defaults.plugins.tooltip.padding = { x: 12, y: 10 };
+Chart.defaults.plugins.tooltip.cornerRadius = 6;
+Chart.defaults.plugins.tooltip.boxPadding = 4;
+Chart.defaults.plugins.tooltip.titleFont = { family: "'Inter',sans-serif", size: 11, weight: '600' };
+Chart.defaults.plugins.tooltip.bodyFont  = { family: "'Inter',sans-serif", size: 11 };
+
+const COLORS = {
+  neg:  '#dc2626',
+  low:  '#f59e0b',
+  high: '#059669',
+  blue: '#2563eb',
+  ink:  '#0f2220',
+};
+
+// ── Chart 1: GEX time series ──────────────────────────────────────────────────
+(function() {
+  const dates  = ["2022-01-03", "2022-01-05", "2022-01-07", "2022-01-10", "2022-01-12", "2022-01-14", "2022-01-18", "2022-01-19", "2022-01-21", "2022-01-24", "2022-01-26", "2022-01-28", "2022-01-31", "2022-02-02", "2022-02-04", "2022-02-07", "2022-02-09", "2022-02-11", "2022-02-14", "2022-02-16", "2022-02-18", "2022-02-22", "2022-02-23", "2022-02-25", "2022-02-28", "2022-03-02", "2022-03-04", "2022-03-07", "2022-03-09", "2022-03-11", "2022-03-14", "2022-03-16", "2022-03-18", "2022-03-21", "2022-03-23", "2022-03-25", "2022-03-28", "2022-03-30", "2022-03-31", "2022-04-01", "2022-04-04", "2022-04-06", "2022-04-08", "2022-04-11", "2022-04-13", "2022-04-14", "2022-04-18", "2022-04-20", "2022-04-22", "2022-04-25", "2022-04-26", "2022-04-27", "2022-04-29", "2022-05-02", "2022-05-03", "2022-05-04", "2022-05-06", "2022-05-09", "2022-05-10", "2022-05-11", "2022-05-13", "2022-05-16", "2022-05-17", "2022-05-18", "2022-05-19", "2022-05-20", "2022-05-23", "2022-05-24", "2022-05-25", "2022-05-26", "2022-05-27", "2022-05-31", "2022-06-01", "2022-06-02", "2022-06-03", "2022-06-06", "2022-06-07", "2022-06-08", "2022-06-09", "2022-06-10", "2022-06-13", "2022-06-14", "2022-06-15", "2022-06-16", "2022-06-17", "2022-06-21", "2022-06-22", "2022-06-23", "2022-06-24", "2022-06-27", "2022-06-28", "2022-06-29", "2022-06-30", "2022-07-01", "2022-07-05", "2022-07-06", "2022-07-07", "2022-07-08", "2022-07-11", "2022-07-12", "2022-07-13", "2022-07-14", "2022-07-15", "2022-07-18", "2022-07-19", "2022-07-20", "2022-07-21", "2022-07-22", "2022-07-25", "2022-07-26", "2022-07-27", "2022-07-28", "2022-07-29", "2022-08-01", "2022-08-02", "2022-08-03", "2022-08-04", "2022-08-05", "2022-08-08", "2022-08-09", "2022-08-10", "2022-08-11", "2022-08-12", "2022-08-15", "2022-08-16", "2022-08-17", "2022-08-18", "2022-08-19", "2022-08-22", "2022-08-23", "2022-08-24", "2022-08-25", "2022-08-26", "2022-08-29", "2022-08-30", "2022-08-31", "2022-09-01", "2022-09-02", "2022-09-06", "2022-09-07", "2022-09-08", "2022-09-09", "2022-09-12", "2022-09-13", "2022-09-14", "2022-09-15", "2022-09-16", "2022-09-19", "2022-09-20", "2022-09-21", "2022-09-22", "2022-09-23", "2022-09-26", "2022-09-27", "2022-09-28", "2022-09-29", "2022-09-30", "2022-10-03", "2022-10-04", "2022-10-05", "2022-10-06", "2022-10-07", "2022-10-10", "2022-10-11", "2022-10-12", "2022-10-13", "2022-10-14", "2022-10-17", "2022-10-18", "2022-10-19", "2022-10-20", "2022-10-21", "2022-10-24", "2022-10-25", "2022-10-26", "2022-10-27", "2022-10-28", "2022-10-31", "2022-11-01", "2022-11-02", "2022-11-03", "2022-11-04", "2022-11-07", "2022-11-08", "2022-11-09", "2022-11-10", "2022-11-11", "2022-11-14", "2022-11-15", "2022-11-16", "2022-11-17", "2022-11-18", "2022-11-21", "2022-11-22", "2022-11-23", "2022-11-25", "2022-11-28", "2022-11-29", "2022-11-30", "2022-12-01", "2022-12-02", "2022-12-05", "2022-12-06", "2022-12-07", "2022-12-08", "2022-12-09", "2022-12-12", "2022-12-13", "2022-12-14", "2022-12-15", "2022-12-16", "2022-12-19", "2022-12-20", "2022-12-21", "2022-12-22", "2022-12-23", "2022-12-27", "2022-12-28", "2022-12-29", "2022-12-30", "2023-01-03", "2023-01-04", "2023-01-05", "2023-01-06", "2023-01-09", "2023-01-10", "2023-01-11", "2023-01-12", "2023-01-13", "2023-01-17", "2023-01-18", "2023-01-19", "2023-01-20", "2023-01-23", "2023-01-24", "2023-01-25", "2023-01-26", "2023-01-27", "2023-01-30", "2023-01-31", "2023-02-01", "2023-02-02", "2023-02-03", "2023-02-06", "2023-02-07", "2023-02-08", "2023-02-09", "2023-02-10", "2023-02-13", "2023-02-14", "2023-02-15", "2023-02-16", "2023-02-17", "2023-02-21", "2023-02-22", "2023-02-23", "2023-02-24", "2023-02-27", "2023-02-28", "2023-03-01", "2023-03-02", "2023-03-03", "2023-03-06", "2023-03-07", "2023-03-08", "2023-03-09", "2023-03-10", "2023-03-13", "2023-03-14", "2023-03-15", "2023-03-16", "2023-03-17", "2023-03-20", "2023-03-21", "2023-03-22", "2023-03-23", "2023-03-24", "2023-03-27", "2023-03-28", "2023-03-29", "2023-03-30", "2023-03-31", "2023-04-03", "2023-04-04", "2023-04-05", "2023-04-06", "2023-04-10", "2023-04-11", "2023-04-12", "2023-04-13", "2023-04-14", "2023-04-17", "2023-04-18", "2023-04-19", "2023-04-20", "2023-04-21", "2023-04-24", "2023-04-25", "2023-04-26", "2023-04-27", "2023-04-28", "2023-05-01", "2023-05-02", "2023-05-03", "2023-05-04", "2023-05-05", "2023-05-08", "2023-05-09", "2023-05-10", "2023-05-11", "2023-05-12", "2023-05-15", "2023-05-16", "2023-05-17", "2023-05-18", "2023-05-19", "2023-05-22", "2023-05-23", "2023-05-24", "2023-05-25", "2023-05-26", "2023-05-30", "2023-05-31", "2023-06-01", "2023-06-02", "2023-06-05", "2023-06-06", "2023-06-07", "2023-06-08", "2023-06-09", "2023-06-12", "2023-06-13", "2023-06-14", "2023-06-15", "2023-06-16", "2023-06-20", "2023-06-21", "2023-06-22", "2023-06-23", "2023-06-26", "2023-06-27", "2023-06-28", "2023-06-29", "2023-06-30", "2023-07-03", "2023-07-05", "2023-07-06", "2023-07-07", "2023-07-10", "2023-07-11", "2023-07-12", "2023-07-13", "2023-07-14", "2023-07-17", "2023-07-18", "2023-07-19", "2023-07-20", "2023-07-21", "2023-07-24", "2023-07-25", "2023-07-26", "2023-07-27", "2023-07-28", "2023-07-31", "2023-08-01", "2023-08-02", "2023-08-03", "2023-08-04", "2023-08-07", "2023-08-08", "2023-08-09", "2023-08-10", "2023-08-11", "2023-08-14", "2023-08-15", "2023-08-16", "2023-08-17", "2023-08-18", "2023-08-21", "2023-08-22", "2023-08-23", "2023-08-24", "2023-08-25", "2023-08-28", "2023-08-29", "2023-08-30", "2023-08-31", "2023-09-01", "2023-09-05", "2023-09-06", "2023-09-07", "2023-09-08", "2023-09-11", "2023-09-12", "2023-09-13", "2023-09-14", "2023-09-15", "2023-09-18", "2023-09-19", "2023-09-20", "2023-09-21", "2023-09-22", "2023-09-25", "2023-09-26", "2023-09-27", "2023-09-28", "2023-09-29", "2023-10-02", "2023-10-03", "2023-10-04", "2023-10-05", "2023-10-06", "2023-10-09", "2023-10-10", "2023-10-11", "2023-10-12", "2023-10-13", "2023-10-16", "2023-10-17", "2023-10-18", "2023-10-19", "2023-10-20", "2023-10-23", "2023-10-24", "2023-10-25", "2023-10-26", "2023-10-27", "2023-10-30", "2023-10-31", "2023-11-01", "2023-11-02", "2023-11-03", "2023-11-06", "2023-11-07", "2023-11-08", "2023-11-09", "2023-11-10", "2023-11-13", "2023-11-14", "2023-11-15", "2023-11-16", "2023-11-17", "2023-11-20", "2023-11-21", "2023-11-22", "2023-11-24", "2023-11-27", "2023-11-28", "2023-11-29", "2023-11-30", "2023-12-01", "2023-12-04", "2023-12-05", "2023-12-06", "2023-12-07", "2023-12-08", "2023-12-11", "2023-12-12", "2023-12-13", "2023-12-14", "2023-12-15", "2023-12-18", "2023-12-19", "2023-12-20", "2023-12-21", "2023-12-22", "2023-12-26", "2023-12-27", "2023-12-28", "2023-12-29", "2024-01-02", "2024-01-03", "2024-01-04", "2024-01-05", "2024-01-08", "2024-01-09", "2024-01-10", "2024-01-11", "2024-01-12", "2024-01-16", "2024-01-17", "2024-01-18", "2024-01-19", "2024-01-22", "2024-01-23", "2024-01-24", "2024-01-25", "2024-01-26", "2024-01-29", "2024-01-30", "2024-01-31", "2024-02-01", "2024-02-02", "2024-02-05", "2024-02-06", "2024-02-07", "2024-02-08", "2024-02-09", "2024-02-12", "2024-02-13", "2024-02-14", "2024-02-15", "2024-02-16", "2024-02-20", "2024-02-21", "2024-02-22", "2024-02-23", "2024-02-26", "2024-02-27", "2024-02-28", "2024-02-29", "2024-03-01", "2024-03-04", "2024-03-05", "2024-03-06", "2024-03-07", "2024-03-08", "2024-03-11", "2024-03-12", "2024-03-13", "2024-03-14", "2024-03-15", "2024-03-18", "2024-03-19", "2024-03-20", "2024-03-21", "2024-03-22", "2024-03-25", "2024-03-26", "2024-03-27", "2024-03-28", "2024-04-01", "2024-04-02", "2024-04-03", "2024-04-04", "2024-04-05", "2024-04-08", "2024-04-09", "2024-04-10", "2024-04-11", "2024-04-12", "2024-04-15", "2024-04-16", "2024-04-17", "2024-04-18", "2024-04-19", "2024-04-22", "2024-04-23", "2024-04-24", "2024-04-25", "2024-04-26", "2024-04-29", "2024-04-30", "2024-05-01", "2024-05-02", "2024-05-03", "2024-05-06", "2024-05-07", "2024-05-08", "2024-05-09", "2024-05-10", "2024-05-13", "2024-05-14", "2024-05-15", "2024-05-16", "2024-05-17", "2024-05-20", "2024-05-21", "2024-05-22", "2024-05-23", "2024-05-24", "2024-05-28", "2024-05-29", "2024-05-30", "2024-05-31", "2024-06-03", "2024-06-04", "2024-06-05", "2024-06-06", "2024-06-07", "2024-06-10", "2024-06-11", "2024-06-12", "2024-06-13", "2024-06-14", "2024-06-17", "2024-06-18", "2024-06-20", "2024-06-21", "2024-06-24", "2024-06-25", "2024-06-26", "2024-06-27", "2024-06-28", "2024-07-01", "2024-07-02", "2024-07-03", "2024-07-05", "2024-07-08", "2024-07-09", "2024-07-10", "2024-07-11", "2024-07-12", "2024-07-15", "2024-07-16", "2024-07-17", "2024-07-18", "2024-07-19", "2024-07-22", "2024-07-23", "2024-07-24", "2024-07-25", "2024-07-26", "2024-07-29", "2024-07-30", "2024-07-31", "2024-08-01", "2024-08-02", "2024-08-05", "2024-08-06", "2024-08-07", "2024-08-08", "2024-08-09", "2024-08-12", "2024-08-13", "2024-08-14", "2024-08-15", "2024-08-16", "2024-08-19", "2024-08-20", "2024-08-21", "2024-08-22", "2024-08-23", "2024-08-26", "2024-08-27", "2024-08-28", "2024-08-29", "2024-08-30", "2024-09-03", "2024-09-04", "2024-09-05", "2024-09-06", "2024-09-09", "2024-09-10", "2024-09-11", "2024-09-12", "2024-09-13", "2024-09-16", "2024-09-17", "2024-09-18", "2024-09-19", "2024-09-20", "2024-09-23", "2024-09-24", "2024-09-25", "2024-09-26", "2024-09-27", "2024-09-30", "2024-10-01", "2024-10-02", "2024-10-03", "2024-10-04", "2024-10-07", "2024-10-08", "2024-10-09", "2024-10-10", "2024-10-11", "2024-10-14", "2024-10-15", "2024-10-16", "2024-10-17", "2024-10-18", "2024-10-21", "2024-10-22", "2024-10-23", "2024-10-24", "2024-10-25", "2024-10-28", "2024-10-29", "2024-10-30", "2024-10-31", "2024-11-01", "2024-11-04", "2024-11-05", "2024-11-06", "2024-11-07", "2024-11-08", "2024-11-11", "2024-11-12", "2024-11-13", "2024-11-14", "2024-11-15", "2024-11-18", "2024-11-19", "2024-11-20", "2024-11-21", "2024-11-22", "2024-11-25", "2024-11-26", "2024-11-27", "2024-11-29", "2024-12-02", "2024-12-03", "2024-12-04", "2024-12-05", "2024-12-06", "2024-12-09", "2024-12-10", "2024-12-11", "2024-12-12", "2024-12-13", "2024-12-16", "2024-12-17", "2024-12-18", "2024-12-19", "2024-12-20", "2024-12-23", "2024-12-24", "2024-12-26", "2024-12-27", "2024-12-30", "2024-12-31"];
+  const values = [0.023, -0.742, -0.115, -0.148, 0.193, 0.029, -0.182, -0.144, -0.084, -0.046, -0.522, -0.04, 0.113, 0.095, -0.436, -0.057, 0.143, -0.16, -0.156, 0.038, -0.19, -0.137, -0.097, 0.134, 0.01, 0.062, -0.066, -0.46, 0.031, -0.129, -0.107, 0.127, 0.125, -0.008, -0.126, 0.118, 0.023, 0.058, -0.25, 0.064, 0.006, -0.217, -0.091, -0.216, 0.022, -0.21, -0.079, 0.109, -0.263, -0.012, -0.155, -0.054, -0.332, -0.042, 0.03, 0.108, -0.168, -0.082, -0.063, -0.083, -0.03, -0.034, 0.067, -0.269, -0.088, -0.065, 0.02, -0.026, -0.003, 0.116, 0.131, -0.141, -0.091, 0.018, -0.049, -0.011, 0.061, -0.063, -0.159, -1.099, -0.266, -0.001, -0.116, -0.037, -0.056, 0.249, -0.037, 0.098, -0.0, -0.022, -0.019, 0.027, -0.181, -0.058, -0.027, 0.053, 0.105, -0.092, -0.093, -0.03, -0.272, -0.032, 0.282, -0.056, 0.038, 0.242, 0.157, -0.028, -0.003, -0.112, 0.138, 0.134, 0.202, 0.117, -0.006, 0.122, -0.049, -0.055, -0.099, -0.117, 0.022, -0.004, 0.021, 0.131, 0.048, -0.031, 0.026, 0.102, -0.228, -0.005, -0.055, 0.539, -0.101, -0.098, -0.074, -0.099, -0.036, -0.011, -0.096, 0.108, 0.007, 0.307, -0.012, -0.01, -0.134, -0.036, -0.021, 0.039, -0.113, -0.092, -0.014, -0.23, -0.082, -0.043, 0.117, -0.106, -0.969, 0.031, 0.029, 0.027, -0.043, -0.205, -0.028, -0.06, -0.098, 0.109, -0.191, 0.003, 0.026, -0.059, -0.013, -0.114, 0.167, 0.119, -0.357, -0.072, 0.012, 0.196, 0.026, -0.134, -0.065, -0.084, 0.118, 0.203, -0.262, 0.066, 0.13, 0.099, 0.001, 0.027, -0.058, -0.069, 0.138, 0.218, 0.101, -0.073, 0.051, -0.016, 0.0, 0.214, 0.24, 0.094, -0.265, -0.143, 0.068, -0.096, -0.048, 0.111, 0.024, -0.103, -0.149, -0.048, -0.077, 0.023, -0.237, 0.013, 0.229, -0.04, 0.065, 0.297, 0.094, -0.007, -0.1, 0.042, 0.109, 0.189, 3.288, 0.045, 0.399, -0.05, -0.258, -0.007, 0.18, 0.406, 0.123, -0.029, 0.025, 0.102, -0.117, 0.01, 0.138, 0.553, -0.007, -0.164, 0.186, 0.041, -0.215, -0.045, 0.028, 0.092, 0.134, -0.159, -0.154, -0.235, -0.146, -0.037, -0.26, -0.048, -0.213, -0.204, -0.027, 0.531, 0.293, -0.028, -0.162, -0.063, -0.52, -0.217, 0.111, -0.089, 0.206, -0.13, -0.065, 0.021, 0.013, 0.034, -0.096, 0.01, -0.054, 0.416, 0.271, 0.783, 0.327, -0.124, 0.051, -0.111, 0.244, 0.097, -0.158, 0.038, 0.299, -0.072, 0.04, 0.392, -0.131, 0.231, -0.026, -0.147, -0.235, 0.014, 0.458, 0.242, 0.054, -0.171, -0.123, -0.051, 0.007, 0.141, 0.171, -0.101, 0.121, -0.022, -0.12, 0.369, 0.465, 0.333, 0.032, -0.086, -0.458, 0.199, 0.546, -0.05, 0.107, 0.049, 0.32, 0.451, 0.151, 0.113, 0.303, 0.859, 0.432, 0.602, 0.085, 0.073, 0.413, 0.059, -0.48, -0.077, -0.334, 0.007, 0.209, -0.027, 0.086, 1.048, 0.195, 0.204, -0.04, -0.103, -0.111, 0.261, 0.418, 0.26, -0.099, 0.141, 0.408, 0.405, -0.022, 0.271, 0.155, 0.275, -0.08, -0.029, -0.047, 0.346, -0.203, -0.119, -0.132, -0.655, 0.185, 0.016, -0.397, -0.106, -0.481, -0.108, -0.061, -0.146, -0.323, -0.301, -0.111, 0.058, -0.059, -0.103, -0.122, 0.277, 0.142, 0.42, 0.186, 0.245, 0.313, -0.184, -0.141, -0.193, 0.103, -0.262, 0.104, 0.429, -0.513, -0.103, 0.033, -0.424, -0.257, -0.415, -0.122, -0.042, 0.002, 0.111, -0.423, -0.118, -0.196, 0.233, 0.121, 0.39, 0.024, 0.232, 0.025, -0.061, -0.235, 0.224, 0.14, -0.194, -0.097, -0.058, -0.185, 0.115, -0.28, -0.144, -0.342, 0.185, 0.287, 0.281, 0.137, 0.525, 0.132, 0.24, 0.258, -0.283, 0.066, -0.051, 0.074, 0.288, -0.008, 0.451, 0.077, 0.134, 0.398, 1.337, -0.299, -0.214, -0.373, 0.572, 4.25, -0.922, -0.077, 0.736, -0.07, 0.38, 0.566, 0.241, 0.104, 1.323, 0.43, 0.283, 0.225, -0.068, 0.108, 0.626, 1.128, 0.018, 0.261, -0.344, -0.025, -0.381, -0.153, 0.096, 0.375, -0.022, 0.253, 0.131, 0.184, -0.193, -0.006, 0.34, 0.039, 0.642, 0.428, 0.227, 0.335, -0.14, 0.338, 0.85, -0.441, -0.032, 0.61, 0.047, 0.355, 0.092, 0.143, 0.113, -0.056, -0.444, -0.167, 2.255, -0.727, -0.275, -0.072, 0.343, 0.344, 0.075, 0.131, 0.19, 0.502, 0.502, 0.169, -0.014, 0.195, 0.449, 0.142, -0.194, 0.191, 0.084, -0.203, -0.311, 2.129, 0.761, 1.535, 0.188, 0.472, -0.178, 0.014, 0.494, 0.447, -0.051, -0.18, -0.058, -0.384, 0.119, -0.369, -0.119, -0.287, 0.338, -0.386, -0.482, -0.078, -0.135, -0.169, -0.527, -0.061, 0.028, 0.145, -0.117, 0.411, -0.015, -0.179, -0.272, 0.283, 0.101, 0.095, 0.37, 0.197, 0.574, 0.509, -0.061, 0.31, 0.558, 0.158, -0.185, 0.048, 0.224, -0.175, -0.479, -0.24, -0.08, -0.348, -0.277, -0.139, 0.095, 0.118, 0.512, 0.151, 0.444, -0.03, 0.026, 0.397, 0.229, -0.031, 0.6, 0.403, -0.039, 0.079, -0.01, 0.111, 0.19, 0.08, 0.033, 0.081, 0.427, 0.216, 1.096, 0.906, 0.267, 0.708, -0.088, 0.236, 0.703, 0.275, -0.076, -0.552, -0.497, -0.064, -0.21, -0.7, -0.055, 0.038, -0.084, -0.1, 0.265, -0.119, -0.53, -0.463, -0.079, -0.241, 0.182, 0.233, 0.73, 0.523, 0.184, 0.201, 1.197, 0.212, 0.083, 0.051, -0.13, 0.209, -0.054, -0.075, 0.036, -0.073, 0.57, -0.363, -0.233, -0.176, -0.427, -0.058, 0.328, 0.163, 0.189, 0.379, 0.221, 0.072, 0.109, 0.15, 0.203, 0.19, 0.114, -0.006, 0.386, 0.407, 0.227, -0.219, 0.184, -0.151, 0.44, -0.41, 0.232, 0.727, 0.074, 0.599, 0.462, -0.373, 1.492, 0.08, 0.409, 0.162, -0.076, -0.395, 0.08, -0.142, 0.079, -0.082, -0.022, -0.298, -0.361, -0.236, -0.008, 0.249, 0.403, 1.186, -0.1, -0.071, 0.008, -0.04, -0.151, 0.102, 0.127, -0.085, 0.465, 0.521, 0.163, 0.406, 0.304, 0.495, 0.379, 0.061, 0.288, -0.149, -0.042, -0.404, -0.595, 0.517, -0.284, -0.488, 0.975, -0.303, -0.083, -0.208, -0.24, 1.0, 0.023, 0.267, -0.493, -0.104, -0.45];
+  const colors = ["#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#f59e0b", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#f59e0b", "#dc2626", "#f59e0b", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#f59e0b", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#f59e0b", "#059669", "#f59e0b", "#dc2626", "#f59e0b", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#f59e0b", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#f59e0b", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#f59e0b", "#059669", "#f59e0b", "#f59e0b", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#059669", "#f59e0b", "#dc2626", "#f59e0b", "#dc2626", "#f59e0b", "#059669", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#f59e0b", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#059669", "#059669", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#f59e0b", "#f59e0b", "#dc2626", "#f59e0b", "#059669", "#059669", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#f59e0b", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#f59e0b", "#f59e0b", "#dc2626", "#f59e0b", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#f59e0b", "#dc2626", "#059669", "#f59e0b", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#059669", "#dc2626", "#059669", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#f59e0b", "#f59e0b", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#f59e0b", "#f59e0b", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#f59e0b", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#f59e0b", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#f59e0b", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#059669", "#f59e0b", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#f59e0b", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#f59e0b", "#059669", "#059669", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#059669", "#f59e0b", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#f59e0b", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#f59e0b", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#f59e0b", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#f59e0b", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#dc2626", "#f59e0b", "#dc2626", "#059669", "#059669", "#f59e0b", "#f59e0b", "#f59e0b", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#f59e0b", "#f59e0b", "#dc2626", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#f59e0b", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#dc2626", "#059669", "#dc2626", "#059669", "#059669", "#f59e0b", "#059669", "#059669", "#dc2626", "#059669", "#f59e0b", "#059669", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#dc2626"];
+
+  new Chart(document.getElementById('gexChart'), {
+    type: 'bar',
+    data: {
+      labels: dates,
+      datasets: [{
+        data: values,
+        backgroundColor: colors,
+        borderWidth: 0,
+        barPercentage: 0.9,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            title: ctx => ctx[0].label,
+            label: ctx => `GEX: ${ctx.raw.toFixed(2)}bn`,
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { maxTicksLimit: 8, maxRotation: 0, font: { size: 10 } },
+          grid: { display: false },
+          border: { color: 'rgba(0,0,0,0.10)' },
+        },
+        y: {
+          title: { display: true, text: 'GEX (US$bn)', font: { size: 11 } },
+          grid: { color: 'rgba(0,0,0,0.05)', lineWidth: 0.75 },
+          border: { color: 'transparent' },
+          ticks: { font: { size: 10 } },
+        }
+      }
+    }
+  });
+})();
+
+// ── Chart 2: Regime distribution (bar + error) ────────────────────────────────
+(function() {
+  const labels  = ["Negative GEX", "Low GEX", "High GEX"];
+  const medians = [11.55, 11.29, 8.05];
+  const p25     = [7.86, 7.37, 5.92];
+  const p75     = [17.16, 15.3, 11.42];
+  const p10     = [6.03, 5.65, 4.5];
+  const p90     = [23.03, 21.56, 14.74];
+  const barColors = [COLORS.neg, COLORS.low, COLORS.high];
+
+  new Chart(document.getElementById('regimeChart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          // p10–p90 whisker range (background)
+          data: p10.map((v, i) => [v, p90[i]]),
+          backgroundColor: barColors.map(c => c + '18'),
+          borderColor: 'transparent',
+          borderWidth: 0,
+          barPercentage: 0.45,
+          categoryPercentage: 0.7,
+          order: 3,
+        },
+        {
+          // IQR box (p25–p75)
+          data: p25.map((v, i) => [v, p75[i]]),
+          backgroundColor: barColors.map(c => c + '44'),
+          borderColor: barColors,
+          borderWidth: 1.5,
+          barPercentage: 0.45,
+          categoryPercentage: 0.7,
+          order: 2,
+        },
+        {
+          // Median marker (thin floating bar)
+          data: medians.map(m => [m - 0.35, m + 0.35]),
+          backgroundColor: barColors,
+          borderColor: 'transparent',
+          borderWidth: 0,
+          barPercentage: 0.45,
+          categoryPercentage: 0.7,
+          order: 1,
+        },
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            title: ctx => labels[ctx[0].dataIndex],
+            label: (ctx) => {
+              const i = ctx.dataIndex;
+              return [
+                `Median: ${medians[i].toFixed(1)}%`,
+                `IQR (p25–p75): ${p25[i].toFixed(1)}% – ${p75[i].toFixed(1)}%`,
+                `Range (p10–p90): ${p10[i].toFixed(1)}% – ${p90[i].toFixed(1)}%`,
+              ];
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          border: { color: 'rgba(0,0,0,0.10)' },
+          ticks: { font: { size: 11, weight: '500' } },
+        },
+        y: {
+          title: { display: true, text: 'Annualised Intraday RVol', font: { size: 11 } },
+          grid: { color: 'rgba(0,0,0,0.05)', lineWidth: 0.75 },
+          border: { color: 'transparent' },
+          ticks: {
+            callback: v => v + '%',
+            font: { size: 10 },
+          },
+        }
+      }
+    }
+  });
+})();
+
+// ── Chart 3: Scatter GEX vs RVol ─────────────────────────────────────────────
+(function() {
+  const pts    = [{"x": 0.023, "y": 8.01, "regime": "Low GEX"}, {"x": -0.742, "y": 19.55, "regime": "Negative GEX"}, {"x": -0.115, "y": 9.29, "regime": "Negative GEX"}, {"x": -0.148, "y": 18.9, "regime": "Negative GEX"}, {"x": 0.193, "y": 8.62, "regime": "High GEX"}, {"x": 0.029, "y": 10.7, "regime": "Low GEX"}, {"x": -0.182, "y": 9.69, "regime": "Negative GEX"}, {"x": -0.144, "y": 17.06, "regime": "Negative GEX"}, {"x": -0.084, "y": 21.76, "regime": "Negative GEX"}, {"x": -0.046, "y": 43.45, "regime": "Negative GEX"}, {"x": -0.522, "y": 33.16, "regime": "Negative GEX"}, {"x": -0.04, "y": 31.09, "regime": "Negative GEX"}, {"x": 0.113, "y": 22.43, "regime": "High GEX"}, {"x": 0.095, "y": 10.61, "regime": "Low GEX"}, {"x": -0.436, "y": 19.03, "regime": "Negative GEX"}, {"x": -0.057, "y": 10.93, "regime": "Negative GEX"}, {"x": 0.143, "y": 6.0, "regime": "High GEX"}, {"x": -0.16, "y": 27.12, "regime": "Negative GEX"}, {"x": -0.156, "y": 13.61, "regime": "Negative GEX"}, {"x": 0.038, "y": 13.1, "regime": "Low GEX"}, {"x": -0.19, "y": 14.98, "regime": "Negative GEX"}, {"x": -0.137, "y": 21.34, "regime": "Negative GEX"}, {"x": -0.097, "y": 26.57, "regime": "Negative GEX"}, {"x": 0.134, "y": 21.98, "regime": "High GEX"}, {"x": 0.01, "y": 16.46, "regime": "Low GEX"}, {"x": 0.062, "y": 17.84, "regime": "Low GEX"}, {"x": -0.066, "y": 12.15, "regime": "Negative GEX"}, {"x": -0.46, "y": 28.98, "regime": "Negative GEX"}, {"x": 0.031, "y": 14.97, "regime": "Low GEX"}, {"x": -0.129, "y": 20.77, "regime": "Negative GEX"}, {"x": -0.107, "y": 19.88, "regime": "Negative GEX"}, {"x": 0.127, "y": 24.11, "regime": "High GEX"}, {"x": 0.125, "y": 16.52, "regime": "High GEX"}, {"x": -0.008, "y": 12.42, "regime": "Negative GEX"}, {"x": -0.126, "y": 10.22, "regime": "Negative GEX"}, {"x": 0.118, "y": 9.62, "regime": "High GEX"}, {"x": 0.023, "y": 12.31, "regime": "Low GEX"}, {"x": 0.058, "y": 9.83, "regime": "Low GEX"}, {"x": -0.25, "y": 15.93, "regime": "Negative GEX"}, {"x": 0.064, "y": 9.13, "regime": "Low GEX"}, {"x": 0.006, "y": 9.75, "regime": "Low GEX"}, {"x": -0.217, "y": 11.67, "regime": "Negative GEX"}, {"x": -0.091, "y": 9.97, "regime": "Negative GEX"}, {"x": -0.216, "y": 12.1, "regime": "Negative GEX"}, {"x": 0.022, "y": 13.56, "regime": "Low GEX"}, {"x": -0.21, "y": 15.23, "regime": "Negative GEX"}, {"x": -0.079, "y": 9.02, "regime": "Negative GEX"}, {"x": 0.109, "y": 8.75, "regime": "High GEX"}, {"x": -0.263, "y": 27.92, "regime": "Negative GEX"}, {"x": -0.012, "y": 22.16, "regime": "Negative GEX"}, {"x": -0.155, "y": 22.58, "regime": "Negative GEX"}, {"x": -0.054, "y": 18.0, "regime": "Negative GEX"}, {"x": -0.332, "y": 33.4, "regime": "Negative GEX"}, {"x": -0.042, "y": 25.32, "regime": "Negative GEX"}, {"x": 0.03, "y": 12.76, "regime": "Low GEX"}, {"x": 0.108, "y": 36.06, "regime": "Low GEX"}, {"x": -0.168, "y": 21.08, "regime": "Negative GEX"}, {"x": -0.082, "y": 23.54, "regime": "Negative GEX"}, {"x": -0.063, "y": 26.81, "regime": "Negative GEX"}, {"x": -0.083, "y": 28.94, "regime": "Negative GEX"}, {"x": -0.03, "y": 18.07, "regime": "Negative GEX"}, {"x": -0.034, "y": 15.15, "regime": "Negative GEX"}, {"x": 0.067, "y": 14.07, "regime": "Low GEX"}, {"x": -0.269, "y": 31.81, "regime": "Negative GEX"}, {"x": -0.088, "y": 17.16, "regime": "Negative GEX"}, {"x": -0.065, "y": 40.44, "regime": "Negative GEX"}, {"x": 0.02, "y": 17.78, "regime": "Low GEX"}, {"x": -0.026, "y": 19.97, "regime": "Negative GEX"}, {"x": -0.003, "y": 18.22, "regime": "Negative GEX"}, {"x": 0.116, "y": 20.33, "regime": "High GEX"}, {"x": 0.131, "y": 17.79, "regime": "High GEX"}, {"x": -0.141, "y": 14.83, "regime": "Negative GEX"}, {"x": -0.091, "y": 21.57, "regime": "Negative GEX"}, {"x": 0.018, "y": 24.05, "regime": "Low GEX"}, {"x": -0.049, "y": 10.49, "regime": "Negative GEX"}, {"x": -0.011, "y": 13.96, "regime": "Negative GEX"}, {"x": 0.061, "y": 19.93, "regime": "Low GEX"}, {"x": -0.063, "y": 12.55, "regime": "Negative GEX"}, {"x": -0.159, "y": 24.15, "regime": "Negative GEX"}, {"x": -1.099, "y": 14.63, "regime": "Negative GEX"}, {"x": -0.266, "y": 21.49, "regime": "Negative GEX"}, {"x": -0.001, "y": 18.72, "regime": "Negative GEX"}, {"x": -0.116, "y": 29.71, "regime": "Negative GEX"}, {"x": -0.037, "y": 17.8, "regime": "Negative GEX"}, {"x": -0.056, "y": 18.79, "regime": "Negative GEX"}, {"x": 0.249, "y": 12.01, "regime": "High GEX"}, {"x": -0.037, "y": 21.74, "regime": "Negative GEX"}, {"x": 0.098, "y": 15.07, "regime": "Low GEX"}, {"x": -0.0, "y": 21.57, "regime": "Negative GEX"}, {"x": -0.022, "y": 9.6, "regime": "Negative GEX"}, {"x": -0.019, "y": 31.13, "regime": "Negative GEX"}, {"x": 0.027, "y": 9.65, "regime": "Low GEX"}, {"x": -0.181, "y": 20.5, "regime": "Negative GEX"}, {"x": -0.058, "y": 19.94, "regime": "Negative GEX"}, {"x": -0.027, "y": 22.94, "regime": "Negative GEX"}, {"x": 0.053, "y": 15.62, "regime": "Low GEX"}, {"x": 0.105, "y": 16.19, "regime": "Low GEX"}, {"x": -0.092, "y": 12.23, "regime": "Negative GEX"}, {"x": -0.093, "y": 8.34, "regime": "Negative GEX"}, {"x": -0.03, "y": 17.87, "regime": "Negative GEX"}, {"x": -0.272, "y": 18.3, "regime": "Negative GEX"}, {"x": -0.032, "y": 20.36, "regime": "Negative GEX"}, {"x": 0.282, "y": 11.73, "regime": "High GEX"}, {"x": -0.056, "y": 20.88, "regime": "Negative GEX"}, {"x": 0.038, "y": 18.33, "regime": "Low GEX"}, {"x": 0.242, "y": 12.67, "regime": "High GEX"}, {"x": 0.157, "y": 17.39, "regime": "High GEX"}, {"x": -0.028, "y": 17.87, "regime": "Negative GEX"}, {"x": -0.003, "y": 7.87, "regime": "Negative GEX"}, {"x": -0.112, "y": 10.0, "regime": "Negative GEX"}, {"x": 0.138, "y": 21.13, "regime": "High GEX"}, {"x": 0.134, "y": 20.49, "regime": "High GEX"}, {"x": 0.202, "y": 14.56, "regime": "High GEX"}, {"x": 0.117, "y": 11.62, "regime": "High GEX"}, {"x": -0.006, "y": 14.37, "regime": "Negative GEX"}, {"x": 0.122, "y": 13.12, "regime": "High GEX"}, {"x": -0.049, "y": 6.11, "regime": "Negative GEX"}, {"x": -0.055, "y": 10.53, "regime": "Negative GEX"}, {"x": -0.099, "y": 13.31, "regime": "Negative GEX"}, {"x": -0.117, "y": 5.86, "regime": "Negative GEX"}, {"x": 0.022, "y": 7.79, "regime": "Low GEX"}, {"x": -0.004, "y": 12.97, "regime": "Negative GEX"}, {"x": 0.021, "y": 13.89, "regime": "Low GEX"}, {"x": 0.131, "y": 10.49, "regime": "High GEX"}, {"x": 0.048, "y": 10.77, "regime": "Low GEX"}, {"x": -0.031, "y": 11.07, "regime": "Negative GEX"}, {"x": 0.026, "y": 6.94, "regime": "Low GEX"}, {"x": 0.102, "y": 9.1, "regime": "Low GEX"}, {"x": -0.228, "y": 11.1, "regime": "Negative GEX"}, {"x": -0.005, "y": 8.41, "regime": "Negative GEX"}, {"x": -0.055, "y": 8.58, "regime": "Negative GEX"}, {"x": 0.539, "y": 12.51, "regime": "High GEX"}, {"x": -0.101, "y": 33.99, "regime": "Negative GEX"}, {"x": -0.098, "y": 10.96, "regime": "Negative GEX"}, {"x": -0.074, "y": 19.3, "regime": "Negative GEX"}, {"x": -0.099, "y": 14.85, "regime": "Negative GEX"}, {"x": -0.036, "y": 16.33, "regime": "Negative GEX"}, {"x": -0.011, "y": 27.03, "regime": "Negative GEX"}, {"x": -0.096, "y": 13.89, "regime": "Negative GEX"}, {"x": 0.108, "y": 20.28, "regime": "Low GEX"}, {"x": 0.007, "y": 16.17, "regime": "Low GEX"}, {"x": 0.307, "y": 11.89, "regime": "High GEX"}, {"x": -0.012, "y": 7.6, "regime": "Negative GEX"}, {"x": -0.01, "y": 26.82, "regime": "Negative GEX"}, {"x": -0.134, "y": 12.3, "regime": "Negative GEX"}, {"x": -0.036, "y": 17.45, "regime": "Negative GEX"}, {"x": -0.021, "y": 10.27, "regime": "Negative GEX"}, {"x": 0.039, "y": 15.76, "regime": "Low GEX"}, {"x": -0.113, "y": 12.24, "regime": "Negative GEX"}, {"x": -0.092, "y": 29.67, "regime": "Negative GEX"}, {"x": -0.014, "y": 12.33, "regime": "Negative GEX"}, {"x": -0.23, "y": 19.04, "regime": "Negative GEX"}, {"x": -0.082, "y": 18.67, "regime": "Negative GEX"}, {"x": -0.043, "y": 24.85, "regime": "Negative GEX"}, {"x": 0.117, "y": 25.17, "regime": "High GEX"}, {"x": -0.106, "y": 19.44, "regime": "Negative GEX"}, {"x": -0.969, "y": 23.4, "regime": "Negative GEX"}, {"x": 0.031, "y": 24.47, "regime": "Low GEX"}, {"x": 0.029, "y": 29.28, "regime": "Low GEX"}, {"x": 0.027, "y": 21.62, "regime": "Low GEX"}, {"x": -0.043, "y": 15.33, "regime": "Negative GEX"}, {"x": -0.205, "y": 32.08, "regime": "Negative GEX"}, {"x": -0.028, "y": 17.27, "regime": "Negative GEX"}, {"x": -0.06, "y": 19.42, "regime": "Negative GEX"}, {"x": -0.098, "y": 9.37, "regime": "Negative GEX"}, {"x": 0.109, "y": 51.7, "regime": "High GEX"}, {"x": -0.191, "y": 34.88, "regime": "Negative GEX"}, {"x": 0.003, "y": 28.13, "regime": "Low GEX"}, {"x": 0.026, "y": 20.35, "regime": "Low GEX"}, {"x": -0.059, "y": 16.29, "regime": "Negative GEX"}, {"x": -0.013, "y": 20.85, "regime": "Negative GEX"}, {"x": -0.114, "y": 29.08, "regime": "Negative GEX"}, {"x": 0.167, "y": 17.6, "regime": "High GEX"}, {"x": 0.119, "y": 16.42, "regime": "High GEX"}, {"x": -0.357, "y": 15.45, "regime": "Negative GEX"}, {"x": -0.072, "y": 14.14, "regime": "Negative GEX"}, {"x": 0.012, "y": 24.39, "regime": "Low GEX"}, {"x": 0.196, "y": 7.74, "regime": "High GEX"}, {"x": 0.026, "y": 17.5, "regime": "Low GEX"}, {"x": -0.134, "y": 34.65, "regime": "Negative GEX"}, {"x": -0.065, "y": 13.88, "regime": "Negative GEX"}, {"x": -0.084, "y": 22.59, "regime": "Negative GEX"}, {"x": 0.118, "y": 12.71, "regime": "High GEX"}, {"x": 0.203, "y": 18.5, "regime": "High GEX"}, {"x": -0.262, "y": 19.02, "regime": "Negative GEX"}, {"x": 0.066, "y": 22.95, "regime": "Low GEX"}, {"x": 0.13, "y": 13.8, "regime": "High GEX"}, {"x": 0.099, "y": 12.83, "regime": "Low GEX"}, {"x": 0.001, "y": 18.71, "regime": "Low GEX"}, {"x": 0.027, "y": 7.19, "regime": "Low GEX"}, {"x": -0.058, "y": 11.68, "regime": "Negative GEX"}, {"x": -0.069, "y": 11.5, "regime": "Negative GEX"}, {"x": 0.138, "y": 7.64, "regime": "High GEX"}, {"x": 0.218, "y": 11.79, "regime": "High GEX"}, {"x": 0.101, "y": 8.6, "regime": "Low GEX"}, {"x": -0.073, "y": 3.26, "regime": "Negative GEX"}, {"x": 0.051, "y": 13.66, "regime": "Low GEX"}, {"x": -0.016, "y": 9.65, "regime": "Negative GEX"}, {"x": 0.0, "y": 33.8, "regime": "Low GEX"}, {"x": 0.214, "y": 12.29, "regime": "High GEX"}, {"x": 0.24, "y": 13.46, "regime": "High GEX"}, {"x": 0.094, "y": 16.05, "regime": "Low GEX"}, {"x": -0.265, "y": 20.11, "regime": "Negative GEX"}, {"x": -0.143, "y": 8.88, "regime": "Negative GEX"}, {"x": 0.068, "y": 9.87, "regime": "Low GEX"}, {"x": -0.096, "y": 10.78, "regime": "Negative GEX"}, {"x": -0.048, "y": 13.33, "regime": "Negative GEX"}, {"x": 0.111, "y": 26.9, "regime": "High GEX"}, {"x": 0.024, "y": 21.86, "regime": "Low GEX"}, {"x": -0.103, "y": 17.93, "regime": "Negative GEX"}, {"x": -0.149, "y": 13.75, "regime": "Negative GEX"}, {"x": -0.048, "y": 13.86, "regime": "Negative GEX"}, {"x": -0.077, "y": 10.99, "regime": "Negative GEX"}, {"x": 0.023, "y": 11.69, "regime": "Low GEX"}, {"x": -0.237, "y": 28.67, "regime": "Negative GEX"}, {"x": 0.013, "y": 12.6, "regime": "Low GEX"}, {"x": 0.229, "y": 8.75, "regime": "High GEX"}, {"x": -0.04, "y": 17.49, "regime": "Negative GEX"}, {"x": 0.065, "y": 13.16, "regime": "Low GEX"}, {"x": 0.297, "y": 10.4, "regime": "High GEX"}, {"x": 0.094, "y": 21.45, "regime": "Low GEX"}, {"x": -0.007, "y": 14.64, "regime": "Negative GEX"}, {"x": -0.1, "y": 7.72, "regime": "Negative GEX"}, {"x": 0.042, "y": 24.4, "regime": "Low GEX"}, {"x": 0.109, "y": 14.71, "regime": "High GEX"}, {"x": 0.189, "y": 10.75, "regime": "High GEX"}, {"x": 3.288, "y": 10.22, "regime": "High GEX"}, {"x": 0.045, "y": 14.62, "regime": "Low GEX"}, {"x": 0.399, "y": 13.86, "regime": "High GEX"}, {"x": -0.05, "y": 7.58, "regime": "Negative GEX"}, {"x": -0.258, "y": 21.3, "regime": "Negative GEX"}, {"x": -0.007, "y": 9.36, "regime": "Negative GEX"}, {"x": 0.18, "y": 18.62, "regime": "High GEX"}, {"x": 0.406, "y": 16.54, "regime": "High GEX"}, {"x": 0.123, "y": 8.38, "regime": "High GEX"}, {"x": -0.029, "y": 17.14, "regime": "Negative GEX"}, {"x": 0.025, "y": 11.58, "regime": "Low GEX"}, {"x": 0.102, "y": 11.09, "regime": "Low GEX"}, {"x": -0.117, "y": 11.48, "regime": "Negative GEX"}, {"x": 0.01, "y": 13.6, "regime": "Low GEX"}, {"x": 0.138, "y": 26.45, "regime": "High GEX"}, {"x": 0.553, "y": 12.46, "regime": "High GEX"}, {"x": -0.007, "y": 13.54, "regime": "Negative GEX"}, {"x": -0.164, "y": 7.42, "regime": "Negative GEX"}, {"x": 0.186, "y": 20.64, "regime": "High GEX"}, {"x": 0.041, "y": 10.64, "regime": "Low GEX"}, {"x": -0.215, "y": 20.36, "regime": "Negative GEX"}, {"x": -0.045, "y": 8.04, "regime": "Negative GEX"}, {"x": 0.028, "y": 10.98, "regime": "Low GEX"}, {"x": 0.092, "y": 15.14, "regime": "Low GEX"}, {"x": 0.134, "y": 10.63, "regime": "High GEX"}, {"x": -0.159, "y": 11.08, "regime": "Negative GEX"}, {"x": -0.154, "y": 8.13, "regime": "Negative GEX"}, {"x": -0.235, "y": 12.68, "regime": "Negative GEX"}, {"x": -0.146, "y": 9.82, "regime": "Negative GEX"}, {"x": -0.037, "y": 14.21, "regime": "Negative GEX"}, {"x": -0.26, "y": 8.7, "regime": "Negative GEX"}, {"x": -0.048, "y": 10.85, "regime": "Negative GEX"}, {"x": -0.213, "y": 7.5, "regime": "Negative GEX"}, {"x": -0.204, "y": 7.99, "regime": "Negative GEX"}, {"x": -0.027, "y": 15.33, "regime": "Negative GEX"}, {"x": 0.531, "y": 12.86, "regime": "High GEX"}, {"x": 0.293, "y": 8.08, "regime": "High GEX"}, {"x": -0.028, "y": 16.74, "regime": "Negative GEX"}, {"x": -0.162, "y": 7.47, "regime": "Negative GEX"}, {"x": -0.063, "y": 26.36, "regime": "Negative GEX"}, {"x": -0.52, "y": 21.68, "regime": "Negative GEX"}, {"x": -0.217, "y": 24.09, "regime": "Negative GEX"}, {"x": 0.111, "y": 15.64, "regime": "High GEX"}, {"x": -0.089, "y": 14.25, "regime": "Negative GEX"}, {"x": 0.206, "y": 24.8, "regime": "High GEX"}, {"x": -0.13, "y": 14.25, "regime": "Negative GEX"}, {"x": -0.065, "y": 9.97, "regime": "Negative GEX"}, {"x": 0.021, "y": 9.19, "regime": "Low GEX"}, {"x": 0.013, "y": 25.01, "regime": "Low GEX"}, {"x": 0.034, "y": 21.59, "regime": "Low GEX"}, {"x": -0.096, "y": 15.64, "regime": "Negative GEX"}, {"x": 0.01, "y": 8.06, "regime": "Low GEX"}, {"x": -0.054, "y": 6.76, "regime": "Negative GEX"}, {"x": 0.416, "y": 6.96, "regime": "High GEX"}, {"x": 0.271, "y": 6.13, "regime": "High GEX"}, {"x": 0.783, "y": 12.06, "regime": "High GEX"}, {"x": 0.327, "y": 6.81, "regime": "High GEX"}, {"x": -0.124, "y": 10.89, "regime": "Negative GEX"}, {"x": 0.051, "y": 6.6, "regime": "Low GEX"}, {"x": -0.111, "y": 8.89, "regime": "Negative GEX"}, {"x": 0.244, "y": 8.7, "regime": "High GEX"}, {"x": 0.097, "y": 5.25, "regime": "Low GEX"}, {"x": -0.158, "y": 11.0, "regime": "Negative GEX"}, {"x": 0.038, "y": 13.57, "regime": "Low GEX"}, {"x": 0.299, "y": 11.62, "regime": "High GEX"}, {"x": -0.072, "y": 6.64, "regime": "Negative GEX"}, {"x": 0.04, "y": 6.77, "regime": "Low GEX"}, {"x": 0.392, "y": 6.73, "regime": "High GEX"}, {"x": -0.131, "y": 7.94, "regime": "Negative GEX"}, {"x": 0.231, "y": 5.82, "regime": "High GEX"}, {"x": -0.026, "y": 5.72, "regime": "Negative GEX"}, {"x": -0.147, "y": 11.99, "regime": "Negative GEX"}, {"x": -0.235, "y": 9.54, "regime": "Negative GEX"}, {"x": 0.014, "y": 13.85, "regime": "Low GEX"}, {"x": 0.458, "y": 10.39, "regime": "High GEX"}, {"x": 0.242, "y": 5.39, "regime": "High GEX"}, {"x": 0.054, "y": 16.23, "regime": "Low GEX"}, {"x": -0.171, "y": 14.16, "regime": "Negative GEX"}, {"x": -0.123, "y": 8.3, "regime": "Negative GEX"}, {"x": -0.051, "y": 11.78, "regime": "Negative GEX"}, {"x": 0.007, "y": 4.53, "regime": "Low GEX"}, {"x": 0.141, "y": 3.25, "regime": "High GEX"}, {"x": 0.171, "y": 13.12, "regime": "High GEX"}, {"x": -0.101, "y": 5.7, "regime": "Negative GEX"}, {"x": 0.121, "y": 10.59, "regime": "High GEX"}, {"x": -0.022, "y": 7.41, "regime": "Negative GEX"}, {"x": -0.12, "y": 5.97, "regime": "Negative GEX"}, {"x": 0.369, "y": 12.04, "regime": "High GEX"}, {"x": 0.465, "y": 11.43, "regime": "High GEX"}, {"x": 0.333, "y": 7.67, "regime": "High GEX"}, {"x": 0.032, "y": 6.92, "regime": "Low GEX"}, {"x": -0.086, "y": 11.55, "regime": "Negative GEX"}, {"x": -0.458, "y": 6.82, "regime": "Negative GEX"}, {"x": 0.199, "y": 8.63, "regime": "High GEX"}, {"x": 0.546, "y": 12.59, "regime": "High GEX"}, {"x": -0.05, "y": 8.71, "regime": "Negative GEX"}, {"x": 0.107, "y": 6.85, "regime": "Low GEX"}, {"x": 0.049, "y": 13.92, "regime": "Low GEX"}, {"x": 0.32, "y": 10.71, "regime": "High GEX"}, {"x": 0.451, "y": 7.35, "regime": "High GEX"}, {"x": 0.151, "y": 5.77, "regime": "High GEX"}, {"x": 0.113, "y": 7.82, "regime": "High GEX"}, {"x": 0.303, "y": 8.43, "regime": "High GEX"}, {"x": 0.859, "y": 6.91, "regime": "High GEX"}, {"x": 0.432, "y": 8.19, "regime": "High GEX"}, {"x": 0.602, "y": 5.9, "regime": "High GEX"}, {"x": 0.085, "y": 11.95, "regime": "Low GEX"}, {"x": 0.073, "y": 16.62, "regime": "Low GEX"}, {"x": 0.413, "y": 10.02, "regime": "High GEX"}, {"x": 0.059, "y": 7.29, "regime": "Low GEX"}, {"x": -0.48, "y": 5.82, "regime": "Negative GEX"}, {"x": -0.077, "y": 6.62, "regime": "Negative GEX"}, {"x": -0.334, "y": 5.69, "regime": "Negative GEX"}, {"x": 0.007, "y": 7.53, "regime": "Low GEX"}, {"x": 0.209, "y": 10.82, "regime": "High GEX"}, {"x": -0.027, "y": 6.63, "regime": "Negative GEX"}, {"x": 0.086, "y": 5.98, "regime": "Low GEX"}, {"x": 1.048, "y": 6.87, "regime": "High GEX"}, {"x": 0.195, "y": 3.12, "regime": "High GEX"}, {"x": 0.204, "y": 4.28, "regime": "High GEX"}, {"x": -0.04, "y": 6.61, "regime": "Negative GEX"}, {"x": -0.103, "y": 9.39, "regime": "Negative GEX"}, {"x": -0.111, "y": 4.9, "regime": "Negative GEX"}, {"x": 0.261, "y": 7.63, "regime": "High GEX"}, {"x": 0.418, "y": 5.49, "regime": "High GEX"}, {"x": 0.26, "y": 6.22, "regime": "High GEX"}, {"x": -0.099, "y": 6.08, "regime": "Negative GEX"}, {"x": 0.141, "y": 6.03, "regime": "High GEX"}, {"x": 0.408, "y": 10.14, "regime": "High GEX"}, {"x": 0.405, "y": 4.85, "regime": "High GEX"}, {"x": -0.022, "y": 7.7, "regime": "Negative GEX"}, {"x": 0.271, "y": 4.2, "regime": "High GEX"}, {"x": 0.155, "y": 5.76, "regime": "High GEX"}, {"x": 0.275, "y": 6.0, "regime": "High GEX"}, {"x": -0.08, "y": 7.56, "regime": "Negative GEX"}, {"x": -0.029, "y": 16.51, "regime": "Negative GEX"}, {"x": -0.047, "y": 11.08, "regime": "Negative GEX"}, {"x": 0.346, "y": 4.41, "regime": "High GEX"}, {"x": -0.203, "y": 3.68, "regime": "Negative GEX"}, {"x": -0.119, "y": 8.81, "regime": "Negative GEX"}, {"x": -0.132, "y": 7.26, "regime": "Negative GEX"}, {"x": -0.655, "y": 14.05, "regime": "Negative GEX"}, {"x": 0.185, "y": 6.1, "regime": "High GEX"}, {"x": 0.016, "y": 11.54, "regime": "Low GEX"}, {"x": -0.397, "y": 9.04, "regime": "Negative GEX"}, {"x": -0.106, "y": 14.89, "regime": "Negative GEX"}, {"x": -0.481, "y": 7.19, "regime": "Negative GEX"}, {"x": -0.108, "y": 7.97, "regime": "Negative GEX"}, {"x": -0.061, "y": 9.31, "regime": "Negative GEX"}, {"x": -0.146, "y": 10.03, "regime": "Negative GEX"}, {"x": -0.323, "y": 12.35, "regime": "Negative GEX"}, {"x": -0.301, "y": 9.99, "regime": "Negative GEX"}, {"x": -0.111, "y": 10.43, "regime": "Negative GEX"}, {"x": 0.058, "y": 7.83, "regime": "Low GEX"}, {"x": -0.059, "y": 9.87, "regime": "Negative GEX"}, {"x": -0.103, "y": 18.08, "regime": "Negative GEX"}, {"x": -0.122, "y": 13.71, "regime": "Negative GEX"}, {"x": 0.277, "y": 7.4, "regime": "High GEX"}, {"x": 0.142, "y": 14.94, "regime": "High GEX"}, {"x": 0.42, "y": 6.12, "regime": "High GEX"}, {"x": 0.186, "y": 5.64, "regime": "High GEX"}, {"x": 0.245, "y": 8.42, "regime": "High GEX"}, {"x": 0.313, "y": 4.0, "regime": "High GEX"}, {"x": -0.184, "y": 10.04, "regime": "Negative GEX"}, {"x": -0.141, "y": 6.01, "regime": "Negative GEX"}, {"x": -0.193, "y": 5.52, "regime": "Negative GEX"}, {"x": 0.103, "y": 4.9, "regime": "Low GEX"}, {"x": -0.262, "y": 6.7, "regime": "Negative GEX"}, {"x": 0.104, "y": 5.62, "regime": "Low GEX"}, {"x": 0.429, "y": 7.14, "regime": "High GEX"}, {"x": -0.513, "y": 9.77, "regime": "Negative GEX"}, {"x": -0.103, "y": 5.18, "regime": "Negative GEX"}, {"x": 0.033, "y": 7.23, "regime": "Low GEX"}, {"x": -0.424, "y": 12.97, "regime": "Negative GEX"}, {"x": -0.257, "y": 10.42, "regime": "Negative GEX"}, {"x": -0.415, "y": 9.07, "regime": "Negative GEX"}, {"x": -0.122, "y": 7.86, "regime": "Negative GEX"}, {"x": -0.042, "y": 10.71, "regime": "Negative GEX"}, {"x": 0.002, "y": 12.07, "regime": "Low GEX"}, {"x": 0.111, "y": 12.0, "regime": "High GEX"}, {"x": -0.423, "y": 13.2, "regime": "Negative GEX"}, {"x": -0.118, "y": 9.25, "regime": "Negative GEX"}, {"x": -0.196, "y": 16.18, "regime": "Negative GEX"}, {"x": 0.233, "y": 10.98, "regime": "High GEX"}, {"x": 0.121, "y": 9.46, "regime": "High GEX"}, {"x": 0.39, "y": 23.56, "regime": "High GEX"}, {"x": 0.024, "y": 13.02, "regime": "Low GEX"}, {"x": 0.232, "y": 10.28, "regime": "High GEX"}, {"x": 0.025, "y": 7.45, "regime": "Low GEX"}, {"x": -0.061, "y": 13.4, "regime": "Negative GEX"}, {"x": -0.235, "y": 14.46, "regime": "Negative GEX"}, {"x": 0.224, "y": 7.82, "regime": "High GEX"}, {"x": 0.14, "y": 12.46, "regime": "High GEX"}, {"x": -0.194, "y": 13.44, "regime": "Negative GEX"}, {"x": -0.097, "y": 15.76, "regime": "Negative GEX"}, {"x": -0.058, "y": 12.28, "regime": "Negative GEX"}, {"x": -0.185, "y": 15.05, "regime": "Negative GEX"}, {"x": 0.115, "y": 9.2, "regime": "High GEX"}, {"x": -0.28, "y": 11.15, "regime": "Negative GEX"}, {"x": -0.144, "y": 13.17, "regime": "Negative GEX"}, {"x": -0.342, "y": 12.48, "regime": "Negative GEX"}, {"x": 0.185, "y": 10.26, "regime": "High GEX"}, {"x": 0.287, "y": 9.89, "regime": "High GEX"}, {"x": 0.281, "y": 10.98, "regime": "High GEX"}, {"x": 0.137, "y": 9.68, "regime": "High GEX"}, {"x": 0.525, "y": 7.19, "regime": "High GEX"}, {"x": 0.132, "y": 5.41, "regime": "High GEX"}, {"x": 0.24, "y": 6.72, "regime": "High GEX"}, {"x": 0.258, "y": 7.03, "regime": "High GEX"}, {"x": -0.283, "y": 11.09, "regime": "Negative GEX"}, {"x": 0.066, "y": 15.47, "regime": "Low GEX"}, {"x": -0.051, "y": 6.31, "regime": "Negative GEX"}, {"x": 0.074, "y": 8.45, "regime": "Low GEX"}, {"x": 0.288, "y": 5.46, "regime": "High GEX"}, {"x": -0.008, "y": 5.18, "regime": "Negative GEX"}, {"x": 0.451, "y": 4.51, "regime": "High GEX"}, {"x": 0.077, "y": 9.7, "regime": "Low GEX"}, {"x": 0.134, "y": 4.57, "regime": "High GEX"}, {"x": 0.398, "y": 5.22, "regime": "High GEX"}, {"x": 1.337, "y": 1.61, "regime": "High GEX"}, {"x": -0.299, "y": 2.96, "regime": "Negative GEX"}, {"x": -0.214, "y": 5.81, "regime": "Negative GEX"}, {"x": -0.373, "y": 8.61, "regime": "Negative GEX"}, {"x": 0.572, "y": 7.17, "regime": "High GEX"}, {"x": 4.25, "y": 9.36, "regime": "High GEX"}, {"x": -0.922, "y": 9.98, "regime": "Negative GEX"}, {"x": -0.077, "y": 5.68, "regime": "Negative GEX"}, {"x": 0.736, "y": 9.46, "regime": "High GEX"}, {"x": -0.07, "y": 5.44, "regime": "Negative GEX"}, {"x": 0.38, "y": 7.34, "regime": "High GEX"}, {"x": 0.566, "y": 5.59, "regime": "High GEX"}, {"x": 0.241, "y": 7.42, "regime": "High GEX"}, {"x": 0.104, "y": 13.54, "regime": "Low GEX"}, {"x": 1.323, "y": 9.06, "regime": "High GEX"}, {"x": 0.43, "y": 6.65, "regime": "High GEX"}, {"x": 0.283, "y": 6.24, "regime": "High GEX"}, {"x": 0.225, "y": 4.97, "regime": "High GEX"}, {"x": -0.068, "y": 16.32, "regime": "Negative GEX"}, {"x": 0.108, "y": 8.37, "regime": "Low GEX"}, {"x": 0.626, "y": 7.41, "regime": "High GEX"}, {"x": 1.128, "y": 5.2, "regime": "High GEX"}, {"x": 0.018, "y": 3.55, "regime": "Low GEX"}, {"x": 0.261, "y": 2.58, "regime": "High GEX"}, {"x": -0.344, "y": 7.48, "regime": "Negative GEX"}, {"x": -0.025, "y": 6.42, "regime": "Negative GEX"}, {"x": -0.381, "y": 6.13, "regime": "Negative GEX"}, {"x": -0.153, "y": 7.95, "regime": "Negative GEX"}, {"x": 0.096, "y": 8.16, "regime": "Low GEX"}, {"x": 0.375, "y": 13.04, "regime": "High GEX"}, {"x": -0.022, "y": 7.21, "regime": "Negative GEX"}, {"x": 0.253, "y": 7.17, "regime": "High GEX"}, {"x": 0.131, "y": 11.76, "regime": "High GEX"}, {"x": 0.184, "y": 6.74, "regime": "High GEX"}, {"x": -0.193, "y": 7.13, "regime": "Negative GEX"}, {"x": -0.006, "y": 5.91, "regime": "Negative GEX"}, {"x": 0.34, "y": 9.32, "regime": "High GEX"}, {"x": 0.039, "y": 12.29, "regime": "Low GEX"}, {"x": 0.642, "y": 4.81, "regime": "High GEX"}, {"x": 0.428, "y": 4.36, "regime": "High GEX"}, {"x": 0.227, "y": 7.61, "regime": "High GEX"}, {"x": 0.335, "y": 5.71, "regime": "High GEX"}, {"x": -0.14, "y": 5.04, "regime": "Negative GEX"}, {"x": 0.338, "y": 8.27, "regime": "High GEX"}, {"x": 0.85, "y": 2.93, "regime": "High GEX"}, {"x": -0.441, "y": 12.2, "regime": "Negative GEX"}, {"x": -0.032, "y": 10.64, "regime": "Negative GEX"}, {"x": 0.61, "y": 13.06, "regime": "High GEX"}, {"x": 0.047, "y": 8.03, "regime": "Low GEX"}, {"x": 0.355, "y": 4.39, "regime": "High GEX"}, {"x": 0.092, "y": 6.08, "regime": "Low GEX"}, {"x": 0.143, "y": 2.78, "regime": "High GEX"}, {"x": 0.113, "y": 6.02, "regime": "High GEX"}, {"x": -0.056, "y": 6.19, "regime": "Negative GEX"}, {"x": -0.444, "y": 12.31, "regime": "Negative GEX"}, {"x": -0.167, "y": 8.96, "regime": "Negative GEX"}, {"x": 2.255, "y": 6.49, "regime": "High GEX"}, {"x": -0.727, "y": 7.84, "regime": "Negative GEX"}, {"x": -0.275, "y": 7.6, "regime": "Negative GEX"}, {"x": -0.072, "y": 7.33, "regime": "Negative GEX"}, {"x": 0.343, "y": 10.31, "regime": "High GEX"}, {"x": 0.344, "y": 5.68, "regime": "High GEX"}, {"x": 0.075, "y": 5.43, "regime": "Low GEX"}, {"x": 0.131, "y": 4.54, "regime": "High GEX"}, {"x": 0.19, "y": 3.57, "regime": "High GEX"}, {"x": 0.502, "y": 8.25, "regime": "High GEX"}, {"x": 0.502, "y": 8.83, "regime": "High GEX"}, {"x": 0.169, "y": 4.09, "regime": "High GEX"}, {"x": -0.014, "y": 10.87, "regime": "Negative GEX"}, {"x": 0.195, "y": 6.82, "regime": "High GEX"}, {"x": 0.449, "y": 11.31, "regime": "High GEX"}, {"x": 0.142, "y": 13.13, "regime": "High GEX"}, {"x": -0.194, "y": 6.32, "regime": "Negative GEX"}, {"x": 0.191, "y": 12.09, "regime": "High GEX"}, {"x": 0.084, "y": 5.17, "regime": "Low GEX"}, {"x": -0.203, "y": 9.83, "regime": "Negative GEX"}, {"x": -0.311, "y": 6.69, "regime": "Negative GEX"}, {"x": 2.129, "y": 5.64, "regime": "High GEX"}, {"x": 0.761, "y": 9.05, "regime": "High GEX"}, {"x": 1.535, "y": 10.2, "regime": "High GEX"}, {"x": 0.188, "y": 4.01, "regime": "High GEX"}, {"x": 0.472, "y": 2.99, "regime": "High GEX"}, {"x": -0.178, "y": 2.46, "regime": "Negative GEX"}, {"x": 0.014, "y": 5.83, "regime": "Low GEX"}, {"x": 0.494, "y": 6.81, "regime": "High GEX"}, {"x": 0.447, "y": 3.33, "regime": "High GEX"}, {"x": -0.051, "y": 6.22, "regime": "Negative GEX"}, {"x": -0.18, "y": 4.6, "regime": "Negative GEX"}, {"x": -0.058, "y": 6.03, "regime": "Negative GEX"}, {"x": -0.384, "y": 20.44, "regime": "Negative GEX"}, {"x": 0.119, "y": 11.85, "regime": "High GEX"}, {"x": -0.369, "y": 4.21, "regime": "Negative GEX"}, {"x": -0.119, "y": 11.79, "regime": "Negative GEX"}, {"x": -0.287, "y": 7.55, "regime": "Negative GEX"}, {"x": 0.338, "y": 13.68, "regime": "High GEX"}, {"x": -0.386, "y": 12.53, "regime": "Negative GEX"}, {"x": -0.482, "y": 21.93, "regime": "Negative GEX"}, {"x": -0.078, "y": 8.11, "regime": "Negative GEX"}, {"x": -0.135, "y": 13.47, "regime": "Negative GEX"}, {"x": -0.169, "y": 10.59, "regime": "Negative GEX"}, {"x": -0.527, "y": 12.65, "regime": "Negative GEX"}, {"x": -0.061, "y": 13.28, "regime": "Negative GEX"}, {"x": 0.028, "y": 12.43, "regime": "Low GEX"}, {"x": 0.145, "y": 8.0, "regime": "High GEX"}, {"x": -0.117, "y": 12.91, "regime": "Negative GEX"}, {"x": 0.411, "y": 7.85, "regime": "High GEX"}, {"x": -0.015, "y": 6.56, "regime": "Negative GEX"}, {"x": -0.179, "y": 14.29, "regime": "Negative GEX"}, {"x": -0.272, "y": 15.75, "regime": "Negative GEX"}, {"x": 0.283, "y": 12.02, "regime": "High GEX"}, {"x": 0.101, "y": 7.45, "regime": "Low GEX"}, {"x": 0.095, "y": 6.13, "regime": "Low GEX"}, {"x": 0.37, "y": 3.91, "regime": "High GEX"}, {"x": 0.197, "y": 4.8, "regime": "High GEX"}, {"x": 0.574, "y": 6.44, "regime": "High GEX"}, {"x": 0.509, "y": 5.57, "regime": "High GEX"}, {"x": -0.061, "y": 5.36, "regime": "Negative GEX"}, {"x": 0.31, "y": 5.97, "regime": "High GEX"}, {"x": 0.558, "y": 8.85, "regime": "High GEX"}, {"x": 0.158, "y": 5.36, "regime": "High GEX"}, {"x": -0.185, "y": 3.97, "regime": "Negative GEX"}, {"x": 0.048, "y": 4.3, "regime": "Low GEX"}, {"x": 0.224, "y": 4.4, "regime": "High GEX"}, {"x": -0.175, "y": 6.81, "regime": "Negative GEX"}, {"x": -0.479, "y": 15.05, "regime": "Negative GEX"}, {"x": -0.24, "y": 6.11, "regime": "Negative GEX"}, {"x": -0.08, "y": 6.13, "regime": "Negative GEX"}, {"x": -0.348, "y": 3.51, "regime": "Negative GEX"}, {"x": -0.277, "y": 7.05, "regime": "Negative GEX"}, {"x": -0.139, "y": 16.66, "regime": "Negative GEX"}, {"x": 0.095, "y": 12.16, "regime": "Low GEX"}, {"x": 0.118, "y": 7.58, "regime": "High GEX"}, {"x": 0.512, "y": 10.69, "regime": "High GEX"}, {"x": 0.151, "y": 4.89, "regime": "High GEX"}, {"x": 0.444, "y": 7.76, "regime": "High GEX"}, {"x": -0.03, "y": 6.1, "regime": "Negative GEX"}, {"x": 0.026, "y": 8.85, "regime": "Low GEX"}, {"x": 0.397, "y": 6.72, "regime": "High GEX"}, {"x": 0.229, "y": 6.58, "regime": "High GEX"}, {"x": -0.031, "y": 5.21, "regime": "Negative GEX"}, {"x": 0.6, "y": 12.11, "regime": "High GEX"}, {"x": 0.403, "y": 3.29, "regime": "High GEX"}, {"x": -0.039, "y": 8.6, "regime": "Negative GEX"}, {"x": 0.079, "y": 4.61, "regime": "Low GEX"}, {"x": -0.01, "y": 7.58, "regime": "Negative GEX"}, {"x": 0.111, "y": 4.84, "regime": "High GEX"}, {"x": 0.19, "y": 5.62, "regime": "High GEX"}, {"x": 0.08, "y": 4.11, "regime": "Low GEX"}, {"x": 0.033, "y": 12.78, "regime": "Low GEX"}, {"x": 0.081, "y": 5.89, "regime": "Low GEX"}, {"x": 0.427, "y": 9.35, "regime": "High GEX"}, {"x": 0.216, "y": 5.51, "regime": "High GEX"}, {"x": 1.096, "y": 6.77, "regime": "High GEX"}, {"x": 0.906, "y": 3.54, "regime": "High GEX"}, {"x": 0.267, "y": 2.84, "regime": "High GEX"}, {"x": 0.708, "y": 8.35, "regime": "High GEX"}, {"x": -0.088, "y": 11.08, "regime": "Negative GEX"}, {"x": 0.236, "y": 11.09, "regime": "High GEX"}, {"x": 0.703, "y": 8.83, "regime": "High GEX"}, {"x": 0.275, "y": 5.18, "regime": "High GEX"}, {"x": -0.076, "y": 6.66, "regime": "Negative GEX"}, {"x": -0.552, "y": 15.62, "regime": "Negative GEX"}, {"x": -0.497, "y": 10.68, "regime": "Negative GEX"}, {"x": -0.064, "y": 7.32, "regime": "Negative GEX"}, {"x": -0.21, "y": 5.94, "regime": "Negative GEX"}, {"x": -0.7, "y": 15.54, "regime": "Negative GEX"}, {"x": -0.055, "y": 17.58, "regime": "Negative GEX"}, {"x": 0.038, "y": 9.98, "regime": "Low GEX"}, {"x": -0.084, "y": 7.58, "regime": "Negative GEX"}, {"x": -0.1, "y": 15.5, "regime": "Negative GEX"}, {"x": 0.265, "y": 10.25, "regime": "High GEX"}, {"x": -0.119, "y": 26.9, "regime": "Negative GEX"}, {"x": -0.53, "y": 15.01, "regime": "Negative GEX"}, {"x": -0.463, "y": 24.55, "regime": "Negative GEX"}, {"x": -0.079, "y": 21.62, "regime": "Negative GEX"}, {"x": -0.241, "y": 24.59, "regime": "Negative GEX"}, {"x": 0.182, "y": 17.11, "regime": "High GEX"}, {"x": 0.233, "y": 10.67, "regime": "High GEX"}, {"x": 0.73, "y": 8.54, "regime": "High GEX"}, {"x": 0.523, "y": 10.61, "regime": "High GEX"}, {"x": 0.184, "y": 8.51, "regime": "High GEX"}, {"x": 0.201, "y": 7.75, "regime": "High GEX"}, {"x": 1.197, "y": 6.48, "regime": "High GEX"}, {"x": 0.212, "y": 9.85, "regime": "High GEX"}, {"x": 0.083, "y": 5.99, "regime": "Low GEX"}, {"x": 0.051, "y": 12.6, "regime": "Low GEX"}, {"x": -0.13, "y": 13.98, "regime": "Negative GEX"}, {"x": 0.209, "y": 9.87, "regime": "High GEX"}, {"x": -0.054, "y": 8.25, "regime": "Negative GEX"}, {"x": -0.075, "y": 6.36, "regime": "Negative GEX"}, {"x": 0.036, "y": 11.29, "regime": "Low GEX"}, {"x": -0.073, "y": 11.06, "regime": "Negative GEX"}, {"x": 0.57, "y": 12.01, "regime": "High GEX"}, {"x": -0.363, "y": 19.41, "regime": "Negative GEX"}, {"x": -0.233, "y": 8.58, "regime": "Negative GEX"}, {"x": -0.176, "y": 11.6, "regime": "Negative GEX"}, {"x": -0.427, "y": 21.25, "regime": "Negative GEX"}, {"x": -0.058, "y": 8.8, "regime": "Negative GEX"}, {"x": 0.328, "y": 10.07, "regime": "High GEX"}, {"x": 0.163, "y": 26.81, "regime": "High GEX"}, {"x": 0.189, "y": 11.42, "regime": "High GEX"}, {"x": 0.379, "y": 6.08, "regime": "High GEX"}, {"x": 0.221, "y": 5.45, "regime": "High GEX"}, {"x": 0.072, "y": 9.78, "regime": "Low GEX"}, {"x": 0.109, "y": 13.27, "regime": "High GEX"}, {"x": 0.15, "y": 8.02, "regime": "High GEX"}, {"x": 0.203, "y": 6.96, "regime": "High GEX"}, {"x": 0.19, "y": 3.74, "regime": "High GEX"}, {"x": 0.114, "y": 6.29, "regime": "High GEX"}, {"x": -0.006, "y": 4.98, "regime": "Negative GEX"}, {"x": 0.386, "y": 8.01, "regime": "High GEX"}, {"x": 0.407, "y": 6.33, "regime": "High GEX"}, {"x": 0.227, "y": 10.51, "regime": "High GEX"}, {"x": -0.219, "y": 13.48, "regime": "Negative GEX"}, {"x": 0.184, "y": 7.78, "regime": "High GEX"}, {"x": -0.151, "y": 7.24, "regime": "Negative GEX"}, {"x": 0.44, "y": 8.79, "regime": "High GEX"}, {"x": -0.41, "y": 8.93, "regime": "Negative GEX"}, {"x": 0.232, "y": 7.09, "regime": "High GEX"}, {"x": 0.727, "y": 8.55, "regime": "High GEX"}, {"x": 0.074, "y": 5.11, "regime": "Low GEX"}, {"x": 0.599, "y": 7.29, "regime": "High GEX"}, {"x": 0.462, "y": 7.42, "regime": "High GEX"}, {"x": -0.373, "y": 10.42, "regime": "Negative GEX"}, {"x": 1.492, "y": 6.35, "regime": "High GEX"}, {"x": 0.08, "y": 6.46, "regime": "Low GEX"}, {"x": 0.409, "y": 4.59, "regime": "High GEX"}, {"x": 0.162, "y": 6.95, "regime": "High GEX"}, {"x": -0.076, "y": 6.74, "regime": "Negative GEX"}, {"x": -0.395, "y": 12.03, "regime": "Negative GEX"}, {"x": 0.08, "y": 5.75, "regime": "Low GEX"}, {"x": -0.142, "y": 10.46, "regime": "Negative GEX"}, {"x": 0.079, "y": 3.59, "regime": "Low GEX"}, {"x": -0.082, "y": 7.35, "regime": "Negative GEX"}, {"x": -0.022, "y": 6.61, "regime": "Negative GEX"}, {"x": -0.298, "y": 11.98, "regime": "Negative GEX"}, {"x": -0.361, "y": 8.2, "regime": "Negative GEX"}, {"x": -0.236, "y": 7.71, "regime": "Negative GEX"}, {"x": -0.008, "y": 10.34, "regime": "Negative GEX"}, {"x": 0.249, "y": 10.59, "regime": "High GEX"}, {"x": 0.403, "y": 5.85, "regime": "High GEX"}, {"x": 1.186, "y": 5.54, "regime": "High GEX"}, {"x": -0.1, "y": 5.05, "regime": "Negative GEX"}, {"x": -0.071, "y": 7.86, "regime": "Negative GEX"}, {"x": 0.008, "y": 6.82, "regime": "Low GEX"}, {"x": -0.04, "y": 8.26, "regime": "Negative GEX"}, {"x": -0.151, "y": 10.3, "regime": "Negative GEX"}, {"x": 0.102, "y": 6.74, "regime": "Low GEX"}, {"x": 0.127, "y": 11.38, "regime": "High GEX"}, {"x": -0.085, "y": 9.99, "regime": "Negative GEX"}, {"x": 0.465, "y": 12.37, "regime": "High GEX"}, {"x": 0.521, "y": 4.81, "regime": "High GEX"}, {"x": 0.163, "y": 9.02, "regime": "High GEX"}, {"x": 0.406, "y": 5.18, "regime": "High GEX"}, {"x": 0.304, "y": 5.68, "regime": "High GEX"}, {"x": 0.495, "y": 6.29, "regime": "High GEX"}, {"x": 0.379, "y": 2.92, "regime": "High GEX"}, {"x": 0.061, "y": 2.87, "regime": "Low GEX"}, {"x": 0.288, "y": 4.65, "regime": "High GEX"}, {"x": -0.149, "y": 3.41, "regime": "Negative GEX"}, {"x": -0.042, "y": 3.21, "regime": "Negative GEX"}, {"x": -0.404, "y": 5.95, "regime": "Negative GEX"}, {"x": -0.595, "y": 5.79, "regime": "Negative GEX"}, {"x": 0.517, "y": 4.61, "regime": "High GEX"}, {"x": -0.284, "y": 4.45, "regime": "Negative GEX"}, {"x": -0.488, "y": 6.81, "regime": "Negative GEX"}, {"x": 0.975, "y": 4.04, "regime": "High GEX"}, {"x": -0.303, "y": 3.61, "regime": "Negative GEX"}, {"x": -0.083, "y": 32.81, "regime": "Negative GEX"}, {"x": -0.208, "y": 11.56, "regime": "Negative GEX"}, {"x": -0.24, "y": 24.05, "regime": "Negative GEX"}, {"x": 1.0, "y": 12.31, "regime": "High GEX"}, {"x": 0.023, "y": 9.35, "regime": "Low GEX"}, {"x": 0.267, "y": 6.98, "regime": "High GEX"}, {"x": -0.493, "y": 11.25, "regime": "Negative GEX"}, {"x": -0.104, "y": 11.88, "regime": "Negative GEX"}, {"x": -0.45, "y": 10.09, "regime": "Negative GEX"}];
+  const colors = ["#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#f59e0b", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#f59e0b", "#dc2626", "#f59e0b", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#f59e0b", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#f59e0b", "#059669", "#f59e0b", "#dc2626", "#f59e0b", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#f59e0b", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#f59e0b", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#f59e0b", "#059669", "#f59e0b", "#f59e0b", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#059669", "#f59e0b", "#dc2626", "#f59e0b", "#dc2626", "#f59e0b", "#059669", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#f59e0b", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#059669", "#059669", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#f59e0b", "#f59e0b", "#dc2626", "#f59e0b", "#059669", "#059669", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#f59e0b", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#f59e0b", "#f59e0b", "#dc2626", "#f59e0b", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#f59e0b", "#dc2626", "#059669", "#f59e0b", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#059669", "#dc2626", "#059669", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#f59e0b", "#f59e0b", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#f59e0b", "#f59e0b", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#f59e0b", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#f59e0b", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#f59e0b", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#059669", "#f59e0b", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#f59e0b", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#f59e0b", "#059669", "#059669", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#059669", "#f59e0b", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#f59e0b", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#f59e0b", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#f59e0b", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#f59e0b", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#dc2626", "#f59e0b", "#dc2626", "#059669", "#059669", "#f59e0b", "#f59e0b", "#f59e0b", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#f59e0b", "#f59e0b", "#dc2626", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#f59e0b", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#dc2626", "#059669", "#dc2626", "#059669", "#059669", "#f59e0b", "#059669", "#059669", "#dc2626", "#059669", "#f59e0b", "#059669", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#dc2626"];
+  const regLine = [{"x": -1.099, "y": 16.7}, {"x": 4.25, "y": -5.94}];
+
+  const scatterDs = pts.map((p, i) => ({ x: p.x, y: p.y }));
+
+  new Chart(document.getElementById('scatterChart'), {
+    type: 'scatter',
+    data: {
+      datasets: [
+        {
+          label: 'Daily observations',
+          data: scatterDs,
+          backgroundColor: colors.map(c => c + '55'),
+          borderColor: colors.map(c => c + '99'),
+          borderWidth: 0.8,
+          pointRadius: 3.5,
+          pointHoverRadius: 6,
+          pointStyle: 'circle',
+        },
+        {
+          label: 'OLS regression',
+          type: 'line',
+          data: regLine,
+          borderColor: COLORS.blue,
+          borderWidth: 2,
+          borderDash: [5, 3],
+          pointRadius: 0,
+          fill: false,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              if (ctx.datasetIndex === 0) {
+                const p = pts[ctx.dataIndex];
+                return [`${p.date}`, `GEX: ${p.x.toFixed(2)}bn`, `RVol: ${p.y.toFixed(1)}%`, p.regime];
+              }
+              return `Trend: ${ctx.parsed.y.toFixed(1)}%`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          title: { display: true, text: 'Daily GEX (US$bn)', font: { size: 11 } },
+          grid: { color: 'rgba(0,0,0,0.05)', lineWidth: 0.75 },
+          border: { color: 'rgba(0,0,0,0.10)' },
+          ticks: { font: { size: 10 } },
+        },
+        y: {
+          title: { display: true, text: 'Intraday RVol, annualised', font: { size: 11 } },
+          grid: { color: 'rgba(0,0,0,0.05)', lineWidth: 0.75 },
+          border: { color: 'transparent' },
+          ticks: { callback: v => v + '%', font: { size: 10 } },
+        }
+      }
+    }
+  });
+})();
+
+// ── Chart 4: Intraday vol profile ─────────────────────────────────────────────
+(function() {
+  const labels = ["09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30"];
+  const neg    = [48.01, 69.82, 57.65, 63.08, 62.69, 89.12, 96.73, 77.97, 104.23, 116.2, 88.42, 93.42, 101.13];
+  const low    = [59.24, 55.04, 91.57, 87.93, 107.24, 115.56, 94.44, 109.57, 88.41, 109.49, 156.68, 113.47, 110.65];
+  const high   = [46.45, 66.73, 59.3, 54.22, 64.33, 52.0, 59.19, 67.87, 68.73, 97.58, 93.83, 65.93, 86.05];
+
+  new Chart(document.getElementById('profileChart'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Negative GEX',
+          data: neg,
+          borderColor: COLORS.neg,
+          backgroundColor: COLORS.neg + '18',
+          borderWidth: 2.5,
+          pointRadius: 4,
+          pointBackgroundColor: COLORS.neg,
+          fill: true,
+          tension: 0.35,
+        },
+        {
+          label: 'Low GEX',
+          data: low,
+          borderColor: COLORS.low,
+          backgroundColor: COLORS.low + '12',
+          borderWidth: 2,
+          pointRadius: 3,
+          pointBackgroundColor: COLORS.low,
+          fill: true,
+          tension: 0.35,
+        },
+        {
+          label: 'High GEX',
+          data: high,
+          borderColor: COLORS.high,
+          backgroundColor: COLORS.high + '18',
+          borderWidth: 2.5,
+          pointRadius: 4,
+          pointBackgroundColor: COLORS.high,
+          fill: true,
+          tension: 0.35,
+        },
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => `${ctx.dataset.label}: ${ctx.raw !== null ? ctx.raw.toFixed(1) + '%' : 'n/a'}`,
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          border: { color: 'rgba(0,0,0,0.10)' },
+          ticks: { font: { size: 10 } },
+        },
+        y: {
+          title: { display: true, text: 'Avg bucket RVol, annualised', font: { size: 11 } },
+          grid: { color: 'rgba(0,0,0,0.05)', lineWidth: 0.75 },
+          border: { color: 'transparent' },
+          ticks: { callback: v => v + '%', font: { size: 10 } },
+        }
+      }
+    }
+  });
+})();
+
+// ── Chart 5: Backtest — daily RVol bars coloured by regime ───────────────────
+(function() {
+  const dates   = ["2022-01-03", "2022-01-05", "2022-01-07", "2022-01-10", "2022-01-12", "2022-01-14", "2022-01-18", "2022-01-19", "2022-01-21", "2022-01-24", "2022-01-26", "2022-01-28", "2022-01-31", "2022-02-02", "2022-02-04", "2022-02-07", "2022-02-09", "2022-02-11", "2022-02-14", "2022-02-16", "2022-02-18", "2022-02-22", "2022-02-23", "2022-02-25", "2022-02-28", "2022-03-02", "2022-03-04", "2022-03-07", "2022-03-09", "2022-03-11", "2022-03-14", "2022-03-16", "2022-03-18", "2022-03-21", "2022-03-23", "2022-03-25", "2022-03-28", "2022-03-30", "2022-03-31", "2022-04-01", "2022-04-04", "2022-04-06", "2022-04-08", "2022-04-11", "2022-04-13", "2022-04-14", "2022-04-18", "2022-04-20", "2022-04-22", "2022-04-25", "2022-04-26", "2022-04-27", "2022-04-29", "2022-05-02", "2022-05-03", "2022-05-04", "2022-05-06", "2022-05-09", "2022-05-10", "2022-05-11", "2022-05-13", "2022-05-16", "2022-05-17", "2022-05-18", "2022-05-19", "2022-05-20", "2022-05-23", "2022-05-24", "2022-05-25", "2022-05-26", "2022-05-27", "2022-05-31", "2022-06-01", "2022-06-02", "2022-06-03", "2022-06-06", "2022-06-07", "2022-06-08", "2022-06-09", "2022-06-10", "2022-06-13", "2022-06-14", "2022-06-15", "2022-06-16", "2022-06-17", "2022-06-21", "2022-06-22", "2022-06-23", "2022-06-24", "2022-06-27", "2022-06-28", "2022-06-29", "2022-06-30", "2022-07-01", "2022-07-05", "2022-07-06", "2022-07-07", "2022-07-08", "2022-07-11", "2022-07-12", "2022-07-13", "2022-07-14", "2022-07-15", "2022-07-18", "2022-07-19", "2022-07-20", "2022-07-21", "2022-07-22", "2022-07-25", "2022-07-26", "2022-07-27", "2022-07-28", "2022-07-29", "2022-08-01", "2022-08-02", "2022-08-03", "2022-08-04", "2022-08-05", "2022-08-08", "2022-08-09", "2022-08-10", "2022-08-11", "2022-08-12", "2022-08-15", "2022-08-16", "2022-08-17", "2022-08-18", "2022-08-19", "2022-08-22", "2022-08-23", "2022-08-24", "2022-08-25", "2022-08-26", "2022-08-29", "2022-08-30", "2022-08-31", "2022-09-01", "2022-09-02", "2022-09-06", "2022-09-07", "2022-09-08", "2022-09-09", "2022-09-12", "2022-09-13", "2022-09-14", "2022-09-15", "2022-09-16", "2022-09-19", "2022-09-20", "2022-09-21", "2022-09-22", "2022-09-23", "2022-09-26", "2022-09-27", "2022-09-28", "2022-09-29", "2022-09-30", "2022-10-03", "2022-10-04", "2022-10-05", "2022-10-06", "2022-10-07", "2022-10-10", "2022-10-11", "2022-10-12", "2022-10-13", "2022-10-14", "2022-10-17", "2022-10-18", "2022-10-19", "2022-10-20", "2022-10-21", "2022-10-24", "2022-10-25", "2022-10-26", "2022-10-27", "2022-10-28", "2022-10-31", "2022-11-01", "2022-11-02", "2022-11-03", "2022-11-04", "2022-11-07", "2022-11-08", "2022-11-09", "2022-11-10", "2022-11-11", "2022-11-14", "2022-11-15", "2022-11-16", "2022-11-17", "2022-11-18", "2022-11-21", "2022-11-22", "2022-11-23", "2022-11-25", "2022-11-28", "2022-11-29", "2022-11-30", "2022-12-01", "2022-12-02", "2022-12-05", "2022-12-06", "2022-12-07", "2022-12-08", "2022-12-09", "2022-12-12", "2022-12-13", "2022-12-14", "2022-12-15", "2022-12-16", "2022-12-19", "2022-12-20", "2022-12-21", "2022-12-22", "2022-12-23", "2022-12-27", "2022-12-28", "2022-12-29", "2022-12-30", "2023-01-03", "2023-01-04", "2023-01-05", "2023-01-06", "2023-01-09", "2023-01-10", "2023-01-11", "2023-01-12", "2023-01-13", "2023-01-17", "2023-01-18", "2023-01-19", "2023-01-20", "2023-01-23", "2023-01-24", "2023-01-25", "2023-01-26", "2023-01-27", "2023-01-30", "2023-01-31", "2023-02-01", "2023-02-02", "2023-02-03", "2023-02-06", "2023-02-07", "2023-02-08", "2023-02-09", "2023-02-10", "2023-02-13", "2023-02-14", "2023-02-15", "2023-02-16", "2023-02-17", "2023-02-21", "2023-02-22", "2023-02-23", "2023-02-24", "2023-02-27", "2023-02-28", "2023-03-01", "2023-03-02", "2023-03-03", "2023-03-06", "2023-03-07", "2023-03-08", "2023-03-09", "2023-03-10", "2023-03-13", "2023-03-14", "2023-03-15", "2023-03-16", "2023-03-17", "2023-03-20", "2023-03-21", "2023-03-22", "2023-03-23", "2023-03-24", "2023-03-27", "2023-03-28", "2023-03-29", "2023-03-30", "2023-03-31", "2023-04-03", "2023-04-04", "2023-04-05", "2023-04-06", "2023-04-10", "2023-04-11", "2023-04-12", "2023-04-13", "2023-04-14", "2023-04-17", "2023-04-18", "2023-04-19", "2023-04-20", "2023-04-21", "2023-04-24", "2023-04-25", "2023-04-26", "2023-04-27", "2023-04-28", "2023-05-01", "2023-05-02", "2023-05-03", "2023-05-04", "2023-05-05", "2023-05-08", "2023-05-09", "2023-05-10", "2023-05-11", "2023-05-12", "2023-05-15", "2023-05-16", "2023-05-17", "2023-05-18", "2023-05-19", "2023-05-22", "2023-05-23", "2023-05-24", "2023-05-25", "2023-05-26", "2023-05-30", "2023-05-31", "2023-06-01", "2023-06-02", "2023-06-05", "2023-06-06", "2023-06-07", "2023-06-08", "2023-06-09", "2023-06-12", "2023-06-13", "2023-06-14", "2023-06-15", "2023-06-16", "2023-06-20", "2023-06-21", "2023-06-22", "2023-06-23", "2023-06-26", "2023-06-27", "2023-06-28", "2023-06-29", "2023-06-30", "2023-07-03", "2023-07-05", "2023-07-06", "2023-07-07", "2023-07-10", "2023-07-11", "2023-07-12", "2023-07-13", "2023-07-14", "2023-07-17", "2023-07-18", "2023-07-19", "2023-07-20", "2023-07-21", "2023-07-24", "2023-07-25", "2023-07-26", "2023-07-27", "2023-07-28", "2023-07-31", "2023-08-01", "2023-08-02", "2023-08-03", "2023-08-04", "2023-08-07", "2023-08-08", "2023-08-09", "2023-08-10", "2023-08-11", "2023-08-14", "2023-08-15", "2023-08-16", "2023-08-17", "2023-08-18", "2023-08-21", "2023-08-22", "2023-08-23", "2023-08-24", "2023-08-25", "2023-08-28", "2023-08-29", "2023-08-30", "2023-08-31", "2023-09-01", "2023-09-05", "2023-09-06", "2023-09-07", "2023-09-08", "2023-09-11", "2023-09-12", "2023-09-13", "2023-09-14", "2023-09-15", "2023-09-18", "2023-09-19", "2023-09-20", "2023-09-21", "2023-09-22", "2023-09-25", "2023-09-26", "2023-09-27", "2023-09-28", "2023-09-29", "2023-10-02", "2023-10-03", "2023-10-04", "2023-10-05", "2023-10-06", "2023-10-09", "2023-10-10", "2023-10-11", "2023-10-12", "2023-10-13", "2023-10-16", "2023-10-17", "2023-10-18", "2023-10-19", "2023-10-20", "2023-10-23", "2023-10-24", "2023-10-25", "2023-10-26", "2023-10-27", "2023-10-30", "2023-10-31", "2023-11-01", "2023-11-02", "2023-11-03", "2023-11-06", "2023-11-07", "2023-11-08", "2023-11-09", "2023-11-10", "2023-11-13", "2023-11-14", "2023-11-15", "2023-11-16", "2023-11-17", "2023-11-20", "2023-11-21", "2023-11-22", "2023-11-24", "2023-11-27", "2023-11-28", "2023-11-29", "2023-11-30", "2023-12-01", "2023-12-04", "2023-12-05", "2023-12-06", "2023-12-07", "2023-12-08", "2023-12-11", "2023-12-12", "2023-12-13", "2023-12-14", "2023-12-15", "2023-12-18", "2023-12-19", "2023-12-20", "2023-12-21", "2023-12-22", "2023-12-26", "2023-12-27", "2023-12-28", "2023-12-29", "2024-01-02", "2024-01-03", "2024-01-04", "2024-01-05", "2024-01-08", "2024-01-09", "2024-01-10", "2024-01-11", "2024-01-12", "2024-01-16", "2024-01-17", "2024-01-18", "2024-01-19", "2024-01-22", "2024-01-23", "2024-01-24", "2024-01-25", "2024-01-26", "2024-01-29", "2024-01-30", "2024-01-31", "2024-02-01", "2024-02-02", "2024-02-05", "2024-02-06", "2024-02-07", "2024-02-08", "2024-02-09", "2024-02-12", "2024-02-13", "2024-02-14", "2024-02-15", "2024-02-16", "2024-02-20", "2024-02-21", "2024-02-22", "2024-02-23", "2024-02-26", "2024-02-27", "2024-02-28", "2024-02-29", "2024-03-01", "2024-03-04", "2024-03-05", "2024-03-06", "2024-03-07", "2024-03-08", "2024-03-11", "2024-03-12", "2024-03-13", "2024-03-14", "2024-03-15", "2024-03-18", "2024-03-19", "2024-03-20", "2024-03-21", "2024-03-22", "2024-03-25", "2024-03-26", "2024-03-27", "2024-03-28", "2024-04-01", "2024-04-02", "2024-04-03", "2024-04-04", "2024-04-05", "2024-04-08", "2024-04-09", "2024-04-10", "2024-04-11", "2024-04-12", "2024-04-15", "2024-04-16", "2024-04-17", "2024-04-18", "2024-04-19", "2024-04-22", "2024-04-23", "2024-04-24", "2024-04-25", "2024-04-26", "2024-04-29", "2024-04-30", "2024-05-01", "2024-05-02", "2024-05-03", "2024-05-06", "2024-05-07", "2024-05-08", "2024-05-09", "2024-05-10", "2024-05-13", "2024-05-14", "2024-05-15", "2024-05-16", "2024-05-17", "2024-05-20", "2024-05-21", "2024-05-22", "2024-05-23", "2024-05-24", "2024-05-28", "2024-05-29", "2024-05-30", "2024-05-31", "2024-06-03", "2024-06-04", "2024-06-05", "2024-06-06", "2024-06-07", "2024-06-10", "2024-06-11", "2024-06-12", "2024-06-13", "2024-06-14", "2024-06-17", "2024-06-18", "2024-06-20", "2024-06-21", "2024-06-24", "2024-06-25", "2024-06-26", "2024-06-27", "2024-06-28", "2024-07-01", "2024-07-02", "2024-07-03", "2024-07-05", "2024-07-08", "2024-07-09", "2024-07-10", "2024-07-11", "2024-07-12", "2024-07-15", "2024-07-16", "2024-07-17", "2024-07-18", "2024-07-19", "2024-07-22", "2024-07-23", "2024-07-24", "2024-07-25", "2024-07-26", "2024-07-29", "2024-07-30", "2024-07-31", "2024-08-01", "2024-08-02", "2024-08-05", "2024-08-06", "2024-08-07", "2024-08-08", "2024-08-09", "2024-08-12", "2024-08-13", "2024-08-14", "2024-08-15", "2024-08-16", "2024-08-19", "2024-08-20", "2024-08-21", "2024-08-22", "2024-08-23", "2024-08-26", "2024-08-27", "2024-08-28", "2024-08-29", "2024-08-30", "2024-09-03", "2024-09-04", "2024-09-05", "2024-09-06", "2024-09-09", "2024-09-10", "2024-09-11", "2024-09-12", "2024-09-13", "2024-09-16", "2024-09-17", "2024-09-18", "2024-09-19", "2024-09-20", "2024-09-23", "2024-09-24", "2024-09-25", "2024-09-26", "2024-09-27", "2024-09-30", "2024-10-01", "2024-10-02", "2024-10-03", "2024-10-04", "2024-10-07", "2024-10-08", "2024-10-09", "2024-10-10", "2024-10-11", "2024-10-14", "2024-10-15", "2024-10-16", "2024-10-17", "2024-10-18", "2024-10-21", "2024-10-22", "2024-10-23", "2024-10-24", "2024-10-25", "2024-10-28", "2024-10-29", "2024-10-30", "2024-10-31", "2024-11-01", "2024-11-04", "2024-11-05", "2024-11-06", "2024-11-07", "2024-11-08", "2024-11-11", "2024-11-12", "2024-11-13", "2024-11-14", "2024-11-15", "2024-11-18", "2024-11-19", "2024-11-20", "2024-11-21", "2024-11-22", "2024-11-25", "2024-11-26", "2024-11-27", "2024-11-29", "2024-12-02", "2024-12-03", "2024-12-04", "2024-12-05", "2024-12-06", "2024-12-09", "2024-12-10", "2024-12-11", "2024-12-12", "2024-12-13", "2024-12-16", "2024-12-17", "2024-12-18", "2024-12-19", "2024-12-20", "2024-12-23", "2024-12-24", "2024-12-26", "2024-12-27", "2024-12-30", "2024-12-31"];
+  const rvols   = [8.01, 19.55, 9.29, 18.9, 8.62, 10.7, 9.69, 17.06, 21.76, 43.45, 33.16, 31.09, 22.43, 10.61, 19.03, 10.93, 6.0, 27.12, 13.61, 13.1, 14.98, 21.34, 26.57, 21.98, 16.46, 17.84, 12.15, 28.98, 14.97, 20.77, 19.88, 24.11, 16.52, 12.42, 10.22, 9.62, 12.31, 9.83, 15.93, 9.13, 9.75, 11.67, 9.97, 12.1, 13.56, 15.23, 9.02, 8.75, 27.92, 22.16, 22.58, 18.0, 33.4, 25.32, 12.76, 36.06, 21.08, 23.54, 26.81, 28.94, 18.07, 15.15, 14.07, 31.81, 17.16, 40.44, 17.78, 19.97, 18.22, 20.33, 17.79, 14.83, 21.57, 24.05, 10.49, 13.96, 19.93, 12.55, 24.15, 14.63, 21.49, 18.72, 29.71, 17.8, 18.79, 12.01, 21.74, 15.07, 21.57, 9.6, 31.13, 9.65, 20.5, 19.94, 22.94, 15.62, 16.19, 12.23, 8.34, 17.87, 18.3, 20.36, 11.73, 20.88, 18.33, 12.67, 17.39, 17.87, 7.87, 10.0, 21.13, 20.49, 14.56, 11.62, 14.37, 13.12, 6.11, 10.53, 13.31, 5.86, 7.79, 12.97, 13.89, 10.49, 10.77, 11.07, 6.94, 9.1, 11.1, 8.41, 8.58, 12.51, 33.99, 10.96, 19.3, 14.85, 16.33, 27.03, 13.89, 20.28, 16.17, 11.89, 7.6, 26.82, 12.3, 17.45, 10.27, 15.76, 12.24, 29.67, 12.33, 19.04, 18.67, 24.85, 25.17, 19.44, 23.4, 24.47, 29.28, 21.62, 15.33, 32.08, 17.27, 19.42, 9.37, 51.7, 34.88, 28.13, 20.35, 16.29, 20.85, 29.08, 17.6, 16.42, 15.45, 14.14, 24.39, 7.74, 17.5, 34.65, 13.88, 22.59, 12.71, 18.5, 19.02, 22.95, 13.8, 12.83, 18.71, 7.19, 11.68, 11.5, 7.64, 11.79, 8.6, 3.26, 13.66, 9.65, 33.8, 12.29, 13.46, 16.05, 20.11, 8.88, 9.87, 10.78, 13.33, 26.9, 21.86, 17.93, 13.75, 13.86, 10.99, 11.69, 28.67, 12.6, 8.75, 17.49, 13.16, 10.4, 21.45, 14.64, 7.72, 24.4, 14.71, 10.75, 10.22, 14.62, 13.86, 7.58, 21.3, 9.36, 18.62, 16.54, 8.38, 17.14, 11.58, 11.09, 11.48, 13.6, 26.45, 12.46, 13.54, 7.42, 20.64, 10.64, 20.36, 8.04, 10.98, 15.14, 10.63, 11.08, 8.13, 12.68, 9.82, 14.21, 8.7, 10.85, 7.5, 7.99, 15.33, 12.86, 8.08, 16.74, 7.47, 26.36, 21.68, 24.09, 15.64, 14.25, 24.8, 14.25, 9.97, 9.19, 25.01, 21.59, 15.64, 8.06, 6.76, 6.96, 6.13, 12.06, 6.81, 10.89, 6.6, 8.89, 8.7, 5.25, 11.0, 13.57, 11.62, 6.64, 6.77, 6.73, 7.94, 5.82, 5.72, 11.99, 9.54, 13.85, 10.39, 5.39, 16.23, 14.16, 8.3, 11.78, 4.53, 3.25, 13.12, 5.7, 10.59, 7.41, 5.97, 12.04, 11.43, 7.67, 6.92, 11.55, 6.82, 8.63, 12.59, 8.71, 6.85, 13.92, 10.71, 7.35, 5.77, 7.82, 8.43, 6.91, 8.19, 5.9, 11.95, 16.62, 10.02, 7.29, 5.82, 6.62, 5.69, 7.53, 10.82, 6.63, 5.98, 6.87, 3.12, 4.28, 6.61, 9.39, 4.9, 7.63, 5.49, 6.22, 6.08, 6.03, 10.14, 4.85, 7.7, 4.2, 5.76, 6.0, 7.56, 16.51, 11.08, 4.41, 3.68, 8.81, 7.26, 14.05, 6.1, 11.54, 9.04, 14.89, 7.19, 7.97, 9.31, 10.03, 12.35, 9.99, 10.43, 7.83, 9.87, 18.08, 13.71, 7.4, 14.94, 6.12, 5.64, 8.42, 4.0, 10.04, 6.01, 5.52, 4.9, 6.7, 5.62, 7.14, 9.77, 5.18, 7.23, 12.97, 10.42, 9.07, 7.86, 10.71, 12.07, 12.0, 13.2, 9.25, 16.18, 10.98, 9.46, 23.56, 13.02, 10.28, 7.45, 13.4, 14.46, 7.82, 12.46, 13.44, 15.76, 12.28, 15.05, 9.2, 11.15, 13.17, 12.48, 10.26, 9.89, 10.98, 9.68, 7.19, 5.41, 6.72, 7.03, 11.09, 15.47, 6.31, 8.45, 5.46, 5.18, 4.51, 9.7, 4.57, 5.22, 1.61, 2.96, 5.81, 8.61, 7.17, 9.36, 9.98, 5.68, 9.46, 5.44, 7.34, 5.59, 7.42, 13.54, 9.06, 6.65, 6.24, 4.97, 16.32, 8.37, 7.41, 5.2, 3.55, 2.58, 7.48, 6.42, 6.13, 7.95, 8.16, 13.04, 7.21, 7.17, 11.76, 6.74, 7.13, 5.91, 9.32, 12.29, 4.81, 4.36, 7.61, 5.71, 5.04, 8.27, 2.93, 12.2, 10.64, 13.06, 8.03, 4.39, 6.08, 2.78, 6.02, 6.19, 12.31, 8.96, 6.49, 7.84, 7.6, 7.33, 10.31, 5.68, 5.43, 4.54, 3.57, 8.25, 8.83, 4.09, 10.87, 6.82, 11.31, 13.13, 6.32, 12.09, 5.17, 9.83, 6.69, 5.64, 9.05, 10.2, 4.01, 2.99, 2.46, 5.83, 6.81, 3.33, 6.22, 4.6, 6.03, 20.44, 11.85, 4.21, 11.79, 7.55, 13.68, 12.53, 21.93, 8.11, 13.47, 10.59, 12.65, 13.28, 12.43, 8.0, 12.91, 7.85, 6.56, 14.29, 15.75, 12.02, 7.45, 6.13, 3.91, 4.8, 6.44, 5.57, 5.36, 5.97, 8.85, 5.36, 3.97, 4.3, 4.4, 6.81, 15.05, 6.11, 6.13, 3.51, 7.05, 16.66, 12.16, 7.58, 10.69, 4.89, 7.76, 6.1, 8.85, 6.72, 6.58, 5.21, 12.11, 3.29, 8.6, 4.61, 7.58, 4.84, 5.62, 4.11, 12.78, 5.89, 9.35, 5.51, 6.77, 3.54, 2.84, 8.35, 11.08, 11.09, 8.83, 5.18, 6.66, 15.62, 10.68, 7.32, 5.94, 15.54, 17.58, 9.98, 7.58, 15.5, 10.25, 26.9, 15.01, 24.55, 21.62, 24.59, 17.11, 10.67, 8.54, 10.61, 8.51, 7.75, 6.48, 9.85, 5.99, 12.6, 13.98, 9.87, 8.25, 6.36, 11.29, 11.06, 12.01, 19.41, 8.58, 11.6, 21.25, 8.8, 10.07, 26.81, 11.42, 6.08, 5.45, 9.78, 13.27, 8.02, 6.96, 3.74, 6.29, 4.98, 8.01, 6.33, 10.51, 13.48, 7.78, 7.24, 8.79, 8.93, 7.09, 8.55, 5.11, 7.29, 7.42, 10.42, 6.35, 6.46, 4.59, 6.95, 6.74, 12.03, 5.75, 10.46, 3.59, 7.35, 6.61, 11.98, 8.2, 7.71, 10.34, 10.59, 5.85, 5.54, 5.05, 7.86, 6.82, 8.26, 10.3, 6.74, 11.38, 9.99, 12.37, 4.81, 9.02, 5.18, 5.68, 6.29, 2.92, 2.87, 4.65, 3.41, 3.21, 5.95, 5.79, 4.61, 4.45, 6.81, 4.04, 3.61, 32.81, 11.56, 24.05, 12.31, 9.35, 6.98, 11.25, 11.88, 10.09];
+  const rolling = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 17.71, 17.58, 17.75, 18.13, 18.29, 18.22, 18.2, 17.98, 18.37, 18.25, 18.34, 18.39, 18.57, 18.5, 18.33, 18.09, 17.86, 17.71, 17.5, 17.46, 17.25, 17.07, 16.94, 16.78, 16.67, 16.6, 16.57, 16.41, 16.25, 16.49, 16.6, 16.72, 16.75, 17.06, 17.21, 17.13, 17.47, 17.53, 17.64, 17.79, 17.98, 18.15, 18.07, 18.15, 18.37, 18.51, 19.01, 19.14, 19.19, 19.13, 18.74, 18.49, 18.22, 18.2, 18.43, 18.29, 18.34, 18.57, 18.32, 18.5, 18.53, 18.63, 18.59, 18.64, 18.57, 18.61, 18.52, 18.68, 18.44, 18.55, 18.37, 18.55, 18.31, 18.38, 18.51, 18.72, 18.82, 18.88, 18.92, 18.8, 18.94, 19.08, 19.23, 19.26, 19.4, 19.48, 19.44, 19.58, 19.73, 19.4, 19.2, 19.17, 19.21, 18.9, 18.67, 18.7, 18.32, 18.07, 17.85, 17.62, 17.24, 17.07, 17.03, 17.03, 16.67, 16.57, 16.08, 15.9, 15.72, 15.6, 15.4, 15.24, 15.21, 15.41, 15.2, 15.34, 15.36, 15.3, 15.54, 15.37, 15.46, 15.37, 15.26, 14.89, 15.04, 14.93, 15.02, 14.83, 14.84, 14.69, 15.02, 14.71, 14.87, 14.84, 14.92, 14.95, 15.02, 15.14, 15.34, 15.69, 15.75, 15.7, 15.9, 15.99, 15.97, 15.82, 16.47, 16.76, 16.93, 17.14, 17.24, 17.24, 17.38, 17.43, 17.51, 17.53, 17.55, 17.85, 17.81, 17.88, 18.36, 18.46, 18.62, 18.6, 18.73, 18.87, 19.07, 19.18, 19.24, 19.37, 19.35, 19.4, 19.38, 18.95, 18.96, 18.78, 18.59, 18.54, 18.25, 18.59, 18.45, 18.41, 18.48, 18.69, 18.39, 18.35, 18.23, 18.29, 18.47, 18.63, 18.44, 18.46, 18.37, 18.24, 18.03, 18.08, 17.97, 17.73, 17.61, 17.34, 17.15, 17.26, 16.97, 16.81, 16.89, 16.98, 16.3, 15.88, 15.66, 15.55, 15.41, 15.41, 15.09, 15.1, 15.1, 14.99, 15.04, 14.82, 14.88, 14.78, 14.43, 14.64, 14.47, 14.48, 14.3, 14.32, 14.12, 14.23, 14.15, 14.02, 14.15, 14.13, 14.13, 14.14, 14.15, 14.17, 14.35, 14.27, 14.29, 13.85, 13.78, 13.81, 13.76, 13.56, 13.69, 13.65, 13.91, 14.05, 14.0, 13.9, 13.84, 14.02, 14.03, 14.01, 13.97, 13.91, 14.06, 14.17, 14.01, 13.91, 13.85, 13.6, 13.55, 13.54, 13.31, 13.18, 13.15, 13.12, 12.96, 12.92, 13.02, 12.86, 12.81, 12.61, 12.45, 12.44, 12.25, 12.16, 12.17, 12.14, 12.14, 11.87, 11.76, 11.8, 11.91, 11.71, 11.73, 11.46, 11.38, 11.42, 11.26, 11.26, 11.2, 11.16, 11.15, 11.18, 11.07, 11.04, 11.05, 11.04, 11.05, 11.01, 10.94, 10.92, 10.87, 10.92, 10.61, 10.34, 10.07, 9.95, 9.83, 9.55, 9.41, 9.44, 9.57, 9.32, 9.08, 8.92, 8.89, 8.88, 8.88, 8.96, 8.87, 8.86, 8.79, 8.73, 8.66, 8.62, 8.69, 8.59, 8.49, 8.39, 8.38, 8.37, 8.36, 8.39, 8.38, 8.41, 8.28, 8.22, 8.09, 8.04, 8.23, 8.14, 7.98, 7.9, 7.85, 7.9, 8.08, 7.96, 8.06, 8.03, 8.16, 8.18, 8.11, 8.07, 8.11, 8.2, 8.18, 8.24, 8.22, 8.18, 8.33, 8.45, 8.34, 8.41, 8.39, 8.39, 8.4, 8.32, 8.38, 8.34, 8.33, 8.22, 8.05, 7.98, 7.98, 8.04, 8.02, 8.04, 8.13, 8.13, 8.17, 8.2, 8.26, 8.41, 8.54, 8.65, 8.65, 8.84, 8.89, 8.96, 9.25, 9.36, 9.43, 9.39, 9.53, 9.64, 9.7, 9.82, 9.94, 10.08, 10.01, 10.07, 10.15, 10.28, 10.35, 10.44, 10.37, 10.44, 10.43, 10.44, 10.31, 10.28, 10.26, 10.22, 10.24, 10.29, 10.23, 10.2, 10.16, 10.08, 9.85, 9.79, 9.74, 9.58, 9.5, 9.46, 9.41, 9.49, 9.44, 9.5, 9.57, 9.58, 9.63, 9.63, 9.63, 9.56, 9.6, 9.7, 9.64, 9.58, 9.53, 9.48, 9.57, 9.51, 9.44, 9.3, 9.21, 8.98, 8.92, 8.87, 8.58, 8.5, 8.46, 8.55, 8.45, 8.33, 8.4, 8.3, 8.2, 8.03, 7.98, 7.94, 7.86, 7.75, 7.66, 7.54, 7.46, 7.43, 7.3, 7.34, 7.4, 7.52, 7.54, 7.5, 7.42, 7.21, 7.2, 7.16, 7.28, 7.34, 7.37, 7.34, 7.39, 7.43, 7.57, 7.62, 7.61, 7.54, 7.48, 7.47, 7.45, 7.42, 7.44, 7.47, 7.53, 7.66, 7.64, 7.62, 7.55, 7.6, 7.61, 7.62, 7.5, 7.53, 7.48, 7.44, 7.42, 7.47, 7.46, 7.41, 7.41, 7.36, 7.32, 7.45, 7.52, 7.47, 7.47, 7.49, 7.6, 7.71, 7.92, 7.85, 7.99, 8.1, 8.18, 8.31, 8.43, 8.42, 8.59, 8.52, 8.45, 8.47, 8.6, 8.73, 8.75, 8.8, 8.77, 8.75, 8.65, 8.59, 8.57, 8.54, 8.56, 8.53, 8.42, 8.4, 8.38, 8.42, 8.61, 8.58, 8.53, 8.52, 8.46, 8.62, 8.64, 8.55, 8.62, 8.5, 8.54, 8.48, 8.52, 8.53, 8.49, 8.41, 8.54, 8.55, 8.65, 8.63, 8.64, 8.67, 8.66, 8.65, 8.76, 8.52, 8.48, 8.5, 8.42, 8.35, 8.17, 8.1, 7.92, 7.97, 7.89, 7.8, 7.7, 7.74, 7.71, 7.7, 7.58, 7.71, 7.9, 7.82, 7.69, 7.75, 7.79, 8.14, 8.32, 8.65, 8.91, 9.22, 9.42, 9.5, 9.49, 9.58, 9.66, 9.71, 9.75, 9.8, 9.65, 9.76, 9.89, 9.99, 10.01, 9.84, 9.83, 9.88, 9.91, 10.15, 10.16, 10.25, 10.46, 10.49, 10.55, 10.91, 10.9, 10.95, 10.9, 10.98, 11.08, 11.13, 11.15, 11.15, 11.04, 11.02, 11.0, 11.01, 11.08, 11.24, 11.32, 11.31, 11.27, 11.23, 11.2, 11.26, 11.23, 11.09, 11.04, 11.09, 11.1, 10.95, 10.73, 10.68, 10.67, 10.61, 10.53, 10.26, 10.07, 9.78, 9.53, 9.32, 9.17, 9.12, 9.15, 9.15, 9.11, 9.07, 9.05, 9.02, 9.03, 8.96, 8.9, 8.84, 8.9, 8.96, 8.97, 8.87, 8.82, 8.58, 8.53, 8.45, 8.14, 8.04, 7.95, 7.56, 7.42, 7.42, 7.43, 7.34, 7.19, 7.17, 7.13, 7.12, 7.57, 7.68, 7.94, 8.04, 8.02, 7.91, 7.97, 8.05, 8.07];
+  const colors  = ["#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#f59e0b", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#f59e0b", "#dc2626", "#f59e0b", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#f59e0b", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#f59e0b", "#059669", "#f59e0b", "#dc2626", "#f59e0b", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#f59e0b", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#f59e0b", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#f59e0b", "#059669", "#f59e0b", "#f59e0b", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#059669", "#f59e0b", "#dc2626", "#f59e0b", "#dc2626", "#f59e0b", "#059669", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#f59e0b", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#059669", "#059669", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#f59e0b", "#f59e0b", "#dc2626", "#f59e0b", "#059669", "#059669", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#f59e0b", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#f59e0b", "#f59e0b", "#dc2626", "#f59e0b", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#f59e0b", "#dc2626", "#059669", "#f59e0b", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#059669", "#dc2626", "#059669", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#f59e0b", "#f59e0b", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#f59e0b", "#f59e0b", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#f59e0b", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#f59e0b", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#f59e0b", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#059669", "#f59e0b", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#f59e0b", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#f59e0b", "#059669", "#059669", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#059669", "#f59e0b", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#f59e0b", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#f59e0b", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#f59e0b", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#f59e0b", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#dc2626", "#f59e0b", "#dc2626", "#059669", "#059669", "#f59e0b", "#f59e0b", "#f59e0b", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#f59e0b", "#f59e0b", "#dc2626", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#f59e0b", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#dc2626", "#059669", "#dc2626", "#059669", "#059669", "#f59e0b", "#059669", "#059669", "#dc2626", "#059669", "#f59e0b", "#059669", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#f59e0b", "#dc2626", "#dc2626", "#f59e0b", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#f59e0b", "#059669", "#dc2626", "#dc2626", "#dc2626"];
+
+  new Chart(document.getElementById('backtestChart'), {
+    type: 'bar',
+    data: {
+      labels: dates,
+      datasets: [
+        {
+          type: 'bar',
+          label: 'Daily RVol',
+          data: rvols,
+          backgroundColor: colors.map(c => c + '60'),
+          borderWidth: 0,
+          barPercentage: 1.0,
+          categoryPercentage: 1.0,
+          order: 2,
+        },
+        {
+          type: 'line',
+          label: '60-day rolling mean',
+          data: rolling,
+          borderColor: 'rgba(37,99,235,0.85)',
+          borderWidth: 2,
+          pointRadius: 0,
+          fill: false,
+          tension: 0.2,
+          order: 1,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            title: ctx => ctx[0].label,
+            label: (ctx) => {
+              if (ctx.datasetIndex === 0) return `RVol: ${ctx.raw !== null ? ctx.raw.toFixed(1) + '%' : 'n/a'}`;
+              return `60d avg: ${ctx.raw !== null ? ctx.raw.toFixed(1) + '%' : 'n/a'}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { maxTicksLimit: 8, maxRotation: 0, font: { size: 10 } },
+          grid: { display: false },
+          border: { color: 'rgba(0,0,0,0.10)' },
+        },
+        y: {
+          title: { display: true, text: 'Intraday RVol, annualised', font: { size: 11 } },
+          grid: { color: 'rgba(0,0,0,0.05)', lineWidth: 0.75 },
+          border: { color: 'transparent' },
+          ticks: { callback: v => v + '%', font: { size: 10 } },
+        }
+      }
+    }
+  });
+})();
+
+// ── Progress bar ──────────────────────────────────────────────────────────────
+const pb = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  pb.style.width = Math.min(pct, 100) + '%';
+}, {passive: true});
+
+// ── Nav shadow on scroll ──────────────────────────────────────────────────────
+const navEl = document.querySelector('nav');
+window.addEventListener('scroll', () => navEl.classList.toggle('scrolled', window.scrollY > 10), {passive: true});
+
+// ── Side nav ─────────────────────────────────────────────────────────────────
+const NAV_LABELS = ['Background','Data & GEX','The Two Regimes','Intraday Dynamics','Trading Signal','Caveats','Conclusion'];
+const sideNav = document.getElementById('side-nav');
+NAV_LABELS.forEach((label, i) => {
+  const a = document.createElement('a');
+  a.href = '#s' + (i + 1);
+  a.innerHTML = `<span class="sn-label">${label}</span><span class="sn-dot"></span>`;
+  sideNav.appendChild(a);
+});
+const sideLinks = sideNav.querySelectorAll('a');
+
+// ── Scroll-reveal ─────────────────────────────────────────────────────────────
+const sections = document.querySelectorAll('.section');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold: 0.08});
+sections.forEach(s => io.observe(s));
+
+// ── Side nav active highlight ─────────────────────────────────────────────────
+const ioNav = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    const idx = Array.from(sections).indexOf(e.target);
+    if (idx >= 0 && sideLinks[idx]) sideLinks[idx].classList.toggle('active', e.isIntersecting);
+  });
+}, {threshold: 0.3});
+sections.forEach(s => ioNav.observe(s));
+</script>
+</body>
+</html>
