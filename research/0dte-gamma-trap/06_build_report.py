@@ -49,7 +49,7 @@ ts_gex_js        = json.dumps(ts_data["gex_bn"])
 ts_colors_js     = json.dumps(ts_data["bar_colors"])
 
 scatter_pts_js   = json.dumps([
-    {"x": p["gex"], "y": round(p["rvol"]*100, 2), "regime": p["regime"]}
+    {"x": p["gex"], "y": round(p["rvol"]*100, 2), "regime": p["regime"], "date": p.get("date", "")}
     for p in scatter_data["points"]
 ])
 scatter_reg_js   = json.dumps([
@@ -78,13 +78,6 @@ profile_high_js   = json.dumps([
     for v in profile_data["regimes"]["High GEX"]
 ])
 
-def box_arr(regime):
-    d = regime_data["data"][regime]
-    return [
-        round(d["p10"]*100,2), round(d["p25"]*100,2),
-        round(d["median"]*100,2),
-        round(d["p75"]*100,2), round(d["p90"]*100,2),
-    ]
 regime_labels_js = json.dumps(["Negative GEX", "Low GEX", "High GEX"])
 regime_medians_js = json.dumps([
     round(regime_data["data"][r]["median"]*100, 2)
@@ -127,194 +120,226 @@ html = f"""<!DOCTYPE html>
   <title>The Gamma Trap: How 0DTE Options Reshape Intraday SPX Dynamics | The Intrinsic Investor</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@1,300;1,400;1,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
   <style>
     :root {{
-      --bg:#f7f4ec; --bg2:#f0ece2; --bg3:#e8e3d8;
-      --ink:#0f2220; --ink2:#2a3c38;
-      --muted:#4a6460; --hint:#8aa49e; --border:#e2ddd0;
-      --card:#ffffff;
-      --accent:#1a5c52; --accent2:#144a42;
-      --green:#0d6e4e; --green2:#059669; --green-bg:#ecfdf5; --green-border:#a7f3d0;
-      --red:#991b1b; --red2:#dc2626; --red-bg:#fef2f2; --red-border:#fca5a5;
+      --bg:#f7f4ec; --bg2:#f0ece2; --bg3:#e8e3d8; --card:#fff;
+      --ink:#0f2220; --muted:#4a6460; --hint:#8aa49e;
+      --border:#e2ddd0; --accent:#1a5c52; --accent2:#144a42;
+      --green:#0E9F6E; --green2:#059669; --green-bg:#ecfdf5; --green-border:#a7f3d0;
+      --red:#E02424; --red2:#dc2626; --red-bg:#fef2f2; --red-border:#fca5a5;
       --blue:#1e40af; --blue2:#2563eb; --blue-bg:#eff6ff; --blue-border:#bfdbfe;
-      --amber:#92400e; --amber-bg:#fffbeb; --amber-border:#fcd34d;
-      --purple:#5b21b6; --purple-bg:#f5f3ff; --purple-border:#c4b5fd;
+      --amber:#E3A008; --amber-bg:#fffbeb; --amber-border:#fcd34d;
+      --purple:#7E3AF2; --purple-bg:#f5f3ff; --purple-border:#c4b5fd;
+      --font:'Inter',sans-serif; --serif:'Fraunces',serif; --mono:'JetBrains Mono',monospace;
     }}
-    *, *::before, *::after {{ box-sizing:border-box; margin:0; padding:0; }}
-    html {{ font-size:16px; }}
-    body {{ background:var(--bg); color:var(--ink); font-family:'Inter',sans-serif; line-height:1.6; }}
-
-    nav {{ background:var(--ink); padding:0 24px; display:flex; align-items:center; justify-content:space-between; height:52px; position:sticky; top:0; z-index:100; }}
-    .nav-logo {{ font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:15px; color:rgba(255,255,255,0.9); text-decoration:none; }}
-    .nav-links {{ display:flex; gap:28px; list-style:none; }}
-    .nav-links a {{ color:rgba(255,255,255,0.5); text-decoration:none; font-size:13px; font-weight:400; letter-spacing:0.01em; transition:color 0.15s; }}
-    .nav-links a:hover {{ color:rgba(255,255,255,0.85); }}
-    .nav-links a.active {{ color:rgba(255,255,255,0.9); font-weight:500; }}
-
-    .hero {{ background:var(--ink); padding:64px 24px 80px; }}
-    .hero-inner {{ max-width:800px; margin:0 auto; }}
-    .eyebrow {{ display:flex; align-items:center; gap:12px; margin-bottom:20px; }}
-    .eyebrow::before {{ content:''; display:block; width:24px; height:1px; background:var(--accent); }}
-    .eyebrow span {{ font-family:'Inter',sans-serif; font-size:11px; font-weight:500; color:var(--accent); text-transform:uppercase; letter-spacing:0.12em; }}
-    .hero h1 {{ font-family:'Fraunces',serif; font-style:italic; font-weight:600; font-size:2.4rem; color:#fff; line-height:1.25; margin-bottom:16px; }}
-    .hero h1 em {{ color:#5ab5a5; font-style:italic; }}
-    .hero-subtitle {{ font-family:'Inter',sans-serif; font-size:14px; font-weight:300; color:rgba(255,255,255,0.55); line-height:1.6; max-width:640px; margin-bottom:28px; }}
-    .hero-meta {{ font-family:'JetBrains Mono',monospace; font-size:11px; color:rgba(255,255,255,0.3); display:flex; flex-wrap:wrap; gap:16px; }}
-    .hero-meta span {{ display:flex; align-items:center; gap:6px; }}
-    .hero-meta span::before {{ content:''; display:inline-block; width:1px; height:10px; background:rgba(255,255,255,0.15); }}
-    .hero-meta span:first-child::before {{ display:none; }}
-
-    .kpi-strip {{ max-width:800px; margin:-32px auto 0; padding:0 24px 24px; position:relative; z-index:10; }}
-    .kpi-card {{ background:var(--card); border:1px solid var(--border); border-radius:8px; padding:20px 16px; }}
-    .kpi-cells {{ display:grid; grid-template-columns:repeat(4,1fr); gap:0; }}
-    .kpi-cell {{ padding:4px 12px; border-right:1px solid var(--border); }}
-    .kpi-cell:last-child {{ border-right:none; }}
-    .kpi-label {{ font-size:10px; color:var(--hint); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:4px; }}
-    .kpi-value {{ font-family:'JetBrains Mono',monospace; font-size:22px; line-height:1.1; }}
-    .kpi-value.green {{ color:var(--green2); }}
-    .kpi-value.blue  {{ color:var(--blue2); }}
-    .kpi-value.red   {{ color:var(--red2); }}
-    .kpi-value.amber {{ color:#d97706; }}
-    .kpi-sub {{ font-size:11px; color:var(--hint); margin-top:2px; }}
-
-    .section {{ padding:52px 24px; border-bottom:1px solid var(--border); }}
-    .section:nth-child(even) {{ background:var(--bg2); }}
-    .section-inner {{ max-width:800px; margin:0 auto; }}
-    .section-label {{ display:flex; align-items:center; gap:12px; margin-bottom:16px; }}
-    .section-label::before {{ content:''; display:block; width:16px; height:1px; background:var(--accent); }}
-    .section-label span {{ font-size:10px; font-weight:600; color:var(--accent); text-transform:uppercase; letter-spacing:0.12em; }}
-    .section h2 {{ font-family:'Fraunces',serif; font-style:italic; font-weight:600; font-size:1.65rem; color:var(--ink); line-height:1.3; margin-bottom:16px; }}
-    .section h3 {{ font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:1.15rem; color:var(--ink2); margin:24px 0 10px; }}
-    .section p {{ font-size:14px; color:var(--muted); line-height:1.75; margin-bottom:14px; }}
-    .section p:last-child {{ margin-bottom:0; }}
-
-    .callout {{ display:flex; gap:12px; padding:14px 16px; border-radius:8px; border:1px solid; margin:20px 0; }}
-    .callout-icon {{ font-size:16px; flex-shrink:0; margin-top:1px; }}
-    .callout-body {{ font-size:13px; line-height:1.6; }}
-    .callout-body strong {{ font-weight:600; }}
-    .callout.green  {{ background:var(--green-bg);  border-color:var(--green-border);  color:var(--green);  }}
-    .callout.red    {{ background:var(--red-bg);    border-color:var(--red-border);    color:var(--red);    }}
-    .callout.blue   {{ background:var(--blue-bg);   border-color:var(--blue-border);   color:var(--blue);   }}
-    .callout.amber  {{ background:var(--amber-bg);  border-color:var(--amber-border);  color:var(--amber);  }}
-    .callout.purple {{ background:var(--purple-bg); border-color:var(--purple-border); color:var(--purple); }}
-
-    .highlight-box {{ background:var(--ink); border-radius:8px; padding:28px; margin:24px 0; }}
-    .hl-grid {{ display:grid; grid-template-columns:repeat(3,1fr); gap:0; }}
-    .hl-cell {{ padding:0 20px; border-right:1px solid rgba(255,255,255,0.1); }}
-    .hl-cell:first-child {{ padding-left:0; }}
-    .hl-cell:last-child {{ border-right:none; }}
-    .hl-label {{ font-size:10px; font-weight:500; color:rgba(255,255,255,0.35); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:6px; }}
-    .hl-value {{ font-family:'Fraunces',serif; font-style:italic; font-size:1.75rem; color:#5ab5a5; line-height:1.1; }}
-    .hl-sub {{ font-size:11px; color:rgba(255,255,255,0.3); margin-top:4px; }}
-
-    .chart-box {{ background:var(--card); border:1px solid var(--border); border-radius:8px; padding:20px; margin:24px 0; }}
-    .chart-title {{ font-size:11px; font-weight:600; color:var(--hint); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:14px; }}
-    .chart-legend {{ display:flex; gap:16px; flex-wrap:wrap; margin-top:12px; }}
-    .legend-item {{ display:flex; align-items:center; gap:6px; font-size:11px; color:var(--muted); }}
-    .legend-dot {{ width:10px; height:10px; border-radius:50%; flex-shrink:0; }}
-    .legend-line {{ width:16px; height:2px; flex-shrink:0; }}
-
-    .table-wrap {{ overflow-x:auto; margin:16px 0; }}
-    table {{ width:100%; border-collapse:collapse; font-size:13px; }}
-    thead th {{ background:var(--ink); color:rgba(255,255,255,0.75); font-size:11px; font-weight:500; padding:8px 12px; text-align:left; letter-spacing:0.05em; }}
-    tbody td {{ padding:9px 12px; border-bottom:1px solid var(--border); color:var(--muted); }}
-    tbody tr:hover td {{ background:var(--bg2); }}
-    .mono {{ font-family:'JetBrains Mono',monospace; }}
-
-    .badge {{ display:inline-block; padding:2px 8px; border-radius:99px; font-size:11px; font-weight:600; }}
-    .badge.red   {{ background:var(--red-bg);   color:var(--red); }}
-    .badge.amber {{ background:var(--amber-bg); color:var(--amber); }}
-    .badge.green {{ background:var(--green-bg); color:var(--green); }}
-
-    footer {{ background:var(--ink); padding:40px 24px 28px; }}
-    .footer-inner {{ max-width:800px; margin:0 auto; }}
-    .footer-top {{ display:flex; justify-content:space-between; align-items:flex-start; gap:32px; margin-bottom:24px; padding-bottom:24px; border-bottom:1px solid rgba(255,255,255,0.08); }}
-    .footer-logo {{ font-family:'Fraunces',serif; font-style:italic; font-size:16px; color:rgba(255,255,255,0.7); margin-bottom:6px; }}
-    .footer-desc {{ font-size:12px; color:rgba(255,255,255,0.3); line-height:1.6; max-width:280px; }}
-    .footer-links {{ display:flex; gap:20px; }}
-    .footer-links a {{ font-size:12px; color:rgba(255,255,255,0.35); text-decoration:none; transition:color 0.15s; }}
-    .footer-links a:hover {{ color:rgba(255,255,255,0.7); }}
-    .footer-bottom {{ font-size:11px; color:rgba(255,255,255,0.2); line-height:1.7; }}
-
-    @media (max-width:640px) {{
-      .hero h1 {{ font-size:1.8rem; }}
-      .kpi-cells {{ grid-template-columns:repeat(2,1fr); }}
-      .kpi-cell:nth-child(2) {{ border-right:none; }}
-      .hl-grid {{ grid-template-columns:1fr; gap:16px; }}
-      .hl-cell {{ border-right:none; padding:0; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:14px; }}
-      .hl-cell:last-child {{ border-bottom:none; }}
-      .footer-top {{ flex-direction:column; gap:16px; }}
-      .nav-links {{ display:none; }}
+    *,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}
+    html{{scroll-behavior:smooth}}
+    body{{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.7}}
+    body::after{{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+      mix-blend-mode:multiply;opacity:0.5}}
+    #progress-bar{{position:fixed;top:0;left:0;height:2px;width:0%;
+      background:linear-gradient(90deg,#1a5c52,#2d9d8f);z-index:9998;transition:width .1s linear}}
+    nav{{position:sticky;top:0;z-index:100;height:62px;display:flex;align-items:center;
+      justify-content:space-between;padding:0 2rem;
+      background:rgba(247,244,236,.92);backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
+      transition:box-shadow .3s}}
+    nav.scrolled{{box-shadow:0 1px 24px rgba(15,34,32,.06)}}
+    .nav-logo{{font-family:var(--serif);font-weight:600;font-size:1.1rem;color:var(--ink);letter-spacing:-.01em}}
+    .nav-links{{display:flex;gap:1.75rem;list-style:none}}
+    .nav-links a{{color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:500;
+      position:relative;padding-bottom:2px;transition:color .2s}}
+    .nav-links a:hover{{color:var(--ink)}}
+    .nav-links a::after{{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
+      background:var(--accent);transform:scaleX(0);transform-origin:left;
+      transition:transform .25s cubic-bezier(.4,0,.2,1)}}
+    .nav-links a:hover::after{{transform:scaleX(1)}}
+    .hero{{background:var(--ink);padding:5rem 2rem 4rem;position:relative;overflow:hidden}}
+    .hero::before{{content:'';position:absolute;inset:0;pointer-events:none;
+      background-image:repeating-linear-gradient(-55deg,transparent,transparent 40px,
+        rgba(255,255,255,.013) 40px,rgba(255,255,255,.013) 41px)}}
+    .hero-inner{{max-width:860px;margin:0 auto;position:relative}}
+    .hero-tag{{display:inline-block;font-family:var(--mono);font-size:.72rem;color:var(--accent);
+      letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(26,92,82,.4);
+      padding:.25rem .75rem;border-radius:2px;margin-bottom:1.5rem;
+      animation:fadeUp .6s ease both}}
+    .hero h1{{font-family:var(--serif);font-size:clamp(1.9rem,4.5vw,3.2rem);font-weight:600;
+      color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:1.25rem;
+      animation:fadeUp .6s .1s ease both}}
+    .hero h1 em{{font-style:italic;color:var(--accent)}}
+    .hero-sub{{font-size:1rem;color:rgba(255,255,255,.65);max-width:620px;line-height:1.7;
+      margin-bottom:2rem;animation:fadeUp .6s .2s ease both}}
+    .hero-meta{{display:flex;flex-wrap:wrap;gap:2rem;font-family:var(--mono);font-size:.75rem;
+      color:rgba(255,255,255,.5);border-top:1px solid rgba(255,255,255,.1);
+      padding-top:1.5rem;animation:fadeUp .6s .3s ease both}}
+    .hero-meta-item strong{{display:block;color:rgba(255,255,255,.85);font-size:.85rem;margin-bottom:.15rem}}
+    @keyframes fadeUp{{from{{opacity:0;transform:translateY(18px)}}to{{opacity:1;transform:translateY(0)}}}}
+    .kpi-strip{{background:var(--card);border-bottom:1px solid var(--border);padding:2rem}}
+    .kpi-grid{{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}}
+    .kpi-cell{{padding:1.5rem;border-right:1px solid var(--border)}}
+    .kpi-cell:last-child{{border-right:none}}
+    .kpi-label{{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+      color:var(--hint);margin-bottom:.5rem}}
+    .kpi-value{{font-family:var(--mono);font-size:1.9rem;font-weight:500;color:var(--ink);
+      line-height:1;margin-bottom:.4rem}}
+    .kpi-value.green{{color:var(--green2)}}
+    .kpi-value.red{{color:var(--red2)}}
+    .kpi-value.blue{{color:var(--blue2)}}
+    .kpi-sub{{font-size:.78rem;color:var(--muted)}}
+    .container{{max-width:860px;margin:0 auto;padding:0 2rem}}
+    .section{{opacity:0;transform:translateY(16px);
+      transition:opacity .55s ease,transform .55s ease;
+      padding:4.5rem 0;border-bottom:1px solid var(--border)}}
+    .section.visible{{opacity:1;transform:none}}
+    .section:last-of-type{{border-bottom:none}}
+    .section-label{{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem}}
+    .section-counter{{font-family:var(--mono);font-size:.72rem;color:var(--hint);letter-spacing:.04em}}
+    .section-label span:last-child{{font-size:.72rem;font-weight:600;letter-spacing:.08em;
+      text-transform:uppercase;color:var(--hint)}}
+    h2{{font-family:var(--serif);font-size:clamp(1.5rem,3vw,2.1rem);font-weight:600;
+      color:var(--ink);line-height:1.25;letter-spacing:-.02em;margin-bottom:1.25rem}}
+    h2 em{{font-style:italic;color:var(--accent)}}
+    h3{{font-family:var(--serif);font-size:1.15rem;font-weight:600;color:var(--ink);margin:2rem 0 .75rem}}
+    p{{color:var(--muted);line-height:1.75;margin-bottom:1rem;text-align:justify;hyphens:auto}}
+    p:last-child{{margin-bottom:0}}
+    .callout{{display:flex;gap:1rem;padding:1.25rem 1.5rem;border-radius:4px;
+      margin:1.5rem 0;border-left:3px solid}}
+    .callout.green{{background:var(--green-bg);border-color:var(--green2)}}
+    .callout.amber{{background:var(--amber-bg);border-color:var(--amber)}}
+    .callout.red{{background:var(--red-bg);border-color:var(--red2)}}
+    .callout.blue{{background:var(--blue-bg);border-color:var(--blue2)}}
+    .callout.purple{{background:var(--purple-bg);border-color:var(--purple)}}
+    .callout-icon{{font-size:1.1rem;flex-shrink:0;margin-top:.1rem}}
+    .callout-body{{font-size:.9rem;color:var(--ink);line-height:1.6}}
+    .callout-body strong{{font-weight:600}}
+    .highlight-box{{background:var(--ink);border-radius:4px;padding:2rem;margin:1.5rem 0}}
+    .hl-grid{{display:grid;grid-template-columns:repeat(3,1fr);gap:0}}
+    .hl-cell{{padding:0 1.5rem;border-right:1px solid rgba(255,255,255,.1)}}
+    .hl-cell:first-child{{padding-left:0}}
+    .hl-cell:last-child{{border-right:none}}
+    .hl-label{{font-size:.7rem;font-weight:500;color:rgba(255,255,255,.35);text-transform:uppercase;
+      letter-spacing:.1em;margin-bottom:.5rem}}
+    .hl-value{{font-family:var(--serif);font-style:italic;font-size:1.75rem;color:#5ab5a5;line-height:1.1}}
+    .hl-sub{{font-size:.75rem;color:rgba(255,255,255,.3);margin-top:.3rem}}
+    .chart-box{{background:var(--bg2);border:1px solid var(--border);
+      border-radius:4px;padding:1.5rem;margin:1.5rem 0}}
+    .chart-title{{font-size:.85rem;font-weight:600;color:var(--ink);
+      margin-bottom:1rem;letter-spacing:.02em}}
+    .chart-legend{{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px}}
+    .legend-item{{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}}
+    .legend-dot{{width:10px;height:10px;border-radius:50%;flex-shrink:0}}
+    .legend-line{{width:16px;height:2px;flex-shrink:0}}
+    .table-wrap{{overflow-x:auto;margin:1.5rem 0;border-radius:4px;border:1px solid var(--border)}}
+    table{{width:100%;border-collapse:collapse;font-size:.875rem}}
+    thead tr{{background:var(--ink);color:#fff}}
+    thead th{{padding:.7rem .9rem;text-align:left;font-weight:500;font-size:.75rem;letter-spacing:.04em}}
+    tbody tr{{border-bottom:1px solid var(--border)}}
+    tbody tr:last-child{{border-bottom:none}}
+    tbody tr:hover{{background:var(--bg2)}}
+    td{{padding:.65rem .9rem;color:var(--muted);vertical-align:middle}}
+    .mono{{font-family:var(--mono);font-size:.82rem}}
+    #side-nav{{position:fixed;right:0;top:50%;transform:translateY(-50%);
+      z-index:50;display:flex;flex-direction:column;gap:2px;padding:10px 6px}}
+    #side-nav a{{display:flex;align-items:center;justify-content:flex-end;gap:7px;
+      text-decoration:none;padding:5px 8px;border-radius:4px;transition:background .2s}}
+    #side-nav a:hover{{background:rgba(26,92,82,.07)}}
+    .sn-label{{font-size:.67rem;font-weight:500;color:var(--hint);white-space:nowrap;
+      letter-spacing:.02em;font-family:var(--font);transition:color .2s;text-align:right}}
+    .sn-dot{{width:5px;height:5px;border-radius:50%;background:var(--border);
+      flex-shrink:0;transition:all .2s}}
+    #side-nav a.active .sn-label{{color:var(--accent);font-weight:600}}
+    #side-nav a.active .sn-dot{{background:var(--accent);transform:scale(1.5)}}
+    #side-nav a:hover .sn-label{{color:var(--ink)}}
+    #side-nav a:hover .sn-dot{{background:var(--muted)}}
+    footer{{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}}
+    .footer-inner{{max-width:860px;margin:0 auto;display:flex;
+      justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}}
+    .footer-name{{font-family:var(--serif);font-weight:600;font-size:1rem;color:rgba(255,255,255,.9)}}
+    .footer-right{{font-size:.8rem;text-align:right}}
+    .footer-right a{{color:rgba(255,255,255,.5);text-decoration:none;margin-left:1.2rem}}
+    .footer-right a:hover{{color:rgba(255,255,255,.85)}}
+    .gh-btn{{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);
+      font-size:.68rem;color:rgba(255,255,255,.5);text-decoration:none;
+      border:1px solid rgba(255,255,255,.2);padding:3px 9px;border-radius:3px;
+      transition:all .2s;letter-spacing:.02em;align-self:center}}
+    .gh-btn:hover{{color:#fff;border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.08)}}
+    @media(max-width:860px){{
+      #side-nav{{display:none}}
+      .kpi-grid{{grid-template-columns:repeat(2,1fr)}}
+      .footer-inner{{flex-direction:column;text-align:center}}
+      .footer-right{{text-align:center}}
+    }}
+    @media(max-width:560px){{
+      .kpi-cell{{border-right:none;border-bottom:1px solid var(--border)}}
+      .hl-grid{{grid-template-columns:1fr;gap:1rem}}
+      .hl-cell{{border-right:none;padding:0;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:1rem}}
+      .hl-cell:last-child{{border-bottom:none}}
+    }}
+    @media(prefers-reduced-motion:reduce){{
+      *,*::before,*::after{{animation-duration:.01ms!important;transition-duration:.01ms!important}}
     }}
   </style>
 </head>
 <body>
 
-<!-- Nav -->
+<div id="progress-bar"></div>
+
 <nav>
-  <a class="nav-logo" href="/">The Intrinsic Investor</a>
+  <div class="nav-logo">The Intrinsic Investor</div>
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
-    <li><a href="/research/" class="active">Research</a></li>
-    <li><a href="/about.html">About</a></li>
+    <li><a href="/research">Research</a></li>
+    <li><a href="/about">About</a></li>
   </ul>
 </nav>
 
-<!-- Hero -->
 <div class="hero">
   <div class="hero-inner">
-    <div class="eyebrow"><span>0DTE Options Research</span></div>
-    <h1>The <em>Gamma Trap:</em> How 0DTE Options Reshape Intraday SPX Dynamics</h1>
-    <p class="hero-subtitle">
-      Every day, dealers who sell zero-days-to-expiry SPX options must hedge their positions
-      in real time. When their aggregate gamma exposure turns negative, that hedging
-      mechanically amplifies intraday moves. We measure this effect empirically using
-      OptionMetrics and TAQ data from {date_start} to {date_end}.
-    </p>
+    <div class="hero-tag">0DTE Options Research</div>
+    <h1>The Gamma Trap: <em>How 0DTE Options Reshape Intraday SPX Dynamics</em></h1>
+    <p class="hero-sub">Every day, dealers who sell zero-days-to-expiry SPX options must hedge their positions in real time. When their aggregate gamma exposure turns negative, that hedging mechanically amplifies intraday moves. We measure this effect empirically using OptionMetrics and TAQ data across {n_days} trading days.</p>
     <div class="hero-meta">
-      <span>OptionMetrics via WRDS</span>
-      <span>TAQ Consolidated Trades</span>
-      <span>{date_start}&#8202;&#8211;&#8202;{date_end}</span>
-      <span>{n_days:,} trading days</span>
-      <span>SPX 0DTE options only</span>
+      <div class="hero-meta-item"><strong>Brian Liew</strong>LSE, BSc Accounting and Finance</div>
+      <div class="hero-meta-item"><strong>{date_start} &ndash; {date_end}</strong>Sample Period</div>
+      <div class="hero-meta-item"><strong>{n_days} Trading Days</strong>Observations</div>
+      <div class="hero-meta-item"><strong>OptionMetrics &amp; TAQ via WRDS</strong>Data Sources</div>
+      <div class="hero-meta-item"><strong>April 2026</strong>Published</div>
+      <a class="gh-btn" href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/0dte-gamma-trap" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg> Code</a>
     </div>
   </div>
 </div>
 
-<!-- KPI Strip -->
 <div class="kpi-strip">
-  <div class="kpi-card">
-    <div class="kpi-cells">
-      <div class="kpi-cell">
-        <div class="kpi-label">Vol Premium (Neg vs High GEX)</div>
-        <div class="kpi-value red">{vol_prem_pct:+.0f}%</div>
-        <div class="kpi-sub">higher intraday vol when GEX negative</div>
-      </div>
-      <div class="kpi-cell">
-        <div class="kpi-label">R&#178; (GEX vs RVol)</div>
-        <div class="kpi-value blue">{r2:.3f}</div>
-        <div class="kpi-sub">OLS regression, {n_days:,} day sample</div>
-      </div>
-      <div class="kpi-cell">
-        <div class="kpi-label">p-value (t-test)</div>
-        <div class="kpi-value {'green' if p_val < 0.05 else 'amber'}">{p_val:.4f}</div>
-        <div class="kpi-sub">Neg GEX vs High GEX, Welch&#8217;s t</div>
-      </div>
-      <div class="kpi-cell">
-        <div class="kpi-label">Days with Positive GEX</div>
-        <div class="kpi-value green">{pct(pct_pos)}</div>
-        <div class="kpi-sub">of the {n_days:,}-day sample</div>
-      </div>
+  <div class="kpi-grid">
+    <div class="kpi-cell">
+      <div class="kpi-label">Vol Premium (Neg vs High GEX)</div>
+      <div class="kpi-value red">+{vol_prem_pct:.0f}%</div>
+      <div class="kpi-sub">higher intraday vol when GEX negative</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">R&#178; (GEX vs RVol)</div>
+      <div class="kpi-value blue">{r2:.3f}</div>
+      <div class="kpi-sub">OLS regression, {n_days} day sample</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">p-value (t-test)</div>
+      <div class="kpi-value green">{p_val:.4f}</div>
+      <div class="kpi-sub">Neg GEX vs High GEX, Welch&#8217;s t</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">Days with Positive GEX</div>
+      <div class="kpi-value green">{pct(pct_pos)}</div>
+      <div class="kpi-sub">of the {n_days}-day sample</div>
     </div>
   </div>
 </div>
 
-<!-- Section 1: Background -->
-<div class="section">
-  <div class="section-inner">
-    <div class="section-label"><span>Background</span></div>
+<section class="section" id="s1">
+<div class="container">
+  <div class="section-label"><span class="section-counter">01</span><span>Background</span></div>
     <h2>What is Dealer Gamma Exposure?</h2>
 
     <p>
@@ -376,12 +401,11 @@ html = f"""<!DOCTYPE html>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- Section 2: Data & GEX time series -->
-<div class="section">
-  <div class="section-inner">
-    <div class="section-label"><span>Data &amp; Methodology</span></div>
+<section class="section" id="s2">
+<div class="container">
+  <div class="section-label"><span class="section-counter">02</span><span>Data &amp; GEX</span></div>
     <h2>Building the GEX Time Series</h2>
 
     <p>
@@ -419,12 +443,11 @@ html = f"""<!DOCTYPE html>
       announcements, and periods of elevated VIX, when put buyers dominate 0DTE flow.
     </p>
   </div>
-</div>
+</section>
 
-<!-- Section 3: The Two Regimes -->
-<div class="section">
-  <div class="section-inner">
-    <div class="section-label"><span>The Two Regimes</span></div>
+<section class="section" id="s3">
+<div class="container">
+  <div class="section-label"><span class="section-counter">03</span><span>The Two Regimes</span></div>
     <h2>Negative GEX Days Are Structurally More Volatile</h2>
 
     <p>
@@ -448,7 +471,7 @@ html = f"""<!DOCTYPE html>
         </div>
         <div class="hl-cell">
           <div class="hl-label">Vol premium</div>
-          <div class="hl-value">{vol_prem_pct:+.0f}%</div>
+          <div class="hl-value">+{vol_prem_pct:.0f}%</div>
           <div class="hl-sub">p={p_val:.4f}, t={t_stat:.2f}, Welch&#8217;s t-test</div>
         </div>
       </div>
@@ -493,12 +516,11 @@ html = f"""<!DOCTYPE html>
       factors (scheduled news, VIX regime, time-of-year) that also drive intraday vol.
     </p>
   </div>
-</div>
+</section>
 
-<!-- Section 4: Intraday Profile -->
-<div class="section">
-  <div class="section-inner">
-    <div class="section-label"><span>Intraday Dynamics</span></div>
+<section class="section" id="s4">
+<div class="container">
+  <div class="section-label"><span class="section-counter">04</span><span>Intraday Dynamics</span></div>
     <h2>The Effect Is Strongest in the Final Hour</h2>
 
     <p>
@@ -552,12 +574,11 @@ html = f"""<!DOCTYPE html>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- Section 5: Trading Signal -->
-<div class="section">
-  <div class="section-inner">
-    <div class="section-label"><span>Trading Signal</span></div>
+<section class="section" id="s5">
+<div class="container">
+  <div class="section-label"><span class="section-counter">05</span><span>Trading Signal</span></div>
     <h2>A Concrete Intraday Vol Signal</h2>
 
     <p>
@@ -604,12 +625,12 @@ html = f"""<!DOCTYPE html>
       <div class="hl-grid">
         <div class="hl-cell">
           <div class="hl-label">Negative GEX days</div>
-          <div class="hl-value">{pct1(backtest_data['summary']['neg_gex_mean_rvol'])}</div>
+          <div class="hl-value">{pct1(neg_rvol)}</div>
           <div class="hl-sub">mean annualised intraday vol</div>
         </div>
         <div class="hl-cell">
           <div class="hl-label">High GEX days</div>
-          <div class="hl-value">{pct1(backtest_data['summary']['high_gex_mean_rvol'])}</div>
+          <div class="hl-value">{pct1(high_rvol)}</div>
           <div class="hl-sub">mean annualised intraday vol</div>
         </div>
         <div class="hl-cell">
@@ -620,12 +641,11 @@ html = f"""<!DOCTYPE html>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- Section 6: Caveats -->
-<div class="section">
-  <div class="section-inner">
-    <div class="section-label"><span>Caveats &amp; Limitations</span></div>
+<section class="section" id="s6">
+<div class="container">
+  <div class="section-label"><span class="section-counter">06</span><span>Caveats</span></div>
     <h2>What This Study Cannot Tell You</h2>
 
     <p>
@@ -667,12 +687,11 @@ html = f"""<!DOCTYPE html>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- Section 7: Conclusion -->
-<div class="section">
-  <div class="section-inner">
-    <div class="section-label"><span>Conclusion</span></div>
+<section class="section" id="s7">
+<div class="container">
+  <div class="section-label"><span class="section-counter">07</span><span>Conclusion</span></div>
     <h2>The Options Market Now Co-Authors Intraday Price Action</h2>
 
     <p>
@@ -685,9 +704,9 @@ html = f"""<!DOCTYPE html>
     </p>
 
     <p>
-      Across {n_days:,} trading days from {date_start} to {date_end}, negative-GEX days
+      Across {n_days} trading days from {date_start} to {date_end}, negative-GEX days
       experienced mean intraday realised vol of {pct1(neg_rvol)}, compared with {pct1(high_rvol)}
-      on high-GEX days. The difference is {sig_str} (p&#8202;=&#8202;{p_val:.4f}), and the
+      on high-GEX days. The difference is statistically significant (p&#8202;=&#8202;{p_val:.4f}), and the
       pattern is persistent through time rather than driven by a handful of outlier sessions.
       The regime divergence peaks in the final hour of trading &#8212; precisely when 0DTE
       gamma is highest and dealer hedging is most urgent.
@@ -701,27 +720,18 @@ html = f"""<!DOCTYPE html>
       greater scepticism.
     </p>
   </div>
-</div>
+</section>
 
-<!-- Footer -->
+<div id="side-nav"></div>
+
 <footer>
   <div class="footer-inner">
-    <div class="footer-top">
-      <div>
-        <div class="footer-logo">The Intrinsic Investor</div>
-        <div class="footer-desc">Independent quantitative research on equities, options, and market structure.</div>
-      </div>
-      <div class="footer-links">
-        <a href="/">Home</a>
-        <a href="/research/">Research</a>
-        <a href="/about.html">About</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      Data: OptionMetrics via WRDS &nbsp;&#183;&nbsp; TAQ Consolidated Trades via WRDS &nbsp;&#183;&nbsp;
-      Sample: {date_start}&#8202;&#8211;&#8202;{date_end} &nbsp;&#183;&nbsp;
-      GEX methodology follows the standard dealer-net-short assumption (SpotGamma convention).<br>
-      For educational and research purposes only. Not financial advice.
+    <div class="footer-name">The Intrinsic Investor</div>
+    <div class="footer-right">
+      <a href="/">Home</a>
+      <a href="/research">Research</a>
+      <a href="/about">About</a>
+      <div style="margin-top:.5rem;color:rgba(255,255,255,.25)">&copy; 2026 Brian Liew &mdash; For research purposes only. Not financial advice.</div>
     </div>
   </div>
 </footer>
@@ -729,7 +739,20 @@ html = f"""<!DOCTYPE html>
 <script>
 // ── Shared chart defaults ─────────────────────────────────────────────────────
 Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.font.size = 11;
 Chart.defaults.color = '#8aa49e';
+Chart.defaults.animation = false;
+
+Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(15,34,32,0.96)';
+Chart.defaults.plugins.tooltip.titleColor = 'rgba(255,255,255,0.92)';
+Chart.defaults.plugins.tooltip.bodyColor = 'rgba(255,255,255,0.62)';
+Chart.defaults.plugins.tooltip.borderColor = 'rgba(255,255,255,0.09)';
+Chart.defaults.plugins.tooltip.borderWidth = 1;
+Chart.defaults.plugins.tooltip.padding = {{ x: 12, y: 10 }};
+Chart.defaults.plugins.tooltip.cornerRadius = 6;
+Chart.defaults.plugins.tooltip.boxPadding = 4;
+Chart.defaults.plugins.tooltip.titleFont = {{ family: "'Inter',sans-serif", size: 11, weight: '600' }};
+Chart.defaults.plugins.tooltip.bodyFont  = {{ family: "'Inter',sans-serif", size: 11 }};
 
 const COLORS = {{
   neg:  '#dc2626',
@@ -758,17 +781,26 @@ const COLORS = {{
     }},
     options: {{
       responsive: true,
-      plugins: {{ legend: {{ display: false }}, tooltip: {{
-        callbacks: {{
-          title: ctx => ctx[0].label,
-          label: ctx => `GEX: ${{ctx.raw.toFixed(2)}}bn`,
+      plugins: {{
+        legend: {{ display: false }},
+        tooltip: {{
+          callbacks: {{
+            title: ctx => ctx[0].label,
+            label: ctx => `GEX: ${{ctx.raw.toFixed(2)}}bn`,
+          }}
         }}
-      }} }},
+      }},
       scales: {{
-        x: {{ ticks: {{ maxTicksLimit: 8, maxRotation: 0 }}, grid: {{ display: false }} }},
+        x: {{
+          ticks: {{ maxTicksLimit: 8, maxRotation: 0, font: {{ size: 10 }} }},
+          grid: {{ display: false }},
+          border: {{ color: 'rgba(0,0,0,0.10)' }},
+        }},
         y: {{
           title: {{ display: true, text: 'GEX (US$bn)', font: {{ size: 11 }} }},
-          grid: {{ color: 'rgba(0,0,0,0.04)' }},
+          grid: {{ color: 'rgba(0,0,0,0.05)', lineWidth: 0.75 }},
+          border: {{ color: 'transparent' }},
+          ticks: {{ font: {{ size: 10 }} }},
         }}
       }}
     }}
@@ -789,33 +821,71 @@ const COLORS = {{
     type: 'bar',
     data: {{
       labels,
-      datasets: [{{
-        label: 'Median RVol (%)',
-        data: medians,
-        backgroundColor: barColors.map(c => c + '99'),
-        borderColor: barColors,
-        borderWidth: 2,
-      }}]
+      datasets: [
+        {{
+          // p10–p90 whisker range (background)
+          data: p10.map((v, i) => [v, p90[i]]),
+          backgroundColor: barColors.map(c => c + '18'),
+          borderColor: 'transparent',
+          borderWidth: 0,
+          barPercentage: 0.45,
+          categoryPercentage: 0.7,
+          order: 3,
+        }},
+        {{
+          // IQR box (p25–p75)
+          data: p25.map((v, i) => [v, p75[i]]),
+          backgroundColor: barColors.map(c => c + '44'),
+          borderColor: barColors,
+          borderWidth: 1.5,
+          barPercentage: 0.45,
+          categoryPercentage: 0.7,
+          order: 2,
+        }},
+        {{
+          // Median marker (thin floating bar)
+          data: medians.map(m => [m - 0.35, m + 0.35]),
+          backgroundColor: barColors,
+          borderColor: 'transparent',
+          borderWidth: 0,
+          barPercentage: 0.45,
+          categoryPercentage: 0.7,
+          order: 1,
+        }},
+      ]
     }},
     options: {{
       responsive: true,
-      plugins: {{ legend: {{ display: false }}, tooltip: {{
-        callbacks: {{
-          label: (ctx) => {{
-            const i = ctx.dataIndex;
-            return [
-              `Median: ${{medians[i].toFixed(1)}}%`,
-              `p25–p75: ${{p25[i].toFixed(1)}}%–${{p75[i].toFixed(1)}}%`,
-              `p10–p90: ${{p10[i].toFixed(1)}}%–${{p90[i].toFixed(1)}}%`,
-            ];
+      plugins: {{
+        legend: {{ display: false }},
+        tooltip: {{
+          callbacks: {{
+            title: ctx => labels[ctx[0].dataIndex],
+            label: (ctx) => {{
+              const i = ctx.dataIndex;
+              return [
+                `Median: ${{medians[i].toFixed(1)}}%`,
+                `IQR (p25–p75): ${{p25[i].toFixed(1)}}% – ${{p75[i].toFixed(1)}}%`,
+                `Range (p10–p90): ${{p10[i].toFixed(1)}}% – ${{p90[i].toFixed(1)}}%`,
+              ];
+            }}
           }}
         }}
-      }} }},
+      }},
       scales: {{
-        x: {{ grid: {{ display: false }} }},
+        x: {{
+          grid: {{ display: false }},
+          border: {{ color: 'rgba(0,0,0,0.10)' }},
+          ticks: {{ font: {{ size: 11, weight: '500' }} }},
+        }},
         y: {{
-          title: {{ display: true, text: 'Annualised Intraday RVol (%)', font: {{ size: 11 }} }},
-          grid: {{ color: 'rgba(0,0,0,0.04)' }},
+          title: {{ display: true, text: 'Annualised Intraday RVol', font: {{ size: 11 }} }},
+          grid: {{ color: 'rgba(0,0,0,0.05)', lineWidth: 0.75 }},
+          border: {{ color: 'transparent' }},
+          ticks: {{
+            callback: v => v + '%',
+            font: {{ size: 10 }},
+          }},
         }}
       }}
     }}
@@ -837,11 +907,12 @@ const COLORS = {{
         {{
           label: 'Daily observations',
           data: scatterDs,
-          backgroundColor: colors.map(c => c + '66'),
-          borderColor: colors.map(c => c + 'aa'),
-          borderWidth: 1,
-          pointRadius: 3,
-          pointHoverRadius: 5,
+          backgroundColor: colors.map(c => c + '55'),
+          borderColor: colors.map(c => c + '99'),
+          borderWidth: 0.8,
+          pointRadius: 3.5,
+          pointHoverRadius: 6,
+          pointStyle: 'circle',
         }},
         {{
           label: 'OLS regression',
@@ -849,6 +920,7 @@ const COLORS = {{
           data: regLine,
           borderColor: COLORS.blue,
           borderWidth: 2,
+          borderDash: [5, 3],
           pointRadius: 0,
           fill: false,
         }}
@@ -856,25 +928,32 @@ const COLORS = {{
     }},
     options: {{
       responsive: true,
-      plugins: {{ legend: {{ display: false }}, tooltip: {{
-        callbacks: {{
-          label: (ctx) => {{
-            if (ctx.datasetIndex === 0) {{
-              const p = pts[ctx.dataIndex];
-              return [`${{p.date}}`, `GEX: ${{p.x.toFixed(2)}}bn`, `RVol: ${{p.y.toFixed(1)}}%`, p.regime];
+      plugins: {{
+        legend: {{ display: false }},
+        tooltip: {{
+          callbacks: {{
+            label: (ctx) => {{
+              if (ctx.datasetIndex === 0) {{
+                const p = pts[ctx.dataIndex];
+                return [`${{p.date}}`, `GEX: ${{p.x.toFixed(2)}}bn`, `RVol: ${{p.y.toFixed(1)}}%`, p.regime];
+              }}
+              return `Trend: ${{ctx.parsed.y.toFixed(1)}}%`;
             }}
-            return `Regression: ${{ctx.parsed.y.toFixed(1)}}%`;
           }}
         }}
-      }} }},
+      }},
       scales: {{
         x: {{
           title: {{ display: true, text: 'Daily GEX (US$bn)', font: {{ size: 11 }} }},
-          grid: {{ color: 'rgba(0,0,0,0.04)' }},
+          grid: {{ color: 'rgba(0,0,0,0.05)', lineWidth: 0.75 }},
+          border: {{ color: 'rgba(0,0,0,0.10)' }},
+          ticks: {{ font: {{ size: 10 }} }},
         }},
         y: {{
-          title: {{ display: true, text: 'Intraday RVol, annualised (%)', font: {{ size: 11 }} }},
-          grid: {{ color: 'rgba(0,0,0,0.04)' }},
+          title: {{ display: true, text: 'Intraday RVol, annualised', font: {{ size: 11 }} }},
+          grid: {{ color: 'rgba(0,0,0,0.05)', lineWidth: 0.75 }},
+          border: {{ color: 'transparent' }},
+          ticks: {{ callback: v => v + '%', font: {{ size: 10 }} }},
         }}
       }}
     }}
@@ -893,23 +972,62 @@ const COLORS = {{
     data: {{
       labels,
       datasets: [
-        {{ label: 'Negative GEX', data: neg,  borderColor: COLORS.neg,  borderWidth: 2.5, pointRadius: 3, fill: false, tension: 0.3 }},
-        {{ label: 'Low GEX',      data: low,  borderColor: COLORS.low,  borderWidth: 2,   pointRadius: 3, fill: false, tension: 0.3 }},
-        {{ label: 'High GEX',     data: high, borderColor: COLORS.high, borderWidth: 2.5, pointRadius: 3, fill: false, tension: 0.3 }},
+        {{
+          label: 'Negative GEX',
+          data: neg,
+          borderColor: COLORS.neg,
+          backgroundColor: COLORS.neg + '18',
+          borderWidth: 2.5,
+          pointRadius: 4,
+          pointBackgroundColor: COLORS.neg,
+          fill: true,
+          tension: 0.35,
+        }},
+        {{
+          label: 'Low GEX',
+          data: low,
+          borderColor: COLORS.low,
+          backgroundColor: COLORS.low + '12',
+          borderWidth: 2,
+          pointRadius: 3,
+          pointBackgroundColor: COLORS.low,
+          fill: true,
+          tension: 0.35,
+        }},
+        {{
+          label: 'High GEX',
+          data: high,
+          borderColor: COLORS.high,
+          backgroundColor: COLORS.high + '18',
+          borderWidth: 2.5,
+          pointRadius: 4,
+          pointBackgroundColor: COLORS.high,
+          fill: true,
+          tension: 0.35,
+        }},
       ]
     }},
     options: {{
       responsive: true,
-      plugins: {{ legend: {{ display: false }}, tooltip: {{
-        callbacks: {{
-          label: ctx => `${{ctx.dataset.label}}: ${{ctx.raw !== null ? ctx.raw.toFixed(1) + '%' : 'n/a'}}`,
+      plugins: {{
+        legend: {{ display: false }},
+        tooltip: {{
+          callbacks: {{
+            label: ctx => `${{ctx.dataset.label}}: ${{ctx.raw !== null ? ctx.raw.toFixed(1) + '%' : 'n/a'}}`,
+          }}
         }}
-      }} }},
+      }},
       scales: {{
-        x: {{ grid: {{ display: false }} }},
+        x: {{
+          grid: {{ display: false }},
+          border: {{ color: 'rgba(0,0,0,0.10)' }},
+          ticks: {{ font: {{ size: 10 }} }},
+        }},
         y: {{
-          title: {{ display: true, text: 'Avg bucket RVol, annualised (%)', font: {{ size: 11 }} }},
-          grid: {{ color: 'rgba(0,0,0,0.04)' }},
+          title: {{ display: true, text: 'Avg bucket RVol, annualised', font: {{ size: 11 }} }},
+          grid: {{ color: 'rgba(0,0,0,0.05)', lineWidth: 0.75 }},
+          border: {{ color: 'transparent' }},
+          ticks: {{ callback: v => v + '%', font: {{ size: 10 }} }},
         }}
       }}
     }}
@@ -932,44 +1050,93 @@ const COLORS = {{
           type: 'bar',
           label: 'Daily RVol',
           data: rvols,
-          backgroundColor: colors.map(c => c + '77'),
+          backgroundColor: colors.map(c => c + '60'),
           borderWidth: 0,
           barPercentage: 1.0,
+          categoryPercentage: 1.0,
           order: 2,
         }},
         {{
           type: 'line',
           label: '60-day rolling mean',
           data: rolling,
-          borderColor: COLORS.blue,
-          borderWidth: 1.5,
+          borderColor: 'rgba(37,99,235,0.85)',
+          borderWidth: 2,
           pointRadius: 0,
           fill: false,
+          tension: 0.2,
           order: 1,
         }}
       ]
     }},
     options: {{
       responsive: true,
-      plugins: {{ legend: {{ display: false }}, tooltip: {{
-        callbacks: {{
-          title: ctx => ctx[0].label,
-          label: (ctx) => {{
-            if (ctx.datasetIndex === 0) return `RVol: ${{ctx.raw !== null ? ctx.raw.toFixed(1) + '%' : 'n/a'}}`;
-            return `60d avg: ${{ctx.raw !== null ? ctx.raw.toFixed(1) + '%' : 'n/a'}}`;
+      plugins: {{
+        legend: {{ display: false }},
+        tooltip: {{
+          callbacks: {{
+            title: ctx => ctx[0].label,
+            label: (ctx) => {{
+              if (ctx.datasetIndex === 0) return `RVol: ${{ctx.raw !== null ? ctx.raw.toFixed(1) + '%' : 'n/a'}}`;
+              return `60d avg: ${{ctx.raw !== null ? ctx.raw.toFixed(1) + '%' : 'n/a'}}`;
+            }}
           }}
         }}
-      }} }},
+      }},
       scales: {{
-        x: {{ ticks: {{ maxTicksLimit: 8, maxRotation: 0 }}, grid: {{ display: false }} }},
+        x: {{
+          ticks: {{ maxTicksLimit: 8, maxRotation: 0, font: {{ size: 10 }} }},
+          grid: {{ display: false }},
+          border: {{ color: 'rgba(0,0,0,0.10)' }},
+        }},
         y: {{
-          title: {{ display: true, text: 'Intraday RVol, annualised (%)', font: {{ size: 11 }} }},
-          grid: {{ color: 'rgba(0,0,0,0.04)' }},
+          title: {{ display: true, text: 'Intraday RVol, annualised', font: {{ size: 11 }} }},
+          grid: {{ color: 'rgba(0,0,0,0.05)', lineWidth: 0.75 }},
+          border: {{ color: 'transparent' }},
+          ticks: {{ callback: v => v + '%', font: {{ size: 10 }} }},
         }}
       }}
     }}
   }});
 }})();
+
+// ── Progress bar ──────────────────────────────────────────────────────────────
+const pb = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {{
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  pb.style.width = Math.min(pct, 100) + '%';
+}}, {{passive: true}});
+
+// ── Nav shadow on scroll ──────────────────────────────────────────────────────
+const navEl = document.querySelector('nav');
+window.addEventListener('scroll', () => navEl.classList.toggle('scrolled', window.scrollY > 10), {{passive: true}});
+
+// ── Side nav ─────────────────────────────────────────────────────────────────
+const NAV_LABELS = ['Background','Data & GEX','The Two Regimes','Intraday Dynamics','Trading Signal','Caveats','Conclusion'];
+const sideNav = document.getElementById('side-nav');
+NAV_LABELS.forEach((label, i) => {{
+  const a = document.createElement('a');
+  a.href = '#s' + (i + 1);
+  a.innerHTML = `<span class="sn-label">${{label}}</span><span class="sn-dot"></span>`;
+  sideNav.appendChild(a);
+}});
+const sideLinks = sideNav.querySelectorAll('a');
+
+// ── Scroll-reveal ─────────────────────────────────────────────────────────────
+const sections = document.querySelectorAll('.section');
+const io = new IntersectionObserver(entries => {{
+  entries.forEach(e => {{ if (e.isIntersecting) e.target.classList.add('visible'); }});
+}}, {{threshold: 0.08}});
+sections.forEach(s => io.observe(s));
+
+// ── Side nav active highlight ─────────────────────────────────────────────────
+const ioNav = new IntersectionObserver(entries => {{
+  entries.forEach(e => {{
+    const idx = Array.from(sections).indexOf(e.target);
+    if (idx >= 0 && sideLinks[idx]) sideLinks[idx].classList.toggle('active', e.isIntersecting);
+  }});
+}}, {{threshold: 0.3}});
+sections.forEach(s => ioNav.observe(s));
 </script>
 </body>
 </html>"""
