@@ -4,10 +4,10 @@
 --------------
 Merge GEX + intraday RVol, classify GEX regimes, compute stats and regression.
 
-Regime classification (based on full-sample GEX distribution):
+Regime classification (based on positive-day GEX distribution):
   - Negative GEX  : gex_bn < 0              → dealers short gamma, vol amplifying
-  - Low GEX       : 0 ≤ gex_bn < 33rd pct   → weakly long gamma, mild suppression
-  - High GEX      : gex_bn ≥ 33rd pct        → strongly long gamma, vol suppressing
+  - Low GEX       : 0 ≤ gex_bn < median     → weakly long gamma, mild suppression
+  - High GEX      : gex_bn ≥ median          → strongly long gamma, vol suppressing
 
 Output: data/combined.parquet
 """
@@ -35,12 +35,12 @@ print(f"Merged dataset: {len(merged):,} days")
 
 # ── Regime classification ─────────────────────────────────────────────────────
 positive_days = merged[merged["gex_bn"] >= 0]["gex_bn"]
-p33 = float(positive_days.quantile(0.33))
+p50 = float(positive_days.quantile(0.50))
 
 def classify(g):
     if g < 0:
         return "Negative GEX"
-    elif g < p33:
+    elif g < p50:
         return "Low GEX"
     else:
         return "High GEX"
@@ -48,7 +48,7 @@ def classify(g):
 merged["regime"] = merged["gex_bn"].apply(classify)
 merged["regime_ord"] = merged["regime"].map({"Negative GEX": 0, "Low GEX": 1, "High GEX": 2})
 
-print(f"\nRegime thresholds: Negative < 0 < Low < {p33:.2f} <= High")
+print(f"\nRegime thresholds: Negative < 0 < Low < {p50:.2f} (median) <= High")
 print(merged["regime"].value_counts().to_string())
 
 # ── Per-regime stats ──────────────────────────────────────────────────────────
@@ -113,7 +113,7 @@ merged["regression_r2"]        = r2
 merged["regression_p"]         = p_reg
 merged["t_stat_neg_vs_high"]   = t_stat
 merged["p_val_neg_vs_high"]    = p_val
-merged["gex_p33_threshold"]    = p33
+merged["gex_p50_threshold"]    = p50
 
 # ── Pre/post structural break: May 2022 (daily 0DTE introduced) ───────────────
 # Before May 2022: Mon/Wed/Fri only had 0DTE. After: every day.

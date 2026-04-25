@@ -342,8 +342,8 @@ html = f"""<!DOCTYPE html>
     <h2>What is Dealer Gamma Exposure?</h2>
 
     <p>
-      Zero-days-to-expiry (0DTE) SPX options — contracts that expire the same calendar day they
-      are traded — have grown from a curiosity to a dominant force in US equity markets. Since the
+      Zero-days-to-expiry (0DTE) SPX options, contracts that expire the same calendar day they
+      are traded, have grown from a curiosity to a dominant force in US equity markets. Since the
       CBOE introduced daily SPX expirations in May 2022, 0DTE options now routinely account for
       more than 40% of total SPX options volume. Behind every one of those contracts is a market
       maker who has sold it and must now manage the resulting risk.
@@ -355,16 +355,16 @@ html = f"""<!DOCTYPE html>
       When a dealer sells an option, they delta-hedge their exposure by taking an offsetting
       position in the underlying. As the underlying price moves, delta changes, and the dealer
       must adjust their hedge continuously. The rate at which delta changes with price is gamma
-      (&#915;). A dealer who is <em>long</em> gamma profits from this adjustment process &#8212;
-      they buy when prices fall and sell when prices rise, acting as a natural stabiliser.
+      (&#915;). A dealer who is <em>long</em> gamma profits from this adjustment process: they buy
+      when prices fall and sell when prices rise, acting as a natural stabiliser.
       A dealer who is <em>short</em> gamma must do the opposite: buy as prices rise and sell
       as prices fall. Their hedging <em>amplifies</em> the very moves they are trying to hedge.
     </p>
 
     <p>
       Dealer Gamma Exposure (GEX) aggregates this effect across all open 0DTE contracts.
-      Under the standard assumption &#8212; that all open interest represents customer-bought
-      positions with dealers on the other side &#8212; GEX is computed as:
+      Under the standard assumption (that all open interest represents customer-bought
+      positions with dealers on the other side), GEX is computed as:
     </p>
 
     <div class="callout blue">
@@ -384,7 +384,7 @@ html = f"""<!DOCTYPE html>
       is predominantly driven by customer hedgers and income sellers, while put open interest is
       dominated by protective buyers. Dealers tend to be net short calls and net long puts in
       aggregate, yielding positive net gamma under normal conditions. But 0DTE options are
-      different &#8212; they expire the same day, so open interest at the start of the session
+      different: they expire the same day, so open interest at the start of the session
       represents only same-day speculative and hedging activity, with a sharper intraday
       gamma profile than any multi-day contract.
     </p>
@@ -425,7 +425,7 @@ html = f"""<!DOCTYPE html>
     </p>
 
     <div class="chart-box">
-      <div class="chart-title">Chart 1 &#8202;&#8212;&#8202; Daily SPX 0DTE GEX, {date_start}&#8202;&#8211;&#8202;{date_end}</div>
+      <div class="chart-title">Chart 1: Daily SPX 0DTE GEX, {date_start} to {date_end}</div>
       <canvas id="gexChart" height="80"></canvas>
       <div class="chart-legend">
         <div class="legend-item"><span class="legend-dot" style="background:#059669"></span>Positive GEX (dealers long gamma)</div>
@@ -435,7 +435,7 @@ html = f"""<!DOCTYPE html>
     </div>
 
     <p>
-      Over the full sample, <strong>{pct(pct_pos)}</strong> of trading days had positive GEX &#8212;
+      Over the full sample, <strong>{pct(pct_pos)}</strong> of trading days had positive GEX,
       meaning dealers were net long gamma on the majority of sessions. The distribution is
       right-skewed: large positive GEX readings (dealers very long gamma) are more common than
       deeply negative ones. Negative GEX days tend to cluster around macro events, FOMC
@@ -452,8 +452,8 @@ html = f"""<!DOCTYPE html>
     <p>
       We classify each trading day into one of three regimes based on daily GEX:
       <strong>Negative GEX</strong> (gex &lt; 0), <strong>Low GEX</strong>
-      (0 &#8804; gex &lt; 33rd percentile of positive days), and <strong>High GEX</strong>
-      (gex &#8805; 33rd percentile). The key comparison is between the extremes.
+      (0 &#8804; gex &lt; median of positive days), and <strong>High GEX</strong>
+      (gex &#8805; median of positive days). The key comparison is between the extremes.
     </p>
 
     <div class="highlight-box">
@@ -479,14 +479,14 @@ html = f"""<!DOCTYPE html>
     <p>
       The vol premium is <strong>{sig_str}</strong>. On negative-GEX days, mean annualised
       intraday realised volatility is {pct1(neg_rvol)}, compared with {pct1(high_rvol)}
-      on high-GEX days &#8212; a difference of roughly {vol_prem_pct:.0f} percentage points.
+      on high-GEX days, a difference of roughly {vol_prem_pct:.0f} percentage points.
       This is not merely a reflection of regime selection bias (e.g., negative GEX days
       happening to coincide with scheduled macro events). The chart below shows the
       distribution of intraday vol across all three regimes.
     </p>
 
     <div class="chart-box">
-      <div class="chart-title">Chart 2 &#8202;&#8212;&#8202; Intraday Realised Vol Distribution by GEX Regime</div>
+      <div class="chart-title">Chart 2: Intraday Realised Vol Distribution by GEX Regime</div>
       <canvas id="regimeChart" height="70"></canvas>
       <div class="chart-legend">
         <div class="legend-item"><span class="legend-dot" style="background:#dc2626"></span>Negative GEX (n={regime_data['data']['Negative GEX']['n']})</div>
@@ -497,7 +497,7 @@ html = f"""<!DOCTYPE html>
     </div>
 
     <div class="chart-box">
-      <div class="chart-title">Chart 3 &#8202;&#8212;&#8202; GEX vs Intraday Realised Vol (Daily, {date_start}&#8202;&#8211;&#8202;{date_end})</div>
+      <div class="chart-title">Chart 3: GEX vs Intraday Realised Vol (Daily, {date_start} to {date_end})</div>
       <canvas id="scatterChart" height="80"></canvas>
       <div class="chart-legend">
         <div class="legend-item"><span class="legend-dot" style="background:#dc2626"></span>Negative GEX</div>
@@ -525,7 +525,7 @@ html = f"""<!DOCTYPE html>
     <p>
       GEX is not uniform through the trading day. As a 0DTE option approaches expiry,
       its gamma profile changes dramatically. Near-the-money options develop very high
-      gamma in the final hour &#8212; small price moves create large delta swings that
+      gamma in the final hour; small price moves create large delta swings that
       dealers must hedge immediately. Simultaneously, the &#8220;charm&#8221; effect
       (d&#916;/dt) forces dealers to adjust their hedges simply because time is passing,
       even without price movement.
@@ -538,7 +538,7 @@ html = f"""<!DOCTYPE html>
     </p>
 
     <div class="chart-box">
-      <div class="chart-title">Chart 4 &#8202;&#8212;&#8202; Average Intraday Realised Vol by 30-min Bucket and GEX Regime</div>
+      <div class="chart-title">Chart 4: Average Intraday Realised Vol by 30-min Bucket and GEX Regime</div>
       <canvas id="profileChart" height="80"></canvas>
       <div class="chart-legend">
         <div class="legend-item"><span class="legend-line" style="background:#dc2626"></span>Negative GEX</div>
@@ -569,7 +569,7 @@ html = f"""<!DOCTYPE html>
         <strong>Practical implication:</strong> The regime difference is not spread uniformly
         through the day. If you are trading intraday and GEX is negative, the first 30 minutes
         and the final 60 minutes carry disproportionate vol risk. Position sizing should account
-        for this asymmetry &#8212; not just the overall GEX level.
+        for this asymmetry, not just the overall GEX level.
       </div>
     </div>
   </div>
@@ -602,7 +602,7 @@ html = f"""<!DOCTYPE html>
     </div>
 
     <div class="chart-box">
-      <div class="chart-title">Chart 5 &#8202;&#8212;&#8202; Daily Intraday Realised Vol with GEX Regime Shading</div>
+      <div class="chart-title">Chart 5: Daily Intraday Realised Vol with GEX Regime Shading</div>
       <canvas id="backtestChart" height="80"></canvas>
       <div class="chart-legend">
         <div class="legend-item"><span class="legend-dot" style="background:#dc2626"></span>Negative GEX day (vol amplifying)</div>
@@ -613,7 +613,7 @@ html = f"""<!DOCTYPE html>
 
     <p>
       The time-series chart confirms the pattern holds out-of-sample throughout the
-      period &#8212; negative-GEX days (shown in red) consistently cluster around the
+      period; negative-GEX days (shown in red) consistently cluster around the
       higher end of the daily vol distribution. The effect is most visible during
       2022&#8202;&#8211;&#8202;2023, when the combination of Fed rate hikes and elevated
       VIX produced frequent negative-GEX days. During the calmer 2024 bull market,
@@ -666,7 +666,7 @@ html = f"""<!DOCTYPE html>
       and elevated vol could partly reflect reverse causation: high-vol days attract more
       put buyers (generating negative GEX), rather than negative GEX causing higher vol.
       Disentangling this would require intraday GEX snapshots taken at the open, before
-      the day&#8217;s vol is realised &#8212; a data exercise beyond the scope of this study.
+      the day&#8217;s vol is realised, a data exercise beyond the scope of this study.
     </p>
 
     <p>
@@ -695,8 +695,8 @@ html = f"""<!DOCTYPE html>
 
     <p>
       Zero-days-to-expiry options have fundamentally changed the microstructure of the SPX.
-      The daily flow of 0DTE gamma from dealers to customers &#8212; and the resulting
-      obligation on dealers to delta-hedge in real time &#8212; creates a structural,
+      The daily flow of 0DTE gamma from dealers to customers, and the resulting
+      obligation on dealers to delta-hedge in real time, creates a structural,
       measurable regime effect on intraday volatility. When dealer gamma is positive,
       they act as a dampener on price moves. When it turns negative, they become
       amplifiers.
@@ -707,7 +707,7 @@ html = f"""<!DOCTYPE html>
       experienced mean intraday realised vol of {pct1(neg_rvol)}, compared with {pct1(high_rvol)}
       on high-GEX days. The difference is statistically significant (p&#8202;=&#8202;{p_val:.4f}), and the
       pattern is persistent through time rather than driven by a handful of outlier sessions.
-      The regime divergence peaks in the final hour of trading &#8212; precisely when 0DTE
+      The regime divergence peaks in the final hour of trading, precisely when 0DTE
       gamma is highest and dealer hedging is most urgent.
     </p>
 
@@ -730,7 +730,7 @@ html = f"""<!DOCTYPE html>
       <a href="/">Home</a>
       <a href="/research">Research</a>
       <a href="/about">About</a>
-      <div style="margin-top:.5rem;color:rgba(255,255,255,.25)">&copy; 2026 Brian Liew &mdash; For research purposes only. Not financial advice.</div>
+      <div style="margin-top:.5rem;color:rgba(255,255,255,.25)">&copy; 2026 Brian Liew. For research purposes only. Not financial advice.</div>
     </div>
   </div>
 </footer>
