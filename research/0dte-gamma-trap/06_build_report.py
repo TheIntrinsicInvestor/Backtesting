@@ -510,9 +510,14 @@ html = f"""<!DOCTYPE html>
     <p>
       The scatter plot reveals a clear negative relationship: higher GEX is associated with lower
       intraday vol. The OLS regression has R&#178;&nbsp;=&nbsp;{r2:.3f}, meaning GEX explains
-      approximately {r2*100:.0f}% of the cross-day variation in intraday realised vol.
-      While modest in absolute terms, this is a meaningful signal given the number of other
-      factors (scheduled news, VIX regime, time-of-year) that also drive intraday vol.
+      approximately {r2*100:.0f}% of the cross-day variation in intraday realised vol. That is a
+      small number. The remaining 95% of day-to-day vol variation is driven by other factors:
+      scheduled macro events, the prevailing VIX regime, earnings clusters, and seasonal patterns.
+      GEX alone cannot forecast intraday vol with precision. What it does offer is a reliable
+      regime-level signal: the difference in group means between negative and high GEX days is
+      large (+{vol_prem_pct:.0f}%) and statistically robust (t&nbsp;=&nbsp;{t_stat:.2f},
+      p&nbsp;&lt;&nbsp;0.0001). That is a coarse signal, useful for adjusting position size
+      at the start of the session, not a precise vol forecast.
     </p>
   </div>
 </section>
