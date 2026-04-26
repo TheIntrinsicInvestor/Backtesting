@@ -22,7 +22,7 @@ nav.scrolled{box-shadow:0 1px 24px rgba(15,34,32,0.06)}
 /* ── SIDEBAR ── */
 .sidebar{background:#f0ece2;border-right:1px solid #e2ddd0;padding:2.5rem 1.75rem;display:flex;flex-direction:column;gap:1.75rem;position:sticky;top:62px;min-height:calc(100vh - 62px)}
 
-.avatar{width:80px;height:80px;border-radius:50%;background:#0f2220;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:2rem;font-style:italic;color:rgba(255,255,255,.5);font-weight:600}
+.avatar{width:88px;height:88px;border-radius:50%;object-fit:cover;display:block;border:3px solid #fff;box-shadow:0 0 0 2px #e2ddd0,0 4px 16px rgba(15,34,32,0.10)}
 
 .name-block{}
 .sb-name{font-family:'Fraunces',serif;font-size:1.35rem;font-weight:600;color:#0f2220;line-height:1.2}
@@ -113,6 +113,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
 
   <!-- SIDEBAR -->
   <div class="sidebar">
+
+    <img class="avatar" src="/assets/brian.jpg" alt="Brian Liew">
 
     <div class="name-block">
       <div class="sb-name">Brian Liew</div>
