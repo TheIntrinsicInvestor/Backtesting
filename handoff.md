@@ -54,7 +54,11 @@ The original report framed R² = 0.054 as "a meaningful signal given the number 
 
 ## Next steps
 
-No immediate follow-up needed. The report is live and methodologically consistent.
+The corrected figures (+62%, t=10.96) have been propagated to:
+- `index.html` homepage card (meta line)
+- `research/index.html` report listing card (description, vol premium metric, t-stat metric)
+
+No further follow-up needed. The report is live and fully consistent across all pages.
 
 Possible future improvements:
 - Intraday GEX updates (would require tick-level options data)
