@@ -39,10 +39,14 @@ All `&#8212;`, `&mdash;`, and literal `—` removed from report prose and chart 
 - Parenthetical asides: `— that ... —` became `(that ...)`
 - Sentence continuations: replaced with commas or semicolons
 
-### 4. Files changed
+### 4. Honest R² disclosure (06_build_report.py)
+
+The original report framed R² = 0.054 as "a meaningful signal given the number of other factors." That was an oversell. Updated to state plainly that 5% is small, GEX cannot forecast intraday vol precisely, and the actual finding is the regime mean difference (+62%, t = 10.96) — a coarse signal useful for position sizing, not a precise vol forecast.
+
+### 5. Files changed
 
 - `research/0dte-gamma-trap/04_analysis.py` — regime logic, threshold variable renamed p33 -> p50
-- `research/0dte-gamma-trap/06_build_report.py` — prose updates, em dash removal
+- `research/0dte-gamma-trap/06_build_report.py` — prose updates, em dash removal, honest R² disclosure
 - `research/0dte-gamma-trap/charts/*.json` — regenerated with new regime data
 - `research/0dte-gamma-trap/index.html` — rebuilt (~160KB)
 
