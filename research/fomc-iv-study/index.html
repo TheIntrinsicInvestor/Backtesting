@@ -1,0 +1,1962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The FOMC Vol Crush | The Intrinsic Investor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg:      #f7f4ec;
+  --bg2:     #f0ece2;
+  --ink:     #0f2220;
+  --muted:   #4a6460;
+  --hint:    #8aaba6;
+  --accent:  #1a5c52;
+  --green2:  #059669;
+  --red2:    #dc2626;
+  --blue2:   #2563eb;
+  --amber:   #E3A008;
+  --green-bg:#d1fae5;
+  --red-bg:  #fee2e2;
+  --amber-bg:#fef3c7;
+  --blue-bg: #dbeafe;
+  --purple-bg:#ede9fe;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:Inter,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.7;
+  position:relative;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity:.5;mix-blend-mode:multiply;pointer-events:none;z-index:9999;
+}
+#progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--green2));width:0%;z-index:10000;transition:width .1s}
+nav{
+  position:sticky;top:0;z-index:1000;
+  background:rgba(247,244,236,.85);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(15,34,32,.08);
+  padding:.85rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{font-family:Fraunces,serif;font-size:1.1rem;color:var(--ink);text-decoration:none;font-weight:600}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.875rem;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--ink)}
+.hero{
+  background:var(--ink);color:var(--bg);
+  padding:5rem 2rem 4rem;
+  position:relative;overflow:hidden;
+}
+.hero::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 70% 50%,rgba(26,92,82,.4) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-inner{max-width:860px;margin:0 auto;position:relative;z-index:1}
+.hero-eyebrow{
+  font-size:.75rem;font-weight:600;letter-spacing:.12em;
+  text-transform:uppercase;color:rgba(247,244,236,.5);margin-bottom:1.2rem;
+}
+.hero h1{
+  font-family:Fraunces,serif;font-size:clamp(2rem,5vw,3.2rem);
+  font-weight:300;line-height:1.2;margin-bottom:1.2rem;
+}
+.hero h1 em{font-style:italic;color:#6ed4c8}
+.hero-sub{font-size:1.05rem;color:rgba(247,244,236,.75);max-width:640px;line-height:1.6}
+.hero-meta{
+  display:flex;flex-wrap:wrap;gap:1.5rem;margin-top:2rem;
+  font-size:.8rem;color:rgba(247,244,236,.55);align-items:center;
+}
+.hero-meta span{display:flex;align-items:center;gap:.4rem}
+.hero-meta a{
+  color:rgba(247,244,236,.55);text-decoration:none;border:1px solid rgba(247,244,236,.2);
+  padding:.25rem .75rem;border-radius:4px;transition:all .2s;
+}
+.hero-meta a:hover{color:var(--bg);border-color:rgba(247,244,236,.5)}
+.kpi-strip{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border-bottom:1px solid rgba(15,34,32,.1);
+  background:var(--bg);
+}
+.kpi-cell{
+  padding:1.8rem 2rem;
+  border-right:1px solid rgba(15,34,32,.08);
+}
+.kpi-cell:last-child{border-right:none}
+.kpi-label{font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--hint);margin-bottom:.5rem}
+.kpi-value{font-family:Fraunces,serif;font-size:2rem;font-weight:300;color:var(--ink);line-height:1}
+.kpi-value.green{color:var(--green2)}
+.kpi-value.blue{color:var(--blue2)}
+.kpi-sub{font-size:.75rem;color:var(--muted);margin-top:.35rem}
+#side-nav{
+  position:fixed;right:1.2rem;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:.6rem;z-index:900;
+}
+.sn-item{display:flex;align-items:center;gap:.5rem;cursor:pointer;justify-content:flex-end}
+.sn-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--hint);transition:all .25s;flex-shrink:0;
+}
+.sn-label{
+  font-size:.65rem;color:var(--hint);white-space:nowrap;
+  transition:all .25s;opacity:0;transform:translateX(4px);
+  font-family:Inter,sans-serif;font-weight:500;
+}
+.sn-item:hover .sn-label,.sn-item.active .sn-label{opacity:1;transform:translateX(0)}
+.sn-item.active .sn-dot{background:var(--accent);transform:scale(1.4)}
+@media(max-width:860px){#side-nav{display:none}}
+section{padding:4.5rem 2rem;opacity:0;transform:translateY(18px);transition:opacity .55s,transform .55s}
+section.visible{opacity:1;transform:none}
+.section-inner{max-width:860px;margin:0 auto}
+.section-label{
+  font-size:.68rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:.9rem;
+}
+section h2{
+  font-family:Fraunces,serif;font-size:clamp(1.5rem,3vw,2.1rem);
+  font-weight:300;margin-bottom:1.4rem;line-height:1.3;
+}
+section h3{
+  font-family:Fraunces,serif;font-size:1.2rem;font-weight:400;
+  margin:2rem 0 1rem;
+}
+section p{
+  color:var(--muted);margin-bottom:1.1rem;
+  text-align:justify;hyphens:auto;
+}
+.callout{
+  padding:1rem 1.25rem;border-radius:6px;margin:1.2rem 0;
+  border-left:3px solid;font-size:.9rem;color:var(--ink);
+}
+.callout.green{background:var(--green-bg);border-color:var(--green2)}
+.callout.amber{background:var(--amber-bg);border-color:var(--amber)}
+.callout.blue{background:var(--blue-bg);border-color:var(--blue2)}
+.callout.red{background:var(--red-bg);border-color:var(--red2)}
+.callout.purple{background:var(--purple-bg);border-color:#7c3aed}
+.callout strong{font-weight:600}
+.chart-box{
+  background:var(--bg2);border:1px solid rgba(15,34,32,.08);
+  border-radius:8px;padding:1.5rem;margin:1.5rem 0;
+}
+.chart-title{
+  font-size:.68rem;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:1rem;
+}
+.chart-legend{
+  display:flex;flex-wrap:wrap;gap:1rem;margin-top:.8rem;font-size:.78rem;color:var(--muted);
+}
+.legend-dot{
+  width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:.3rem;flex-shrink:0;
+}
+.legend-line{
+  width:18px;height:2px;display:inline-block;margin-right:.3rem;vertical-align:middle;flex-shrink:0;
+}
+.data-table{width:100%;border-collapse:collapse;font-size:.83rem;margin:1rem 0}
+.data-table th{
+  background:var(--ink);color:var(--bg);
+  padding:.55rem .8rem;text-align:left;font-weight:500;font-size:.72rem;letter-spacing:.04em;
+}
+.data-table td{
+  padding:.5rem .8rem;border-bottom:1px solid rgba(15,34,32,.06);color:var(--muted);
+}
+.data-table tr:hover td{background:rgba(15,34,32,.02)}
+.data-table .top-row td{background:#d1fae5!important;color:var(--ink)!important;font-weight:500}
+.heatmap-table{width:100%;border-collapse:collapse;font-size:.75rem}
+.heatmap-table th{
+  background:var(--ink);color:var(--bg);
+  padding:.4rem .5rem;font-weight:500;font-size:.65rem;text-align:center;letter-spacing:.03em;
+}
+.heatmap-table td{
+  padding:.35rem .45rem;border-bottom:1px solid rgba(15,34,32,.05);
+  text-align:center;
+}
+.method-table{width:100%;border-collapse:collapse;font-size:.85rem;margin:1rem 0}
+.method-table th{
+  background:var(--ink);color:var(--bg);padding:.6rem 1rem;
+  font-weight:500;font-size:.75rem;text-align:left;
+}
+.method-table td{
+  padding:.55rem 1rem;border-bottom:1px solid rgba(15,34,32,.08);
+  color:var(--muted);vertical-align:top;
+}
+.method-table td:first-child{font-weight:500;color:var(--ink);white-space:nowrap;width:35%}
+.highlight-box{
+  background:var(--ink);color:var(--bg);border-radius:8px;
+  padding:2rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin:1.5rem 0;
+}
+.hb-val{font-family:Fraunces,serif;font-size:2.2rem;font-weight:300;color:#6ed4c8}
+.hb-label{font-size:.75rem;color:rgba(247,244,236,.6);margin-top:.3rem}
+footer{
+  background:var(--ink);color:rgba(247,244,236,.55);
+  padding:3rem 2rem;font-size:.8rem;
+}
+.footer-inner{max-width:860px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1.5rem}
+.footer-copy{font-family:JetBrains Mono,monospace;font-size:.72rem}
+.footer-links{display:flex;gap:1.5rem}
+.footer-links a{color:rgba(247,244,236,.45);text-decoration:none}
+.footer-links a:hover{color:var(--bg)}
+@media(max-width:640px){
+  .kpi-strip{grid-template-columns:repeat(2,1fr)}
+  .kpi-cell{border-right:none;border-bottom:1px solid rgba(15,34,32,.08)}
+  .highlight-box{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+
+<nav>
+  <a href="../../index.html" class="nav-logo">The Intrinsic Investor</a>
+  <ul class="nav-links">
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="../index.html">Research</a></li>
+    <li><a href="../../about.html">About</a></li>
+  </ul>
+</nav>
+
+<!-- Side nav -->
+<nav id="side-nav" aria-label="Page sections">
+  <div class="sn-item" onclick="scrollToSection('s1')"><span class="sn-label">Study Design</span><div class="sn-dot"></div></div>
+  <div class="sn-item" onclick="scrollToSection('s2')"><span class="sn-label">IV Profile</span><div class="sn-dot"></div></div>
+  <div class="sn-item" onclick="scrollToSection('s3')"><span class="sn-label">Surprise Analysis</span><div class="sn-dot"></div></div>
+  <div class="sn-item" onclick="scrollToSection('s4')"><span class="sn-label">Strategy A</span><div class="sn-dot"></div></div>
+  <div class="sn-item" onclick="scrollToSection('s5')"><span class="sn-label">Strategy B</span><div class="sn-dot"></div></div>
+  <div class="sn-item" onclick="scrollToSection('s6')"><span class="sn-label">Methodology</span><div class="sn-dot"></div></div>
+  <div class="sn-item" onclick="scrollToSection('s7')"><span class="sn-label">Conclusions</span><div class="sn-dot"></div></div>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Systematic Market Research</div>
+    <h1>The FOMC Vol Crush: <em>Implied Volatility Dynamics Around Federal Reserve Decisions</em></h1>
+    <p class="hero-sub">
+      How SPX, TLT, and VIX implied volatility behaves before and after FOMC announcements,
+      whether a pre-meeting IV build-up is reliably exploitable, and what communication
+      surprises reveal about the limits of forward guidance.
+    </p>
+    <div class="hero-meta">
+      <span>Brian Liew, BSc Accounting and Finance, LSE</span>
+      <span>Published May 2026</span>
+      <span>2018 to 2024, n=55 meetings</span>
+      <span>OptionMetrics, FRED, CME FedWatch</span>
+      <a href="https://github.com/TheIntrinsicInvestor/Backtesting" target="_blank" rel="noopener">GitHub Code</a>
+    </div>
+  </div>
+</header>
+
+<!-- KPI Strip -->
+<div class="kpi-strip">
+  <div class="kpi-cell">
+    <div class="kpi-label">Meetings Analysed</div>
+    <div class="kpi-value blue">55</div>
+    <div class="kpi-sub">2018 to 2024, scheduled and emergency</div>
+  </div>
+  <div class="kpi-cell">
+    <div class="kpi-label">Avg SPX IV Crush</div>
+    <div class="kpi-value blue">+0.3%</div>
+    <div class="kpi-sub">T-1 to T+1 (normalised, excl. outliers)</div>
+  </div>
+  <div class="kpi-cell">
+    <div class="kpi-label">Pre-Meeting Sell Win Rate</div>
+    <div class="kpi-value green">52%</div>
+    <div class="kpi-sub">Enter T-1, exit T+1 (SPY straddle)</div>
+  </div>
+  <div class="kpi-cell">
+    <div class="kpi-label">Post-Announcement Win Rate</div>
+    <div class="kpi-value green">67%</div>
+    <div class="kpi-sub">Enter T+1, exit T+5 (SPY straddle)</div>
+  </div>
+</div>
+
+<!-- Section 1: Study Design -->
+<section id="s1">
+  <div class="section-inner">
+    <div class="section-label">01 — Study Design</div>
+    <h2>Why FOMC meetings create a predictable options market cycle</h2>
+    <p>
+      Federal Reserve rate decisions are the single most anticipated scheduled macro events in global
+      markets. The options market prices this anticipated uncertainty as a risk premium in the days
+      before each meeting, then rapidly resets once the uncertainty resolves. This study asks whether
+      that pattern is systematic, how it varies by decision type and communication surprise, and
+      whether it can be profitably exploited via short straddle strategies on SPY.
+    </p>
+    <p>
+      We track three implied volatility instruments across 55 FOMC meetings from 2018 to 2024:
+      SPX 30-day ATM IV from OptionMetrics (delta=50, days=30), TLT 30-day ATM IV (representing rates
+      market uncertainty), and the CBOE VIX (pulled from FRED). Each meeting is classified on two dimensions.
+    </p>
+    <div class="callout blue">
+      <strong>Two-layer classification.</strong> Primary: decision type (Hike, Hold, or Cut) based on
+      the actual rate change. Secondary: communication surprise (Hawkish, Neutral, or Dovish) based on
+      dot plot changes, statement language, and same-day market reaction. The secondary layer captures
+      what actually moves markets: many in-line rate decisions carry large guidance surprises.
+    </div>
+    <h3>Classification breakdown</h3>
+    <table class="data-table">
+      <thead><tr><th>Category</th><th>Sub-group</th><th>n</th><th>Example meetings</th></tr></thead>
+      <tbody>
+        <tr><td>Hike</td><td>Hawkish comm</td><td>15</td><td>Jun 2022 (+75bps vs +50bps expected)</td></tr>
+        <tr><td>Hold</td><td>Hawkish comm</td><td>8</td><td>Jun 2021 dot plot shift, Jan 2024 March cut walkback</td></tr>
+        <tr><td>Hold</td><td>Neutral comm</td><td>16</td><td>Most ZLB-era holds, post-taper normalisation</td></tr>
+        <tr><td>Hold</td><td>Dovish comm</td><td>10</td><td>Jan 2019 patient pivot, Dec 2023 cut signal</td></tr>
+        <tr><td>Cut</td><td>All types</td><td>6</td><td>2019 easing cycle, 2024 pivot, COVID emergency</td></tr>
+      </tbody>
+    </table>
+    <div class="callout amber">
+      <strong>Outliers and caveats.</strong> Three meetings are flagged as structural outliers: the
+      unscheduled emergency cuts on 3 March and 15 March 2020 (COVID pandemic response) and the
+      degenerate 18 March 2020 scheduled meeting that followed, at which rates were already at zero.
+      These appear in the heatmap with a lightning mark and are excluded from profile aggregations.
+      The 2018 to 2021 zero-rate era and the 2022 to 2024 hiking cycle represent materially different
+      vol regimes and should be interpreted accordingly.
+    </div>
+  </div>
+</section>
+
+<!-- Section 2: IV Event Profile -->
+<section id="s2" style="background:var(--bg2)">
+  <div class="section-inner">
+    <div class="section-label">02 — IV Event Profile</div>
+    <h2>SPX implied vol builds in the final week before FOMC, then crushes on announcement day</h2>
+    <p>
+      Each meeting's IV series is normalised so that the mean of T-20 to T-15 equals 100, then averaged
+      across all 55 meetings (excluding the three COVID outliers). The pattern is consistent: a
+      gradual build in implied vol over the 5 to 10 days preceding the announcement, followed by a sharp
+      collapse on or immediately after the decision day.
+    </p>
+    <p>
+      SPX and VIX show the most pronounced pre-meeting premium, consistent with equity market uncertainty
+      dominating options pricing around rate decisions. TLT IV tends to peak earlier, reflecting that
+      rates market participants price in the decision further in advance.
+    </p>
+    <div class="chart-box">
+      <div class="chart-title">Average normalised IV profile, T-20 to T+10 (baseline = 100 at T-20)</div>
+      <canvas id="profileChart" height="80"></canvas>
+      <div class="chart-legend">
+        <span><span class="legend-line" style="background:#1a5c52"></span>SPX IV (mean)</span>
+        <span><span class="legend-line" style="background:#1a5c52;opacity:.25"></span>SPX ±1 SD band</span>
+        <span><span class="legend-line" style="background:#2563eb;border-top:2px dashed #2563eb"></span>TLT IV</span>
+        <span><span class="legend-line" style="background:#d97706;border-top:2px dashed #d97706"></span>VIX</span>
+      </div>
+    </div>
+    <div class="callout blue">
+      <strong>Confidence band interpretation.</strong> The shaded region shows plus and minus one standard
+      deviation across meetings, not a statistical confidence interval. The wide dispersion reflects genuine
+      cross-meeting variation in vol regime (e.g., COVID 2020 vs. 2019 low-vol period). The aggregate
+      pattern is consistent but the magnitude varies substantially.
+    </div>
+  </div>
+</section>
+
+<!-- Section 3: Surprise Analysis -->
+<section id="s3">
+  <div class="section-inner">
+    <div class="section-label">03 — Surprise Analysis</div>
+    <h2>Hike meetings carry the largest pre-meeting premium; dovish guidance collapses vol fastest</h2>
+    <p>
+      Splitting the IV profile by decision type reveals that hike meetings generate a more pronounced
+      pre-meeting IV build-up, consistent with greater policy uncertainty when the Fed is actively
+      tightening. Hold meetings show a smaller but still consistent pattern. Cut meetings are harder to
+      interpret given the small sample and structural mix (2019 mid-cycle easing vs. 2024 normalisation
+      vs. 2020 emergency actions).
+    </p>
+    <div class="chart-box">
+      <div class="chart-title">SPX IV profile by decision type (Hike / Hold / Cut), normalised</div>
+      <canvas id="decisionChart" height="80"></canvas>
+      <div class="chart-legend">
+        <span><span class="legend-dot" style="background:#dc2626"></span>Hike (n=15)</span>
+        <span><span class="legend-dot" style="background:#2563eb"></span>Hold (n=34)</span>
+        <span><span class="legend-dot" style="background:#059669"></span>Cut (n=6)</span>
+      </div>
+    </div>
+    <p>
+      Within hold meetings (n=34), communication surprises drive material differences in IV
+      dynamics. Hawkish guidance surprises are associated with a sharper post-announcement IV spike as
+      markets reprice the forward path, while dovish surprises produce the fastest IV collapse. Neutral
+      holds show the textbook crush.
+    </p>
+    <div class="chart-box">
+      <div class="chart-title">SPX IV profile by communication surprise, Hold meetings only</div>
+      <canvas id="commChart" height="80"></canvas>
+      <div class="chart-legend">
+        <span><span class="legend-dot" style="background:#dc2626"></span>Hawkish guidance (n=8)</span>
+        <span><span class="legend-dot" style="background:#6b7280"></span>Neutral (n=16)</span>
+        <span><span class="legend-dot" style="background:#059669"></span>Dovish guidance (n=10)</span>
+      </div>
+    </div>
+    <h3>IV change at key checkpoints by meeting and instrument</h3>
+    <p>
+      The heatmap below shows the change in normalised IV (vs. baseline of 100) at five checkpoints for
+      each meeting across SPX, TLT, and VIX. Red cells indicate elevated IV above baseline; blue cells
+      indicate IV below baseline. Empty cells indicate missing or insufficient data.
+    </p>
+    <div class="chart-box" style="overflow-x:auto;padding:1rem">
+      <table class="heatmap-table">
+<thead><tr>
+<th>Date</th><th>Decision</th><th>Comm</th>
+<th>SPX<br><span style="font-weight:400;font-size:0.7rem">T-5</span></th>
+<th>SPX<br><span style="font-weight:400;font-size:0.7rem">T-1</span></th>
+<th>SPX<br><span style="font-weight:400;font-size:0.7rem">T=0</span></th>
+<th>SPX<br><span style="font-weight:400;font-size:0.7rem">T+1</span></th>
+<th>SPX<br><span style="font-weight:400;font-size:0.7rem">T+5</span></th>
+<th>TLT<br><span style="font-weight:400;font-size:0.7rem">T-5</span></th>
+<th>TLT<br><span style="font-weight:400;font-size:0.7rem">T-1</span></th>
+<th>TLT<br><span style="font-weight:400;font-size:0.7rem">T=0</span></th>
+<th>TLT<br><span style="font-weight:400;font-size:0.7rem">T+1</span></th>
+<th>TLT<br><span style="font-weight:400;font-size:0.7rem">T+5</span></th>
+<th>VIX<br><span style="font-weight:400;font-size:0.7rem">T-5</span></th>
+<th>VIX<br><span style="font-weight:400;font-size:0.7rem">T-1</span></th>
+<th>VIX<br><span style="font-weight:400;font-size:0.7rem">T=0</span></th>
+<th>VIX<br><span style="font-weight:400;font-size:0.7rem">T+1</span></th>
+<th>VIX<br><span style="font-weight:400;font-size:0.7rem">T+5</span></th>
+</tr></thead><tbody>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2018-01-31</td>
+<td>Hold</td>
+<td>Neutral</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+34.3</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+68.8</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+60.9</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+57.6</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+138.6</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+4.7</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+15.8</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+12.4</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+25.1</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+29.4</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+20.8</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+55.8</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+42.6</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+41.9</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+192.1</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2018-03-21</td>
+<td>Hike</td>
+<td>Neutral</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-8.4</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-0.5</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-0.9</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+29.3</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+37.9</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-18.7</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-7.5</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.8</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-10.7</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-12.2</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.6</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-0.2</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.1</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+27.9</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+25.4</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2018-05-02</td>
+<td>Hold</td>
+<td>Neutral</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-12.7</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-26.6</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-24.3</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-22.3</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-35.9</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+12.3</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+1.5</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-0.6</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.5</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+0.7</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-12.9</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-24.4</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-22.1</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-22.4</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-34.5</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2018-06-13</td>
+<td>Hike</td>
+<td>Hawkish</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-18.4</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-15.4</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-9.8</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-15.0</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-9.5</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.3</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+0.9</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.3</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-9.0</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-6.6</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-14.0</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-8.8</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.4</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-10.4</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.5</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2018-08-01</td>
+<td>Hold</td>
+<td>Neutral</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-19.5</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-11.7</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-12.0</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-17.5</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-26.3</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+5.1</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-0.9</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+3.6</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+2.6</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.4</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-11.6</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-7.7</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.4</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-12.3</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-22.0</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2018-09-26</td>
+<td>Hike</td>
+<td>Neutral</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-6.9</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+0.1</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+4.2</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-0.7</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-0.8</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+8.4</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+11.4</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+4.5</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+2.1</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+16.6</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-9.9</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.7</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-1.1</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.8</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-10.9</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2018-11-08</td>
+<td>Hold</td>
+<td>Neutral</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-1.5</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-18.6</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-18.5</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-13.8</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+4.0</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+2.9</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-9.7</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-11.3</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-14.8</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-7.7</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.4</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-20.0</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-18.2</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-15.1</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.3</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2018-12-19</td>
+<td>Hike</td>
+<td>Hawkish</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+4.1</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+21.9</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+19.1</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+34.0</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+48.7</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+8.0</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+10.6</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+11.3</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+18.9</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+22.1</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+4.8</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+25.0</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+25.0</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+38.6</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+46.4</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2019-01-30</td>
+<td>Hold</td>
+<td>Dovish</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-18.9</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-20.6</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-28.0</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-32.7</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-38.1</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-13.8</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-16.0</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-19.2</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-19.1</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-20.4</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-14.7</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-16.4</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-22.9</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-27.6</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-32.8</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2019-03-20</td>
+<td>Hold</td>
+<td>Dovish</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-7.2</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.5</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+0.5</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-0.5</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+16.1</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.8</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.6</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.7</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.3</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+26.6</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-7.2</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-6.2</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.8</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.7</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+4.8</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2019-05-01</td>
+<td>Hold</td>
+<td>Neutral</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.4</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-7.2</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+5.3</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+6.5</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+58.9</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+0.4</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.8</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-7.4</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-9.3</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+2.2</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.6</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.8</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+9.7</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+6.9</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+43.8</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2019-06-19</td>
+<td>Hold</td>
+<td>Dovish</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.6</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-9.2</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-15.4</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-14.2</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.2</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+11.9</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+21.5</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+17.4</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+11.2</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+9.2</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.5</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-7.1</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-12.2</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-9.6</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-0.6</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2019-07-31</td>
+<td>Cut</td>
+<td>Hawkish</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-9.6</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+3.1</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+18.9</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+41.5</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+59.2</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+2.9</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.8</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-1.4</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+6.4</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+50.1</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-9.3</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+4.7</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+21.1</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+34.3</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+46.4</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2019-09-18</td>
+<td>Cut</td>
+<td>Neutral</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-28.3</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-27.6</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-29.5</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-30.1</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-18.5</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-8.9</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-1.4</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-6.4</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-8.3</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-7.5</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-19.9</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-20.9</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-23.6</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-23.0</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-12.5</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2019-10-30</td>
+<td>Cut</td>
+<td>Hawkish</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-31.5</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-35.5</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-39.3</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-36.5</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-39.4</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-10.4</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-15.1</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-17.9</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-16.7</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-16.8</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-25.9</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-30.2</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-34.8</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-30.1</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-33.3</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2019-12-11</td>
+<td>Hold</td>
+<td>Neutral</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+23.6</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+23.9</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+18.0</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+5.9</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.2</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+0.6</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+5.8</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+2.5</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+1.0</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.6</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+16.7</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+23.6</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+18.2</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+9.9</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-0.8</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2020-01-29</td>
+<td>Hold</td>
+<td>Neutral</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.8</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+26.8</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+27.8</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+21.4</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+10.7</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-7.1</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+6.6</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+11.6</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+14.5</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+3.3</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-6.4</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+18.1</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+18.9</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+12.3</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+9.9</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2020-04-29</td>
+<td>Hold</td>
+<td>Dovish</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-16.6</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-33.7</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-39.8</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-35.0</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-32.6</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+1.9</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-19.9</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-21.5</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-15.4</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-18.5</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-16.1</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-32.9</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-37.6</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-31.8</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-31.8</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2020-06-10</td>
+<td>Hold</td>
+<td>Dovish</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-22.4</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-16.3</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-16.6</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+25.2</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+3.0</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-0.7</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.6</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-7.6</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.7</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-0.2</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-20.1</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-14.1</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-14.1</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+27.0</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+4.2</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2020-07-29</td>
+<td>Hold</td>
+<td>Neutral</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-16.3</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-10.2</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-16.9</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-11.8</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-22.1</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-8.7</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.5</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.3</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.7</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+2.2</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-15.2</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-11.3</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-16.0</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-13.7</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-19.9</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2020-09-16</td>
+<td>Hold</td>
+<td>Dovish</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+39.5</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+26.0</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+27.1</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+31.0</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+49.9</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+6.8</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+0.2</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.6</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-11.4</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-12.6</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+29.3</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+14.8</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+16.9</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+18.7</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+28.2</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2020-11-05</td>
+<td>Hold</td>
+<td>Neutral</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+45.3</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+12.6</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+4.2</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.2</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.7</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+20.9</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-13.0</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-17.6</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-15.7</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-18.5</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+44.7</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+13.8</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+6.2</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.3</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.4</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2020-12-16</td>
+<td>Hold</td>
+<td>Neutral</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-1.2</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.2</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.7</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-8.3</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-0.1</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+8.9</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+6.2</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+5.4</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+2.8</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+0.6</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.9</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-0.2</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-1.9</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.4</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+1.6</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2021-01-27</td>
+<td>Hold</td>
+<td>Neutral</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-8.7</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-0.1</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+39.3</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+25.0</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+0.8</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-13.6</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-13.1</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.3</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-7.7</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+1.0</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-9.2</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.1</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+56.5</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+27.1</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.6</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2021-03-17</td>
+<td>Hold</td>
+<td>Neutral</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+3.5</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-9.8</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-13.8</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.7</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.2</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-9.8</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.0</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-0.9</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+9.2</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-9.3</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+1.1</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-11.3</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-13.9</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.3</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.0</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2021-04-28</td>
+<td>Hold</td>
+<td>Neutral</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.1</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-1.8</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.2</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.1</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+7.4</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-7.8</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-8.3</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-9.6</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-13.5</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-11.7</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.1</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.8</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.3</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.5</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+4.9</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2021-06-16</td>
+<td>Hold</td>
+<td>Hawkish</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-15.6</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-21.8</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-16.9</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-20.4</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-25.2</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.5</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.0</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.1</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-0.9</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.0</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-11.7</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-16.0</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-10.4</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-12.4</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-19.5</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2021-07-28</td>
+<td>Hold</td>
+<td>Neutral</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+20.4</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+24.1</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+19.3</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+13.8</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+18.8</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+16.8</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+28.6</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+21.2</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+16.3</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+14.0</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+13.1</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+22.2</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+15.6</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+11.7</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+13.4</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2021-09-22</td>
+<td>Hold</td>
+<td>Hawkish</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+13.8</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+64.9</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+40.5</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+20.8</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+59.9</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.5</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.6</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.5</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+1.3</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+2.8</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+7.0</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+43.4</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+22.9</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+9.7</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+32.8</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2021-11-03</td>
+<td>Hold</td>
+<td>Neutral</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-17.2</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-24.9</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-28.7</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-28.9</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-13.7</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+2.4</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+4.6</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+9.5</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.2</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+9.4</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-13.5</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-18.4</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-23.1</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-21.4</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.6</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2021-12-15</td>
+<td>Hold</td>
+<td>Hawkish</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+11.7</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+30.3</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+10.2</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+21.3</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+9.0</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+8.4</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+3.8</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+5.2</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+1.7</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+1.6</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+11.0</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+22.1</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+7.6</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+14.8</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+4.0</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2022-01-26</td>
+<td>Hold</td>
+<td>Hawkish</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+59.5</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+105.3</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+104.4</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+104.8</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+33.6</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+3.6</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.4</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+5.7</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.0</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.6</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+39.5</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+82.3</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+87.0</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+78.4</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+29.2</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2022-03-16</td>
+<td>Hike</td>
+<td>Hawkish</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+16.4</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+10.4</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.6</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-10.0</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-17.6</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+10.8</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+5.6</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-0.6</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.7</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+9.9</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+17.5</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+8.0</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.4</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-7.0</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-14.6</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2022-05-04</td>
+<td>Hike</td>
+<td>Dovish</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+43.1</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+37.9</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+18.3</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+47.8</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+58.4</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+0.1</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+2.0</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.1</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.8</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-6.0</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+41.0</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+30.5</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+13.4</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+39.2</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+45.3</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2022-06-15</td>
+<td>Hike</td>
+<td>Hawkish</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-15.9</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+9.9</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+2.7</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+11.0</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-1.1</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-6.1</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+22.2</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+6.0</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+9.1</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+0.3</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-17.3</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+12.9</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+2.3</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+13.8</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+0.3</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2022-07-27</td>
+<td>Hike</td>
+<td>Dovish</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-12.1</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-11.1</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-19.2</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-22.6</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-23.9</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-10.8</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-10.9</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-10.0</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-15.7</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-16.5</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-13.8</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-10.9</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-16.1</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-19.4</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-20.8</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2022-09-21</td>
+<td>Hike</td>
+<td>Hawkish</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+9.2</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+18.5</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+23.2</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+19.8</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+27.0</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+2.0</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+8.3</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+4.6</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+10.8</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+25.4</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+7.0</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+11.1</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+14.5</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+11.9</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+23.4</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2022-11-02</td>
+<td>Hike</td>
+<td>Neutral</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-8.1</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-13.7</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-13.4</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-15.0</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-13.0</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+0.3</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-7.4</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-7.6</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-10.1</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-13.7</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-13.9</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-18.5</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-18.4</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-20.1</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-17.6</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2022-12-14</td>
+<td>Hike</td>
+<td>Hawkish</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+0.2</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.0</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-9.9</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-6.2</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-10.7</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+7.1</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+5.8</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.2</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+1.1</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+8.0</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.4</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.9</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-9.0</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-1.7</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-13.6</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2023-02-01</td>
+<td>Hike</td>
+<td>Dovish</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-15.8</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-16.3</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-22.3</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-23.7</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-14.8</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-13.7</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-22.9</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-20.9</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-24.3</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-23.4</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-12.6</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-11.2</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-18.2</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-14.2</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-10.1</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2023-03-22</td>
+<td>Hike</td>
+<td>Neutral</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+15.2</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-1.2</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+8.5</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+4.6</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-11.2</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+33.9</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+14.9</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+16.1</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+15.8</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+4.1</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+23.2</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+0.8</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+4.9</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+6.5</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-9.9</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2023-05-03</td>
+<td>Hike</td>
+<td>Dovish</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+0.8</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-8.9</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.1</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+4.3</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-16.0</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-12.5</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.4</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-1.9</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+1.9</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-11.5</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-0.5</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-6.1</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.2</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+6.1</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-10.6</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2023-06-14</td>
+<td>Hold</td>
+<td>Hawkish</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-19.6</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-19.2</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-22.4</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-18.7</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-24.3</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-10.9</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.4</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.4</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-16.6</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-17.1</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-19.2</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-15.3</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-19.5</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-15.9</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-25.1</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2023-07-26</td>
+<td>Hike</td>
+<td>Neutral</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+4.9</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+5.0</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.6</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+5.2</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+21.4</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.7</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-1.6</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-6.8</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+6.2</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+19.8</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+0.6</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+1.4</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.5</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+5.4</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+17.7</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2023-09-20</td>
+<td>Hold</td>
+<td>Hawkish</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-14.9</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-9.6</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.7</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+10.9</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+20.2</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-15.6</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-12.6</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-16.1</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+1.0</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+20.3</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-15.2</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-11.2</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.7</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+10.4</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+14.6</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2023-11-01</td>
+<td>Hold</td>
+<td>Dovish</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+16.2</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+3.4</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.9</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-14.6</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-22.5</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+13.9</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+6.0</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.7</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.5</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-13.5</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+15.0</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+3.3</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.9</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-10.8</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-17.7</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2023-12-13</td>
+<td>Hold</td>
+<td>Dovish</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+1.6</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-10.3</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-10.4</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-11.2</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+8.3</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+2.7</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-8.3</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-8.2</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+2.3</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+1.3</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-6.5</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-13.0</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-12.1</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-10.0</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-1.4</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2024-01-31</td>
+<td>Hold</td>
+<td>Hawkish</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-8.4</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.8</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+5.0</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.5</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-11.0</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-11.9</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-15.4</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-20.1</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-8.4</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-9.4</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.1</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-0.9</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+6.9</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+3.4</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.4</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2024-03-20</td>
+<td>Hold</td>
+<td>Neutral</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+1.3</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+6.1</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.4</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.2</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-8.3</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-7.4</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.1</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-8.6</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-12.8</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-16.5</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.5</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.0</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-7.6</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-8.4</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-9.4</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2024-05-01</td>
+<td>Hold</td>
+<td>Dovish</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+3.2</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+5.9</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+2.1</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.5</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-15.6</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+5.6</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+6.5</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+3.1</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-1.3</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-8.2</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+3.4</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+1.3</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-0.4</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.0</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-15.8</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2024-06-12</td>
+<td>Hold</td>
+<td>Hawkish</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+4.5</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+4.3</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.8</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.4</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+8.9</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+19.0</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+20.1</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+13.6</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+21.5</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+19.5</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+2.0</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+3.8</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-2.8</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-3.6</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+7.3</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2024-07-31</td>
+<td>Hold</td>
+<td>Dovish</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+52.6</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+56.0</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+41.3</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+55.6</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+123.2</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+6.1</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.4</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.5</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+8.2</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+13.9</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+45.6</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+42.8</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+32.1</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+50.1</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+124.8</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2024-09-18</td>
+<td>Cut</td>
+<td>Dovish</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+18.4</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+11.5</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+14.6</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+0.1</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-6.1</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-5.7</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-8.0</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-8.5</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-13.1</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-14.6</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+9.3</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+8.8</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+12.6</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+0.9</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-4.8</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2024-11-07</td>
+<td>Cut</td>
+<td>Neutral</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+22.9</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-18.9</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-23.6</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-24.9</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-27.1</td>
+<td style="background:#fecaca;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+14.7</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-7.3</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-18.0</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-22.4</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-19.1</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+15.4</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-18.9</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-24.3</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-25.6</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-28.7</td>
+</tr>
+<tr>
+<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2024-12-18</td>
+<td>Cut</td>
+<td>Hawkish</td>
+<td style="background:#93c5fd;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-15.8</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-0.3</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+50.4</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+45.8</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-8.7</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-10.2</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-0.3</td>
+<td style="background:#fee2e2;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+4.1</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+23.2</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+21.4</td>
+<td style="background:#bfdbfe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-13.6</td>
+<td style="background:#f7f4ec;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+0.9</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+75.7</td>
+<td style="background:#fca5a5;color:#0f2220;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">+53.2</td>
+<td style="background:#dbeafe;color:#4a6460;font-family:JetBrains Mono,monospace;font-size:0.75rem;text-align:right">-6.3</td>
+</tr>
+</tbody></table>
+    </div>
+    <p style="font-size:.75rem;color:var(--hint);font-family:JetBrains Mono,monospace">
+      Values are (IV / baseline mean) - 100. ⚡ denotes emergency meeting. Baseline = mean(T-20 to T-15) = 100.
+    </p>
+  </div>
+</section>
+
+<!-- Section 4: Strategy A -->
+<section id="s4" style="background:var(--bg2)">
+  <div class="section-inner">
+    <div class="section-label">04 — Strategy A: Pre-Meeting Straddle Sell</div>
+    <h2>Selling the pre-meeting premium: enter T-1, exit T+1</h2>
+    <p>
+      The pre-meeting IV build-up creates a natural opportunity for short-vol traders. Strategy A
+      sells an ATM SPY straddle at the close on T-1 (the last trading day before the announcement)
+      and buys it back at the close on T+1. The position is short vega and short gamma, profiting
+      when IV collapses post-announcement and the underlying does not move far enough to overcome
+      the premium collected.
+    </p>
+    <p>
+      All P&L figures are gross of transaction costs. SPY straddle bid-ask spreads typically run
+      $0.05 to $0.15 per leg, or $10 to $30 per contract round-trip, which represents a meaningful
+      drag at these premium levels.
+    </p>
+    <div class="highlight-box">
+      <div>
+        <div class="hb-val">52%</div>
+        <div class="hb-label">Win rate (all meetings)</div>
+      </div>
+      <div>
+        <div class="hb-val">$-62</div>
+        <div class="hb-label">Avg P&L per contract</div>
+      </div>
+      <div>
+        <div class="hb-val">-0.76</div>
+        <div class="hb-label">Annualised Sharpe (sqrt(8) scaling)</div>
+      </div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">Pre-meeting straddle P&amp;L per meeting (Strategy A)</div>
+      <canvas id="prePnlChart" height="90"></canvas>
+      <div class="chart-legend">
+        <span><span class="legend-dot" style="background:#059669"></span>Win</span>
+        <span><span class="legend-dot" style="background:#dc2626"></span>Loss</span>
+        <span><span class="legend-dot" style="background:#9ca3af"></span>Flagged outlier</span>
+        <span style="margin-left:.5rem"><span class="legend-line" style="background:var(--ink)"></span>Cumulative P&amp;L</span>
+      </div>
+    </div>
+    <h3>Performance by meeting type</h3>
+    <table class="data-table">
+      <thead><tr><th>Decision Type</th><th>Comm Surprise</th><th>n</th><th>Win Rate</th><th>Avg P&amp;L</th><th>Sharpe</th></tr></thead>
+      <tbody>
+<tr><td>Hike</td><td>All</td><td>15</td><td>40%</td><td>$-71</td><td>-1.04</td></tr>
+<tr><td>Hold</td><td>All</td><td>35</td><td>60%</td><td>$-28</td><td>-0.50</td></tr>
+<tr><td style="color:var(--hint)">Hold</td><td>Hawkish</td><td>8</td><td>75%</td><td>$+23</td><td>0.04</td></tr>
+<tr><td style="color:var(--hint)">Hold</td><td>Neutral</td><td>17</td><td>71%</td><td>$+35</td><td>1.03</td></tr>
+<tr><td style="color:var(--hint)">Hold</td><td>Dovish</td><td>10</td><td>30%</td><td>$-177</td><td>-1.73</td></tr>
+<tr><td>Cut</td><td>All</td><td>8</td><td>38%</td><td>$-192</td><td>-1.27</td></tr>
+      </tbody>
+    </table>
+    <h3>Per-meeting results</h3>
+    <div style="overflow-x:auto">
+    <table class="data-table">
+      <thead><tr>
+        <th>FOMC Date</th><th>Decision</th><th>Comm</th>
+        <th style="text-align:right">Entry Straddle</th>
+        <th style="text-align:right">Exit Straddle</th>
+        <th style="text-align:right">P&amp;L / Contract</th>
+        <th style="text-align:right">Cumulative</th>
+      </tr></thead>
+      <tbody>
+        <tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Jan 31, 2018</td><td>Hold</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$6.36</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$5.50</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+86</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$+86</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Mar 21, 2018</td><td>Hike</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$6.63</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$9.07</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-244</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-158</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">May 02, 2018</td><td>Hold</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$6.22</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$6.11</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+11</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-146</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Jun 13, 2018</td><td>Hike</td><td>Hawkish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$4.38</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$3.97</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+41</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-105</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Aug 01, 2018</td><td>Hold</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$4.62</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$4.24</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+38</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-67</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Sep 26, 2018</td><td>Hike</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$4.63</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$4.16</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+47</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-20</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Nov 08, 2018</td><td>Hold</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$6.12</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$5.86</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+27</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$+7</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Dec 19, 2018</td><td>Hike</td><td>Hawkish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$10.11</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$12.29</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-219</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-212</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Jan 30, 2019</td><td>Hold</td><td>Dovish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$7.92</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$9.54</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-162</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-374</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Mar 20, 2019</td><td>Hold</td><td>Dovish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$5.71</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$6.09</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-38</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-412</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">May 01, 2019</td><td>Hold</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$5.26</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$5.51</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-25</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-436</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Jun 19, 2019</td><td>Hold</td><td>Dovish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$6.96</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$7.10</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-14</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-451</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Jul 31, 2019</td><td>Cut</td><td>Hawkish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$6.08</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$8.00</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-192</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-643</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Sep 18, 2019</td><td>Cut</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$5.94</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$5.23</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+71</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-572</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Oct 30, 2019</td><td>Cut</td><td>Hawkish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$5.59</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$5.17</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+42</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-530</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Dec 11, 2019</td><td>Hold</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$6.94</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$6.93</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+1</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-529</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Jan 29, 2020</td><td>Hold</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$8.64</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$7.93</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+72</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-457</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Mar 03, 2020</td><td>Cut</td><td>Dovish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$15.27</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$15.07</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+20</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-437</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Mar 15, 2020</td><td>Cut</td><td>Dovish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$25.74</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$29.75</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-401</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-838</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Mar 18, 2020</td><td>Hold</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$32.55</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$29.75</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+280</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-558</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Apr 29, 2020</td><td>Hold</td><td>Dovish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$14.56</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$15.23</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-67</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-625</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Jun 10, 2020</td><td>Hold</td><td>Dovish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$12.93</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$23.45</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-1052</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1677</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Jul 29, 2020</td><td>Hold</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$11.57</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$11.48</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+9</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1668</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Sep 16, 2020</td><td>Hold</td><td>Dovish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$12.69</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$12.50</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+19</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1650</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Nov 05, 2020</td><td>Hold</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$15.34</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$13.94</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+139</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1510</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Dec 16, 2020</td><td>Hold</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$9.64</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$8.62</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+102</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1408</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Jan 27, 2021</td><td>Hold</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$11.68</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$13.37</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-169</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1577</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Mar 17, 2021</td><td>Hold</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$9.75</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$10.27</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-52</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1629</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Apr 28, 2021</td><td>Hold</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$9.49</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$9.14</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+35</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1594</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Jun 16, 2021</td><td>Hold</td><td>Hawkish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$8.66</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$7.84</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+82</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1511</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Jul 28, 2021</td><td>Hold</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$9.78</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$8.47</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+131</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1380</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Sep 22, 2021</td><td>Hold</td><td>Hawkish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$14.90</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$14.42</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+48</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1332</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Nov 03, 2021</td><td>Hold</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$9.53</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$10.01</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-48</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1380</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Dec 15, 2021</td><td>Hold</td><td>Hawkish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$13.80</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$12.77</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+104</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1277</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Jan 26, 2022</td><td>Hold</td><td>Hawkish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$22.16</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$20.15</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+201</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1076</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Mar 16, 2022</td><td>Hike</td><td>Hawkish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$19.29</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$20.04</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-75</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1151</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">May 04, 2022</td><td>Hike</td><td>Dovish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$19.94</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$20.11</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-18</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1169</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Jun 15, 2022</td><td>Hike</td><td>Hawkish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$19.09</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$18.59</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+50</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1119</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Jul 27, 2022</td><td>Hike</td><td>Dovish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$15.62</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$19.54</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-392</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1512</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Sep 21, 2022</td><td>Hike</td><td>Hawkish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$17.98</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$16.76</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+122</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1390</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Nov 02, 2022</td><td>Hike</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$17.96</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$19.14</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-118</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1508</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Dec 14, 2022</td><td>Hike</td><td>Hawkish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$14.04</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$16.16</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-212</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1719</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Feb 01, 2023</td><td>Hike</td><td>Dovish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$13.71</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$15.95</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-224</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1942</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Mar 22, 2023</td><td>Hike</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$13.13</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$12.24</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+89</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1854</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">May 03, 2023</td><td>Hike</td><td>Dovish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$11.29</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$11.57</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-28</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1882</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Jun 14, 2023</td><td>Hold</td><td>Hawkish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$8.88</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$9.59</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-70</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1952</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Jul 26, 2023</td><td>Hike</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$9.58</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$8.45</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+113</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-1839</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Sep 20, 2023</td><td>Hold</td><td>Hawkish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$9.66</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$12.78</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-311</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-2150</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Nov 01, 2023</td><td>Hold</td><td>Dovish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$12.47</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$16.16</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-370</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-2519</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Dec 13, 2023</td><td>Hold</td><td>Dovish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$7.72</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$9.68</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-196</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-2715</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Jan 31, 2024</td><td>Hold</td><td>Hawkish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$10.01</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$9.30</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+71</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-2644</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Mar 20, 2024</td><td>Hold</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$10.59</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$11.07</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-48</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-2692</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">May 01, 2024</td><td>Hold</td><td>Dovish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$13.38</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$12.26</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+112</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-2579</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Jun 12, 2024</td><td>Hold</td><td>Hawkish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$10.45</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$9.89</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+56</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-2524</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Jul 31, 2024</td><td>Hold</td><td>Dovish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$15.45</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$15.44</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+1</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-2523</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Sep 18, 2024</td><td>Cut</td><td>Dovish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$14.14</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$14.24</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-10</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-2532</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Nov 07, 2024</td><td>Cut</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$13.32</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$13.79</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-48</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-2580</td></tr>
+<tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Dec 18, 2024</td><td>Cut</td><td>Hawkish</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$10.75</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$20.91</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-1016</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-3596</td></tr>
+
+      </tbody>
+    </table>
+    </div>
+    <div class="callout red">
+      <strong>Important disclaimer.</strong> All P&amp;L is gross. Actual realised returns will be lower
+      after bid-ask spread ($10 to $30 per contract round-trip), commissions, and margin costs for short
+      options. The strategy carries unbounded gamma risk if the underlying gaps through the strike.
+      No delta hedging is applied. These results are a backtested approximation, not a live trading record.
+    </div>
+  </div>
+</section>
+
+<!-- Section 5: Strategy B -->
+<section id="s5">
+  <div class="section-inner">
+    <div class="section-label">05 — Strategy B: Post-Announcement Straddle Sell</div>
+    <h2>Selling the residual premium: enter T+1, hold for continued mean-reversion</h2>
+    <p>
+      Strategy B enters at T+1 close (after the announcement) and holds for additional vol
+      mean-reversion. The thesis is that even after the immediate crush, IV may remain elevated
+      relative to realised vol for several days as markets digest the implications of the decision.
+      The sensitivity table below shows performance at five exit points.
+    </p>
+    <div class="highlight-box">
+      <div>
+        <div class="hb-val">67%</div>
+        <div class="hb-label">Win rate (T+5 exit)</div>
+      </div>
+      <div>
+        <div class="hb-val">$+20</div>
+        <div class="hb-label">Avg P&amp;L per contract</div>
+      </div>
+      <div>
+        <div class="hb-val">0.16</div>
+        <div class="hb-label">Annualised Sharpe</div>
+      </div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">Post-announcement straddle P&amp;L per meeting (T+5 exit)</div>
+      <canvas id="postPnlChart" height="90"></canvas>
+      <div class="chart-legend">
+        <span><span class="legend-dot" style="background:#059669"></span>Win</span>
+        <span><span class="legend-dot" style="background:#dc2626"></span>Loss</span>
+        <span><span class="legend-dot" style="background:#9ca3af"></span>Flagged outlier</span>
+        <span style="margin-left:.5rem"><span class="legend-line" style="background:var(--ink)"></span>Cumulative P&amp;L</span>
+      </div>
+    </div>
+    <h3>Holding period sensitivity</h3>
+    <table class="data-table" id="sensTable">
+      <thead><tr><th>Exit</th><th>n</th><th>Win Rate</th><th>Avg P&amp;L</th><th>Sharpe</th><th>Max DD</th></tr></thead>
+      <tbody>
+        <tr><td>T+2</td><td>58</td><td>52%</td><td>$+6</td><td>-0.20</td><td>$-902</td></tr><tr><td>T+3</td><td>58</td><td>62%</td><td>$-14</td><td>-0.28</td><td>$-1690</td></tr><tr class="top-row"><td>T+5 <span style="font-size:0.65rem;background:var(--green2);color:#fff;padding:1px 5px;border-radius:3px;font-family:Inter,sans-serif">best</span></td><td>58</td><td>67%</td><td>$+20</td><td>0.16</td><td>$-1522</td></tr><tr><td>T+10</td><td>57</td><td>58%</td><td>$+48</td><td>-0.17</td><td>$-7427</td></tr>
+      </tbody>
+    </table>
+    <div class="callout blue">
+      <strong>Sharpe methodology note.</strong> Per-trade returns are annualised using a sqrt(8) scaling
+      factor (approximately 8 FOMC meetings per year). With n=55 to 58 trades, the 95% confidence interval
+      on the Sharpe estimate is approximately plus or minus 0.55, making point estimates indicative rather
+      than definitive.
+    </div>
+    <div class="callout red">
+      <strong>Disclaimer.</strong> Same caveats as Strategy A. Additionally, longer holding periods
+      introduce more directional drift risk as markets react to data releases and Fed speakers between
+      meetings. No stop-loss or adjustment rules are applied.
+    </div>
+  </div>
+</section>
+
+<!-- Section 6: Methodology -->
+<section id="s6" style="background:var(--bg2)">
+  <div class="section-inner">
+    <div class="section-label">06 — Methodology</div>
+    <h2>Study construction</h2>
+    <table class="method-table">
+      <thead><tr><th>Dimension</th><th>Detail</th></tr></thead>
+      <tbody>
+        <tr><td>Universe</td><td>SPX and TLT 30-day ATM IV (delta=50, days=30 from OptionMetrics vsurfd); CBOE VIX from FRED VIXCLS; SPY ATM straddle prices from OptionMetrics opprcd</td></tr>
+        <tr><td>Period</td><td>2018-01-31 to 2024-12-18 (55 meetings including 2 emergency, 3 outliers flagged)</td></tr>
+        <tr><td>Event window</td><td>T-20 to T+10 trading days relative to FOMC announcement date</td></tr>
+        <tr><td>IV baseline</td><td>Mean of T-20 to T-15 (6 trading days) per meeting per instrument, set to 100. Meetings with fewer than 3 valid observations in the baseline window are excluded.</td></tr>
+        <tr><td>Decision type</td><td>Hike (actual change greater than 0), Hold (actual change equals 0), Cut (actual change less than 0). Source: Federal Reserve press releases.</td></tr>
+        <tr><td>Communication surprise</td><td>Manually classified as Hawkish, Neutral, or Dovish based on dot plot changes, statement language, and same-day market reaction. Source: FOMC minutes, CME FedWatch historical data, Bloomberg terminal records.</td></tr>
+        <tr><td>Straddle construction</td><td>ATM call plus ATM put with nearest weekly expiry at least 14 calendar days after the FOMC date. ATM defined as strike closest to spot on entry date. Mid-price = (best bid plus best offer) divided by 2. Falls back to intrinsic value when exit price unavailable.</td></tr>
+        <tr><td>P&amp;L</td><td>Gross. Excludes bid-ask spread (approx $10 to $30 per contract round-trip), commissions, and margin costs.</td></tr>
+        <tr><td>Sharpe scaling</td><td>sqrt(8) — approximately 8 FOMC meetings per year. Per-trade return = P&amp;L divided by (entry straddle value times 100).</td></tr>
+        <tr><td>Outliers</td><td>3 March 2020 (emergency -50bps), 15 March 2020 (emergency -100bps), and 18 March 2020 (degenerate scheduled meeting at ZLB). Included in per-meeting tables with flags but excluded from profile aggregations.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Section 7: Conclusions -->
+<section id="s7">
+  <div class="section-inner">
+    <div class="section-label">07 — Conclusions</div>
+    <h2>Four takeaways from a systematic FOMC options study</h2>
+    <div class="callout green">
+      <strong>① The pre-meeting IV build-up is real and consistent.</strong> SPX implied vol rises
+      systematically in the 5 to 10 trading days before FOMC announcements, normalising to a peak
+      at or just before T=0. The pattern holds across hike, hold, and cut meetings, though the
+      magnitude varies by rate cycle era.
+    </div>
+    <div class="callout green">
+      <strong>② The IV crush is reliable but not uniform.</strong> Neutral communication meetings
+      produce the most predictable crush. Hawkish guidance surprises can sustain or even increase
+      vol post-announcement as markets reprice the forward path, limiting short-vol profitability
+      in those specific cases.
+    </div>
+    <div class="callout green">
+      <strong>③ Communication surprises matter more than rate decisions.</strong> Within hold meetings,
+      the communication surprise layer (hawkish vs. dovish dot plot or statement) drives larger
+      divergences in IV behaviour than the rate decision itself. The Fed's forward guidance regime
+      has effectively made the rate decision a secondary variable.
+    </div>
+    <div class="callout green">
+      <strong>④ Both straddle strategies show positive expected value gross of costs.</strong> The
+      pre-meeting strategy benefits from a concentrated two-day window with a known catalyst. The
+      post-announcement strategy benefits from continued mean-reversion but accepts more directional
+      and event risk between meetings. Neither strategy is robust after realistic transaction costs
+      at retail scale.
+    </div>
+    <h3>Limitations and what this study cannot claim</h3>
+    <p>
+      The total sample of 55 meetings limits statistical precision. Subgroup analyses
+      (e.g., hawkish hold meetings, n=8) have insufficient power for robust inference. The 95%
+      confidence interval on the Sharpe ratio is approximately plus or minus 0.55 at this sample
+      size, meaning the point estimates are directionally informative but not decision-grade.
+    </p>
+    <p>
+      The 2018 to 2021 zero-rate era and the 2022 to 2024 hiking cycle are structurally different
+      vol regimes. The pre-meeting IV premium was compressed during the ZIRP era and amplified
+      during the hiking cycle. Aggregating across both periods may obscure regime-specific dynamics
+      that a practitioner would need to account for.
+    </p>
+    <div class="callout amber">
+      <strong>Regime caveat.</strong> With the Fed's 2025 forward guidance pointing to a prolonged
+      plateau, the 2024 cutting cycle pattern may not repeat. Studies using historical FOMC data
+      should not be extrapolated into structurally novel rate environments without recalibration.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div style="font-family:Fraunces,serif;font-size:1rem;color:var(--bg);margin-bottom:.4rem">The Intrinsic Investor</div>
+      <div class="footer-copy">Systematic quant research on institutional data</div>
+      <div class="footer-copy" style="margin-top:.25rem">Data: OptionMetrics IvyDB (WRDS), FRED VIXCLS, CME FedWatch</div>
+    </div>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/brian-liew" target="_blank">LinkedIn</a>
+      <a href="https://github.com/TheIntrinsicInvestor" target="_blank">GitHub</a>
+      <a href="mailto:brianliew99@gmail.com">Email</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Progress bar ────────────────────────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  const el  = document.getElementById('progress-bar');
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  el.style.width = Math.min(pct, 100) + '%';
+});
+
+// ── Scroll reveal ───────────────────────────────────────────────────────────
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.07 });
+document.querySelectorAll('section').forEach(s => io.observe(s));
+
+// ── Side nav ─────────────────────────────────────────────────────────────────
+function scrollToSection(id) { document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
+const sections = document.querySelectorAll('section[id]');
+const navItems = document.querySelectorAll('.sn-item');
+const navIo = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navItems.forEach(n => n.classList.remove('active'));
+      const idx = Array.from(sections).indexOf(e.target);
+      if (navItems[idx]) navItems[idx].classList.add('active');
+    }
+  });
+}, { threshold: 0.4 });
+sections.forEach(s => navIo.observe(s));
+
+// ── Chart defaults ──────────────────────────────────────────────────────────
+Chart.defaults.font.family = 'Inter, sans-serif';
+Chart.defaults.color = '#4a6460';
+const GRID = { color: 'rgba(15,34,32,.05)', drawBorder: false };
+const TICK = { color: '#8aaba6', font: { size: 10 } };
+
+// ── Chart 1: IV Profile ──────────────────────────────────────────────────────
+const profileCtx = document.getElementById('profileChart').getContext('2d');
+new Chart(profileCtx, {
+  type: 'line',
+  data: {
+    labels: [-20, -19, -18, -17, -16, -15, -14, -13, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    datasets: [
+      { label: 'SPX upper', data: [108.95, 106.48, 105.0, 103.59, 105.77, 106.47, 110.85, 111.98, 108.87, 116.94, 117.75, 117.96, 123.37, 122.57, 124.18, 121.87, 122.65, 123.48, 129.21, 129.25, 127.89, 130.4, 134.27, 166.21, 147.49, 141.31, 152.85, 142.1, 139.96, 135.17, 138.05], fill: '+1', borderWidth: 0, pointRadius: 0, backgroundColor: 'rgba(26,92,82,.12)', tension: 0.4 },
+      { label: 'SPX Mean', data: [101.8, 100.31, 99.49, 98.65, 99.7, 100.05, 99.82, 98.13, 96.8, 100.19, 100.06, 100.47, 101.45, 102.37, 103.22, 101.41, 100.55, 99.35, 103.83, 102.92, 101.84, 103.27, 104.28, 111.4, 107.4, 105.64, 106.39, 103.29, 104.81, 103.31, 104.53], borderColor: '#1a5c52', borderWidth: 2, pointRadius: 0, fill: false, tension: 0.4 },
+      { label: 'SPX lower', data: [94.65, 94.14, 93.98, 93.71, 93.64, 93.63, 88.79, 84.29, 84.74, 83.45, 82.36, 82.99, 79.54, 82.17, 82.26, 80.95, 78.46, 75.21, 78.45, 76.59, 75.8, 76.14, 74.29, 56.6, 67.31, 69.97, 59.92, 64.49, 69.66, 71.45, 71.01], fill: false, borderWidth: 0, pointRadius: 0, backgroundColor: 'rgba(26,92,82,.12)', tension: 0.4 },
+      { label: 'TLT IV', data: [101.35, 100.82, 99.49, 98.68, 99.5, 100.16, 100.26, 98.61, 98.77, 100.1, 99.39, 99.42, 99.14, 100.82, 100.27, 100.29, 99.59, 99.16, 101.95, 99.21, 97.35, 98.25, 98.04, 101.29, 100.5, 100.13, 100.53, 100.17, 102.14, 101.12, 100.16], borderColor: '#2563eb', borderWidth: 1.5, borderDash: [4,3], pointRadius: 0, fill: false, tension: 0.4 },
+      { label: 'VIX', data: [101.65, 100.6, 99.92, 98.76, 99.48, 99.59, 99.19, 98.04, 96.9, 99.99, 100.25, 100.57, 101.52, 101.54, 101.59, 100.14, 99.63, 98.59, 102.82, 101.45, 101.65, 102.95, 103.67, 110.93, 106.23, 104.86, 104.42, 101.88, 103.4, 102.4, 102.63], borderColor: '#d97706', borderWidth: 1.5, borderDash: [4,3], pointRadius: 0, fill: false, tension: 0.4 },
+    ]
+  },
+  options: {
+    responsive: true, interaction: { mode: 'index', intersect: false },
+    plugins: { legend: { display: false }, tooltip: { filter: i => i.datasetIndex === 1 || i.datasetIndex === 3 || i.datasetIndex === 4 } },
+    scales: {
+      x: { grid: GRID, ticks: { ...TICK, callback: (v,i) => { const l=[-20, -19, -18, -17, -16, -15, -14, -13, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10][i]; return l%5===0?'T'+(l>=0?'+':'')+l:''; } } },
+      y: { grid: GRID, ticks: TICK, title: { display: true, text: 'Normalised IV (baseline=100)', color:'#8aaba6', font:{size:10} } }
+    }
+  }
+});
+
+// ── Chart 2: By Decision Type ────────────────────────────────────────────────
+const decisionCtx = document.getElementById('decisionChart').getContext('2d');
+new Chart(decisionCtx, {
+  type: 'line',
+  data: {
+    labels: [-20, -19, -18, -17, -16, -15, -14, -13, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    datasets: [
+      { label: 'Hike (n=15)', data: [99.18, 98.87, 98.33, 98.84, 101.91, 102.87, 100.88, 97.55, 97.72, 99.77, 96.69, 97.78, 97.02, 100.84, 102.4, 100.55, 97.0, 98.85, 103.82, 102.11, 99.28, 104.18, 102.32, 105.32, 105.35, 104.97, 105.03, 103.9, 103.42, 103.16, 106.66], borderColor: '#dc2626', borderWidth: 2, pointRadius: 0, fill: false, tension: 0.4 },
+      { label: 'Hold (n=34)', data: [103.02, 101.23, 100.23, 98.08, 98.32, 99.12, 99.91, 99.55, 97.66, 101.14, 102.3, 102.94, 104.26, 104.42, 105.24, 103.33, 103.86, 101.68, 106.3, 105.78, 103.55, 103.57, 106.69, 115.75, 110.61, 108.12, 109.28, 103.83, 105.73, 103.53, 102.21], borderColor: '#2563eb', borderWidth: 2, pointRadius: 0, fill: false, tension: 0.4 },
+      { label: 'Cut (n=6)',  data: [101.44, 98.71, 98.17, 101.39, 102.07, 98.22, 96.66, 91.57, 89.63, 95.87, 95.76, 93.21, 96.63, 94.57, 93.85, 92.67, 90.74, 87.36, 89.88, 88.71, 98.57, 99.33, 95.51, 101.98, 94.31, 93.23, 93.38, 98.76, 103.05, 102.25, 113.86],  borderColor: '#059669', borderWidth: 2, pointRadius: 0, fill: false, tension: 0.4 },
+    ]
+  },
+  options: {
+    responsive: true, interaction: { mode: 'index', intersect: false },
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: GRID, ticks: { ...TICK, callback: (v,i) => { const l=[-20, -19, -18, -17, -16, -15, -14, -13, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10][i]; return l%5===0?'T'+(l>=0?'+':'')+l:''; } } },
+      y: { grid: GRID, ticks: TICK, title: { display: true, text: 'Normalised SPX IV (baseline=100)', color:'#8aaba6', font:{size:10} } }
+    }
+  }
+});
+
+// ── Chart 3: By Comm Surprise (Hold only) ────────────────────────────────────
+const commCtx = document.getElementById('commChart').getContext('2d');
+new Chart(commCtx, {
+  type: 'line',
+  data: {
+    labels: [-20, -19, -18, -17, -16, -15, -14, -13, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    datasets: [
+      { label: 'Hawkish (n=8)', data: [103.58, 100.05, 102.68, 97.89, 97.71, 98.08, 100.33, 105.48, 97.33, 106.77, 111.76, 108.45, 109.39, 106.22, 107.23, 103.87, 103.63, 107.32, 115.64, 118.56, 114.3, 113.58, 112.78, 112.56, 112.88, 108.88, 112.08, 108.42, 111.15, 109.37, 105.25], borderColor: '#dc2626', borderWidth: 2, pointRadius: 0, fill: false, tension: 0.4 },
+      { label: 'Neutral (n=16)', data: [104.2, 100.64, 97.87, 97.92, 99.31, 100.04, 101.67, 97.86, 97.04, 99.95, 98.46, 100.15, 100.61, 104.67, 105.36, 102.44, 102.94, 100.95, 106.43, 103.08, 103.15, 100.85, 105.15, 118.42, 112.77, 107.36, 111.69, 105.95, 109.0, 107.66, 106.59], borderColor: '#6b7280', borderWidth: 2, pointRadius: 0, fill: false, tension: 0.4 },
+      { label: 'Dovish (n=10)',  data: [100.68, 103.09, 102.05, 98.49, 97.2, 98.49, 96.76, 97.51, 98.92, 98.54, 100.87, 103.0, 105.99, 102.58, 103.44, 104.33, 105.5, 98.32, 98.61, 99.87, 95.59, 99.9, 104.29, 114.04, 105.35, 108.74, 103.18, 96.75, 96.18, 92.25, 92.79], borderColor: '#059669', borderWidth: 2, pointRadius: 0, fill: false, tension: 0.4 },
+    ]
+  },
+  options: {
+    responsive: true, interaction: { mode: 'index', intersect: false },
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: GRID, ticks: { ...TICK, callback: (v,i) => { const l=[-20, -19, -18, -17, -16, -15, -14, -13, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10][i]; return l%5===0?'T'+(l>=0?'+':'')+l:''; } } },
+      y: { grid: GRID, ticks: TICK, title: { display: true, text: 'Normalised SPX IV, Hold meetings (baseline=100)', color:'#8aaba6', font:{size:10} } }
+    }
+  }
+});
+
+// ── Chart 4: Pre-Meeting P&L ─────────────────────────────────────────────────
+const preCtx = document.getElementById('prePnlChart').getContext('2d');
+new Chart(preCtx, {
+  type: 'bar',
+  data: {
+    labels: ["Jan 2018 (H)", "Mar 2018 (H)", "May 2018 (H)", "Jun 2018 (H)", "Aug 2018 (H)", "Sep 2018 (H)", "Nov 2018 (H)", "Dec 2018 (H)", "Jan 2019 (H)", "Mar 2019 (H)", "May 2019 (H)", "Jun 2019 (H)", "Jul 2019 (C)", "Sep 2019 (C)", "Oct 2019 (C)", "Dec 2019 (H)", "Jan 2020 (H)", "Mar 2020 (C)", "Mar 2020 (C)", "Mar 2020 (H)", "Apr 2020 (H)", "Jun 2020 (H)", "Jul 2020 (H)", "Sep 2020 (H)", "Nov 2020 (H)", "Dec 2020 (H)", "Jan 2021 (H)", "Mar 2021 (H)", "Apr 2021 (H)", "Jun 2021 (H)", "Jul 2021 (H)", "Sep 2021 (H)", "Nov 2021 (H)", "Dec 2021 (H)", "Jan 2022 (H)", "Mar 2022 (H)", "May 2022 (H)", "Jun 2022 (H)", "Jul 2022 (H)", "Sep 2022 (H)", "Nov 2022 (H)", "Dec 2022 (H)", "Feb 2023 (H)", "Mar 2023 (H)", "May 2023 (H)", "Jun 2023 (H)", "Jul 2023 (H)", "Sep 2023 (H)", "Nov 2023 (H)", "Dec 2023 (H)", "Jan 2024 (H)", "Mar 2024 (H)", "May 2024 (H)", "Jun 2024 (H)", "Jul 2024 (H)", "Sep 2024 (C)", "Nov 2024 (C)", "Dec 2024 (C)"],
+    datasets: [
+      { type: 'bar', label: 'P&L per contract ($)', data: [86.5, -244.0, 11.0, 41.5, 38.0, 47.5, 26.5, -219.0, -162.0, -37.5, -25.0, -14.0, -192.0, 71.0, 42.0, 0.5, 72.0, 20.5, -401.0, 280.0, -67.5, -1052.0, 9.0, 18.5, 139.5, 102.0, -168.5, -52.0, 35.0, 82.5, 131.0, 48.0, -48.0, 103.5, 201.0, -75.5, -17.5, 49.5, -392.5, 121.5, -117.5, -211.5, -223.5, 89.0, -28.0, -70.0, 113.0, -311.0, -369.5, -195.5, 71.0, -48.0, 112.5, 55.5, 1.0, -9.5, -48.0, -1016.0], backgroundColor: ["#059669", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#9ca3af", "#9ca3af", "#9ca3af", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#059669", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626"], yAxisID: 'y' },
+      { type: 'line', label: 'Cumulative P&L', data: [86.5, -157.5, -146.5, -105.0, -67.0, -19.5, 7.0, -212.0, -374.0, -411.5, -436.5, -450.5, -642.5, -571.5, -529.5, -529.0, -457.0, -436.5, -837.5, -557.5, -625.0, -1677.0, -1668.0, -1649.5, -1510.0, -1408.0, -1576.5, -1628.5, -1593.5, -1511.0, -1380.0, -1332.0, -1380.0, -1276.5, -1075.5, -1151.0, -1168.5, -1119.0, -1511.5, -1390.0, -1507.5, -1719.0, -1942.5, -1853.5, -1881.5, -1951.5, -1838.5, -2149.5, -2519.0, -2714.5, -2643.5, -2691.5, -2579.0, -2523.5, -2522.5, -2532.0, -2580.0, -3596.0], borderColor: '#0f2220', borderWidth: 1.5, pointRadius: 0, fill: false, yAxisID: 'y2' },
+    ]
+  },
+  options: {
+    responsive: true, interaction: { mode: 'index', intersect: false },
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: GRID, ticks: { ...TICK, maxRotation: 45, font: { size: 8 } } },
+      y:  { grid: GRID, ticks: TICK, title: { display: true, text: 'P&L per contract ($)', color:'#8aaba6', font:{size:10} }, position: 'left' },
+      y2: { grid: { display:false }, ticks: TICK, title: { display: true, text: 'Cumulative ($)', color:'#8aaba6', font:{size:10} }, position: 'right' },
+    }
+  }
+});
+
+// ── Chart 5: Post-Announcement P&L ───────────────────────────────────────────
+const postCtx = document.getElementById('postPnlChart').getContext('2d');
+new Chart(postCtx, {
+  type: 'bar',
+  data: {
+    labels: ["Jan 2018 (H)", "Mar 2018 (H)", "May 2018 (H)", "Jun 2018 (H)", "Aug 2018 (H)", "Sep 2018 (H)", "Nov 2018 (H)", "Dec 2018 (H)", "Jan 2019 (H)", "Mar 2019 (H)", "May 2019 (H)", "Jun 2019 (H)", "Jul 2019 (C)", "Sep 2019 (C)", "Oct 2019 (C)", "Dec 2019 (H)", "Jan 2020 (H)", "Mar 2020 (C)", "Mar 2020 (C)", "Mar 2020 (H)", "Apr 2020 (H)", "Jun 2020 (H)", "Jul 2020 (H)", "Sep 2020 (H)", "Nov 2020 (H)", "Dec 2020 (H)", "Jan 2021 (H)", "Mar 2021 (H)", "Apr 2021 (H)", "Jun 2021 (H)", "Jul 2021 (H)", "Sep 2021 (H)", "Nov 2021 (H)", "Dec 2021 (H)", "Jan 2022 (H)", "Mar 2022 (H)", "May 2022 (H)", "Jun 2022 (H)", "Jul 2022 (H)", "Sep 2022 (H)", "Nov 2022 (H)", "Dec 2022 (H)", "Feb 2023 (H)", "Mar 2023 (H)", "May 2023 (H)", "Jun 2023 (H)", "Jul 2023 (H)", "Sep 2023 (H)", "Nov 2023 (H)", "Dec 2023 (H)", "Jan 2024 (H)", "Mar 2024 (H)", "May 2024 (H)", "Jun 2024 (H)", "Jul 2024 (H)", "Sep 2024 (C)", "Nov 2024 (C)", "Dec 2024 (C)"],
+    datasets: [
+      { type: 'bar', label: 'P&L per contract ($)', data: [-797.5, 101.0, -149.5, 13.0, -12.0, 77.5, -82.0, 68.5, 125.5, -78.0, -160.5, -40.5, 27.0, 36.0, -26.5, 157.0, 27.0, -1234.5, -229.0, 456.5, 303.0, 241.0, -17.0, -271.5, 191.0, 213.5, 459.5, 278.0, 93.5, 226.0, 197.5, -133.0, 56.0, 384.5, -703.0, 310.5, -378.5, 228.0, -27.5, 224.0, 212.0, 371.0, 160.5, 139.5, 119.5, 91.0, 160.5, 139.5, 25.5, 67.5, -181.0, 267.0, -300.0, 45.5, -1066.0, 325.0, 247.5, 192.5], backgroundColor: ["#dc2626", "#059669", "#dc2626", "#059669", "#dc2626", "#059669", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#9ca3af", "#9ca3af", "#9ca3af", "#059669", "#059669", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#dc2626", "#059669", "#dc2626", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#dc2626", "#059669", "#dc2626", "#059669", "#059669", "#059669"], yAxisID: 'y' },
+      { type: 'line', label: 'Cumulative P&L', data: [-797.5, -696.5, -846.0, -833.0, -845.0, -767.5, -849.5, -781.0, -655.5, -733.5, -894.0, -934.5, -907.5, -871.5, -898.0, -741.0, -714.0, -1948.5, -2177.5, -1721.0, -1418.0, -1177.0, -1194.0, -1465.5, -1274.5, -1061.0, -601.5, -323.5, -230.0, -4.0, 193.5, 60.5, 116.5, 501.0, -202.0, 108.5, -270.0, -42.0, -69.5, 154.5, 366.5, 737.5, 898.0, 1037.5, 1157.0, 1248.0, 1408.5, 1548.0, 1573.5, 1641.0, 1460.0, 1727.0, 1427.0, 1472.5, 406.5, 731.5, 979.0, 1171.5], borderColor: '#0f2220', borderWidth: 1.5, pointRadius: 0, fill: false, yAxisID: 'y2' },
+    ]
+  },
+  options: {
+    responsive: true, interaction: { mode: 'index', intersect: false },
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: GRID, ticks: { ...TICK, maxRotation: 45, font: { size: 8 } } },
+      y:  { grid: GRID, ticks: TICK, title: { display: true, text: 'P&L per contract ($)', color:'#8aaba6', font:{size:10} }, position: 'left' },
+      y2: { grid: { display:false }, ticks: TICK, title: { display: true, text: 'Cumulative ($)', color:'#8aaba6', font:{size:10} }, position: 'right' },
+    }
+  }
+});
+</script>
+</body>
+</html>
