@@ -147,6 +147,41 @@ def build_heatmap_html():
 
 heatmap_html = build_heatmap_html()
 
+# ── Subgroup metrics for strategy analysis sections ───────────────────────────
+pre_df["fomc_date"]  = pd.to_datetime(pre_df["fomc_date"])
+post_df["fomc_date"] = pd.to_datetime(post_df["fomc_date"])
+
+def _sg(df):
+    if len(df) == 0:
+        return dict(n=0, win_rate=0.0, avg_pnl=0.0, sharpe=None)
+    n   = len(df)
+    wr  = float((df["pnl_per_contract"] > 0).mean())
+    avg = float(df["pnl_per_contract"].mean())
+    ret = df["return_pct"]
+    sh  = ret.mean() / ret.std() * np.sqrt(8) if ret.std() > 0 else float("nan")
+    return dict(n=n, win_rate=wr, avg_pnl=avg, sharpe=None if np.isnan(sh) else float(sh))
+
+def _fmt_sh(m):
+    return f"{m['sharpe']:.2f}" if m["sharpe"] is not None else "--"
+
+_pre_hold = pre_df[pre_df["decision_type"] == "Hold"]
+_pre_hike = pre_df[pre_df["decision_type"] == "Hike"]
+_pre_cut  = pre_df[pre_df["decision_type"] == "Cut"]
+
+sg_pre_hike    = _sg(_pre_hike)
+sg_pre_cut     = _sg(_pre_cut)
+sg_pre_neutral = _sg(_pre_hold[_pre_hold["comm_surprise"] == "Neutral"])
+sg_pre_hawkish = _sg(_pre_hold[_pre_hold["comm_surprise"] == "Hawkish"])
+sg_pre_dovish  = _sg(_pre_hold[_pre_hold["comm_surprise"] == "Dovish"])
+
+_post_hike = post_df[post_df["decision_type"] == "Hike"]
+_post_hold = post_df[post_df["decision_type"] == "Hold"]
+_post_cut  = post_df[post_df["decision_type"] == "Cut"]
+
+sg_post_hike = _sg(_post_hike)
+sg_post_hold = _sg(_post_hold)
+sg_post_cut  = _sg(_post_cut)
+
 # ── Build full HTML ───────────────────────────────────────────────────────────
 IV_LABELS_JS  = json.dumps(iv_profile["labels"])
 SPX_MEAN_JS   = json.dumps(iv_profile["spx_mean"])
@@ -681,6 +716,50 @@ html += f"""      </tbody>
       </tbody>
     </table>
     </div>
+    <h3>What these results mean</h3>
+    <p style="text-align:justify;hyphens:auto">
+      Aggregate results do not support Strategy A as a systematic trade. The {pre_win:.0%} win rate
+      is statistically indistinguishable from random, and the annualised Sharpe of {pre_sharpe:.2f}
+      is negative. The strategy loses more on its bad trades than it earns on its good ones, driven
+      by a small number of large losses around meetings that delivered unexpected policy shifts or
+      aggressive communication tone changes.
+    </p>
+    <p style="text-align:justify;hyphens:auto">
+      Disaggregating by meeting type reveals where the edge concentrates and where it collapses.
+      Hold meetings with Neutral communication ({sg_pre_neutral['n']} trades) are the only
+      consistently profitable cohort: {sg_pre_neutral['win_rate']:.0%} win rate, avg
+      ${sg_pre_neutral['avg_pnl']:+.0f} per contract, Sharpe {_fmt_sh(sg_pre_neutral)}.
+      The logic holds in this regime: when the Fed holds rates with no surprises in tone or
+      forward guidance, implied vol collapses after the announcement and the short straddle
+      captures that decay cleanly. Hold meetings with Dovish communication
+      ({sg_pre_dovish['n']} trades) invert this result entirely: {sg_pre_dovish['win_rate']:.0%}
+      win rate and avg ${sg_pre_dovish['avg_pnl']:+.0f} per contract. A dovish pivot (rate cuts
+      signalled, guidance softened) expands market uncertainty rather than resolving it. Hike
+      meetings ({sg_pre_hike['n']} trades) average ${sg_pre_hike['avg_pnl']:+.0f}, as the market
+      frequently moved sharply through the strike during the 2022 to 2023 hiking cycle.
+    </p>
+    <div class="highlight-box">
+      <div>
+        <div class="hb-val">{sg_pre_neutral['win_rate']:.0%}</div>
+        <div class="hb-label">Win rate, Hold/Neutral<br>({sg_pre_neutral['n']} trades)</div>
+      </div>
+      <div>
+        <div class="hb-val">${sg_pre_dovish['avg_pnl']:+.0f}</div>
+        <div class="hb-label">Avg P&amp;L, Hold/Dovish<br>({sg_pre_dovish['n']} trades)</div>
+      </div>
+      <div>
+        <div class="hb-val">${sg_pre_hike['avg_pnl']:+.0f}</div>
+        <div class="hb-label">Avg P&amp;L, Hike meetings<br>({sg_pre_hike['n']} trades)</div>
+      </div>
+    </div>
+    <p style="text-align:justify;hyphens:auto">
+      Implementation viability is limited even for the Hold/Neutral cohort. Communication tone is
+      confirmed only after the FOMC statement is released, so pre-classifying a meeting as Neutral
+      is impossible in practice. A systematic strategy cannot select only these meetings in advance.
+      The +${sg_pre_neutral['avg_pnl']:.0f} gross average on Neutral/Hold meetings is also largely
+      consumed by round-trip bid-ask costs of $10 to $30 per contract. Strategy A does not offer a
+      robust, repeatable edge after realistic transaction costs.
+    </p>
     <div class="callout red">
       <strong>Important disclaimer.</strong> All P&amp;L is gross. Actual realised returns will be lower
       after bid-ask spread ($10 to $30 per contract round-trip), commissions, and margin costs for short
@@ -732,6 +811,47 @@ html += f"""      </tbody>
         {sens_rows_html}
       </tbody>
     </table>
+    <h3>What these results mean</h3>
+    <p style="text-align:justify;hyphens:auto">
+      The T+5 aggregate looks constructive at {post_win:.0%} win rate and a positive Sharpe, but this
+      headline number conceals a sharply bifurcated picture driven almost entirely by the rate cycle.
+      Hike meetings ({sg_post_hike['n']} trades) account for nearly all the strategy's edge:
+      {sg_post_hike['win_rate']:.0%} win rate, avg ${sg_post_hike['avg_pnl']:+.0f} per contract,
+      Sharpe {_fmt_sh(sg_post_hike)}. Strip out hike meetings and the picture deteriorates rapidly.
+      Hold meetings ({sg_post_hold['n']} trades) produce only avg ${sg_post_hold['avg_pnl']:+.0f}
+      (Sharpe {_fmt_sh(sg_post_hold)}), and Cut meetings ({sg_post_cut['n']} trades) average
+      ${sg_post_cut['avg_pnl']:+.0f}. The strategy is not a universal post-FOMC vol trade; it is
+      a post-hike vol trade measured across a broader sample.
+    </p>
+    <div class="highlight-box">
+      <div>
+        <div class="hb-val">{sg_post_hike['win_rate']:.0%}</div>
+        <div class="hb-label">Win rate, Hike meetings<br>({sg_post_hike['n']} trades)</div>
+      </div>
+      <div>
+        <div class="hb-val">${sg_post_hike['avg_pnl']:+.0f}</div>
+        <div class="hb-label">Avg P&amp;L, Hike meetings</div>
+      </div>
+      <div>
+        <div class="hb-val">${sg_post_hold['avg_pnl']:+.0f}</div>
+        <div class="hb-label">Avg P&amp;L, Hold meetings<br>({sg_post_hold['n']} trades)</div>
+      </div>
+    </div>
+    <p style="text-align:justify;hyphens:auto">
+      The mechanism for the hike-cycle edge is intuitive. During the 2022 to 2023 hiking campaign,
+      each meeting resolved acute uncertainty about the terminal rate. After a hike was delivered,
+      implied vol deflated steadily over the following days as markets reprocessed the Fed's
+      trajectory. The T+1 straddle entry captures the peak of post-hike IV, and the T+5 exit
+      harvests most of the mean-reversion before other macro events introduce noise.
+    </p>
+    <p style="text-align:justify;hyphens:auto">
+      Implementation viability is cycle-dependent. The 15 hike meetings (2022 to 2023) drove the
+      majority of this strategy's cumulative P&amp;L and produced a commercially attractive Sharpe.
+      As of 2025, the Fed is in a hold and gradual-cut stance, which means the operative regime
+      is closer to the Hold meeting subgroup (near breakeven) than the all-meetings aggregate. A
+      disciplined implementation would condition the strategy on the rate cycle: apply it actively
+      during confirmed hiking campaigns and stand aside during holds and cuts.
+    </p>
     <div class="callout blue">
       <strong>Sharpe methodology note.</strong> Per-trade returns are annualised using a sqrt(8) scaling
       factor (approximately 8 FOMC meetings per year). With n=55 to 58 trades, the 95% confidence interval

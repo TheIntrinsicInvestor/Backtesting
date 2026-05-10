@@ -1657,6 +1657,50 @@ footer{
       </tbody>
     </table>
     </div>
+    <h3>What these results mean</h3>
+    <p style="text-align:justify;hyphens:auto">
+      Aggregate results do not support Strategy A as a systematic trade. The 52% win rate
+      is statistically indistinguishable from random, and the annualised Sharpe of -0.76
+      is negative. The strategy loses more on its bad trades than it earns on its good ones, driven
+      by a small number of large losses around meetings that delivered unexpected policy shifts or
+      aggressive communication tone changes.
+    </p>
+    <p style="text-align:justify;hyphens:auto">
+      Disaggregating by meeting type reveals where the edge concentrates and where it collapses.
+      Hold meetings with Neutral communication (17 trades) are the only
+      consistently profitable cohort: 71% win rate, avg
+      $+35 per contract, Sharpe 1.03.
+      The logic holds in this regime: when the Fed holds rates with no surprises in tone or
+      forward guidance, implied vol collapses after the announcement and the short straddle
+      captures that decay cleanly. Hold meetings with Dovish communication
+      (10 trades) invert this result entirely: 30%
+      win rate and avg $-177 per contract. A dovish pivot (rate cuts
+      signalled, guidance softened) expands market uncertainty rather than resolving it. Hike
+      meetings (15 trades) average $-71, as the market
+      frequently moved sharply through the strike during the 2022 to 2023 hiking cycle.
+    </p>
+    <div class="highlight-box">
+      <div>
+        <div class="hb-val">71%</div>
+        <div class="hb-label">Win rate, Hold/Neutral<br>(17 trades)</div>
+      </div>
+      <div>
+        <div class="hb-val">$-177</div>
+        <div class="hb-label">Avg P&amp;L, Hold/Dovish<br>(10 trades)</div>
+      </div>
+      <div>
+        <div class="hb-val">$-71</div>
+        <div class="hb-label">Avg P&amp;L, Hike meetings<br>(15 trades)</div>
+      </div>
+    </div>
+    <p style="text-align:justify;hyphens:auto">
+      Implementation viability is limited even for the Hold/Neutral cohort. Communication tone is
+      confirmed only after the FOMC statement is released, so pre-classifying a meeting as Neutral
+      is impossible in practice. A systematic strategy cannot select only these meetings in advance.
+      The +$35 gross average on Neutral/Hold meetings is also largely
+      consumed by round-trip bid-ask costs of $10 to $30 per contract. Strategy A does not offer a
+      robust, repeatable edge after realistic transaction costs.
+    </p>
     <div class="callout red">
       <strong>Important disclaimer.</strong> All P&amp;L is gross. Actual realised returns will be lower
       after bid-ask spread ($10 to $30 per contract round-trip), commissions, and margin costs for short
@@ -1708,6 +1752,47 @@ footer{
         <tr><td>T+2</td><td>58</td><td>52%</td><td>$+6</td><td>-0.20</td><td>$-902</td></tr><tr><td>T+3</td><td>58</td><td>62%</td><td>$-14</td><td>-0.28</td><td>$-1690</td></tr><tr class="top-row"><td>T+5 <span style="font-size:0.65rem;background:var(--green2);color:#fff;padding:1px 5px;border-radius:3px;font-family:Inter,sans-serif">best</span></td><td>58</td><td>67%</td><td>$+20</td><td>0.16</td><td>$-1522</td></tr><tr><td>T+10</td><td>57</td><td>58%</td><td>$+48</td><td>-0.17</td><td>$-7427</td></tr>
       </tbody>
     </table>
+    <h3>What these results mean</h3>
+    <p style="text-align:justify;hyphens:auto">
+      The T+5 aggregate looks constructive at 67% win rate and a positive Sharpe, but this
+      headline number conceals a sharply bifurcated picture driven almost entirely by the rate cycle.
+      Hike meetings (15 trades) account for nearly all the strategy's edge:
+      87% win rate, avg $+119 per contract,
+      Sharpe 2.75. Strip out hike meetings and the picture deteriorates rapidly.
+      Hold meetings (35 trades) produce only avg $+2
+      (Sharpe -0.10), and Cut meetings (8 trades) average
+      $-83. The strategy is not a universal post-FOMC vol trade; it is
+      a post-hike vol trade measured across a broader sample.
+    </p>
+    <div class="highlight-box">
+      <div>
+        <div class="hb-val">87%</div>
+        <div class="hb-label">Win rate, Hike meetings<br>(15 trades)</div>
+      </div>
+      <div>
+        <div class="hb-val">$+119</div>
+        <div class="hb-label">Avg P&amp;L, Hike meetings</div>
+      </div>
+      <div>
+        <div class="hb-val">$+2</div>
+        <div class="hb-label">Avg P&amp;L, Hold meetings<br>(35 trades)</div>
+      </div>
+    </div>
+    <p style="text-align:justify;hyphens:auto">
+      The mechanism for the hike-cycle edge is intuitive. During the 2022 to 2023 hiking campaign,
+      each meeting resolved acute uncertainty about the terminal rate. After a hike was delivered,
+      implied vol deflated steadily over the following days as markets reprocessed the Fed's
+      trajectory. The T+1 straddle entry captures the peak of post-hike IV, and the T+5 exit
+      harvests most of the mean-reversion before other macro events introduce noise.
+    </p>
+    <p style="text-align:justify;hyphens:auto">
+      Implementation viability is cycle-dependent. The 15 hike meetings (2022 to 2023) drove the
+      majority of this strategy's cumulative P&amp;L and produced a commercially attractive Sharpe.
+      As of 2025, the Fed is in a hold and gradual-cut stance, which means the operative regime
+      is closer to the Hold meeting subgroup (near breakeven) than the all-meetings aggregate. A
+      disciplined implementation would condition the strategy on the rate cycle: apply it actively
+      during confirmed hiking campaigns and stand aside during holds and cuts.
+    </p>
     <div class="callout blue">
       <strong>Sharpe methodology note.</strong> Per-trade returns are annualised using a sqrt(8) scaling
       factor (approximately 8 FOMC meetings per year). With n=55 to 58 trades, the 95% confidence interval
