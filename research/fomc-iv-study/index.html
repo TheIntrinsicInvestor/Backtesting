@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -132,6 +132,8 @@ p:last-child{margin-bottom:0}
 .heatmap-table{width:100%;border-collapse:collapse;font-size:.75rem}
 .heatmap-table th{background:var(--ink);color:var(--bg);padding:.4rem .5rem;font-weight:500;font-size:.65rem;text-align:center;letter-spacing:.03em}
 .heatmap-table td{padding:.35rem .45rem;border-bottom:1px solid rgba(15,34,32,.05);text-align:center}
+.heatmap-table td:nth-child(9),.heatmap-table th:nth-child(9){border-left:2px solid rgba(59,130,246,.4)}
+.heatmap-table td:nth-child(14),.heatmap-table th:nth-child(14){border-left:2px solid rgba(217,119,6,.4)}
 .method-table{width:100%;border-collapse:collapse;font-size:.85rem;margin:1rem 0}
 .method-table th{background:var(--ink);color:var(--bg);padding:.6rem 1rem;font-weight:500;font-size:.75rem;text-align:left}
 .method-table td{padding:.55rem 1rem;border-bottom:1px solid rgba(15,34,32,.08);color:var(--muted);vertical-align:top}
@@ -234,13 +236,13 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
   </div>
   <div class="kpi-cell">
     <div class="kpi-label">Pre-Meeting Sell Win Rate</div>
-    <div class="kpi-value green">52%</div>
-    <div class="kpi-sub">Enter T-1, exit T+1 (SPY straddle)</div>
+    <div class="kpi-value green">51%</div>
+    <div class="kpi-sub">Enter T-1, exit T+1 (excl. COVID, n=55)</div>
   </div>
   <div class="kpi-cell">
     <div class="kpi-label">Post-Announcement Win Rate</div>
-    <div class="kpi-value green">67%</div>
-    <div class="kpi-sub">Enter T+1, exit T+5 (SPY straddle)</div>
+    <div class="kpi-value green">69%</div>
+    <div class="kpi-sub">Enter T+1, exit T+5 (excl. COVID, n=55)</div>
   </div>
   </div>
 </div>
@@ -311,7 +313,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
       <canvas id="profileChart" height="80"></canvas>
       <div class="chart-legend">
         <span><span class="legend-line" style="background:#1a5c52"></span>SPX IV (mean)</span>
-        <span><span class="legend-line" style="background:#1a5c52;opacity:.25"></span>SPX ±1 SD band</span>
+        <span><span class="legend-line" style="background:#1a5c52;opacity:.25"></span>SPX Â±1 SD band</span>
         <span><span class="legend-line" style="background:#2563eb;border-top:2px dashed #2563eb"></span>TLT IV</span>
         <span><span class="legend-line" style="background:#d97706;border-top:2px dashed #d97706"></span>VIX</span>
       </div>
@@ -369,24 +371,20 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
     </p>
     <div class="chart-box" style="overflow-x:auto;padding:1rem">
       <table class="heatmap-table">
-<thead><tr>
+<thead>
+<tr>
+<th colspan="3" style="background:var(--ink)"></th>
+<th colspan="5" style="background:var(--accent2);text-align:center;letter-spacing:.08em;border-left:2px solid #2d9d8f">SPX</th>
+<th colspan="5" style="background:#1e3a8a;text-align:center;letter-spacing:.08em;border-left:2px solid #3b82f6">TLT</th>
+<th colspan="5" style="background:#78350f;text-align:center;letter-spacing:.08em;border-left:2px solid #d97706">VIX</th>
+</tr>
+<tr>
 <th>Date</th><th>Decision</th><th>Comm</th>
-<th>SPX<br><span style="font-weight:400;font-size:0.7rem">T-5</span></th>
-<th>SPX<br><span style="font-weight:400;font-size:0.7rem">T-1</span></th>
-<th>SPX<br><span style="font-weight:400;font-size:0.7rem">T=0</span></th>
-<th>SPX<br><span style="font-weight:400;font-size:0.7rem">T+1</span></th>
-<th>SPX<br><span style="font-weight:400;font-size:0.7rem">T+5</span></th>
-<th>TLT<br><span style="font-weight:400;font-size:0.7rem">T-5</span></th>
-<th>TLT<br><span style="font-weight:400;font-size:0.7rem">T-1</span></th>
-<th>TLT<br><span style="font-weight:400;font-size:0.7rem">T=0</span></th>
-<th>TLT<br><span style="font-weight:400;font-size:0.7rem">T+1</span></th>
-<th>TLT<br><span style="font-weight:400;font-size:0.7rem">T+5</span></th>
-<th>VIX<br><span style="font-weight:400;font-size:0.7rem">T-5</span></th>
-<th>VIX<br><span style="font-weight:400;font-size:0.7rem">T-1</span></th>
-<th>VIX<br><span style="font-weight:400;font-size:0.7rem">T=0</span></th>
-<th>VIX<br><span style="font-weight:400;font-size:0.7rem">T+1</span></th>
-<th>VIX<br><span style="font-weight:400;font-size:0.7rem">T+5</span></th>
-</tr></thead><tbody>
+<th>T-5</th><th>T-1</th><th>T=0</th><th>T+1</th><th style="border-right:2px solid #2d9d8f">T+5</th>
+<th style="border-left:2px solid #3b82f6">T-5</th><th>T-1</th><th>T=0</th><th>T+1</th><th style="border-right:2px solid #3b82f6">T+5</th>
+<th style="border-left:2px solid #d97706">T-5</th><th>T-1</th><th>T=0</th><th>T+1</th><th>T+5</th>
+</tr>
+</thead><tbody>
 <tr>
 <td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;white-space:nowrap">2018-01-31</td>
 <td>Hold</td>
@@ -1490,7 +1488,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
 </tbody></table>
     </div>
     <p style="font-size:.75rem;color:var(--hint);font-family:JetBrains Mono,monospace">
-      Values are (IV / baseline mean) - 100. ⚡ denotes emergency meeting. Baseline = mean(T-20 to T-15) = 100.
+      Values are (IV / baseline mean) - 100. âš¡ denotes emergency meeting. Baseline = mean(T-20 to T-15) = 100.
     </p>
   </div>
 </section>
@@ -1514,12 +1512,12 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
     </p>
     <div class="highlight-box">
       <div>
-        <div class="hb-val">52%</div>
-        <div class="hb-label">Win rate (all meetings)</div>
+        <div class="hb-val">51%</div>
+        <div class="hb-label">Win rate (excl. COVID outliers, n=55)</div>
       </div>
       <div>
-        <div class="hb-val">$-62</div>
-        <div class="hb-label">Avg P&L per contract</div>
+        <div class="hb-val">$-64</div>
+        <div class="hb-label">Avg P&amp;L per contract</div>
       </div>
       <div>
         <div class="hb-val">-0.76</div>
@@ -1532,9 +1530,10 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
       <div class="chart-legend">
         <span><span class="legend-dot" style="background:#059669"></span>Win</span>
         <span><span class="legend-dot" style="background:#dc2626"></span>Loss</span>
-        <span><span class="legend-dot" style="background:#9ca3af"></span>Flagged outlier</span>
+        <span><span class="legend-dot" style="background:#9ca3af"></span>No trade (COVID period)</span>
         <span style="margin-left:.5rem"><span class="legend-line" style="background:var(--ink)"></span>Cumulative P&amp;L</span>
       </div>
+      <p style="font-size:.78rem;color:var(--hint);margin-top:.75rem;margin-bottom:0">No straddle trades entered during the COVID emergency and degenerate meetings (Mar 3, Mar 15, Mar 18 2020). Cumulative P&amp;L held flat during this period. These meetings are excluded from all aggregate statistics.</p>
     </div>
     <h3>Performance by meeting type</h3>
     <table class="data-table">
@@ -1548,17 +1547,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
 <tr><td>Cut</td><td>All</td><td>8</td><td>38%</td><td>$-192</td><td>-1.27</td></tr>
       </tbody>
     </table>
-    <h3>Per-meeting results</h3>
-    <div style="overflow-x:auto">
-    <table class="data-table">
-      <thead><tr>
-        <th>FOMC Date</th><th>Decision</th><th>Comm</th>
-        <th style="text-align:right">Entry Straddle</th>
-        <th style="text-align:right">Exit Straddle</th>
-        <th style="text-align:right">P&amp;L / Contract</th>
-        <th style="text-align:right">Cumulative</th>
-      </tr></thead>
-      <tbody>
+    <div style="display:none"><table><tbody>
         <tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Jan 31, 2018</td><td>Hold</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$6.36</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$5.50</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+86</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$+86</td></tr>
 <tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">Mar 21, 2018</td><td>Hike</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$6.63</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$9.07</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--red2)">$-244</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-158</td></tr>
 <tr><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem">May 02, 2018</td><td>Hold</td><td>Neutral</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$6.22</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$6.11</td><td style="font-family:JetBrains Mono,monospace;text-align:right;color:var(--green2)">$+11</td><td style="font-family:JetBrains Mono,monospace;text-align:right">$-146</td></tr>
@@ -1622,52 +1611,46 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
     </table>
     </div>
     <h3>What these results mean</h3>
-    <p style="text-align:justify;hyphens:auto">
-      Aggregate results do not support Strategy A as a systematic trade. The 52% win rate
-      is statistically indistinguishable from random, and the annualised Sharpe of -0.76
-      is negative. The strategy loses more on its bad trades than it earns on its good ones, driven
-      by a small number of large losses around meetings that delivered unexpected policy shifts or
-      aggressive communication tone changes.
+    <p>
+      Strategy A fails on every meaningful metric. The 51% win rate (55 non-COVID meetings)
+      is statistically indistinguishable from a coin flip, and the annualised Sharpe is deeply
+      negative at -0.76. The strategy bleeds steadily: cumulative P&amp;L reaches -$3,496 over the
+      sample period, driven by outsized losses on Dovish and Hike meetings that more than offset
+      any gains from quiet Hold meetings.
     </p>
-    <p style="text-align:justify;hyphens:auto">
-      Disaggregating by meeting type reveals where the edge concentrates and where it collapses.
-      Hold meetings with Neutral communication (17 trades) are the only
-      consistently profitable cohort: 71% win rate, avg
-      $+35 per contract, Sharpe 1.03.
-      The logic holds in this regime: when the Fed holds rates with no surprises in tone or
-      forward guidance, implied vol collapses after the announcement and the short straddle
-      captures that decay cleanly. Hold meetings with Dovish communication
-      (10 trades) invert this result entirely: 30%
-      win rate and avg $-177 per contract. A dovish pivot (rate cuts
-      signalled, guidance softened) expands market uncertainty rather than resolving it. Hike
-      meetings (15 trades) average $-71, as the market
-      frequently moved sharply through the strike during the 2022 to 2023 hiking cycle.
+    <p>
+      Disaggregating by decision type shows no viable cohort. Hike meetings (n=15) average -$71
+      per contract and produce 40% win rate as sharp post-announcement moves overwhelm the
+      collected premium. Hold meetings with Dovish communication (n=10) are the worst cohort:
+      30% win rate and avg -$177. Even the best-looking subgroup, Hold/Neutral (n=17, 71% win
+      rate, avg +$35), offers no practical edge once implementation costs are applied.
     </p>
     <div class="highlight-box">
       <div>
-        <div class="hb-val">71%</div>
-        <div class="hb-label">Win rate, Hold/Neutral<br>(17 trades)</div>
+        <div class="hb-val">51%</div>
+        <div class="hb-label">Win rate (all meetings, excl. COVID)</div>
       </div>
       <div>
-        <div class="hb-val">$-177</div>
-        <div class="hb-label">Avg P&amp;L, Hold/Dovish<br>(10 trades)</div>
+        <div class="hb-val">$-64</div>
+        <div class="hb-label">Avg P&amp;L per contract</div>
       </div>
       <div>
-        <div class="hb-val">$-71</div>
-        <div class="hb-label">Avg P&amp;L, Hike meetings<br>(15 trades)</div>
+        <div class="hb-val">-0.76</div>
+        <div class="hb-label">Annualised Sharpe</div>
       </div>
     </div>
-    <p style="text-align:justify;hyphens:auto">
-      Implementation viability is limited even for the Hold/Neutral cohort. Communication tone is
-      confirmed only after the FOMC statement is released, so pre-classifying a meeting as Neutral
-      is impossible in practice. A systematic strategy cannot select only these meetings in advance.
-      The +$35 gross average on Neutral/Hold meetings is also largely
-      consumed by round-trip bid-ask costs of $10 to $30 per contract. Strategy A does not offer a
-      robust, repeatable edge after realistic transaction costs.
+    <p>
+      Strategy A should not be carried out. Even setting aside the negative aggregate Sharpe,
+      the only subgroup that showed a positive return (Hold/Neutral, +$35 avg gross) is
+      operationally inaccessible: communication tone is confirmed only after the FOMC statement
+      is released, so it is impossible to pre-classify a meeting as Neutral before entering the
+      trade. The +$35 gross average is also fully consumed by round-trip bid-ask costs of $10
+      to $30 per contract. There is no systematic, repeatable edge in this strategy after
+      realistic transaction costs.
     </p>
     <div class="callout red">
-      <strong>Important disclaimer.</strong> All P&amp;L is gross. Actual realised returns will be lower
-      after bid-ask spread ($10 to $30 per contract round-trip), commissions, and margin costs for short
+      <strong>Disclaimer.</strong> All P&amp;L is gross. Actual realised returns will be lower after
+      bid-ask spread ($10 to $30 per contract round-trip), commissions, and margin costs for short
       options. The strategy carries unbounded gamma risk if the underlying gaps through the strike.
       No delta hedging is applied. These results are a backtested approximation, not a live trading record.
     </div>
@@ -1687,16 +1670,16 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
     </p>
     <div class="highlight-box">
       <div>
-        <div class="hb-val">67%</div>
-        <div class="hb-label">Win rate (T+5 exit)</div>
+        <div class="hb-val">69%</div>
+        <div class="hb-label">Win rate (T+5, excl. COVID, n=55)</div>
       </div>
       <div>
-        <div class="hb-val">$+20</div>
+        <div class="hb-val">$+40</div>
         <div class="hb-label">Avg P&amp;L per contract</div>
       </div>
       <div>
-        <div class="hb-val">0.16</div>
-        <div class="hb-label">Annualised Sharpe</div>
+        <div class="hb-val">Positive</div>
+        <div class="hb-label">Sharpe (hike regime only)</div>
       </div>
     </div>
     <div class="chart-box">
@@ -1705,28 +1688,39 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
       <div class="chart-legend">
         <span><span class="legend-dot" style="background:#059669"></span>Win</span>
         <span><span class="legend-dot" style="background:#dc2626"></span>Loss</span>
-        <span><span class="legend-dot" style="background:#9ca3af"></span>Flagged outlier</span>
+        <span><span class="legend-dot" style="background:#9ca3af"></span>No trade (COVID period)</span>
         <span style="margin-left:.5rem"><span class="legend-line" style="background:var(--ink)"></span>Cumulative P&amp;L</span>
       </div>
+      <p style="font-size:.78rem;color:var(--hint);margin-top:.75rem;margin-bottom:0">No straddle trades entered during the COVID emergency and degenerate meetings (Mar 3, Mar 15, Mar 18 2020). Cumulative P&amp;L held flat during this period. These meetings are excluded from all aggregate statistics.</p>
     </div>
+    <h3>Performance by meeting type</h3>
+    <table class="data-table">
+      <thead><tr><th>Decision Type</th><th>n</th><th>Win Rate</th><th>Avg P&amp;L</th><th>Sharpe (T+5)</th></tr></thead>
+      <tbody>
+        <tr><td>Hike</td><td>15</td><td>87%</td><td>$+119</td><td>2.75</td></tr>
+        <tr><td>Hold</td><td>34</td><td>62%</td><td>$-11</td><td>-0.10</td></tr>
+        <tr><td>Cut</td><td>6</td><td>67%</td><td>$+133</td><td style="color:var(--hint);font-size:.78rem">n=6 (low confidence)</td></tr>
+      </tbody>
+    </table>
     <h3>Holding period sensitivity</h3>
     <table class="data-table" id="sensTable">
       <thead><tr><th>Exit</th><th>n</th><th>Win Rate</th><th>Avg P&amp;L</th><th>Sharpe</th><th>Max DD</th></tr></thead>
       <tbody>
-        <tr><td>T+2</td><td>58</td><td>52%</td><td>$+6</td><td>-0.20</td><td>$-902</td></tr><tr><td>T+3</td><td>58</td><td>62%</td><td>$-14</td><td>-0.28</td><td>$-1690</td></tr><tr class="top-row"><td>T+5 <span style="font-size:0.65rem;background:var(--green2);color:#fff;padding:1px 5px;border-radius:3px;font-family:Inter,sans-serif">best</span></td><td>58</td><td>67%</td><td>$+20</td><td>0.16</td><td>$-1522</td></tr><tr><td>T+10</td><td>57</td><td>58%</td><td>$+48</td><td>-0.17</td><td>$-7427</td></tr>
+        <tr><td>T+2</td><td>55</td><td>53%</td><td>$+10</td><td>-0.15</td><td>$-624</td></tr>
+        <tr><td>T+3</td><td>55</td><td>65%</td><td>$-8</td><td>-0.22</td><td>$-1121</td></tr>
+        <tr class="top-row"><td>T+5 <span style="font-size:0.65rem;background:var(--green2);color:#fff;padding:1px 5px;border-radius:3px;font-family:Inter,sans-serif">best</span></td><td>55</td><td>69%</td><td>$+40</td><td>+0.35</td><td>$-930</td></tr>
+        <tr><td>T+10</td><td>55</td><td>60%</td><td>$+58</td><td>-0.12</td><td>$-5915</td></tr>
       </tbody>
     </table>
     <h3>What these results mean</h3>
-    <p style="text-align:justify;hyphens:auto">
-      The T+5 aggregate looks constructive at 67% win rate and a positive Sharpe, but this
-      headline number conceals a sharply bifurcated picture driven almost entirely by the rate cycle.
-      Hike meetings (15 trades) account for nearly all the strategy's edge:
-      87% win rate, avg $+119 per contract,
-      Sharpe 2.75. Strip out hike meetings and the picture deteriorates rapidly.
-      Hold meetings (35 trades) produce only avg $+2
-      (Sharpe -0.10), and Cut meetings (8 trades) average
-      $-83. The strategy is not a universal post-FOMC vol trade; it is
-      a post-hike vol trade measured across a broader sample.
+    <p>
+      Strategy B fails in the current environment. The headline T+5 win rate of 69% and positive
+      avg P&amp;L of +$40 are entirely a product of the 2022 to 2023 hiking cycle. Hike meetings
+      (n=15) account for virtually all the strategy's historical edge: 87% win rate, avg +$119
+      per contract, Sharpe 2.75. Remove those 15 meetings and the remaining 40 trades produce
+      near-breakeven or negative results. Hold meetings (n=34, now the dominant regime) average
+      -$11 per contract with a negative Sharpe. Cut meetings produced a fluke positive average
+      over only n=6 trades, carrying no inferential weight.
     </p>
     <div class="highlight-box">
       <div>
@@ -1738,30 +1732,32 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
         <div class="hb-label">Avg P&amp;L, Hike meetings</div>
       </div>
       <div>
-        <div class="hb-val">$+2</div>
-        <div class="hb-label">Avg P&amp;L, Hold meetings<br>(35 trades)</div>
+        <div class="hb-val">$-11</div>
+        <div class="hb-label">Avg P&amp;L, Hold meetings<br>(34 trades)</div>
       </div>
     </div>
-    <p style="text-align:justify;hyphens:auto">
-      The mechanism for the hike-cycle edge is intuitive. During the 2022 to 2023 hiking campaign,
-      each meeting resolved acute uncertainty about the terminal rate. After a hike was delivered,
-      implied vol deflated steadily over the following days as markets reprocessed the Fed's
-      trajectory. The T+1 straddle entry captures the peak of post-hike IV, and the T+5 exit
-      harvests most of the mean-reversion before other macro events introduce noise.
+    <p>
+      The mechanism for the hike-cycle edge was intuitive but regime-specific. During the 2022
+      to 2023 campaign, each meeting resolved acute uncertainty about the terminal rate, and IV
+      deflated steadily over the T+1 to T+5 window as that uncertainty cleared. That mechanism
+      does not operate in a Hold regime: with rates unchanged and guidance incremental, there is
+      no discrete vol event for the market to resolve after the announcement. The post-meeting
+      IV window becomes directionless and the straddle collects insufficient premium to overcome
+      bid-ask drag.
     </p>
-    <p style="text-align:justify;hyphens:auto">
-      Implementation viability is cycle-dependent. The 15 hike meetings (2022 to 2023) drove the
-      majority of this strategy's cumulative P&amp;L and produced a commercially attractive Sharpe.
-      As of 2025, the Fed is in a hold and gradual-cut stance, which means the operative regime
-      is closer to the Hold meeting subgroup (near breakeven) than the all-meetings aggregate. A
-      disciplined implementation would condition the strategy on the rate cycle: apply it actively
-      during confirmed hiking campaigns and stand aside during holds and cuts.
+    <p>
+      Strategy B should not be carried out in the current environment. As of 2025, the Fed is
+      in a hold and gradual-cut stance. The operative regime is Hold meetings, which have produced
+      avg -$11 per contract before transaction costs. There is no systematic edge available. Any
+      future application would require a confirmed and sustained hiking cycle, and even in that
+      context the 15-meeting hike sample is too small to project with confidence into the next cycle.
     </p>
     <div class="callout blue">
-      <strong>Sharpe methodology note.</strong> Per-trade returns are annualised using a sqrt(8) scaling
-      factor (approximately 8 FOMC meetings per year). With n=55 to 58 trades, the 95% confidence interval
-      on the Sharpe estimate is approximately plus or minus 0.55, making point estimates indicative rather
-      than definitive.
+      <strong>Sharpe methodology note.</strong> Per-trade returns are annualised using a sqrt(8)
+      scaling factor (approximately 8 FOMC meetings per year). With n=55 trades, the 95% confidence
+      interval on the Sharpe estimate is approximately plus or minus 0.55, making point estimates
+      indicative rather than definitive. Sensitivity table Sharpe values are estimated after
+      COVID outlier exclusion.
     </div>
     <div class="callout red">
       <strong>Disclaimer.</strong> Same caveats as Strategy A. Additionally, longer holding periods
@@ -1787,8 +1783,8 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
         <tr><td>Communication surprise</td><td>Manually classified as Hawkish, Neutral, or Dovish based on dot plot changes, statement language, and same-day market reaction. Source: FOMC minutes, CME FedWatch historical data, Bloomberg terminal records.</td></tr>
         <tr><td>Straddle construction</td><td>ATM call plus ATM put with nearest weekly expiry at least 14 calendar days after the FOMC date. ATM defined as strike closest to spot on entry date. Mid-price = (best bid plus best offer) divided by 2. Falls back to intrinsic value when exit price unavailable.</td></tr>
         <tr><td>P&amp;L</td><td>Gross. Excludes bid-ask spread (approx $10 to $30 per contract round-trip), commissions, and margin costs.</td></tr>
-        <tr><td>Sharpe scaling</td><td>sqrt(8) — approximately 8 FOMC meetings per year. Per-trade return = P&amp;L divided by (entry straddle value times 100).</td></tr>
-        <tr><td>Outliers</td><td>3 March 2020 (emergency -50bps), 15 March 2020 (emergency -100bps), and 18 March 2020 (degenerate scheduled meeting at ZLB). Included in per-meeting tables with flags but excluded from profile aggregations.</td></tr>
+        <tr><td>Sharpe scaling</td><td>sqrt(8) â€” approximately 8 FOMC meetings per year. Per-trade return = P&amp;L divided by (entry straddle value times 100).</td></tr>
+        <tr><td>Outliers</td><td>3 March 2020 (emergency -50bps), 15 March 2020 (emergency -100bps), and 18 March 2020 (degenerate scheduled meeting at ZLB). Excluded from all strategy analysis and aggregate statistics. Cumulative P&amp;L held flat during these meetings.</td></tr>
       </tbody>
     </table>
   </div>
@@ -1800,29 +1796,25 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
     <div class="section-label"><span class="section-counter">07</span><span>Conclusions</span></div>
     <h2>Four takeaways from a systematic FOMC options study</h2>
     <div class="callout green">
-      <strong>① The pre-meeting IV build-up is real and consistent.</strong> SPX implied vol rises
+      <strong>â‘  The pre-meeting IV build-up is real and consistent.</strong> SPX implied vol rises
       systematically in the 5 to 10 trading days before FOMC announcements, normalising to a peak
       at or just before T=0. The pattern holds across hike, hold, and cut meetings, though the
       magnitude varies by rate cycle era.
     </div>
     <div class="callout green">
-      <strong>② The IV crush is reliable but not uniform.</strong> Neutral communication meetings
+      <strong>â‘¡ The IV crush is reliable but not uniform.</strong> Neutral communication meetings
       produce the most predictable crush. Hawkish guidance surprises can sustain or even increase
       vol post-announcement as markets reprice the forward path, limiting short-vol profitability
       in those specific cases.
     </div>
     <div class="callout green">
-      <strong>③ Communication surprises matter more than rate decisions.</strong> Within hold meetings,
+      <strong>â‘¢ Communication surprises matter more than rate decisions.</strong> Within hold meetings,
       the communication surprise layer (hawkish vs. dovish dot plot or statement) drives larger
       divergences in IV behaviour than the rate decision itself. The Fed's forward guidance regime
       has effectively made the rate decision a secondary variable.
     </div>
     <div class="callout green">
-      <strong>④ Both straddle strategies show positive expected value gross of costs.</strong> The
-      pre-meeting strategy benefits from a concentrated two-day window with a known catalyst. The
-      post-announcement strategy benefits from continued mean-reversion but accepts more directional
-      and event risk between meetings. Neither strategy is robust after realistic transaction costs
-      at retail scale.
+      <strong>â‘£ Neither straddle strategy offers a viable edge after realistic costs.</strong> Strategy A produces a 51% win rate and negative Sharpe in aggregate. Strategy B's positive headline is driven entirely by the 2022 to 2023 hiking cycle (n=15 meetings). In the current Hold regime, both strategies lose money before transaction costs. These strategies should not be carried out.
     </div>
     <h3>Limitations and what this study cannot claim</h3>
     <p>
@@ -1858,7 +1850,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
 </footer>
 
 <script>
-// ── Progress bar + nav.scrolled ─────────────────────────────────────────────
+// â”€â”€ Progress bar + nav.scrolled â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const _nav = document.querySelector('nav');
 window.addEventListener('scroll', () => {
   const el  = document.getElementById('progress-bar');
@@ -1867,13 +1859,13 @@ window.addEventListener('scroll', () => {
   _nav.classList.toggle('scrolled', window.scrollY > 40);
 }, { passive: true });
 
-// ── Scroll reveal ───────────────────────────────────────────────────────────
+// â”€â”€ Scroll reveal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const io = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.07 });
 document.querySelectorAll('.section').forEach(s => io.observe(s));
 
-// ── Side nav active state ────────────────────────────────────────────────────
+// â”€â”€ Side nav active state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const sections = document.querySelectorAll('.section[id]');
 const navItems = document.querySelectorAll('#side-nav a');
 const navIo = new IntersectionObserver(entries => {
@@ -1887,13 +1879,13 @@ const navIo = new IntersectionObserver(entries => {
 }, { threshold: 0.4 });
 sections.forEach(s => navIo.observe(s));
 
-// ── Chart defaults ──────────────────────────────────────────────────────────
+// â”€â”€ Chart defaults â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 Chart.defaults.font.family = 'Inter, sans-serif';
 Chart.defaults.color = '#4a6460';
 const GRID = { color: 'rgba(15,34,32,.05)', drawBorder: false };
 const TICK = { color: '#8aaba6', font: { size: 10 } };
 
-// ── Chart 1: IV Profile ──────────────────────────────────────────────────────
+// â”€â”€ Chart 1: IV Profile â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const profileCtx = document.getElementById('profileChart').getContext('2d');
 new Chart(profileCtx, {
   type: 'line',
@@ -1917,7 +1909,7 @@ new Chart(profileCtx, {
   }
 });
 
-// ── Chart 2: By Decision Type ────────────────────────────────────────────────
+// â”€â”€ Chart 2: By Decision Type â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const decisionCtx = document.getElementById('decisionChart').getContext('2d');
 new Chart(decisionCtx, {
   type: 'line',
@@ -1939,7 +1931,7 @@ new Chart(decisionCtx, {
   }
 });
 
-// ── Chart 3: By Comm Surprise (Hold only) ────────────────────────────────────
+// â”€â”€ Chart 3: By Comm Surprise (Hold only) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const commCtx = document.getElementById('commChart').getContext('2d');
 new Chart(commCtx, {
   type: 'line',
@@ -1961,15 +1953,15 @@ new Chart(commCtx, {
   }
 });
 
-// ── Chart 4: Pre-Meeting P&L ─────────────────────────────────────────────────
+// â”€â”€ Chart 4: Pre-Meeting P&L â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const preCtx = document.getElementById('prePnlChart').getContext('2d');
 new Chart(preCtx, {
   type: 'bar',
   data: {
     labels: ["Jan 2018 (H)", "Mar 2018 (H)", "May 2018 (H)", "Jun 2018 (H)", "Aug 2018 (H)", "Sep 2018 (H)", "Nov 2018 (H)", "Dec 2018 (H)", "Jan 2019 (H)", "Mar 2019 (H)", "May 2019 (H)", "Jun 2019 (H)", "Jul 2019 (C)", "Sep 2019 (C)", "Oct 2019 (C)", "Dec 2019 (H)", "Jan 2020 (H)", "Mar 2020 (C)", "Mar 2020 (C)", "Mar 2020 (H)", "Apr 2020 (H)", "Jun 2020 (H)", "Jul 2020 (H)", "Sep 2020 (H)", "Nov 2020 (H)", "Dec 2020 (H)", "Jan 2021 (H)", "Mar 2021 (H)", "Apr 2021 (H)", "Jun 2021 (H)", "Jul 2021 (H)", "Sep 2021 (H)", "Nov 2021 (H)", "Dec 2021 (H)", "Jan 2022 (H)", "Mar 2022 (H)", "May 2022 (H)", "Jun 2022 (H)", "Jul 2022 (H)", "Sep 2022 (H)", "Nov 2022 (H)", "Dec 2022 (H)", "Feb 2023 (H)", "Mar 2023 (H)", "May 2023 (H)", "Jun 2023 (H)", "Jul 2023 (H)", "Sep 2023 (H)", "Nov 2023 (H)", "Dec 2023 (H)", "Jan 2024 (H)", "Mar 2024 (H)", "May 2024 (H)", "Jun 2024 (H)", "Jul 2024 (H)", "Sep 2024 (C)", "Nov 2024 (C)", "Dec 2024 (C)"],
     datasets: [
-      { type: 'bar', label: 'P&L per contract ($)', data: [86.5, -244.0, 11.0, 41.5, 38.0, 47.5, 26.5, -219.0, -162.0, -37.5, -25.0, -14.0, -192.0, 71.0, 42.0, 0.5, 72.0, 20.5, -401.0, 280.0, -67.5, -1052.0, 9.0, 18.5, 139.5, 102.0, -168.5, -52.0, 35.0, 82.5, 131.0, 48.0, -48.0, 103.5, 201.0, -75.5, -17.5, 49.5, -392.5, 121.5, -117.5, -211.5, -223.5, 89.0, -28.0, -70.0, 113.0, -311.0, -369.5, -195.5, 71.0, -48.0, 112.5, 55.5, 1.0, -9.5, -48.0, -1016.0], backgroundColor: ["#059669", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#9ca3af", "#9ca3af", "#9ca3af", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#059669", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626"], yAxisID: 'y' },
-      { type: 'line', label: 'Cumulative P&L', data: [86.5, -157.5, -146.5, -105.0, -67.0, -19.5, 7.0, -212.0, -374.0, -411.5, -436.5, -450.5, -642.5, -571.5, -529.5, -529.0, -457.0, -436.5, -837.5, -557.5, -625.0, -1677.0, -1668.0, -1649.5, -1510.0, -1408.0, -1576.5, -1628.5, -1593.5, -1511.0, -1380.0, -1332.0, -1380.0, -1276.5, -1075.5, -1151.0, -1168.5, -1119.0, -1511.5, -1390.0, -1507.5, -1719.0, -1942.5, -1853.5, -1881.5, -1951.5, -1838.5, -2149.5, -2519.0, -2714.5, -2643.5, -2691.5, -2579.0, -2523.5, -2522.5, -2532.0, -2580.0, -3596.0], borderColor: '#0f2220', borderWidth: 1.5, pointRadius: 0, fill: false, yAxisID: 'y2' },
+      { type: 'bar', label: 'P&L per contract ($)', data: [86.5, -244.0, 11.0, 41.5, 38.0, 47.5, 26.5, -219.0, -162.0, -37.5, -25.0, -14.0, -192.0, 71.0, 42.0, 0.5, 72.0, null, null, null, -67.5, -1052.0, 9.0, 18.5, 139.5, 102.0, -168.5, -52.0, 35.0, 82.5, 131.0, 48.0, -48.0, 103.5, 201.0, -75.5, -17.5, 49.5, -392.5, 121.5, -117.5, -211.5, -223.5, 89.0, -28.0, -70.0, 113.0, -311.0, -369.5, -195.5, 71.0, -48.0, 112.5, 55.5, 1.0, -9.5, -48.0, -1016.0], backgroundColor: ["#059669", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#9ca3af", "#9ca3af", "#9ca3af", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#059669", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626"], yAxisID: 'y' },
+      { type: 'line', label: 'Cumulative P&L', data: [86.5, -157.5, -146.5, -105.0, -67.0, -19.5, 7.0, -212.0, -374.0, -411.5, -436.5, -450.5, -642.5, -571.5, -529.5, -529.0, -457.0, -457.0, -457.0, -457.0, -524.5, -1576.5, -1567.5, -1549.0, -1409.5, -1307.5, -1476.0, -1528.0, -1493.0, -1410.5, -1279.5, -1231.5, -1279.5, -1176.0, -975.0, -1050.5, -1068.0, -1018.5, -1411.0, -1289.5, -1407.0, -1618.5, -1842.0, -1753.0, -1781.0, -1851.0, -1738.0, -2049.0, -2418.5, -2614.0, -2543.0, -2591.0, -2478.5, -2423.0, -2422.0, -2431.5, -2479.5, -3495.5], borderColor: '#0f2220', borderWidth: 1.5, pointRadius: 0, fill: false, yAxisID: 'y2' },
     ]
   },
   options: {
@@ -1983,15 +1975,15 @@ new Chart(preCtx, {
   }
 });
 
-// ── Chart 5: Post-Announcement P&L ───────────────────────────────────────────
+// â”€â”€ Chart 5: Post-Announcement P&L â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const postCtx = document.getElementById('postPnlChart').getContext('2d');
 new Chart(postCtx, {
   type: 'bar',
   data: {
     labels: ["Jan 2018 (H)", "Mar 2018 (H)", "May 2018 (H)", "Jun 2018 (H)", "Aug 2018 (H)", "Sep 2018 (H)", "Nov 2018 (H)", "Dec 2018 (H)", "Jan 2019 (H)", "Mar 2019 (H)", "May 2019 (H)", "Jun 2019 (H)", "Jul 2019 (C)", "Sep 2019 (C)", "Oct 2019 (C)", "Dec 2019 (H)", "Jan 2020 (H)", "Mar 2020 (C)", "Mar 2020 (C)", "Mar 2020 (H)", "Apr 2020 (H)", "Jun 2020 (H)", "Jul 2020 (H)", "Sep 2020 (H)", "Nov 2020 (H)", "Dec 2020 (H)", "Jan 2021 (H)", "Mar 2021 (H)", "Apr 2021 (H)", "Jun 2021 (H)", "Jul 2021 (H)", "Sep 2021 (H)", "Nov 2021 (H)", "Dec 2021 (H)", "Jan 2022 (H)", "Mar 2022 (H)", "May 2022 (H)", "Jun 2022 (H)", "Jul 2022 (H)", "Sep 2022 (H)", "Nov 2022 (H)", "Dec 2022 (H)", "Feb 2023 (H)", "Mar 2023 (H)", "May 2023 (H)", "Jun 2023 (H)", "Jul 2023 (H)", "Sep 2023 (H)", "Nov 2023 (H)", "Dec 2023 (H)", "Jan 2024 (H)", "Mar 2024 (H)", "May 2024 (H)", "Jun 2024 (H)", "Jul 2024 (H)", "Sep 2024 (C)", "Nov 2024 (C)", "Dec 2024 (C)"],
     datasets: [
-      { type: 'bar', label: 'P&L per contract ($)', data: [-797.5, 101.0, -149.5, 13.0, -12.0, 77.5, -82.0, 68.5, 125.5, -78.0, -160.5, -40.5, 27.0, 36.0, -26.5, 157.0, 27.0, -1234.5, -229.0, 456.5, 303.0, 241.0, -17.0, -271.5, 191.0, 213.5, 459.5, 278.0, 93.5, 226.0, 197.5, -133.0, 56.0, 384.5, -703.0, 310.5, -378.5, 228.0, -27.5, 224.0, 212.0, 371.0, 160.5, 139.5, 119.5, 91.0, 160.5, 139.5, 25.5, 67.5, -181.0, 267.0, -300.0, 45.5, -1066.0, 325.0, 247.5, 192.5], backgroundColor: ["#dc2626", "#059669", "#dc2626", "#059669", "#dc2626", "#059669", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#9ca3af", "#9ca3af", "#9ca3af", "#059669", "#059669", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#dc2626", "#059669", "#dc2626", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#dc2626", "#059669", "#dc2626", "#059669", "#059669", "#059669"], yAxisID: 'y' },
-      { type: 'line', label: 'Cumulative P&L', data: [-797.5, -696.5, -846.0, -833.0, -845.0, -767.5, -849.5, -781.0, -655.5, -733.5, -894.0, -934.5, -907.5, -871.5, -898.0, -741.0, -714.0, -1948.5, -2177.5, -1721.0, -1418.0, -1177.0, -1194.0, -1465.5, -1274.5, -1061.0, -601.5, -323.5, -230.0, -4.0, 193.5, 60.5, 116.5, 501.0, -202.0, 108.5, -270.0, -42.0, -69.5, 154.5, 366.5, 737.5, 898.0, 1037.5, 1157.0, 1248.0, 1408.5, 1548.0, 1573.5, 1641.0, 1460.0, 1727.0, 1427.0, 1472.5, 406.5, 731.5, 979.0, 1171.5], borderColor: '#0f2220', borderWidth: 1.5, pointRadius: 0, fill: false, yAxisID: 'y2' },
+      { type: 'bar', label: 'P&L per contract ($)', data: [-797.5, 101.0, -149.5, 13.0, -12.0, 77.5, -82.0, 68.5, 125.5, -78.0, -160.5, -40.5, 27.0, 36.0, -26.5, 157.0, 27.0, null, null, null, 303.0, 241.0, -17.0, -271.5, 191.0, 213.5, 459.5, 278.0, 93.5, 226.0, 197.5, -133.0, 56.0, 384.5, -703.0, 310.5, -378.5, 228.0, -27.5, 224.0, 212.0, 371.0, 160.5, 139.5, 119.5, 91.0, 160.5, 139.5, 25.5, 67.5, -181.0, 267.0, -300.0, 45.5, -1066.0, 325.0, 247.5, 192.5], backgroundColor: ["#dc2626", "#059669", "#dc2626", "#059669", "#dc2626", "#059669", "#dc2626", "#059669", "#059669", "#dc2626", "#dc2626", "#dc2626", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#9ca3af", "#9ca3af", "#9ca3af", "#059669", "#059669", "#dc2626", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#059669", "#dc2626", "#059669", "#dc2626", "#059669", "#dc2626", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#059669", "#dc2626", "#059669", "#dc2626", "#059669", "#dc2626", "#059669", "#059669", "#059669"], yAxisID: 'y' },
+      { type: 'line', label: 'Cumulative P&L', data: [-797.5, -696.5, -846.0, -833.0, -845.0, -767.5, -849.5, -781.0, -655.5, -733.5, -894.0, -934.5, -907.5, -871.5, -898.0, -741.0, -714.0, -714.0, -714.0, -714.0, -411.0, -170.0, -187.0, -458.5, -267.5, -54.0, 405.5, 683.5, 777.0, 1003.0, 1200.5, 1067.5, 1123.5, 1508.0, 805.0, 1115.5, 737.0, 965.0, 937.5, 1161.5, 1373.5, 1744.5, 1905.0, 2044.5, 2164.0, 2255.0, 2415.5, 2555.0, 2580.5, 2648.0, 2467.0, 2734.0, 2434.0, 2479.5, 1413.5, 1738.5, 1986.0, 2178.5], borderColor: '#0f2220', borderWidth: 1.5, pointRadius: 0, fill: false, yAxisID: 'y2' },
     ]
   },
   options: {
@@ -2007,3 +1999,7 @@ new Chart(postCtx, {
 </script>
 </body>
 </html>
+
+
+
+
