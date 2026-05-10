@@ -222,211 +222,170 @@ html = f"""<!DOCTYPE html>
 <title>The FOMC Vol Crush | The Intrinsic Investor</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 :root {{
-  --bg:      #f7f4ec;
-  --bg2:     #f0ece2;
-  --ink:     #0f2220;
-  --muted:   #4a6460;
-  --hint:    #8aaba6;
-  --accent:  #1a5c52;
-  --green2:  #059669;
-  --red2:    #dc2626;
-  --blue2:   #2563eb;
-  --amber:   #E3A008;
-  --green-bg:#d1fae5;
-  --red-bg:  #fee2e2;
-  --amber-bg:#fef3c7;
-  --blue-bg: #dbeafe;
-  --purple-bg:#ede9fe;
+  --bg:#f7f4ec; --bg2:#f0ece2; --bg3:#e8e3d8; --card:#fff;
+  --ink:#0f2220; --muted:#4a6460; --hint:#8aa49e;
+  --border:#e2ddd0; --accent:#1a5c52; --accent2:#144a42;
+  --green:#0E9F6E; --green2:#059669; --green-bg:#ecfdf5; --green-border:#a7f3d0;
+  --red:#E02424; --red2:#dc2626; --red-bg:#fef2f2; --red-border:#fca5a5;
+  --blue:#1e40af; --blue2:#2563eb; --blue-bg:#eff6ff; --blue-border:#bfdbfe;
+  --amber:#E3A008; --amber-bg:#fffbeb; --amber-border:#fcd34d;
+  --purple:#7E3AF2; --purple-bg:#f5f3ff; --purple-border:#c4b5fd;
+  --font:'Inter',sans-serif; --serif:'Fraunces',serif; --mono:'JetBrains Mono',monospace;
 }}
 *,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}
 html{{scroll-behavior:smooth}}
-body{{
-  font-family:Inter,sans-serif;
-  background:var(--bg);
-  color:var(--ink);
-  line-height:1.7;
-  position:relative;
-  overflow-x:hidden;
-}}
-body::before{{
-  content:'';
-  position:fixed;inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-  opacity:.5;mix-blend-mode:multiply;pointer-events:none;z-index:9999;
-}}
-#progress-bar{{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--green2));width:0%;z-index:10000;transition:width .1s}}
-nav{{
-  position:sticky;top:0;z-index:1000;
-  background:rgba(247,244,236,.85);backdrop-filter:blur(12px);
-  border-bottom:1px solid rgba(15,34,32,.08);
-  padding:.85rem 2rem;
-  display:flex;align-items:center;justify-content:space-between;
-}}
-.nav-logo{{font-family:Fraunces,serif;font-size:1.1rem;color:var(--ink);text-decoration:none;font-weight:600}}
-.nav-links{{display:flex;gap:2rem;list-style:none}}
-.nav-links a{{color:var(--muted);text-decoration:none;font-size:.875rem;font-weight:500;transition:color .2s}}
+body{{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.7}}
+body::after{{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+  mix-blend-mode:multiply;opacity:0.5}}
+#progress-bar{{position:fixed;top:0;left:0;height:2px;width:0%;
+  background:linear-gradient(90deg,#1a5c52,#2d9d8f);z-index:9998;transition:width .1s linear}}
+nav{{position:sticky;top:0;z-index:100;height:62px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 2rem;
+  background:rgba(247,244,236,.92);backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);transition:box-shadow .3s}}
+nav.scrolled{{box-shadow:0 1px 24px rgba(15,34,32,.06)}}
+.nav-logo{{font-family:var(--serif);font-weight:600;font-size:1.1rem;color:var(--ink);letter-spacing:-.01em;text-decoration:none}}
+.nav-links{{display:flex;gap:1.75rem;list-style:none}}
+.nav-links a{{color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:500;
+  position:relative;padding-bottom:2px;transition:color .2s}}
 .nav-links a:hover{{color:var(--ink)}}
-.hero{{
-  background:var(--ink);color:var(--bg);
-  padding:5rem 2rem 4rem;
-  position:relative;overflow:hidden;
-}}
-.hero::after{{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse at 70% 50%,rgba(26,92,82,.4) 0%,transparent 70%);
-  pointer-events:none;
-}}
-.hero-inner{{max-width:860px;margin:0 auto;position:relative;z-index:1}}
-.hero-eyebrow{{
-  font-size:.75rem;font-weight:600;letter-spacing:.12em;
-  text-transform:uppercase;color:rgba(247,244,236,.5);margin-bottom:1.2rem;
-}}
-.hero h1{{
-  font-family:Fraunces,serif;font-size:clamp(2rem,5vw,3.2rem);
-  font-weight:300;line-height:1.2;margin-bottom:1.2rem;
-}}
-.hero h1 em{{font-style:italic;color:#6ed4c8}}
-.hero-sub{{font-size:1.05rem;color:rgba(247,244,236,.75);max-width:640px;line-height:1.6}}
-.hero-meta{{
-  display:flex;flex-wrap:wrap;gap:1.5rem;margin-top:2rem;
-  font-size:.8rem;color:rgba(247,244,236,.55);align-items:center;
-}}
-.hero-meta span{{display:flex;align-items:center;gap:.4rem}}
-.hero-meta a{{
-  color:rgba(247,244,236,.55);text-decoration:none;border:1px solid rgba(247,244,236,.2);
-  padding:.25rem .75rem;border-radius:4px;transition:all .2s;
-}}
-.hero-meta a:hover{{color:var(--bg);border-color:rgba(247,244,236,.5)}}
-.kpi-strip{{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  border-bottom:1px solid rgba(15,34,32,.1);
-  background:var(--bg);
-}}
-.kpi-cell{{
-  padding:1.8rem 2rem;
-  border-right:1px solid rgba(15,34,32,.08);
-}}
+.nav-links a::after{{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
+  background:var(--accent);transform:scaleX(0);transform-origin:left;
+  transition:transform .25s cubic-bezier(.4,0,.2,1)}}
+.nav-links a:hover::after{{transform:scaleX(1)}}
+.hero{{background:var(--ink);padding:5rem 2rem 4rem;position:relative;overflow:hidden}}
+.hero::before{{content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:repeating-linear-gradient(-55deg,transparent,transparent 40px,rgba(255,255,255,.013) 40px,rgba(255,255,255,.013) 41px)}}
+.hero-inner{{max-width:860px;margin:0 auto;position:relative}}
+.hero-tag{{display:inline-block;font-family:var(--mono);font-size:.72rem;color:var(--accent);
+  letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(26,92,82,.4);
+  padding:.25rem .75rem;border-radius:2px;margin-bottom:1.5rem;animation:fadeUp .6s ease both}}
+.hero h1{{font-family:var(--serif);font-size:clamp(1.9rem,4.5vw,3.2rem);font-weight:600;
+  color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:1.25rem;
+  animation:fadeUp .6s .1s ease both}}
+.hero h1 em{{font-style:italic;color:var(--accent)}}
+.hero-sub{{font-size:1rem;color:rgba(255,255,255,.65);max-width:620px;line-height:1.7;
+  margin-bottom:2rem;animation:fadeUp .6s .2s ease both}}
+.hero-meta{{display:flex;flex-wrap:wrap;gap:2rem;font-family:var(--mono);font-size:.75rem;
+  color:rgba(255,255,255,.5);border-top:1px solid rgba(255,255,255,.1);
+  padding-top:1.5rem;animation:fadeUp .6s .3s ease both}}
+.hero-meta-item strong{{display:block;color:rgba(255,255,255,.85);font-size:.85rem;margin-bottom:.15rem}}
+.gh-btn{{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);
+  font-size:.68rem;color:rgba(255,255,255,.5);text-decoration:none;
+  border:1px solid rgba(255,255,255,.2);padding:3px 9px;border-radius:3px;
+  transition:all .2s;letter-spacing:.02em;align-self:center}}
+.gh-btn:hover{{color:#fff;border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.08)}}
+@keyframes fadeUp{{from{{opacity:0;transform:translateY(18px)}}to{{opacity:1;transform:translateY(0)}}}}
+.kpi-strip{{background:var(--card);border-bottom:1px solid var(--border);padding:2rem}}
+.kpi-grid{{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}}
+.kpi-cell{{padding:1.5rem;border-right:1px solid var(--border)}}
 .kpi-cell:last-child{{border-right:none}}
-.kpi-label{{font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--hint);margin-bottom:.5rem}}
-.kpi-value{{font-family:Fraunces,serif;font-size:2rem;font-weight:300;color:var(--ink);line-height:1}}
+.kpi-label{{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--hint);margin-bottom:.5rem}}
+.kpi-value{{font-family:var(--mono);font-size:1.9rem;font-weight:500;color:var(--ink);
+  line-height:1;margin-bottom:.4rem}}
 .kpi-value.green{{color:var(--green2)}}
+.kpi-value.red{{color:var(--red2)}}
 .kpi-value.blue{{color:var(--blue2)}}
-.kpi-sub{{font-size:.75rem;color:var(--muted);margin-top:.35rem}}
-#side-nav{{
-  position:fixed;right:1.2rem;top:50%;transform:translateY(-50%);
-  display:flex;flex-direction:column;gap:.6rem;z-index:900;
-}}
-.sn-item{{display:flex;align-items:center;gap:.5rem;cursor:pointer;justify-content:flex-end}}
-.sn-dot{{
-  width:7px;height:7px;border-radius:50%;
-  background:var(--hint);transition:all .25s;flex-shrink:0;
-}}
-.sn-label{{
-  font-size:.65rem;color:var(--hint);white-space:nowrap;
-  transition:all .25s;opacity:0;transform:translateX(4px);
-  font-family:Inter,sans-serif;font-weight:500;
-}}
-.sn-item:hover .sn-label,.sn-item.active .sn-label{{opacity:1;transform:translateX(0)}}
-.sn-item.active .sn-dot{{background:var(--accent);transform:scale(1.4)}}
-@media(max-width:860px){{#side-nav{{display:none}}}}
-section{{padding:4.5rem 2rem;opacity:0;transform:translateY(18px);transition:opacity .55s,transform .55s}}
-section.visible{{opacity:1;transform:none}}
-.section-inner{{max-width:860px;margin:0 auto}}
-.section-label{{
-  font-size:.68rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--accent);margin-bottom:.9rem;
-}}
-section h2{{
-  font-family:Fraunces,serif;font-size:clamp(1.5rem,3vw,2.1rem);
-  font-weight:300;margin-bottom:1.4rem;line-height:1.3;
-}}
-section h3{{
-  font-family:Fraunces,serif;font-size:1.2rem;font-weight:400;
-  margin:2rem 0 1rem;
-}}
-section p{{
-  color:var(--muted);margin-bottom:1.1rem;
-  text-align:justify;hyphens:auto;
-}}
-.callout{{
-  padding:1rem 1.25rem;border-radius:6px;margin:1.2rem 0;
-  border-left:3px solid;font-size:.9rem;color:var(--ink);
-}}
+.kpi-sub{{font-size:.78rem;color:var(--muted)}}
+.container{{max-width:860px;margin:0 auto;padding:0 2rem}}
+.section{{opacity:0;transform:translateY(16px);
+  transition:opacity .55s ease,transform .55s ease;
+  padding:4.5rem 0;border-bottom:1px solid var(--border)}}
+.section.visible{{opacity:1;transform:none}}
+.section:last-of-type{{border-bottom:none}}
+.section-label{{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem}}
+.section-counter{{font-family:var(--mono);font-size:.72rem;color:var(--hint);letter-spacing:.04em}}
+.section-label span:last-child{{font-size:.72rem;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--hint)}}
+h2{{font-family:var(--serif);font-size:clamp(1.5rem,3vw,2.1rem);font-weight:600;
+  color:var(--ink);line-height:1.25;letter-spacing:-.02em;margin-bottom:1.25rem}}
+h2 em{{font-style:italic;color:var(--accent)}}
+h3{{font-family:var(--serif);font-size:1.15rem;font-weight:600;color:var(--ink);margin:2rem 0 .75rem}}
+p{{color:var(--muted);line-height:1.75;margin-bottom:1rem;text-align:justify;hyphens:none;word-break:normal}}
+p:last-child{{margin-bottom:0}}
+.callout{{display:flex;gap:1rem;padding:1.25rem 1.5rem;border-radius:4px;
+  margin:1.5rem 0;border-left:3px solid;font-size:.9rem;color:var(--ink);line-height:1.6}}
 .callout.green{{background:var(--green-bg);border-color:var(--green2)}}
 .callout.amber{{background:var(--amber-bg);border-color:var(--amber)}}
-.callout.blue{{background:var(--blue-bg);border-color:var(--blue2)}}
 .callout.red{{background:var(--red-bg);border-color:var(--red2)}}
-.callout.purple{{background:var(--purple-bg);border-color:#7c3aed}}
+.callout.blue{{background:var(--blue-bg);border-color:var(--blue2)}}
+.callout.purple{{background:var(--purple-bg);border-color:var(--purple)}}
 .callout strong{{font-weight:600}}
-.chart-box{{
-  background:var(--bg2);border:1px solid rgba(15,34,32,.08);
-  border-radius:8px;padding:1.5rem;margin:1.5rem 0;
-}}
-.chart-title{{
-  font-size:.68rem;font-weight:600;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--muted);margin-bottom:1rem;
-}}
-.chart-legend{{
-  display:flex;flex-wrap:wrap;gap:1rem;margin-top:.8rem;font-size:.78rem;color:var(--muted);
-}}
-.legend-dot{{
-  width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:.3rem;flex-shrink:0;
-}}
-.legend-line{{
-  width:18px;height:2px;display:inline-block;margin-right:.3rem;vertical-align:middle;flex-shrink:0;
-}}
+.highlight-box{{background:var(--ink);border-radius:4px;padding:2rem;margin:1.5rem 0;display:grid;grid-template-columns:repeat(3,1fr)}}
+.highlight-box > div{{padding:0 1.5rem;border-right:1px solid rgba(255,255,255,.1)}}
+.highlight-box > div:first-child{{padding-left:0}}
+.highlight-box > div:last-child{{border-right:none;padding-right:0}}
+.hl-grid{{display:grid;grid-template-columns:repeat(3,1fr)}}
+.hl-cell{{padding:0 1.5rem;border-right:1px solid rgba(255,255,255,.1)}}
+.hl-cell:first-child{{padding-left:0}}
+.hl-cell:last-child{{border-right:none;padding-right:0}}
+.hl-label{{font-size:.7rem;font-weight:500;color:rgba(255,255,255,.35);text-transform:uppercase;
+  letter-spacing:.1em;margin-bottom:.5rem}}
+.hl-value{{font-family:var(--serif);font-style:italic;font-size:1.75rem;color:#5ab5a5;line-height:1.1}}
+.hl-sub{{font-size:.75rem;color:rgba(255,255,255,.3);margin-top:.3rem}}
+.hb-val{{font-family:var(--serif);font-style:italic;font-size:1.75rem;color:#5ab5a5;line-height:1.1}}
+.hb-label{{font-size:.7rem;font-weight:500;color:rgba(255,255,255,.35);text-transform:uppercase;
+  letter-spacing:.1em;margin-top:.35rem}}
+.chart-box{{background:var(--bg2);border:1px solid var(--border);
+  border-radius:4px;padding:1.5rem;margin:1.5rem 0}}
+.chart-title{{font-size:.85rem;font-weight:600;color:var(--ink);
+  margin-bottom:1rem;letter-spacing:.02em}}
+.chart-legend{{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px}}
+.legend-item{{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}}
+.legend-dot{{width:10px;height:10px;border-radius:50%;flex-shrink:0;display:inline-block}}
+.legend-line{{width:16px;height:2px;flex-shrink:0;display:inline-block;vertical-align:middle}}
 .data-table{{width:100%;border-collapse:collapse;font-size:.83rem;margin:1rem 0}}
-.data-table th{{
-  background:var(--ink);color:var(--bg);
-  padding:.55rem .8rem;text-align:left;font-weight:500;font-size:.72rem;letter-spacing:.04em;
-}}
-.data-table td{{
-  padding:.5rem .8rem;border-bottom:1px solid rgba(15,34,32,.06);color:var(--muted);
-}}
+.data-table th{{background:var(--ink);color:var(--bg);padding:.55rem .8rem;text-align:left;font-weight:500;font-size:.72rem;letter-spacing:.04em}}
+.data-table td{{padding:.5rem .8rem;border-bottom:1px solid rgba(15,34,32,.06);color:var(--muted)}}
 .data-table tr:hover td{{background:rgba(15,34,32,.02)}}
 .data-table .top-row td{{background:#d1fae5!important;color:var(--ink)!important;font-weight:500}}
 .heatmap-table{{width:100%;border-collapse:collapse;font-size:.75rem}}
-.heatmap-table th{{
-  background:var(--ink);color:var(--bg);
-  padding:.4rem .5rem;font-weight:500;font-size:.65rem;text-align:center;letter-spacing:.03em;
-}}
-.heatmap-table td{{
-  padding:.35rem .45rem;border-bottom:1px solid rgba(15,34,32,.05);
-  text-align:center;
-}}
+.heatmap-table th{{background:var(--ink);color:var(--bg);padding:.4rem .5rem;font-weight:500;font-size:.65rem;text-align:center;letter-spacing:.03em}}
+.heatmap-table td{{padding:.35rem .45rem;border-bottom:1px solid rgba(15,34,32,.05);text-align:center}}
 .method-table{{width:100%;border-collapse:collapse;font-size:.85rem;margin:1rem 0}}
-.method-table th{{
-  background:var(--ink);color:var(--bg);padding:.6rem 1rem;
-  font-weight:500;font-size:.75rem;text-align:left;
-}}
-.method-table td{{
-  padding:.55rem 1rem;border-bottom:1px solid rgba(15,34,32,.08);
-  color:var(--muted);vertical-align:top;
-}}
+.method-table th{{background:var(--ink);color:var(--bg);padding:.6rem 1rem;font-weight:500;font-size:.75rem;text-align:left}}
+.method-table td{{padding:.55rem 1rem;border-bottom:1px solid rgba(15,34,32,.08);color:var(--muted);vertical-align:top}}
 .method-table td:first-child{{font-weight:500;color:var(--ink);white-space:nowrap;width:35%}}
-.highlight-box{{
-  background:var(--ink);color:var(--bg);border-radius:8px;
-  padding:2rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin:1.5rem 0;
+#side-nav{{position:fixed;right:0;top:50%;transform:translateY(-50%);
+  z-index:50;display:flex;flex-direction:column;gap:2px;padding:10px 6px}}
+#side-nav a{{display:flex;align-items:center;justify-content:flex-end;gap:7px;
+  text-decoration:none;padding:5px 8px;border-radius:4px;transition:background .2s}}
+#side-nav a:hover{{background:rgba(26,92,82,.07)}}
+.sn-label{{font-size:.67rem;font-weight:500;color:var(--hint);white-space:nowrap;
+  letter-spacing:.02em;font-family:var(--font);transition:color .2s;text-align:right}}
+.sn-dot{{width:5px;height:5px;border-radius:50%;background:var(--border);
+  flex-shrink:0;transition:all .2s}}
+#side-nav a.active .sn-label{{color:var(--accent);font-weight:600}}
+#side-nav a.active .sn-dot{{background:var(--accent);transform:scale(1.5)}}
+#side-nav a:hover .sn-label{{color:var(--ink)}}
+#side-nav a:hover .sn-dot{{background:var(--muted)}}
+footer{{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}}
+.footer-inner{{max-width:860px;margin:0 auto;display:flex;
+  justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}}
+.footer-name{{font-family:var(--serif);font-weight:600;font-size:1rem;color:rgba(255,255,255,.9)}}
+.footer-right{{font-size:.8rem;text-align:right}}
+.footer-right a{{color:rgba(255,255,255,.5);text-decoration:none;margin-left:1.2rem}}
+.footer-right a:hover{{color:rgba(255,255,255,.85)}}
+@media(max-width:860px){{
+  #side-nav{{display:none}}
+  .kpi-grid{{grid-template-columns:repeat(2,1fr)}}
+  .footer-inner{{flex-direction:column;text-align:center}}
+  .footer-right{{text-align:center}}
 }}
-.hb-val{{font-family:Fraunces,serif;font-size:2.2rem;font-weight:300;color:#6ed4c8}}
-.hb-label{{font-size:.75rem;color:rgba(247,244,236,.6);margin-top:.3rem}}
-footer{{
-  background:var(--ink);color:rgba(247,244,236,.55);
-  padding:3rem 2rem;font-size:.8rem;
+@media(max-width:560px){{
+  .kpi-cell{{border-right:none;border-bottom:1px solid var(--border)}}
+  .hl-grid{{grid-template-columns:1fr;gap:1rem}}
+  .hl-cell{{border-right:none;padding:0;border-bottom:1px solid rgba(255,255,255,.08);padding-bottom:1rem}}
+  .hl-cell:last-child{{border-bottom:none}}
 }}
-.footer-inner{{max-width:860px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1.5rem}}
-.footer-copy{{font-family:JetBrains Mono,monospace;font-size:.72rem}}
-.footer-links{{display:flex;gap:1.5rem}}
-.footer-links a{{color:rgba(247,244,236,.45);text-decoration:none}}
-.footer-links a:hover{{color:var(--bg)}}
-@media(max-width:640px){{
-  .kpi-strip{{grid-template-columns:repeat(2,1fr)}}
-  .kpi-cell{{border-right:none;border-bottom:1px solid rgba(15,34,32,.08)}}
-  .highlight-box{{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){{
+  *,*::before,*::after{{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 }}
 </style>
 </head>
@@ -443,20 +402,20 @@ footer{{
 </nav>
 
 <!-- Side nav -->
-<nav id="side-nav" aria-label="Page sections">
-  <div class="sn-item" onclick="scrollToSection('s1')"><span class="sn-label">Study Design</span><div class="sn-dot"></div></div>
-  <div class="sn-item" onclick="scrollToSection('s2')"><span class="sn-label">IV Profile</span><div class="sn-dot"></div></div>
-  <div class="sn-item" onclick="scrollToSection('s3')"><span class="sn-label">Surprise Analysis</span><div class="sn-dot"></div></div>
-  <div class="sn-item" onclick="scrollToSection('s4')"><span class="sn-label">Strategy A</span><div class="sn-dot"></div></div>
-  <div class="sn-item" onclick="scrollToSection('s5')"><span class="sn-label">Strategy B</span><div class="sn-dot"></div></div>
-  <div class="sn-item" onclick="scrollToSection('s6')"><span class="sn-label">Methodology</span><div class="sn-dot"></div></div>
-  <div class="sn-item" onclick="scrollToSection('s7')"><span class="sn-label">Conclusions</span><div class="sn-dot"></div></div>
-</nav>
+<div id="side-nav" aria-label="Page sections">
+  <a href="#s1"><span class="sn-label">Study Design</span><div class="sn-dot"></div></a>
+  <a href="#s2"><span class="sn-label">IV Profile</span><div class="sn-dot"></div></a>
+  <a href="#s3"><span class="sn-label">Surprise Analysis</span><div class="sn-dot"></div></a>
+  <a href="#s4"><span class="sn-label">Strategy A</span><div class="sn-dot"></div></a>
+  <a href="#s5"><span class="sn-label">Strategy B</span><div class="sn-dot"></div></a>
+  <a href="#s6"><span class="sn-label">Methodology</span><div class="sn-dot"></div></a>
+  <a href="#s7"><span class="sn-label">Conclusions</span><div class="sn-dot"></div></a>
+</div>
 
 <!-- Hero -->
 <header class="hero">
   <div class="hero-inner">
-    <div class="hero-eyebrow">Systematic Market Research</div>
+    <div class="hero-tag">FOMC Event Study</div>
     <h1>The FOMC Vol Crush: <em>Implied Volatility Dynamics Around Federal Reserve Decisions</em></h1>
     <p class="hero-sub">
       How SPX, TLT, and VIX implied volatility behaves before and after FOMC announcements,
@@ -464,17 +423,21 @@ footer{{
       surprises reveal about the limits of forward guidance.
     </p>
     <div class="hero-meta">
-      <span>Brian Liew, BSc Accounting and Finance, LSE</span>
-      <span>Published May 2026</span>
-      <span>2018 to 2024, n={n_meetings} meetings</span>
-      <span>OptionMetrics, FRED, CME FedWatch</span>
-      <a href="https://github.com/TheIntrinsicInvestor/Backtesting" target="_blank" rel="noopener">GitHub Code</a>
+      <div class="hero-meta-item"><strong>Author</strong>Brian Liew, BSc Accounting and Finance, LSE</div>
+      <div class="hero-meta-item"><strong>Published</strong>May 2026</div>
+      <div class="hero-meta-item"><strong>Period</strong>2018 to 2024, n={n_meetings} meetings</div>
+      <div class="hero-meta-item"><strong>Data</strong>OptionMetrics, FRED, CME FedWatch</div>
+      <a href="https://github.com/TheIntrinsicInvestor/Backtesting" target="_blank" rel="noopener" class="gh-btn">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub Code
+      </a>
     </div>
   </div>
 </header>
 
 <!-- KPI Strip -->
 <div class="kpi-strip">
+  <div class="kpi-grid">
   <div class="kpi-cell">
     <div class="kpi-label">Meetings Analysed</div>
     <div class="kpi-value blue">{n_meetings}</div>
@@ -495,12 +458,13 @@ footer{{
     <div class="kpi-value green">{post_win:.0%}</div>
     <div class="kpi-sub">Enter T+1, exit {best_exit} (SPY straddle)</div>
   </div>
+  </div>
 </div>
 
 <!-- Section 1: Study Design -->
-<section id="s1">
-  <div class="section-inner">
-    <div class="section-label">01 — Study Design</div>
+<section class="section" id="s1">
+  <div class="container">
+    <div class="section-label"><span class="section-counter">01</span><span>Study Design</span></div>
     <h2>Why FOMC meetings create a predictable options market cycle</h2>
     <p>
       Federal Reserve rate decisions are the single most anticipated scheduled macro events in global
@@ -543,9 +507,9 @@ footer{{
 </section>
 
 <!-- Section 2: IV Event Profile -->
-<section id="s2" style="background:var(--bg2)">
-  <div class="section-inner">
-    <div class="section-label">02 — IV Event Profile</div>
+<section class="section" id="s2" style="background:var(--bg2)">
+  <div class="container">
+    <div class="section-label"><span class="section-counter">02</span><span>IV Event Profile</span></div>
     <h2>SPX implied vol builds in the final week before FOMC, then crushes on announcement day</h2>
     <p>
       Each meeting's IV series is normalised so that the mean of T-20 to T-15 equals 100, then averaged
@@ -578,9 +542,9 @@ footer{{
 </section>
 
 <!-- Section 3: Surprise Analysis -->
-<section id="s3">
-  <div class="section-inner">
-    <div class="section-label">03 — Surprise Analysis</div>
+<section class="section" id="s3">
+  <div class="container">
+    <div class="section-label"><span class="section-counter">03</span><span>Surprise Analysis</span></div>
     <h2>Hike meetings carry the largest pre-meeting premium; dovish guidance collapses vol fastest</h2>
     <p>
       Splitting the IV profile by decision type reveals that hike meetings generate a more pronounced
@@ -629,9 +593,9 @@ footer{{
 </section>
 
 <!-- Section 4: Strategy A -->
-<section id="s4" style="background:var(--bg2)">
-  <div class="section-inner">
-    <div class="section-label">04 — Strategy A: Pre-Meeting Straddle Sell</div>
+<section class="section" id="s4" style="background:var(--bg2)">
+  <div class="container">
+    <div class="section-label"><span class="section-counter">04</span><span>Strategy A: Pre-Meeting Straddle Sell</span></div>
     <h2>Selling the pre-meeting premium: enter T-1, exit T+1</h2>
     <p>
       The pre-meeting IV build-up creates a natural opportunity for short-vol traders. Strategy A
@@ -770,9 +734,9 @@ html += f"""      </tbody>
 </section>
 
 <!-- Section 5: Strategy B -->
-<section id="s5">
-  <div class="section-inner">
-    <div class="section-label">05 — Strategy B: Post-Announcement Straddle Sell</div>
+<section class="section" id="s5">
+  <div class="container">
+    <div class="section-label"><span class="section-counter">05</span><span>Strategy B: Post-Announcement Straddle Sell</span></div>
     <h2>Selling the residual premium: enter T+1, hold for continued mean-reversion</h2>
     <p>
       Strategy B enters at T+1 close (after the announcement) and holds for additional vol
@@ -867,9 +831,9 @@ html += f"""      </tbody>
 </section>
 
 <!-- Section 6: Methodology -->
-<section id="s6" style="background:var(--bg2)">
-  <div class="section-inner">
-    <div class="section-label">06 — Methodology</div>
+<section class="section" id="s6" style="background:var(--bg2)">
+  <div class="container">
+    <div class="section-label"><span class="section-counter">06</span><span>Methodology</span></div>
     <h2>Study construction</h2>
     <table class="method-table">
       <thead><tr><th>Dimension</th><th>Detail</th></tr></thead>
@@ -890,9 +854,9 @@ html += f"""      </tbody>
 </section>
 
 <!-- Section 7: Conclusions -->
-<section id="s7">
-  <div class="section-inner">
-    <div class="section-label">07 — Conclusions</div>
+<section class="section" id="s7">
+  <div class="container">
+    <div class="section-label"><span class="section-counter">07</span><span>Conclusions</span></div>
     <h2>Four takeaways from a systematic FOMC options study</h2>
     <div class="callout green">
       <strong>① The pre-meeting IV build-up is real and consistent.</strong> SPX implied vol rises
@@ -942,12 +906,9 @@ html += f"""      </tbody>
 
 <footer>
   <div class="footer-inner">
-    <div>
-      <div style="font-family:Fraunces,serif;font-size:1rem;color:var(--bg);margin-bottom:.4rem">The Intrinsic Investor</div>
-      <div class="footer-copy">Systematic quant research on institutional data</div>
-      <div class="footer-copy" style="margin-top:.25rem">Data: OptionMetrics IvyDB (WRDS), FRED VIXCLS, CME FedWatch</div>
-    </div>
-    <div class="footer-links">
+    <div class="footer-name">The Intrinsic Investor</div>
+    <div class="footer-right">
+      <span style="color:rgba(255,255,255,.35)">&copy; 2026 Brian Liew</span>
       <a href="https://www.linkedin.com/in/brian-liew" target="_blank">LinkedIn</a>
       <a href="https://github.com/TheIntrinsicInvestor" target="_blank">GitHub</a>
       <a href="mailto:brianliew99@gmail.com">Email</a>
@@ -956,23 +917,24 @@ html += f"""      </tbody>
 </footer>
 
 <script>
-// ── Progress bar ────────────────────────────────────────────────────────────
+// ── Progress bar + nav.scrolled ─────────────────────────────────────────────
+const _nav = document.querySelector('nav');
 window.addEventListener('scroll', () => {{
   const el  = document.getElementById('progress-bar');
   const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
   el.style.width = Math.min(pct, 100) + '%';
-}});
+  _nav.classList.toggle('scrolled', window.scrollY > 40);
+}}, {{ passive: true }});
 
 // ── Scroll reveal ───────────────────────────────────────────────────────────
 const io = new IntersectionObserver(entries => {{
   entries.forEach(e => {{ if (e.isIntersecting) e.target.classList.add('visible'); }});
 }}, {{ threshold: 0.07 }});
-document.querySelectorAll('section').forEach(s => io.observe(s));
+document.querySelectorAll('.section').forEach(s => io.observe(s));
 
-// ── Side nav ─────────────────────────────────────────────────────────────────
-function scrollToSection(id) {{ document.getElementById(id).scrollIntoView({{behavior:'smooth'}}); }}
-const sections = document.querySelectorAll('section[id]');
-const navItems = document.querySelectorAll('.sn-item');
+// ── Side nav active state ────────────────────────────────────────────────────
+const sections = document.querySelectorAll('.section[id]');
+const navItems = document.querySelectorAll('#side-nav a');
 const navIo = new IntersectionObserver(entries => {{
   entries.forEach(e => {{
     if (e.isIntersecting) {{
