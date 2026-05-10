@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Selling Earnings Volatility — TheIntrinsicInvestor</title>
+<title>Selling Earnings Volatility: TheIntrinsicInvestor</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
@@ -179,9 +179,9 @@ tbody tr.visible{opacity:1;transform:none}
   <!-- Executive Summary -->
   <div class="section">
     <div class="section-title">Executive Summary</div>
-    <p>This report evaluates the profitability of selling at-the-money (ATM) short straddles on the Magnificent Seven stocks in the 30 minutes prior to market close on earnings announcement days, closing the position in the second half of the following trading session. The strategy exploits the well-documented tendency for options markets to systematically overprice the magnitude of earnings-driven moves — a phenomenon known as the <em>implied volatility (IV) crush</em>.</p>
+    <p>This report evaluates the profitability of selling at-the-money (ATM) short straddles on the Magnificent Seven stocks in the 30 minutes prior to market close on earnings announcement days, closing the position in the second half of the following trading session. The strategy exploits the well-documented tendency for options markets to systematically overprice the magnitude of earnings-driven moves, a phenomenon known as the <em>implied volatility (IV) crush</em>.</p>
     <p>Across 168 earnings events from Q1 2019 through Q4 2024, the strategy produced a combined total P&L of <strong>$18,476</strong> trading one contract per event. However, the aggregate result masks substantial cross-sectional dispersion: five of seven stocks generated positive total P&L, while AMZN and META were net destroyers of capital, with AMZN alone accounting for a $21,317 loss driven by a catastrophic 2022 drawdown.</p>
-    <p>The headline finding is that <strong>this strategy is stock-specific, not universally applicable</strong>. MSFT stands out as the cleanest expression of the edge — high win rate, favourable risk-adjusted returns, shallow drawdown, and consistent profitability across all six years. TSLA offers the highest nominal return but with extreme regime dependency and an 8-trade losing streak. AMZN and META should be avoided under this strategy framework.</p>
+    <p>The headline finding is that <strong>this strategy is stock-specific, not universally applicable</strong>. MSFT stands out as the cleanest expression of the edge: high win rate, favourable risk-adjusted returns, shallow drawdown, and consistent profitability across all six years. TSLA offers the highest nominal return but with extreme regime dependency and an 8-trade losing streak. AMZN and META should be avoided under this strategy framework.</p>
   </div>
 
   <!-- Strategy Overview -->
@@ -189,7 +189,7 @@ tbody tr.visible{opacity:1;transform:none}
     <div class="section-title">1. Strategy Overview</div>
     <p><strong>Entry:</strong> Sell an ATM straddle (simultaneously sell one call and one put at the strike closest to the current stock price) on the nearest weekly expiry that covers the earnings date, approximately 15–30 minutes before market close on the earnings announcement day.</p>
     <p><strong>Exit:</strong> Close the position in the second half of the following trading day, after IV crush has taken effect.</p>
-    <p><strong>Rationale:</strong> In the days leading up to earnings, implied volatility rises as market participants pay up for optionality. Once earnings are released, the uncertainty resolves and IV collapses — regardless of whether the stock moves up or down. A short straddle profits when the actual stock move is smaller than the move priced into the straddle at entry.</p>
+    <p><strong>Rationale:</strong> In the days leading up to earnings, implied volatility rises as market participants pay up for optionality. Once earnings are released, the uncertainty resolves and IV collapses, regardless of whether the stock moves up or down. A short straddle profits when the actual stock move is smaller than the move priced into the straddle at entry.</p>
     <div class="callout callout-info">
       <strong>Core P&L Identity</strong>
       Profit ≈ Straddle Price Received − |Realised Stock Move|. &nbsp;Edge % = Implied Move % − |Realised Move %|, where Implied Move % = Straddle Price / Spot × 100.
@@ -200,7 +200,7 @@ tbody tr.visible{opacity:1;transform:none}
   <div class="section">
     <div class="section-title">2. Data &amp; Methodology</div>
     <p>Options data was sourced from OptionMetrics IvyDB via WRDS (<code>optionm.opprcd{year}</code>). End-of-day closing bid/ask quotes were used to compute the mid-price straddle cost, serving as a proxy for the 3:45–4:00pm entry price. Earnings announcement dates were obtained from the IBES Actuals database (<code>ibes.act_epsus</code>), with ticker corrections applied for Alphabet (GOOG) and Meta (FBK).</p>
-    <p><strong>P&L approximation:</strong> The exit value of the straddle on the following afternoon is estimated as its intrinsic value — the absolute dollar move in the underlying. This slightly overstates profitability on winning trades and is appropriate for historical analysis purposes.</p>
+    <p><strong>P&L approximation:</strong> The exit value of the straddle on the following afternoon is estimated as its intrinsic value (the absolute dollar move in the underlying). This slightly overstates profitability on winning trades and is appropriate for historical analysis purposes.</p>
     <p><strong>Margin assumption:</strong> Margin is estimated at 20% of notional (spot price × 100 shares per contract), consistent with standard broker requirements for naked short options on equity underlyings.</p>
   </div>
 
@@ -219,28 +219,28 @@ tbody tr.visible{opacity:1;transform:none}
     </div>
 
     <div class="chart-wrap">
-      <div class="chart-label">Figure 1 — Total P&L per Ticker (1 contract per earnings event, 24 events each)</div>
+      <div class="chart-label">Figure 1: Total P&L per Ticker (1 contract per earnings event, 24 events each)</div>
       <canvas id="c1" height="90"></canvas>
     </div>
     <div class="chart-wrap">
-      <div class="chart-label">Figure 2 — Average Implied Move vs Average Realised Move (%)</div>
+      <div class="chart-label">Figure 2: Average Implied Move vs Average Realised Move (%)</div>
       <canvas id="c2" height="90"></canvas>
-      <div class="chart-note">Stocks where implied exceeds realised exhibit systematic IV overpricing — the precondition for a profitable short straddle. META is the only stock where realised moves consistently exceeded implied.</div>
+      <div class="chart-note">Stocks where implied exceeds realised exhibit systematic IV overpricing, the precondition for a profitable short straddle. META is the only stock where realised moves consistently exceeded implied.</div>
     </div>
     <div class="chart-wrap">
-      <div class="chart-label">Figure 3 — Risk-Adjusted Return Metrics (per trade; Sortino and Calmar capped for readability)</div>
+      <div class="chart-label">Figure 3: Risk-Adjusted Return Metrics (per trade, with Sortino and Calmar capped for readability)</div>
       <canvas id="c3" height="90"></canvas>
     </div>
     <div class="chart-wrap">
-      <div class="chart-label">Figure 4 — Win Rate (%) vs Payoff Ratio</div>
+      <div class="chart-label">Figure 4: Win Rate (%) vs Payoff Ratio</div>
       <canvas id="c4" height="90"></canvas>
-      <div class="chart-note">MSFT is the only stock with both a high win rate (&gt;70%) and a payoff ratio above 1.0. TSLA has a payoff of 2.73x but only 50% win rate — entirely dependent on large winners.</div>
+      <div class="chart-note">MSFT is the only stock with both a high win rate (&gt;70%) and a payoff ratio above 1.0. TSLA has a payoff of 2.73x but only 50% win rate, entirely dependent on large winners.</div>
     </div>
   </div>
 
   <!-- Regime Analysis -->
   <div class="section">
-    <div class="section-title">4. Regime Analysis — Year-by-Year Breakdown</div>
+    <div class="section-title">4. Regime Analysis: Year-by-Year Breakdown</div>
     <div class="tabs" id="tabs"></div>
     <div class="chart-wrap">
       <div class="chart-label" id="yearly-label">Annual P&L</div>
@@ -250,7 +250,7 @@ tbody tr.visible{opacity:1;transform:none}
       <strong>Key Regime Observations</strong>
       <strong style="display:inline;font-weight:600;color:var(--ink)">2020 (COVID):</strong> Mixed. TSLA exploded to +$23,467 (100% win rate). AMZN lost $9,439 on violent moves. MSFT and NVDA remained profitable.<br><br>
       <strong style="display:inline;font-weight:600;color:var(--ink)">2022 (Rate shock):</strong> Most destructive year. AMZN lost $36,890 in a single year. META lost $7,679. NVDA was the exception at 4/4 wins.<br><br>
-      <strong style="display:inline;font-weight:600;color:var(--ink)">2021:</strong> Best year broadly — low realised vol, elevated premiums. TSLA went 4/4 for +$11,167.<br><br>
+      <strong style="display:inline;font-weight:600;color:var(--ink)">2021:</strong> Best year broadly, with low realised vol and elevated premiums. TSLA went 4/4 for +$11,167.<br><br>
       <strong style="display:inline;font-weight:600;color:var(--ink)">2023–2024:</strong> TSLA deteriorated to 0% win rate both years. MSFT and AAPL remained constructive.
     </div>
   </div>
@@ -283,31 +283,31 @@ tbody tr.visible{opacity:1;transform:none}
   <div class="section">
     <div class="section-title">6. Individual Stock Verdicts</div>
     <div class="stock-verdict sv-green">
-      <div class="sv-head"><span class="sv-ticker">MSFT</span><span class="sv-rating">★ Strong Edge — Best Risk-Adjusted Expression</span></div>
-      <p class="sv-text">MSFT is the standout ticker for this strategy. A 75% win rate combined with a payoff ratio of 1.26x is rare in short volatility — it means MSFT not only wins more often, it wins bigger than it loses. The Calmar ratio of 7.97 is exceptional: total cumulative P&L is nearly 8× the max drawdown. Crucially, MSFT generated positive annual P&L in all six years including 2022, demonstrating genuine regime resilience. The avg edge of 1.40% is consistent (std: 2.36%). At $5,241 margin per contract, the 6.96% return on margin per trade is the most capital-efficient result in the study.</p>
+      <div class="sv-head"><span class="sv-ticker">MSFT</span><span class="sv-rating">★ Strong Edge: Best Risk-Adjusted Expression</span></div>
+      <p class="sv-text">MSFT is the standout ticker for this strategy. A 75% win rate combined with a payoff ratio of 1.26x is rare in short volatility, meaning MSFT not only wins more often, it wins bigger than it loses. The Calmar ratio of 7.97 is exceptional: total cumulative P&L is nearly 8× the max drawdown. Crucially, MSFT generated positive annual P&L in all six years including 2022, demonstrating genuine regime resilience. The avg edge of 1.40% is consistent (std: 2.36%). At $5,241 margin per contract, the 6.96% return on margin per trade is the most capital-efficient result in the study.</p>
     </div>
     <div class="stock-verdict sv-green">
-      <div class="sv-head"><span class="sv-ticker">NVDA</span><span class="sv-rating">★ Strong Edge — High Reward, High Risk</span></div>
-      <p class="sv-text">NVDA offers the highest avg edge % (1.61%) and a solid 70.8% win rate. However, the payoff ratio of 0.63x reveals the asymmetry: losing trades are 1.6× larger than winning trades on average, with a worst trade of −$5,264. The 2024 deterioration is notable — 0% win rate as AI-driven earnings reactions became less predictable. Max drawdown of $6,802 requires approximately 6 average winning trades to recover. Suitable for traders comfortable with concentrated tail risk, but position sizing must account for the fat tail (excess kurtosis: 2.04).</p>
+      <div class="sv-head"><span class="sv-ticker">NVDA</span><span class="sv-rating">★ Strong Edge: High Reward, High Risk</span></div>
+      <p class="sv-text">NVDA offers the highest avg edge % (1.61%) and a solid 70.8% win rate. However, the payoff ratio of 0.63x reveals the asymmetry: losing trades are 1.6× larger than winning trades on average, with a worst trade of −$5,264. The 2024 deterioration is notable, with 0% win rate as AI-driven earnings reactions became less predictable. Max drawdown of $6,802 requires approximately 6 average winning trades to recover. Suitable for traders comfortable with concentrated tail risk, but position sizing must account for the fat tail (excess kurtosis: 2.04).</p>
     </div>
     <div class="stock-verdict sv-blue">
-      <div class="sv-head"><span class="sv-ticker">AAPL</span><span class="sv-rating">Positive Edge — Modest but Reliable</span></div>
-      <p class="sv-text">AAPL shows a consistent, low-magnitude edge — 66.7% win rate and avg P&L of $136 per contract. The critical warning sign is AAPL's extreme distribution: skewness of −2.74 and excess kurtosis of 10.29 are the most extreme in the sample. This means rare but severe blowouts. The worst trade (−$2,623) was roughly 5.6× the avg win ($466), meaning a single bad quarter can wipe out multiple years of gains. Suitable only with strict position sizing and pre-defined stop rules.</p>
+      <div class="sv-head"><span class="sv-ticker">AAPL</span><span class="sv-rating">Positive Edge: Modest but Reliable</span></div>
+      <p class="sv-text">AAPL shows a consistent, low-magnitude edge (66.7% win rate and avg P&L of $136 per contract). The critical warning sign is AAPL's extreme distribution: skewness of −2.74 and excess kurtosis of 10.29 are the most extreme in the sample. This means rare but severe blowouts. The worst trade (−$2,623) was roughly 5.6× the avg win ($466), meaning a single bad quarter can wipe out multiple years of gains. Suitable only with strict position sizing and pre-defined stop rules.</p>
     </div>
     <div class="stock-verdict sv-yellow">
-      <div class="sv-head"><span class="sv-ticker">TSLA</span><span class="sv-rating">Positive Total P&L — Highly Regime-Dependent</span></div>
-      <p class="sv-text">TSLA is the most anomalous result. A 50% win rate with a payoff ratio of 2.73x produced the highest total P&L ($27,394), driven almost entirely by 2020–2021 where TSLA went 8/8. Since 2022, TSLA has gone 2/8 — a 25% win rate — as earnings reactions became large and directional. A trader running this strategy on TSLA from 2023 onwards would have lost $7,242 over 8 trades. The max consecutive losing streak of 8 would be psychologically and financially punishing at real position sizes.</p>
+      <div class="sv-head"><span class="sv-ticker">TSLA</span><span class="sv-rating">Positive Total P&L: Highly Regime-Dependent</span></div>
+      <p class="sv-text">TSLA is the most anomalous result. A 50% win rate with a payoff ratio of 2.73x produced the highest total P&L ($27,394), driven almost entirely by 2020–2021 where TSLA went 8/8. Since 2022, TSLA has gone 2/8 (a 25% win rate) as earnings reactions became large and directional. A trader running this strategy on TSLA from 2023 onwards would have lost $7,242 over 8 trades. The max consecutive losing streak of 8 would be psychologically and financially punishing at real position sizes.</p>
     </div>
     <div class="stock-verdict sv-yellow">
-      <div class="sv-head"><span class="sv-ticker">GOOGL</span><span class="sv-rating">Marginal — No Reliable Edge</span></div>
-      <p class="sv-text">GOOGL produced a near-zero outcome — $106.50 total P&L over 24 events, Sharpe of 0.001, Calmar of 0.007. The market appears to price GOOGL earnings moves fairly on average. Win rate of 50% with a near-1.0 payoff ratio confirms this is essentially a coin flip. With $22,312 of margin required per contract, there is no statistical basis for running this strategy on GOOGL.</p>
+      <div class="sv-head"><span class="sv-ticker">GOOGL</span><span class="sv-rating">Marginal: No Reliable Edge</span></div>
+      <p class="sv-text">GOOGL produced a near-zero outcome ($106.50 total P&L over 24 events, Sharpe of 0.001, Calmar of 0.007). The market appears to price GOOGL earnings moves fairly on average. Win rate of 50% with a near-1.0 payoff ratio confirms this is essentially a coin flip. With $22,312 of margin required per contract, there is no statistical basis for running this strategy on GOOGL.</p>
     </div>
     <div class="stock-verdict sv-red">
-      <div class="sv-head"><span class="sv-ticker">META</span><span class="sv-rating">Avoid — Negative Edge</span></div>
-      <p class="sv-text">META is a clear avoid. The avg realised move (9.30%) exceeded the avg implied move (7.64%) — options systematically underpriced earnings moves. The avg edge is −1.66%, the worst in the sample. The 2022 destruction (−$7,679 in one year) reflects META's extraordinary fundamental repricing. Negative Sharpe, Sortino, and Calmar confirm this strategy has no business being run on META. Return on margin is −5.80% per trade.</p>
+      <div class="sv-head"><span class="sv-ticker">META</span><span class="sv-rating">Avoid: Negative Edge</span></div>
+      <p class="sv-text">META is a clear avoid. The avg realised move (9.30%) exceeded the avg implied move (7.64%), meaning options systematically underpriced earnings moves. The avg edge is −1.66%, the worst in the sample. The 2022 destruction (−$7,679 in one year) reflects META's extraordinary fundamental repricing. Negative Sharpe, Sortino, and Calmar confirm this strategy has no business being run on META. Return on margin is −5.80% per trade.</p>
     </div>
     <div class="stock-verdict sv-red">
-      <div class="sv-head"><span class="sv-ticker">AMZN</span><span class="sv-rating">Avoid — Catastrophic Tail Risk</span></div>
+      <div class="sv-head"><span class="sv-ticker">AMZN</span><span class="sv-rating">Avoid: Catastrophic Tail Risk</span></div>
       <p class="sv-text">AMZN is the most dangerous ticker in this study. Despite a 58.3% win rate, AMZN produced a total loss of $21,317 driven by 2022 (−$36,890). The payoff ratio of 0.49x means losses are on average 2× larger than wins. The max drawdown of $48,942 would require 15 average winning trades to recover. With $32,466 in average margin per contract, the capital-at-risk is severe. Do not run this strategy on AMZN.</p>
     </div>
   </div>
@@ -315,7 +315,7 @@ tbody tr.visible{opacity:1;transform:none}
   <!-- Risk Considerations -->
   <div class="section">
     <div class="section-title">7. Strategy-Level Risk Considerations</div>
-    <div class="callout callout-red"><strong>Tail Risk &amp; Short Vol Asymmetry</strong>Short straddles have theoretically unlimited loss potential. Five of seven tickers exhibit negative P&L skewness. AAPL's kurtosis of 10.29 is particularly alarming — this is an extremely fat-tailed distribution. A single severe earnings shock can negate years of small gains.</div>
+    <div class="callout callout-red"><strong>Tail Risk &amp; Short Vol Asymmetry</strong>Short straddles have theoretically unlimited loss potential. Five of seven tickers exhibit negative P&L skewness. AAPL's kurtosis of 10.29 is particularly alarming, indicating an extremely fat-tailed distribution. A single severe earnings shock can negate years of small gains.</div>
     <div class="callout callout-yellow"><strong>Transaction Costs</strong>All P&L figures use mid-prices. In practice, selling a straddle requires crossing the bid-ask spread on both legs at entry and exit. For a liquid name like AAPL this could be $40–$100 per contract round trip. The true edge, net of transaction costs, will be meaningfully lower than reported here.</div>
     <div class="callout callout-yellow"><strong>Regime Dependency</strong>The strategy's profitability is demonstrably non-stationary. 2022 was destructive across multiple tickers. TSLA's edge has reversed since 2022. Any live deployment must monitor whether the fundamental conditions for IV overpricing still hold before each earnings event.</div>
     <div class="callout callout-blue"><strong>Margin &amp; Liquidity</strong>Short naked straddles require significant margin. AMZN at $32,466 per contract ties up meaningful capital. In volatile markets, brokers can increase margin requirements intraday, potentially forcing unwanted position closure. Size positions so that margin represents no more than 2–5% of total account equity per trade.</div>
@@ -325,13 +325,13 @@ tbody tr.visible{opacity:1;transform:none}
   <!-- Conclusion -->
   <div class="section">
     <div class="section-title">8. Conclusion &amp; Trader Verdict</div>
-    <p>The empirical evidence from 2019–2024 supports the hypothesis that short straddles on earnings events can generate a systematic edge for selected Magnificent Seven stocks — but the strategy is far from universally applicable, and the risk profile demands careful stock selection and rigorous position sizing.</p>
+    <p>The empirical evidence from 2019–2024 supports the hypothesis that short straddles on earnings events can generate a systematic edge for selected Magnificent Seven stocks, but the strategy is far from universally applicable, and the risk profile demands careful stock selection and rigorous position sizing.</p>
     <div class="verdict-grid">
       <div class="verdict-box vg"><div class="verdict-title">Trade</div><div class="verdict-tickers">MSFT · NVDA · AAPL</div><div class="verdict-desc">Positive edge, manageable risk, consistent profitability across regimes</div></div>
       <div class="verdict-box vy"><div class="verdict-title">Selective</div><div class="verdict-tickers">TSLA · GOOGL</div><div class="verdict-desc">Edge present historically but deteriorating or regime-dependent</div></div>
       <div class="verdict-box vr"><div class="verdict-title">Avoid</div><div class="verdict-tickers">AMZN · META</div><div class="verdict-desc">Negative expected value, catastrophic drawdown potential</div></div>
     </div>
-    <p>If forced to choose a single ticker, <strong>MSFT represents the most compelling expression of this strategy</strong> — the only stock combining a win rate above 70%, a payoff ratio above 1.0, positive P&L in every calendar year, and a Calmar ratio that would satisfy most institutional risk mandates. Its avg return on margin of 6.96% per trade, deployed four times per year, represents an attractive standalone strategy.</p>
+    <p>If forced to choose a single ticker, <strong>MSFT represents the most compelling expression of this strategy</strong>: the only stock combining a win rate above 70%, a payoff ratio above 1.0, positive P&L in every calendar year, and a Calmar ratio that would satisfy most institutional risk mandates. Its avg return on margin of 6.96% per trade, deployed four times per year, represents an attractive standalone strategy.</p>
     <p>For live deployment, the recommended framework is: trade MSFT and AAPL as core positions, add NVDA opportunistically when implied moves appear elevated relative to historical realisation rates, and run a pre-trade screen before every earnings event comparing the current ATM straddle price against the historical distribution of realised earnings moves. Any event where the current implied move falls below the 40th percentile of historical realised moves should be skipped.</p>
   </div>
 
@@ -376,7 +376,7 @@ let yearlyChart=null;
 function buildYearly(ticker){
   const d=yearly[ticker];
   if(yearlyChart)yearlyChart.destroy();
-  document.getElementById("yearly-label").textContent=`${ticker} — Annual P&L ($)`;
+  document.getElementById("yearly-label").textContent=`${ticker}: Annual P&L ($)`;
   yearlyChart=new Chart(document.getElementById("c5"),{type:"bar",data:{labels:d.labels.map(String),datasets:[{label:"Annual P&L",data:d.data,backgroundColor:d.data.map(v=>v>=0?WIN:LOSS),borderRadius:4}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>`$${(v/1000).toFixed(0)}k`,font:{family:'Inter',size:11}}},x:{ticks:{font:{family:'Inter',size:11}}}}}});
 }
 const tabsEl=document.getElementById("tabs");

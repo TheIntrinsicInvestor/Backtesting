@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>The Wheel Strategy on SPY — TheIntrinsicInvestor</title>
+<title>The Wheel Strategy on SPY: TheIntrinsicInvestor</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
@@ -224,7 +224,7 @@ footer strong{color:rgba(255,255,255,.7)}
   <div class="hero-inner">
     <div class="hero-tag">Systematic Market Research</div>
     <h1>The Wheel Strategy on <em>SPY</em><br>A Systematic Backtest</h1>
-    <div class="hero-sub">Exploring delta, DTE and risk-adjusted returns across 20 parameter combinations — January 2018 to December 2025.</div>
+    <div class="hero-sub">Exploring delta, DTE and risk-adjusted returns across 20 parameter combinations, from January 2018 to December 2025.</div>
     <div class="hero-meta">
       <div class="hero-meta-item"><strong>8 Years</strong>Backtest Period</div>
       <div class="hero-meta-item"><strong>20</strong>Parameter Combos</div>
@@ -254,8 +254,8 @@ footer strong{color:rgba(255,255,255,.7)}
 <div class="section" id="introduction">
   <div class="container">
     <h2>1. Introduction</h2>
-    <p>The Wheel Strategy is one of the most popular systematic options strategies among retail traders — and for good reason. The concept is intuitive: sell a cash-secured put, collect premium, get assigned if the stock falls, then sell covered calls until the shares get called away. Repeat indefinitely.</p>
-    <p>The appeal is obvious. High win rates, consistent premium income, and a mechanical process that removes emotional decision-making. But the real question — the one most traders never rigorously answer — is <strong>whether the premium income actually compensates for the opportunity cost of not simply owning the underlying.</strong></p>
+    <p>The Wheel Strategy is one of the most popular systematic options strategies among retail traders, and for good reason. The concept is intuitive: sell a cash-secured put, collect premium, get assigned if the stock falls, then sell covered calls until the shares get called away. Repeat indefinitely.</p>
+    <p>The appeal is obvious. High win rates, consistent premium income, and a mechanical process that removes emotional decision-making. But the real question (the one most traders never rigorously answer) is <strong>whether the premium income actually compensates for the opportunity cost of not simply owning the underlying.</strong></p>
     <p>This report attempts to answer that question systematically. Using eight years of professional options data on SPY, I built a full backtest engine simulating both phases of the wheel cycle across every major delta and DTE combination, comparing each result against a passive buy-and-hold SPY baseline.</p>
     <div class="callout callout-info">
       <div class="callout-icon">📌</div>
@@ -311,11 +311,11 @@ footer strong{color:rgba(255,255,255,.7)}
 <div class="section" id="methodology">
   <div class="container">
     <h2>3. Data &amp; Methodology</h2>
-    <p>All options data is sourced from <strong>OptionMetrics (Ivy DB US)</strong> accessed via the WRDS research platform — the same institutional-grade data used by academic researchers and professional quants. Daily option price records are drawn from the <code style="background:var(--bg3);padding:.1rem .35rem;border-radius:3px;font-family:var(--mono);font-size:.85rem;color:var(--accent)">opprcd{year}</code> tables, with underlying SPY closing prices from <code style="background:var(--bg3);padding:.1rem .35rem;border-radius:3px;font-family:var(--mono);font-size:.85rem;color:var(--accent)">secprd{year}</code>.</p>
+    <p>All options data is sourced from <strong>OptionMetrics (Ivy DB US)</strong> accessed via the WRDS research platform, the same institutional-grade data used by academic researchers and professional quants. Daily option price records are drawn from the <code style="background:var(--bg3);padding:.1rem .35rem;border-radius:3px;font-family:var(--mono);font-size:.85rem;color:var(--accent)">opprcd{year}</code> tables, with underlying SPY closing prices from <code style="background:var(--bg3);padding:.1rem .35rem;border-radius:3px;font-family:var(--mono);font-size:.85rem;color:var(--accent)">secprd{year}</code>.</p>
     <p>Options are priced at the <strong>bid-ask midpoint</strong> on each trading day. On entry days, the engine selects the option with the closest signed delta to the target within a ±10 DTE window, with a minimum mid-price of $0.05 to filter illiquid deep OTM contracts.</p>
     <div class="callout callout-warn">
       <div class="callout-icon">⚠️</div>
-      <div class="callout-text"><strong>Key Assumptions</strong> Mid-price execution (no spread cost), no commissions or slippage, no early assignment (expiration only), no dividends captured during share holding, one contract throughout, and cash earns no interest between trades. These assumptions favour the strategy — see Section 8 for a full discussion.</div>
+      <div class="callout-text"><strong>Key Assumptions</strong> Mid-price execution (no spread cost), no commissions or slippage, no early assignment (expiration only), no dividends captured during share holding, one contract throughout, and cash earns no interest between trades. These assumptions favour the strategy (see Section 8 for a full discussion).</div>
     </div>
   </div>
 </div>
@@ -336,11 +336,11 @@ footer strong{color:rgba(255,255,255,.7)}
     </div>
     <div class="callout callout-info">
       <div class="callout-icon">💡</div>
-      <div class="callout-text"><strong>Why does a 100% win rate still underperform buy-and-hold?</strong> Win rate measures frequency, not magnitude. The 10Δ / 60 DTE combination wins every single trade, but each win is a small premium credit — maybe $1–3 per share. Meanwhile SPY gains $40+ per share in a strong bull year. You win often but leave the large directional move entirely on the table. This is the structural trade-off of all short premium strategies.</div>
+      <div class="callout-text"><strong>Why does a 100% win rate still underperform buy-and-hold?</strong> Win rate measures frequency, not magnitude. The 10Δ / 60 DTE combination wins every single trade, but each win is a small premium credit, typically $1–3 per share. Meanwhile SPY gains $40+ per share in a strong bull year. You win often but leave the large directional move entirely on the table. This is the structural trade-off of all short premium strategies.</div>
     </div>
-    <h3>4.2 Full Parameter Grid — Total PnL (%)</h3>
+    <h3>4.2 Full Parameter Grid: Total PnL (%)</h3>
     <div class="chart-wrap">
-      <div class="chart-title">Total PnL (%) — All 20 Combinations Ranked (2018–2025) vs SPY 140%</div>
+      <div class="chart-title">Total PnL (%): All 20 Combinations Ranked (2018–2025) vs SPY 140%</div>
       <canvas id="barChart" height="100"></canvas>
     </div>
     <h3>4.3 Complete Performance Table</h3>
@@ -353,19 +353,19 @@ footer strong{color:rgba(255,255,255,.7)}
       </table>
     </div>
     <h3>4.4 Key Patterns from the Grid</h3>
-    <p><strong>Lower delta consistently outperforms higher delta.</strong> The 10Δ combinations dominate the top of the rankings. Higher delta options collect more premium per trade, but also carry greater assignment probability. Once assigned, covered call cycles can trap capital in depreciating shares for extended periods — compounding losses.</p>
-    <p><strong>30 DTE is the weakest DTE across almost every delta level.</strong> 30 DTE appears to sit in a difficult middle ground — long enough to collect meaningful premium, but not long enough for the 50% profit target to trigger efficiently before adverse moves develop.</p>
+    <p><strong>Lower delta consistently outperforms higher delta.</strong> The 10Δ combinations dominate the top of the rankings. Higher delta options collect more premium per trade, but also carry greater assignment probability. Once assigned, covered call cycles can trap capital in depreciating shares for extended periods, compounding losses.</p>
+    <p><strong>30 DTE is the weakest DTE across almost every delta level.</strong> 30 DTE appears to sit in a difficult middle ground: long enough to collect meaningful premium, but not long enough for the 50% profit target to trigger efficiently before adverse moves develop.</p>
     <p><strong>60 DTE dominates on risk-adjusted metrics.</strong> Longer-dated options give theta decay more time to work in your favour, allow the 50% target to trigger more reliably, and reduce the frequency of assignments in volatile periods.</p>
     <h3>4.5 The Dashboard Charts</h3>
     <div class="chart-wrap">
-      <div class="chart-title">Figure 1 — Parameter Optimisation Grid: Equity Curves, Sharpe, Drawdown &amp; Win Rate Heatmaps</div>
-      <img src="wheel_dashboard.png" class="chart-img" alt="Wheel Strategy Dashboard — Equity Curves and Heatmaps"/>
+      <div class="chart-title">Figure 1: Parameter Optimisation Grid: Equity Curves, Sharpe, Drawdown &amp; Win Rate Heatmaps</div>
+      <img src="wheel_dashboard.png" class="chart-img" alt="Wheel Strategy Dashboard: Equity Curves and Heatmaps"/>
       <p style="font-size:12px;color:var(--hint);margin-top:.75rem;margin-bottom:0">Panels A–D show cumulative return curves by DTE with buy-and-hold SPY (dashed grey). Panels E–H show heatmaps for annualised return, Sharpe ratio, max drawdown, and win rate across the full 5×4 parameter grid.</p>
     </div>
     <div class="chart-wrap">
-      <div class="chart-title">Figure 2 — 3D PnL Surface: Total Return across Delta × DTE Parameter Space</div>
+      <div class="chart-title">Figure 2: 3D PnL Surface: Total Return across Delta × DTE Parameter Space</div>
       <div id="surface3d" style="width:100%;height:520px"></div>
-      <p style="font-size:12px;color:var(--hint);margin-top:.75rem;margin-bottom:0">Interactive — click and drag to rotate, scroll to zoom. Surface interpolated across 20 observations. Green = higher return · Red = lower return.</p>
+      <p style="font-size:12px;color:var(--hint);margin-top:.75rem;margin-bottom:0">Interactive: click and drag to rotate, scroll to zoom. Surface interpolated across 20 observations. Green = higher return · Red = lower return.</p>
     </div>
   </div>
 </div>
@@ -374,38 +374,38 @@ footer strong{color:rgba(255,255,255,.7)}
 <div class="section" id="yearly">
   <div class="container">
     <h2>5. Year-by-Year Performance</h2>
-    <p>The annual breakdown is the most analytically rich part of this report — it shows precisely <em>when</em> the Wheel works and when it doesn't.</p>
+    <p>The annual breakdown is the most analytically rich part of this report, showing precisely <em>when</em> the Wheel works and when it doesn't.</p>
     <div class="chart-wrap">
-      <div class="chart-title">Annual Return (%) — Best Sharpe Wheel (10Δ / 60 DTE) vs SPY Buy &amp; Hold</div>
+      <div class="chart-title">Annual Return (%): Best Sharpe Wheel (10Δ / 60 DTE) vs SPY Buy &amp; Hold</div>
       <canvas id="yearlyChart" height="80"></canvas>
     </div>
     <h3>Where the Wheel Held Up</h3>
     <div class="breakdown-grid">
       <div class="breakdown-card" style="border-color:var(--green)">
-        <h4>2018 — Volatile, range-bound ↓</h4>
+        <h4>2018: Volatile, range-bound ↓</h4>
         <p>SPY ended down ~−4.6% after a brutal Q4 sell-off. Most wheel puts expired worthless, delivering positive premium income while passive holders suffered losses. The strategy's structural advantage in choppy markets on full display.</p>
       </div>
       <div class="breakdown-card" style="border-color:var(--green)">
-        <h4>2022 — Bear market ↓</h4>
+        <h4>2022: Bear market ↓</h4>
         <p>SPY fell ~−18.2%. Low-delta puts (10Δ, 20Δ) required SPY to fall 8–12% before going ITM, meaning most expired worthless even as the market declined. The wheel's cushion significantly outperformed passive holding on a relative basis.</p>
       </div>
     </div>
     <h3>Where the Wheel Underperformed</h3>
     <div class="breakdown-grid">
       <div class="breakdown-card" style="border-color:var(--red)">
-        <h4>2019 — Strong bull +31.5% ↑</h4>
-        <p>SPY surged throughout the year. All puts expired worthless at high rates — which sounds good, but means premium collected was a fraction of the directional gain available from just owning shares. The opportunity cost is glaring.</p>
+        <h4>2019: Strong bull +31.5% ↑</h4>
+        <p>SPY surged throughout the year. All puts expired worthless at high rates, which sounds good, but means premium collected was a fraction of the directional gain available from just owning shares. The opportunity cost is glaring.</p>
       </div>
       <div class="breakdown-card" style="border-color:var(--red)">
-        <h4>2023 — Recovery rally +26.3% ↑</h4>
+        <h4>2023: Recovery rally +26.3% ↑</h4>
         <p>Post-bear market recovery saw SPY surge. The equity curves show the buy-and-hold gap widening sharply through 2023. 100% win rates with single-digit wheel returns versus 26%+ for passive holders tells the full story.</p>
       </div>
       <div class="breakdown-card" style="border-color:var(--red)">
-        <h4>2024–2025 — AI bull market ↑↑</h4>
+        <h4>2024–2025: AI bull market ↑↑</h4>
         <p>The strongest sustained period of the backtest for SPY. Wheel strategies continued grinding small premiums while SPY compounded aggressively, extending the cumulative return gap to its maximum.</p>
       </div>
       <div class="breakdown-card" style="border-color:var(--amber)">
-        <h4>2020 — COVID crash ↓↑</h4>
+        <h4>2020: COVID crash ↓↑</h4>
         <p>A swift −34% crash followed by a V-shaped recovery. The speed of the crash forced some assignments near market lows, but the subsequent recovery helped recover covered call losses. The drawdown was far smaller than buy-and-hold.</p>
       </div>
     </div>
@@ -444,12 +444,12 @@ footer strong{color:rgba(255,255,255,.7)}
     </div>
     <div class="callout callout-success">
       <div class="callout-icon">📊</div>
-      <div class="callout-text"><strong>Best Total Return: 10Δ / 45 DTE</strong> — 40.3% total, 4.52% annualised, Sharpe 0.53, Max DD −16.9%. A marginal improvement in absolute return over the 60 DTE variant at the cost of a slightly higher drawdown. For those focused purely on maximising income, this is the narrow winner on raw numbers.</div>
+      <div class="callout-text"><strong>Best Total Return: 10Δ / 45 DTE</strong> (40.3% total, 4.52% annualised, Sharpe 0.53, Max DD −16.9%). A marginal improvement in absolute return over the 60 DTE variant at the cost of a slightly higher drawdown. For those focused purely on maximising income, this is the narrow winner on raw numbers.</div>
     </div>
     <h3>What to Avoid</h3>
     <div class="callout callout-danger">
       <div class="callout-icon">🚫</div>
-      <div class="callout-text"><strong>50Δ / 30 DTE — Worst Combination</strong> — 17.2% total return over 8 years (2.1% annualised), Sharpe 0.21. Selling at-the-money options with 30 days to expiry creates frequent assignment risk, traps capital in depreciating shares through covered call cycles, and compounds losses in trending markets. The higher per-trade premium does not compensate for the increased adverse assignment frequency.</div>
+      <div class="callout-text"><strong>50Δ / 30 DTE: Worst Combination</strong> (17.2% total return over 8 years, 2.1% annualised, Sharpe 0.21). Selling at-the-money options with 30 days to expiry creates frequent assignment risk, traps capital in depreciating shares through covered call cycles, and compounds losses in trending markets. The higher per-trade premium does not compensate for the increased adverse assignment frequency.</div>
     </div>
   </div>
 </div>
@@ -460,14 +460,14 @@ footer strong{color:rgba(255,255,255,.7)}
     <h2>7. When the Strategy Breaks Down</h2>
     <p>This is perhaps the most important section for anyone considering deploying capital in a wheel strategy. Understanding the failure modes is as important as understanding the wins.</p>
     <div class="breakdown-grid">
-      <div class="breakdown-card" style="border-color:var(--red)"><h4>🐂 Sustained Bull Markets</h4><p>The Wheel is structurally capped on the upside. In multi-year bull markets (2019–2021, 2023–2025), premium income compounds slowly while SPY compounds aggressively. The opportunity cost is not just one year — it accumulates. After 8 years, the gap in this backtest is ~100 percentage points.</p></div>
+      <div class="breakdown-card" style="border-color:var(--red)"><h4>🐂 Sustained Bull Markets</h4><p>The Wheel is structurally capped on the upside. In multi-year bull markets (2019–2021, 2023–2025), premium income compounds slowly while SPY compounds aggressively. The opportunity cost is not just one year, it accumulates. After 8 years, the gap in this backtest is ~100 percentage points.</p></div>
       <div class="breakdown-card" style="border-color:var(--red)"><h4>⚡ Sharp, Fast Crashes</h4><p>A gap-down crash (2020 COVID, −34% in ~5 weeks) assigns shares immediately at a strike that is underwater. Covered calls then cap your recovery. The faster and deeper the crash, the longer the recovery cycle takes. Higher delta combinations suffered most severely in this scenario.</p></div>
-      <div class="breakdown-card" style="border-color:var(--amber)"><h4>📈 Volatility Spikes at Entry</h4><p>A VIX spike creates an illusion of attractiveness — higher IV means more premium. But entering short puts into a vol spike means entering into a fast-moving, potentially directional market. If the trend continues after the spike, assignment follows immediately into the worst possible conditions.</p></div>
+      <div class="breakdown-card" style="border-color:var(--amber)"><h4>📈 Volatility Spikes at Entry</h4><p>A VIX spike creates an illusion of attractiveness, as higher IV means more premium. But entering short puts into a vol spike means entering into a fast-moving, potentially directional market. If the trend continues after the spike, assignment follows immediately into the worst possible conditions.</p></div>
       <div class="breakdown-card" style="border-color:var(--amber)"><h4>📉 Prolonged Bear Markets</h4><p>A slow grinding bear (2022 is the closest example here) forces repeated assignments. Each put assignment means buying shares that continue falling. Each covered call caps the recovery. Capital becomes trapped cycling through assignments and call sales while the underlying trends lower.</p></div>
     </div>
     <div class="callout callout-warn">
       <div class="callout-icon">⚠️</div>
-      <div class="callout-text"><strong>The 2020 lesson for the Wheel</strong> — This backtest uses a 10Δ put which requires roughly a 10% SPY decline to go ITM. In February–March 2020, SPY fell 34% peak-to-trough in under 5 weeks. Even a 10Δ put was assigned deep ITM. This is the tail risk that win rates don't capture — rare but severe.</div>
+      <div class="callout-text"><strong>The 2020 lesson for the Wheel:</strong> This backtest uses a 10Δ put which requires roughly a 10% SPY decline to go ITM. In February–March 2020, SPY fell 34% peak-to-trough in under 5 weeks. Even a 10Δ put was assigned deep ITM. This is the tail risk that win rates don't capture, but it is rare and severe.</div>
     </div>
   </div>
 </div>
@@ -493,7 +493,7 @@ footer strong{color:rgba(255,255,255,.7)}
     </div>
     <div class="callout callout-warn">
       <div class="callout-icon">⚠️</div>
-      <div class="callout-text"><strong>Net effect of assumptions</strong> — The combination of mid-price fills and no commissions likely overstates real-world returns by 15–30% in absolute terms, depending on trade frequency and broker costs. The 10Δ / 60 DTE combination (fewest trades per year) would be least affected. High-frequency short-dated combinations (10Δ / 15 DTE) would see the most meaningful erosion.</div>
+      <div class="callout-text"><strong>Net effect of assumptions:</strong> The combination of mid-price fills and no commissions likely overstates real-world returns by 15–30% in absolute terms, depending on trade frequency and broker costs. The 10Δ / 60 DTE combination (fewest trades per year) would be least affected. High-frequency short-dated combinations (10Δ / 15 DTE) would see the most meaningful erosion.</div>
     </div>
   </div>
 </div>
@@ -502,19 +502,19 @@ footer strong{color:rgba(255,255,255,.7)}
 <div class="section" id="conclusion">
   <div class="container">
     <h2>9. Conclusion</h2>
-    <p>The Wheel Strategy on SPY is not a way to beat the market. This backtest makes that clear — across 8 years and 20 parameter combinations, no version of the wheel came close to matching buy-and-hold SPY's 140% total return.</p>
-    <p>But that framing misses what the strategy is actually for. The Wheel is a <strong>volatility harvesting income strategy</strong> that trades away upside participation for premium income and downside protection. The 2018 and 2022 results — both years where SPY was negative — show the strategy doing exactly what it is designed to do.</p>
+    <p>The Wheel Strategy on SPY is not a way to beat the market. This backtest makes that clear: across 8 years and 20 parameter combinations, no version of the wheel came close to matching buy-and-hold SPY's 140% total return.</p>
+    <p>But that framing misses what the strategy is actually for. The Wheel is a <strong>volatility harvesting income strategy</strong> that trades away upside participation for premium income and downside protection. The 2018 and 2022 results (both years where SPY was negative) show the strategy doing exactly what it is designed to do.</p>
     <div class="callout callout-info"><div class="callout-icon">1️⃣</div><div class="callout-text"><strong>Lower delta, longer DTE is the dominant strategy.</strong> The 10Δ / 60 DTE combination produced the best Sharpe ratio (0.65), second-lowest drawdown (−11.6%), and 100% win rate. Selling deep OTM with plenty of time to decay is the optimal parameter region across almost every risk-adjusted metric.</div></div>
-    <div class="callout callout-info"><div class="callout-icon">2️⃣</div><div class="callout-text"><strong>Win rate is a misleading metric.</strong> The average win rate across all 20 combinations was 94.7%. The worst total return combination (50Δ / 30 DTE) had an 89% win rate. High win rate is a structural feature of short premium strategies — not evidence of a superior strategy.</div></div>
-    <div class="callout callout-info"><div class="callout-icon">3️⃣</div><div class="callout-text"><strong>The strategy shines when markets don't.</strong> The Wheel's relative advantage is most pronounced in bear markets and high-volatility sideways environments. In sustained bull markets — which characterised most of 2018–2025 — the opportunity cost of not owning SPY compounds relentlessly.</div></div>
-    <p>For someone who wants lower volatility, smaller drawdowns, and consistent premium income — and who accepts a significantly lower ceiling on returns — the Wheel Strategy on SPY is a legitimate, systematic approach. For someone trying to grow wealth aggressively over a long time horizon in a bull market, it is not the right tool.</p>
+    <div class="callout callout-info"><div class="callout-icon">2️⃣</div><div class="callout-text"><strong>Win rate is a misleading metric.</strong> The average win rate across all 20 combinations was 94.7%. The worst total return combination (50Δ / 30 DTE) had an 89% win rate. High win rate is a structural feature of short premium strategies, not evidence of a superior strategy.</div></div>
+    <div class="callout callout-info"><div class="callout-icon">3️⃣</div><div class="callout-text"><strong>The strategy shines when markets don't.</strong> The Wheel's relative advantage is most pronounced in bear markets and high-volatility sideways environments. In sustained bull markets (which characterised most of 2018–2025), the opportunity cost of not owning SPY compounds relentlessly.</div></div>
+    <p>For someone who wants lower volatility, smaller drawdowns, and consistent premium income, and who accepts a significantly lower ceiling on returns, the Wheel Strategy on SPY is a legitimate, systematic approach. For someone trying to grow wealth aggressively over a long time horizon in a bull market, it is not the right tool.</p>
   </div>
 </div>
 
 <!-- FOOTER -->
 <footer>
   <div class="footer-inner">
-    <p><strong>The Wheel Strategy on SPY — A Systematic Backtest (2018–2025)</strong></p>
+    <p><strong>The Wheel Strategy on SPY: A Systematic Backtest (2018–2025)</strong></p>
     <p>Personal research. Data: OptionMetrics via WRDS. All results based on simulated backtest using mid-price execution with no commissions or slippage.</p>
     <p style="margin-top:1rem;font-size:12px;opacity:.6">This report is for informational and educational purposes only. Nothing here constitutes financial advice. Options trading involves significant risk of loss.</p>
   </div>

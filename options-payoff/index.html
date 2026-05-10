@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Options Payoff Visualiser — The Intrinsic Investor</title>
+  <title>Options Payoff Visualiser: The Intrinsic Investor</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -409,7 +409,7 @@ const DEFS = {
 
   'bull-call-spread': {
     name: 'Bull Call Spread',
-    desc: 'Buy a lower-strike call, sell a higher-strike call. Bullish outlook with capped profit and capped loss — cheaper than owning the call outright.',
+    desc: 'Buy a lower-strike call, sell a higher-strike call. Bullish outlook with capped profit and capped loss, cheaper than owning the call outright.',
     inputs: [
       { id: 'spot', label: 'Spot Price',              min: 10, max: 500, step: 1,   def: 100, isStrike: true },
       { id: 'k1',   label: 'Lower Strike (K₁)',       min: 10, max: 490, step: 1,   def: 95,  isStrike: true },
@@ -428,7 +428,7 @@ const DEFS = {
 
   'bear-put-spread': {
     name: 'Bear Put Spread',
-    desc: 'Buy a higher-strike put, sell a lower-strike put. Bearish outlook with capped profit and capped loss — cheaper than owning the put outright.',
+    desc: 'Buy a higher-strike put, sell a lower-strike put. Bearish outlook with capped profit and capped loss, cheaper than owning the put outright.',
     inputs: [
       { id: 'spot', label: 'Spot Price',             min: 10, max: 500, step: 1,   def: 100, isStrike: true },
       { id: 'k1',   label: 'Lower Strike (K₁)',      min: 10, max: 490, step: 1,   def: 90,  isStrike: true },

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Exploiting Leveraged ETF Decay — TheIntrinsicInvestor</title>
+<title>Exploiting Leveraged ETF Decay: TheIntrinsicInvestor</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
@@ -246,7 +246,7 @@ table.revealed tbody tr:nth-child(8){animation-delay:0.31s}
   <div class="hero-inner">
     <div class="hero-tag">Systematic Market Research</div>
     <h1>Exploiting <em>Leveraged ETF Decay</em>:<br>A Systematic Carry Trade on AVGO / AVL</h1>
-    <div class="hero-sub">Single-stock leveraged ETFs bleed value daily through swap financing costs. This paper constructs a market-neutral carry trade to capture that bleed — and presents results both with and without a one-off December 2025 volatility event that materially distorts the headline figures.</div>
+    <div class="hero-sub">Single-stock leveraged ETFs bleed value daily through swap financing costs. This paper constructs a market-neutral carry trade to capture that bleed, presenting results both with and without a one-off December 2025 volatility event that materially distorts the headline figures.</div>
     <div class="hero-meta">
       <span>By: Brian Liew (LSE, BSc Accounting and Finance)</span>
       <span>Oct 2024 – Mar 2026</span>
@@ -261,7 +261,7 @@ table.revealed tbody tr:nth-child(8){animation-delay:0.31s}
 <div class="kpi-strip">
   <div class="kpi-note">
     <span>&#9888;</span>
-    <strong>Reporting note:</strong>&nbsp;Figures shown on two bases — including and excluding December 2025, a one-off volatility event contributing 68% of total P&amp;L. The adjusted figures are the author's preferred basis.
+    <strong>Reporting note:</strong>&nbsp;Figures shown on two bases: including and excluding December 2025, a one-off volatility event contributing 68% of total P&amp;L. The adjusted figures are the author's preferred basis.
   </div>
   <div class="kpi-tabs">
     <button class="kpi-tab active-full" onclick="showPanel('full',this)">Full sample (incl. Dec 2025)</button>
@@ -289,15 +289,15 @@ table.revealed tbody tr:nth-child(8){animation-delay:0.31s}
 <div class="section" id="sec-1">
   <div class="section-label"><span class="section-counter">01</span>The Strategy</div>
   <h2>How leveraged ETF financing costs create a carry trade</h2>
-  <p>A 2x leveraged ETF promises exactly twice the daily return of its underlying. In practice it consistently delivers less. This gap — the tracking error — is not random noise. It is a structural, predetermined daily deduction built into the product's swap mechanics, and it accrues to the short seller unconditionally regardless of market direction.</p>
-  <p>AVL, the T-Rex 2x Broadcom ETF, achieves its 2x exposure through a total return swap. The counterparty delivers 2x AVGO's daily return but charges a financing rate comprising the risk-free rate plus a spread for the difficulty of hedging a single-stock position. This cost is deducted from NAV every trading day — silently, whether AVGO rises or falls.</p>
+  <p>A 2x leveraged ETF promises exactly twice the daily return of its underlying. In practice it consistently delivers less. This gap (the tracking error) is not random noise. It is a structural, predetermined daily deduction built into the product's swap mechanics, and it accrues to the short seller unconditionally regardless of market direction.</p>
+  <p>AVL, the T-Rex 2x Broadcom ETF, achieves its 2x exposure through a total return swap. The counterparty delivers 2x AVGO's daily return but charges a financing rate comprising the risk-free rate plus a spread for the difficulty of hedging a single-stock position. This cost is deducted from NAV every trading day, silently, whether AVGO rises or falls.</p>
   <div class="callout green">
     <div class="callout-icon">&#128161;</div>
-    <p><strong>Daily mechanics:</strong> If AVGO rises 1%, AVL delivers approximately +1.95% not +2.00%. If AVGO falls 1%, AVL delivers approximately -2.05% not -2.00%. The drag operates in both directions. The correlation of daily strategy P&amp;L with AVGO's return in this backtest is <strong>0.002</strong> — statistically indistinguishable from zero.</p>
+    <p><strong>Daily mechanics:</strong> If AVGO rises 1%, AVL delivers approximately +1.95% not +2.00%. If AVGO falls 1%, AVL delivers approximately -2.05% not -2.00%. The drag operates in both directions. The correlation of daily strategy P&amp;L with AVGO's return in this backtest is <strong>0.002</strong>, statistically indistinguishable from zero.</p>
   </div>
-  <p>The position is structured as <strong>$10,000 long AVGO / $5,000 short AVL</strong>, rebalanced daily to maintain delta neutrality. The gross spread — observed tracking error of 23.12% minus borrow cost of 0.6% — is the return available before friction.</p>
+  <p>The position is structured as <strong>$10,000 long AVGO / $5,000 short AVL</strong>, rebalanced daily to maintain delta neutrality. The gross spread (observed tracking error of 23.12% minus borrow cost of 0.6%) is the return available before friction.</p>
   <div class="highlight-box">
-    <div class="hb-label">Tracking error anatomy — what drives the carry</div>
+    <div class="hb-label">Tracking error anatomy: what drives the carry</div>
     <div class="hb-grid">
       <div class="hb-cell"><div class="hb-val">~7%</div><div class="hb-key">Risk-free rate passed through</div></div>
       <div class="hb-cell"><div class="hb-val">~15%</div><div class="hb-key">Bank swap spread (single-stock illiquidity premium)</div></div>
@@ -308,15 +308,15 @@ table.revealed tbody tr:nth-child(8){animation-delay:0.31s}
 
 <div class="section" id="sec-2">
   <div class="section-label"><span class="section-counter">02</span>Methodological Note</div>
-  <h2>The December 2025 problem — and why it matters for honest reporting</h2>
-  <p>Before presenting backtest results, it is necessary to address a significant anomaly. December 2025 contributed <strong>$2,157 of the strategy's total $3,149 P&amp;L</strong> — 68% of all profit from a single month out of 18. Any unqualified presentation of headline returns would be misleading without this disclosure.</p>
+  <h2>The December 2025 problem: why it matters for honest reporting</h2>
+  <p>Before presenting backtest results, it is necessary to address a significant anomaly. December 2025 contributed <strong>$2,157 of the strategy's total $3,149 P&amp;L</strong>, representing 68% of all profit from a single month out of 18. Any unqualified presentation of headline returns would be misleading without this disclosure.</p>
   <div class="callout amber">
     <div class="callout-icon">&#9888;</div>
-    <p><strong>What caused the December anomaly:</strong> AVGO fell 14.1% in December 2025. The daily compounding mechanic of a 2x leveraged ETF causes losses to compound asymmetrically over sustained directional moves — volatility decay. AVL fell substantially more than 2x over the month, generating outsized tracking error of 17.4% against a typical monthly run-rate of 0.3–1.7%. This P&amp;L was real, but it required a specific confluence of high volatility and directional momentum that cannot be reliably expected to repeat.</p>
+    <p><strong>What caused the December anomaly:</strong> AVGO fell 14.1% in December 2025. The daily compounding mechanic of a 2x leveraged ETF causes losses to compound asymmetrically over sustained directional moves, a form of volatility decay. AVL fell substantially more than 2x over the month, generating outsized tracking error of 17.4% against a typical monthly run-rate of 0.3–1.7%. This P&amp;L was real, but it required a specific confluence of high volatility and directional momentum that cannot be reliably expected to repeat.</p>
   </div>
   <div class="chart-wrap">
     <div class="chart-header">
-      <div class="chart-title">Monthly tracking error (%) — December clearly anomalous</div>
+      <div class="chart-title">Monthly tracking error (%): December clearly anomalous</div>
       <div class="legend">
         <span><span class="legend-dot" style="background:#059669"></span>Structural carry (typical)</span>
         <span><span class="legend-dot" style="background:#dc2626"></span>Dec 2025 vol event</span>
@@ -339,14 +339,14 @@ table.revealed tbody tr:nth-child(8){animation-delay:0.31s}
     <div class="scenario-card worst">
       <div class="sc-label">Dec fully excluded</div>
       <div class="sc-cagr">~7.0%</div>
-      <div class="sc-desc">December set to zero. Overly harsh — carry still accrued. Shown for completeness.</div>
+      <div class="sc-desc">December set to zero. Overly harsh, as carry still accrued. Shown for completeness.</div>
     </div>
   </div>
 </div>
 
 <div class="section" id="sec-3">
   <div class="section-label"><span class="section-counter">03</span>Backtest Results</div>
-  <h2>Full results — daily rebalancing, both bases</h2>
+  <h2>Full results: daily rebalancing, both bases</h2>
   <p>The backtest runs from AVL's inception (October 10, 2024) through March 13, 2026 across six distinct market regimes. Position: $10,000 long AVGO, $5,000 short AVL, 0.6% annual borrow, rebalanced daily.</p>
   <table class="dual-table">
     <thead>
@@ -375,7 +375,7 @@ table.revealed tbody tr:nth-child(8){animation-delay:0.31s}
   </div>
   <div class="chart-wrap">
     <div class="chart-header">
-      <div class="chart-title">Cumulative P&amp;L — daily vs weekly rebalancing</div>
+      <div class="chart-title">Cumulative P&amp;L: daily vs weekly rebalancing</div>
       <div class="legend">
         <span><span class="legend-dot" style="background:#059669"></span>Daily rebalancing</span>
         <span><span class="legend-dot" style="background:#93c5fd"></span>Weekly (comparison)</span>
@@ -383,7 +383,7 @@ table.revealed tbody tr:nth-child(8){animation-delay:0.31s}
     </div>
     <div class="chart-box" style="height:280px"><canvas id="cumChart"></canvas></div>
   </div>
-  <h3>Monthly P&amp;L — December highlighted as anomaly</h3>
+  <h3>Monthly P&amp;L: December highlighted as anomaly</h3>
   <div class="chart-wrap">
     <div class="chart-header">
       <div class="chart-title">Monthly P&amp;L, $10,000 initial capital</div>
@@ -408,7 +408,7 @@ table.revealed tbody tr:nth-child(8){animation-delay:0.31s}
         <tr><td>DeepSeek crash (Jan 2025)</td><td class="neg">-6.4%</td><td class="pos">+$42</td><td><span class="badge pos">Normal carry</span></td></tr>
         <tr><td>Liberation Day (Apr 2025)</td><td class="pos">+7.6%</td><td class="pos">+$39</td><td><span class="badge pos">Normal carry</span></td></tr>
         <tr><td>AVGO earnings spike (Sep 2025)</td><td class="pos">+22.1%</td><td class="pos">+$48</td><td><span class="badge pos">Normal carry</span></td></tr>
-        <tr><td>December 2025 selloff</td><td class="neg">-17.6%</td><td class="pos">+$2,102</td><td><span class="badge warn">Vol decay event — not repeatable</span></td></tr>
+        <tr><td>December 2025 selloff</td><td class="neg">-17.6%</td><td class="pos">+$2,102</td><td><span class="badge warn">Vol decay event (not repeatable)</span></td></tr>
         <tr><td>2026 YTD (to Mar 13)</td><td class="neg">-7.3%</td><td class="pos">+$195</td><td><span class="badge pos">Normal carry</span></td></tr>
       </tbody>
     </table>
@@ -419,18 +419,18 @@ table.revealed tbody tr:nth-child(8){animation-delay:0.31s}
   <div class="section-label"><span class="section-counter">05</span>Risk Factors</div>
   <h2>Risks, limitations, and what could go wrong</h2>
   <h3>Sustained directional momentum</h3>
-  <p>The primary risk is a prolonged unidirectional move in AVGO. Between daily rebalances the position drifts out of its 2:1 hedge ratio. Synthetic stress tests show the worst case: a +1.5%/day move over 20 consecutive days produces approximately a -4% loss on capital. This risk is symmetric — sustained down moves also hurt through the same drift mechanism.</p>
+  <p>The primary risk is a prolonged unidirectional move in AVGO. Between daily rebalances the position drifts out of its 2:1 hedge ratio. Synthetic stress tests show the worst case: a +1.5%/day move over 20 consecutive days produces approximately a -4% loss on capital. This risk is symmetric, as sustained down moves also hurt through the same drift mechanism.</p>
   <div class="callout red">
     <div class="callout-icon">&#9889;</div>
     <p><strong>Momentum risk is symmetric.</strong> The ideal environment is choppy and mean-reverting, where both structural carry and volatility decay accrue. A trending market in either direction gradually unwinds the hedge. Daily rebalancing substantially reduces but does not eliminate this exposure.</p>
   </div>
   <h3>Borrow cost uncertainty</h3>
-  <p>The 0.6% borrow cost estimate reflects current market conditions and is not fixed. Borrow costs for single-stock ETFs can spike when the underlying moves strongly — potentially forcing closure at an inopportune time. This should be monitored daily through your prime broker.</p>
+  <p>The 0.6% borrow cost estimate reflects current market conditions and is not fixed. Borrow costs for single-stock ETFs can spike when the underlying moves strongly, potentially forcing closure at an inopportune time. This should be monitored daily through your prime broker.</p>
   <h3>Short data history</h3>
   <p>AVL launched in October 2024, giving this backtest only 17 months of live data. The sample does not include a prolonged bear market or rising-rate environment. The structural tracking error argument is robust, but its specific magnitude in different regimes remains untested.</p>
   <h3>Conclusion</h3>
-  <p>On the adjusted basis — stripping the December volatility windfall — this strategy produced a CAGR of approximately 15.96% at near-zero market beta and a maximum drawdown under 1%. That is a genuinely attractive risk-adjusted profile, and it rests on a structural argument that is observable and persistent across all 17 months of available data.</p>
-  <p>The full-sample CAGR of 21.45% is accurate but misleading as a forward-looking estimate. The author's view is that the honest expected return is in the range of 11–16% annually — the lower bound representing conservative structural carry, the upper bound allowing for occasional volatility decay events. <strong>Investors should base any allocation decision on the adjusted figures presented here, not the headline number.</strong></p>
+  <p>On the adjusted basis (stripping the December volatility windfall), this strategy produced a CAGR of approximately 15.96% at near-zero market beta and a maximum drawdown under 1%. That is a genuinely attractive risk-adjusted profile, and it rests on a structural argument that is observable and persistent across all 17 months of available data.</p>
+  <p>The full-sample CAGR of 21.45% is accurate but misleading as a forward-looking estimate. The author's view is that the honest expected return is in the range of 11–16% annually: the lower bound representing conservative structural carry, the upper bound allowing for occasional volatility decay events. <strong>Investors should base any allocation decision on the adjusted figures presented here, not the headline number.</strong></p>
 </div>
 
 </div>
