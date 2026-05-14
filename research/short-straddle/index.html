@@ -179,7 +179,7 @@ tbody tr.visible{opacity:1;transform:none}
   <!-- Executive Summary -->
   <div class="section">
     <div class="section-title">Executive Summary</div>
-    <p>This report evaluates the profitability of selling at-the-money (ATM) short straddles on the Magnificent Seven stocks in the 30 minutes prior to market close on earnings announcement days, closing the position in the second half of the following trading session. The strategy exploits the well-documented tendency for options markets to systematically overprice the magnitude of earnings-driven moves, a phenomenon known as the <em>implied volatility (IV) crush</em>.</p>
+    <p>Options markets tend to overprice the magnitude of earnings moves. This report tests whether that overpricing is large enough and consistent enough to profit from, using short ATM straddles on the Magnificent Seven entered 30 minutes before the close on earnings day and closed in the following afternoon. When the actual move falls short of the implied move priced into the straddle, the position wins. That gap is the <em>implied volatility (IV) crush</em>.</p>
     <p>Across 168 earnings events from Q1 2019 through Q4 2024, the strategy produced a combined total P&L of <strong>$18,476</strong> trading one contract per event. However, the aggregate result masks substantial cross-sectional dispersion: five of seven stocks generated positive total P&L, while AMZN and META were net destroyers of capital, with AMZN alone accounting for a $21,317 loss driven by a catastrophic 2022 drawdown.</p>
     <p>The headline finding is that <strong>this strategy is stock-specific, not universally applicable</strong>. MSFT stands out as the cleanest expression of the edge: high win rate, favourable risk-adjusted returns, shallow drawdown, and consistent profitability across all six years. TSLA offers the highest nominal return but with extreme regime dependency and an 8-trade losing streak. AMZN and META should be avoided under this strategy framework.</p>
   </div>
@@ -325,13 +325,13 @@ tbody tr.visible{opacity:1;transform:none}
   <!-- Conclusion -->
   <div class="section">
     <div class="section-title">8. Conclusion &amp; Trader Verdict</div>
-    <p>The empirical evidence from 2019–2024 supports the hypothesis that short straddles on earnings events can generate a systematic edge for selected Magnificent Seven stocks, but the strategy is far from universally applicable, and the risk profile demands careful stock selection and rigorous position sizing.</p>
+    <p>The edge is real but narrow. Across 168 earnings events and six years, this strategy produced a net profit, but only because MSFT, NVDA, and TSLA's early years carried it. Remove those and what remains is a strategy that loses money on AMZN, barely breaks even on GOOGL, and gets destroyed by META. The risk profile demands careful stock selection.</p>
     <div class="verdict-grid">
       <div class="verdict-box vg"><div class="verdict-title">Trade</div><div class="verdict-tickers">MSFT · NVDA · AAPL</div><div class="verdict-desc">Positive edge, manageable risk, consistent profitability across regimes</div></div>
       <div class="verdict-box vy"><div class="verdict-title">Selective</div><div class="verdict-tickers">TSLA · GOOGL</div><div class="verdict-desc">Edge present historically but deteriorating or regime-dependent</div></div>
       <div class="verdict-box vr"><div class="verdict-title">Avoid</div><div class="verdict-tickers">AMZN · META</div><div class="verdict-desc">Negative expected value, catastrophic drawdown potential</div></div>
     </div>
-    <p>If forced to choose a single ticker, <strong>MSFT represents the most compelling expression of this strategy</strong>: the only stock combining a win rate above 70%, a payoff ratio above 1.0, positive P&L in every calendar year, and a Calmar ratio that would satisfy most institutional risk mandates. Its avg return on margin of 6.96% per trade, deployed four times per year, represents an attractive standalone strategy.</p>
+    <p>If forced to pick one ticker, <strong>MSFT is the answer</strong>: the only stock combining a win rate above 70%, a payoff ratio above 1.0, positive P&amp;L in every calendar year, and a Calmar ratio that would satisfy most institutional risk mandates. At 6.96% return on margin per trade, deployed four times per year, it works as a standalone strategy.</p>
     <p>For live deployment, the recommended framework is: trade MSFT and AAPL as core positions, add NVDA opportunistically when implied moves appear elevated relative to historical realisation rates, and run a pre-trade screen before every earnings event comparing the current ATM straddle price against the historical distribution of realised earnings moves. Any event where the current implied move falls below the 40th percentile of historical realised moves should be skipped.</p>
   </div>
 
