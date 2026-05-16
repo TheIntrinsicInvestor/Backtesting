@@ -332,13 +332,14 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
 <section class="section" id="s3">
   <div class="container">
     <div class="section-label"><span class="section-counter">03</span><span>Surprise Analysis</span></div>
-    <h2>Hike meetings carry the largest pre-meeting premium; dovish guidance collapses vol fastest</h2>
+    <h2>Hold meetings carry the largest pre-meeting IV premium, with communication tone shaping divergent post-announcement paths</h2>
     <p>
-      Splitting the IV profile by decision type reveals that hike meetings generate a more pronounced
-      pre-meeting IV build-up, consistent with greater policy uncertainty when the Fed is actively
-      tightening. Hold meetings show a smaller but still consistent pattern. Cut meetings are harder to
-      interpret given the small sample and structural mix (2019 mid-cycle easing vs. 2024 normalisation
-      vs. 2020 emergency actions).
+      Splitting the IV profile by decision type reveals that hold meetings generate the largest
+      pre-meeting IV build-up, with normalised IV reaching 105.8 at T-1, against 102.1 for hike
+      meetings. The gap likely reflects the Hold category spanning both high-uncertainty regimes
+      (hawkish pivots, ZLB-to-tightening transitions) and routine holds across the full 2018 to
+      2024 period. Cut meetings are harder to interpret given the small sample and structural mix
+      (2019 mid-cycle easing vs. 2024 normalisation vs. 2020 emergency actions).
     </p>
     <div class="chart-box">
       <div class="chart-title">SPX IV profile by decision type (Hike / Hold / Cut), normalised</div>
@@ -351,9 +352,13 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
     </div>
     <p>
       Within hold meetings (n=34), communication surprises drive material differences in IV
-      dynamics. Hawkish guidance surprises are associated with a sharper post-announcement IV spike as
-      markets reprice the forward path, while dovish surprises produce the fastest IV collapse. Neutral
-      holds show the textbook crush.
+      dynamics. Hawkish guidance meetings (n=8) enter the announcement with pre-elevated IV near 118
+      at T-1, reflecting markets pricing in additional uncertainty before a hawkish pivot. That premium
+      decays gradually post-announcement, settling near 105 at T+10, still above baseline. Neutral
+      (n=16) and Dovish (n=10) meetings show more subdued pre-meeting IV, but both exhibit a
+      pronounced delayed spike around T+3, peaking at 118 and 114 respectively. Dovish meetings
+      ultimately fall well below baseline by T+10 (92.8), while Neutral holds above it (106.6).
+      These subgroup samples are small (n=8 to 16) and limit confident inference on individual paths.
     </p>
     <div class="chart-box">
       <div class="chart-title">SPX IV profile by communication surprise, Hold meetings only</div>
@@ -1803,10 +1808,10 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
       magnitude varies by rate cycle era.
     </div>
     <div class="callout green">
-      <strong>â‘¡ The IV crush is reliable but not uniform.</strong> Neutral communication meetings
-      produce the most predictable crush. Hawkish guidance surprises can sustain or even increase
-      vol post-announcement as markets reprice the forward path, limiting short-vol profitability
-      in those specific cases.
+      <strong>&#x2461; The IV crush is reliable but not uniform.</strong> Hawkish Hold meetings enter the
+      announcement with pre-elevated IV that decays slowly rather than crushing, limiting short-vol
+      profitability. Neutral and Dovish Hold meetings show a pronounced delayed IV spike around T+3
+      before mean-reverting, rather than a clean immediate crush.
     </div>
     <div class="callout green">
       <strong>â‘¢ Communication surprises matter more than rate decisions.</strong> Within hold meetings,
