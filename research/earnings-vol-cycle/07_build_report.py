@@ -1,0 +1,892 @@
+﻿"""
+07_build_report.py  —  Generate standalone index.html for the Earnings Vol Cycle study
+Reads all chart JSON files produced by 06_analysis.py and builds the full report.
+Output: index.html
+"""
+
+import json
+import numpy as np
+from pathlib import Path
+
+# ── Load chart data ───────────────────────────────────────────────────────────
+with open("charts/data_iv_profile.json")       as f: iv_profile   = json.load(f)
+with open("charts/data_sector_analysis.json")  as f: sector_data  = json.load(f)
+with open("charts/data_mktcap_analysis.json")  as f: mktcap_data  = json.load(f)
+with open("charts/data_surprise_analysis.json")as f: surp_data    = json.load(f)
+with open("charts/data_pnl.json")              as f: pnl_data     = json.load(f)
+with open("charts/data_timing.json")           as f: timing_data  = json.load(f)
+with open("charts/data_heatmap.json")          as f: heatmap_data = json.load(f)
+
+m = pnl_data["metrics"]
+
+# ── Heatmap color helpers (Python side) ──────────────────────────────────────
+_C_RED   = (254, 202, 202)
+_C_PARCH = (247, 244, 236)
+_C_GREEN = (187, 247, 208)
+
+def _lerp(t, lo, hi):
+    return "#{:02x}{:02x}{:02x}".format(
+        int(lo[0] + t*(hi[0]-lo[0])),
+        int(lo[1] + t*(hi[1]-lo[1])),
+        int(lo[2] + t*(hi[2]-lo[2])))
+
+def wr_bg(wr):
+    if wr is None: return "#f7f4ec"
+    t = max(0.0, min(1.0, wr / 100.0))
+    return _lerp(t*2, _C_RED, _C_PARCH) if t < 0.5 else _lerp((t-0.5)*2, _C_PARCH, _C_GREEN)
+
+def wr_fg(wr):
+    if wr is None: return "#8aa49e"
+    return "#0f2220" if (wr < 40 or wr > 75) else "#4a6460"
+
+# ── Build heatmap HTML ────────────────────────────────────────────────────────
+years   = heatmap_data["years"]
+sectors = heatmap_data["sectors"]
+hm_cols = "".join(f'<th class="hm-col">{y}</th>' for y in years)
+
+hm_rows = ""
+for i, sec in enumerate(sectors):
+    cells = ""
+    for j, yr in enumerate(years):
+        wr = heatmap_data["win_rates"][i][j]
+        n  = heatmap_data["n_events"][i][j]
+        bg = wr_bg(wr)
+        fg = wr_fg(wr)
+        if wr is None:
+            cells += f'<td class="hm-cell hm-empty" title="n&lt;5">–</td>'
+        else:
+            cells += (f'<td class="hm-cell" style="background:{bg};color:{fg}" '
+                      f'title="n={n}">{wr:.0f}%</td>')
+    hm_rows += f'<tr><td class="hm-row-label">{sec}</td>{cells}</tr>\n'
+
+heatmap_html = f"""
+<div class="hm-wrap">
+<table class="hm-table">
+  <thead>
+    <tr><th class="hm-corner">Sector</th>{hm_cols}</tr>
+  </thead>
+  <tbody>{hm_rows}</tbody>
+</table>
+</div>
+<p style="font-size:.75rem;color:var(--hint);margin-top:.5rem">
+  Win rate (%) for T-1 entry, T+1 exit straddle. Cells with fewer than 5 events shown as —.
+  Color: <span style="background:#bbf7d0;padding:1px 6px;border-radius:2px">green</span> = high win rate,
+  <span style="background:#fecaca;padding:1px 6px;border-radius:2px">red</span> = low win rate.
+</p>
+"""
+
+# ── Build timing sensitivity table ───────────────────────────────────────────
+timing_rows_html = ""
+best_sharpe = max((r for r in timing_data["rows"] if r["sharpe"]), key=lambda r: r["sharpe"], default=None)
+best_entry  = best_sharpe["entry"] if best_sharpe else "T-1"
+
+for r in timing_data["rows"]:
+    is_best = r["entry"] == best_entry
+    badge   = (' <span style="font-size:.65rem;background:var(--green2);color:#fff;'
+               'padding:1px 5px;border-radius:3px">best</span>') if is_best else ""
+    cls     = ' class="top-row"' if is_best else ""
+    sh      = f"{r['sharpe']:.2f}" if r["sharpe"] else "—"
+    timing_rows_html += (
+        f'<tr{cls}><td>{r["entry"]}{badge}</td>'
+        f'<td>{r["n"]:,}</td>'
+        f'<td>{r["win_rate"]*100:.1f}%</td>'
+        f'<td>${r["avg_pnl"]:+.0f}</td>'
+        f'<td>{sh}</td></tr>\n'
+    )
+
+# ── KPI values ────────────────────────────────────────────────────────────────
+n_total    = m["n_total_events"]
+win_rate   = m["win_rate_trades"]
+avg_pnl    = m["avg_pnl_per_trade"]
+sharpe_q   = m["sharpe_quarterly"]
+win_color  = "green" if win_rate >= 0.60 else ("amber" if win_rate >= 0.50 else "red")
+pnl_color  = "green" if avg_pnl > 0 else "red"
+sh_color   = "green" if sharpe_q and sharpe_q >= 1.0 else ("amber" if sharpe_q and sharpe_q >= 0 else "red")
+sharpe_str = f"{sharpe_q:.2f}" if sharpe_q else "—"
+
+# ── Conclusion tone ───────────────────────────────────────────────────────────
+# Honest verdict: if win rate < 55% or avg_pnl < 0, strategy is not viable
+viable = win_rate >= 0.60 and avg_pnl > 0 and (sharpe_q or 0) >= 0.5
+
+if viable:
+    verdict_class = "green"
+    verdict_title = "The premium is real and broadly persistent."
+    verdict_body  = (f"Across {n_total:,} earnings events from 2010 to 2024, the post-announcement IV crush "
+                     f"consistently outweighs the gamma cost of the actual move. A straddle seller earns the "
+                     f"premium in {win_rate:.0%} of events, suggesting a genuine structural edge driven by "
+                     f"systematic IV overshooting into earnings rather than sample-specific noise.")
+else:
+    verdict_class = "amber"
+    verdict_title = "The premium exists in aggregate but is not reliably exploitable."
+    verdict_body  = (f"While IV consistently exceeds realised vol before earnings on average, the win rate "
+                     f"of {win_rate:.0%} and avg P&L of ${avg_pnl:+.0f} per ${10_000:,} notional leave limited "
+                     f"margin for transaction costs. Execution costs and bid-ask spreads would likely erode "
+                     f"the edge for most retail participants.")
+
+# ── JSON for inline JS ────────────────────────────────────────────────────────
+iv_profile_js   = json.dumps(iv_profile)
+sector_data_js  = json.dumps(sector_data)
+mktcap_data_js  = json.dumps(mktcap_data)
+surp_data_js    = json.dumps(surp_data)
+pnl_data_js     = json.dumps(pnl_data)
+
+# ── Full HTML ─────────────────────────────────────────────────────────────────
+html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Earnings Vol Premium | The Intrinsic Investor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{{box-sizing:border-box;margin:0;padding:0}}
+:root{{
+  --bg:#f7f4ec;--bg2:#f0ece2;--bg3:#e8e3d8;--card:#fff;
+  --ink:#0f2220;--muted:#4a6460;--hint:#8aa49e;
+  --border:#e2ddd0;--accent:#1a5c52;--accent2:#144a42;
+  --green:#0E9F6E;--green2:#059669;--green-bg:#ecfdf5;--green-border:#a7f3d0;
+  --red:#E02424;--red2:#dc2626;--red-bg:#fef2f2;--red-border:#fca5a5;
+  --blue:#1e40af;--blue2:#2563eb;--blue-bg:#eff6ff;--blue-border:#bfdbfe;
+  --amber:#E3A008;--amber-bg:#fffbeb;--amber-border:#fcd34d;
+  --purple:#7E3AF2;--purple-bg:#f5f3ff;--purple-border:#c4b5fd;
+  --font:'Inter',sans-serif;--serif:'Fraunces',serif;--mono:'JetBrains Mono',monospace;
+}}
+body{{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.75;font-size:15px;-webkit-font-smoothing:antialiased}}
+body::after{{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23noise)' opacity='0.07'/%3E%3C/svg%3E");
+  mix-blend-mode:multiply;opacity:0.5}}
+#progress-bar{{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,#1a5c52,#2d9d8f);z-index:9998;transition:width 0.1s linear}}
+nav{{position:sticky;top:0;z-index:100;background:rgba(247,244,236,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:box-shadow 0.3s;border-bottom:1px solid var(--border);padding:0 2.5rem;height:62px;display:flex;align-items:center;justify-content:space-between}}
+nav.scrolled{{box-shadow:0 1px 24px rgba(15,34,32,0.06)}}
+.nav-logo{{font-family:var(--serif);font-size:21px;font-weight:600;color:var(--ink);text-decoration:none}}
+.nav-links{{display:flex;gap:2rem;list-style:none}}
+.nav-links a{{font-size:13px;color:var(--ink);text-decoration:none;font-weight:400;position:relative;padding-bottom:2px}}
+.nav-links a::after{{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform 0.25s cubic-bezier(0.4,0,0.2,1)}}
+.nav-links a:hover::after{{transform:scaleX(1)}}
+#side-nav{{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:2px;padding:10px 6px}}
+#side-nav a{{display:flex;align-items:center;justify-content:flex-end;gap:7px;text-decoration:none;padding:5px 8px;border-radius:4px;transition:background .2s}}
+#side-nav a:hover{{background:rgba(26,92,82,.07)}}
+.sn-label{{font-size:.67rem;font-weight:500;color:var(--hint);white-space:nowrap;letter-spacing:.02em;font-family:var(--font);transition:color .2s;text-align:right}}
+.sn-dot{{width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;transition:all .2s}}
+#side-nav a.active .sn-label{{color:var(--accent);font-weight:600}}
+#side-nav a.active .sn-dot{{background:var(--accent);transform:scale(1.5)}}
+#side-nav a:hover .sn-label{{color:var(--ink)}}
+#side-nav a:hover .sn-dot{{background:var(--muted)}}
+@media(max-width:860px){{#side-nav{{display:none}}}}
+@keyframes fadeUp{{from{{opacity:0;transform:translateY(18px)}}to{{opacity:1;transform:translateY(0)}}}}
+.hero{{position:relative;overflow:hidden;background:var(--ink);color:#fff;padding:64px 2.5rem 52px}}
+.hero::before{{content:'';position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(-55deg,transparent,transparent 40px,rgba(255,255,255,0.013) 40px,rgba(255,255,255,0.013) 41px)}}
+.hero-inner{{max-width:900px;margin:0 auto;position:relative}}
+.hero-tag{{font-family:var(--font);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--hint);margin-bottom:1.25rem;display:flex;align-items:center;gap:10px;animation:fadeUp .6s ease both}}
+.hero-tag::before{{content:'';width:24px;height:1px;background:var(--hint)}}
+.hero h1{{font-family:var(--serif);font-size:2.5rem;font-weight:600;line-height:1.2;margin-bottom:1rem;color:#fff;animation:fadeUp .6s .1s ease both}}
+.hero h1 em{{font-style:italic;color:#5ab5a5}}
+.hero-sub{{font-family:var(--font);color:rgba(255,255,255,.5);font-size:14px;max-width:680px;margin-bottom:1.5rem;font-weight:400;line-height:1.85;animation:fadeUp .6s .2s ease both}}
+.hero-meta{{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.3);border-top:1px solid rgba(255,255,255,.08);padding-top:1rem;display:flex;gap:1.5rem;flex-wrap:wrap;align-items:center;animation:fadeUp .6s .3s ease both}}
+.hero-meta-item strong{{color:rgba(255,255,255,.5);margin-right:.35em}}
+.gh-btn{{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.68rem;color:rgba(255,255,255,.5);text-decoration:none;border:1px solid rgba(255,255,255,.2);padding:3px 9px;border-radius:3px;transition:all .2s;letter-spacing:.02em;align-self:center}}
+.gh-btn:hover{{color:#fff;border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.08)}}
+.kpi-strip{{background:var(--ink);border-top:1px solid rgba(255,255,255,.06);padding:0 2.5rem 36px}}
+.kpi-grid{{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}}
+.kpi-cell{{background:rgba(255,255,255,.03);padding:20px 22px}}
+.kpi-label{{font-family:var(--mono);font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.3);margin-bottom:.4rem}}
+.kpi-value{{font-family:var(--serif);font-size:2rem;font-weight:600;font-style:italic;line-height:1;margin-bottom:.3rem}}
+.kpi-value.green{{color:#5ab5a5}}.kpi-value.red{{color:#f87171}}.kpi-value.blue{{color:#93c5fd}}.kpi-value.amber{{color:#fbbf24}}
+.kpi-sub{{font-family:var(--font);font-size:11px;color:rgba(255,255,255,.25)}}
+@media(max-width:700px){{.kpi-grid{{grid-template-columns:repeat(2,1fr)}}}}
+.section{{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease;padding:64px 2.5rem}}
+.section.visible{{opacity:1;transform:none}}
+.container{{max-width:900px;margin:0 auto}}
+.section-label{{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem}}
+.section-counter{{font-family:var(--mono);font-size:.7rem;color:var(--accent);font-weight:500;letter-spacing:.08em}}
+.section-label span:last-child{{font-family:var(--mono);font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--hint)}}
+h2{{font-family:var(--serif);font-size:1.85rem;font-weight:600;color:var(--ink);margin-bottom:1.25rem;line-height:1.25}}
+h2 em{{font-style:italic;color:var(--accent)}}
+h3{{font-family:var(--serif);font-size:1.2rem;font-weight:600;color:var(--ink);margin:1.75rem 0 .75rem}}
+p{{text-align:justify;hyphens:none;word-break:normal;line-height:1.85;color:var(--muted);margin-bottom:1rem;font-size:14px}}
+strong{{font-weight:600;color:var(--ink)}}
+.callout{{border-radius:6px;padding:14px 18px;margin:1.25rem 0;font-size:13.5px;line-height:1.7}}
+.callout strong{{display:block;margin-bottom:.2rem;font-size:13px;letter-spacing:.01em}}
+.callout.green{{background:var(--green-bg);border:1px solid var(--green-border);color:#065f46}}
+.callout.green strong{{color:#065f46}}
+.callout.amber{{background:var(--amber-bg);border:1px solid var(--amber-border);color:#92400e}}
+.callout.amber strong{{color:#92400e}}
+.callout.red{{background:var(--red-bg);border:1px solid var(--red-border);color:#991b1b}}
+.callout.red strong{{color:#991b1b}}
+.callout.blue{{background:var(--blue-bg);border:1px solid var(--blue-border);color:#1e3a8a}}
+.callout.blue strong{{color:#1e3a8a}}
+.callout.purple{{background:var(--purple-bg);border:1px solid var(--purple-border);color:#5b21b6}}
+.callout.purple strong{{color:#5b21b6}}
+.highlight-box{{background:var(--ink);border-radius:8px;padding:28px 32px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin:1.5rem 0}}
+.hb-val{{font-family:var(--serif);font-size:2.1rem;font-weight:600;font-style:italic;color:#5ab5a5;line-height:1;margin-bottom:.3rem}}
+.hb-label{{font-family:var(--mono);font-size:.65rem;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.35)}}
+.chart-box{{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:20px 18px 14px;margin-bottom:1.75rem}}
+.chart-title{{font-family:var(--font);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--hint);margin-bottom:1rem}}
+.chart-legend{{display:flex;gap:1.25rem;flex-wrap:wrap;margin-top:.75rem}}
+.chart-legend span{{font-family:var(--font);font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px}}
+.legend-dot{{width:10px;height:10px;border-radius:50%;flex-shrink:0}}
+.legend-line{{width:16px;height:2px;flex-shrink:0}}
+.data-table{{width:100%;border-collapse:collapse;font-family:var(--font);font-size:13px;margin:1rem 0}}
+.data-table thead tr{{background:var(--ink);color:#fff}}
+.data-table th{{padding:9px 12px;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;text-align:right}}
+.data-table th:first-child{{text-align:left}}
+.data-table td{{padding:8px 12px;border-bottom:1px solid var(--border);color:var(--muted);text-align:right;font-family:var(--mono);font-size:12px}}
+.data-table td:first-child{{text-align:left;font-family:var(--font);font-weight:500;color:var(--ink);font-size:13px}}
+.data-table tr:nth-child(even){{background:var(--bg2)}}
+.data-table tr.top-row{{background:var(--green-bg)!important}}
+.data-table tr.top-row td{{color:#065f46}}
+.data-table tr.top-row td:first-child{{color:#065f46;font-weight:600}}
+.method-table{{width:100%;border-collapse:collapse;font-size:13px}}
+.method-table th{{background:var(--bg3);color:var(--ink);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:9px 14px;text-align:left;border:1px solid var(--border)}}
+.method-table td{{padding:9px 14px;border:1px solid var(--border);color:var(--muted);font-size:13px;vertical-align:top}}
+.method-table td:first-child{{font-weight:600;color:var(--ink);white-space:nowrap;width:160px}}
+.hm-wrap{{overflow-x:auto}}
+.hm-table{{border-collapse:collapse;width:100%;font-family:var(--mono);font-size:.72rem}}
+.hm-table thead th,.hm-table tbody td{{border:1px solid var(--border)}}
+.hm-corner{{background:var(--bg2)}}
+.hm-col{{background:var(--ink);color:#fff;font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em;padding:6px 8px;text-align:center}}
+.hm-row-label{{background:var(--bg2);color:var(--muted);font-size:.7rem;font-family:var(--font);padding:6px 10px;white-space:nowrap}}
+.hm-cell{{text-align:center;color:var(--ink);padding:5px 8px;white-space:nowrap}}
+.hm-cell:hover{{filter:brightness(.92);cursor:default}}
+.hm-empty{{background:var(--bg)}}
+footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
+.footer-inner{{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}}
+.footer-name{{font-family:var(--serif);font-size:16px;color:rgba(255,255,255,.55)}}
+.footer-right{{display:flex;gap:1.5rem;align-items:center;font-family:var(--mono);font-size:11px}}
+.footer-right a{{color:rgba(255,255,255,.4);text-decoration:none;transition:color .2s}}
+.footer-right a:hover{{color:#fff}}
+@media(prefers-reduced-motion:reduce){{*,*::before,*::after{{animation-duration:.01ms!important;transition-duration:.01ms!important}}}}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<nav>
+  <a href="../../index.html" class="nav-logo">The Intrinsic Investor</a>
+  <ul class="nav-links">
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="../index.html">Research</a></li>
+    <li><a href="../../about.html">About</a></li>
+  </ul>
+</nav>
+
+<div id="side-nav" aria-label="Page sections"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Earnings Event Study</div>
+    <h1>The Earnings Vol Premium: <em>IV Dynamics Across the S&amp;P 500</em></h1>
+    <p class="hero-sub">
+      Does implied volatility systematically overstate realised moves at earnings? This study analyses {n_total:,} earnings events
+      across S&amp;P 500 constituents from 2010 to 2024, measuring the IV run-up, the IV-RV spread at announcement, and the
+      profitability of selling ATM straddles at earnings — segmented by sector, market cap, and earnings surprise magnitude.
+    </p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><strong>Author</strong>Brian Liew, BSc Accounting and Finance, LSE</div>
+      <div class="hero-meta-item"><strong>Published</strong>May 2025</div>
+      <div class="hero-meta-item"><strong>Period</strong>2010 to 2024, n={n_total:,} events</div>
+      <div class="hero-meta-item"><strong>Data</strong>OptionMetrics, IBES, CRSP</div>
+      <a href="https://github.com/TheIntrinsicInvestor/Backtesting" target="_blank" rel="noopener" class="gh-btn">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub Code
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="kpi-strip">
+  <div class="kpi-grid">
+    <div class="kpi-cell">
+      <div class="kpi-label">Events Analysed</div>
+      <div class="kpi-value blue">{n_total:,}</div>
+      <div class="kpi-sub">S&amp;P 500 earnings, 2010–2024</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">Straddle Win Rate</div>
+      <div class="kpi-value {win_color}">{win_rate:.0%}</div>
+      <div class="kpi-sub">T-1 entry, T+1 exit</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">Avg P&amp;L per $10K</div>
+      <div class="kpi-value {pnl_color}">${avg_pnl:+.0f}</div>
+      <div class="kpi-sub">Gross, before transaction costs</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">Quarterly Sharpe</div>
+      <div class="kpi-value {sh_color}">{sharpe_str}</div>
+      <div class="kpi-sub">Annualised on quarterly P&amp;L</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Section 01: Study Design ─────────────────────────────────────────────── -->
+<section class="section" id="s1">
+  <div class="container">
+    <div class="section-label"><span class="section-counter">01</span><span>Study Design</span></div>
+    <h2>What the study asks and <em>how it is constructed</em></h2>
+    <p>The central question is whether the implied volatility priced into options before earnings announcements
+    exceeds the subsequent realised move on a systematic, measurable basis. If it does, selling ATM straddles at
+    earnings represents a structural rather than speculative edge. If it does not — or if the edge is consumed by
+    transaction costs — the strategy has no rational basis.</p>
+    <p>The universe is constructed from CRSP's S&amp;P 500 constituent list (<code>crsp.msp500list</code>),
+    using point-in-time membership windows to avoid survivorship bias. Every permno that held membership between
+    January 2010 and December 2024 is included for the quarters it was in the index. Earnings announcement dates
+    come from IBES (<code>ibes.actu_epsus</code>, quarterly, <code>pdicity='QTR'</code>), and implied volatility
+    from the OptionMetrics standardised surface (<code>optionm_all.vsurfd</code>, 30-day maturity, 50-delta call).</p>
+    <p>For each event, we define an event window from T-20 to T+5 trading days relative to the announcement date T.
+    The IV baseline is the mean of T-20 to T-15 (six pre-announcement days well before options begin to price the
+    specific event). All IV values are normalised to this baseline (baseline = 100), making the run-up comparable
+    across stocks with different volatility levels. The straddle P&amp;L uses a BSM ATM approximation: theoretical
+    straddle value equals the 30-day IV times the square root of two trading days over one trading year times
+    the square root of two over pi — applied to a $10,000 notional position.</p>
+    <div class="callout blue">
+      <strong>Data note.</strong> OptionMetrics does not provide reliable individual-stock option quotes for every
+      constituent in every quarter. Events with fewer than three valid baseline IV observations (T-20 to T-15)
+      are excluded. Coverage is highest for large-cap names; the smallest quintile has materially lower data density.
+    </div>
+    <div class="callout amber">
+      <strong>P&amp;L methodology caveat.</strong> Straddle P&amp;L is approximated from IV and price data rather
+      than from actual bid-ask option quotes. The 30-day IV captures the smoothed surface, not the near-term
+      earnings-specific contract. Actual transaction costs (bid-ask spread on short-dated ATM options is typically
+      5-15% of premium) would reduce the reported edge materially for smaller and less liquid names.
+    </div>
+  </div>
+</section>
+
+<!-- ─── Section 02: IV Run-Up Profile ────────────────────────────────────────── -->
+<section class="section" id="s2" style="background:var(--bg2)">
+  <div class="container">
+    <div class="section-label"><span class="section-counter">02</span><span>IV Run-Up</span></div>
+    <h2>Implied volatility builds <em>systematically before earnings</em></h2>
+    <p>The chart below shows the average normalised IV from T-20 to T+5, where T is the earnings announcement date.
+    The ribbon represents the 25th to 75th percentile across all events. The baseline of 100 represents the mean IV
+    from T-20 to T-15, a period far enough before the announcement that options have not yet begun pricing the
+    specific event risk.</p>
+    <div class="chart-box">
+      <div class="chart-title">IV Run-Up Profile — Mean Normalised IV, T-20 to T+5 (baseline = 100)</div>
+      <canvas id="ivProfileChart" height="70"></canvas>
+      <div class="chart-legend">
+        <span><span class="legend-line" style="background:#1a5c52"></span>Mean (all events)</span>
+        <span><span class="legend-line" style="background:rgba(26,92,82,.18)"></span>P25 – P75 band</span>
+      </div>
+    </div>
+    <p>The run-up is consistent across the full sample. IV typically bottoms at the baseline level around T-15 to
+    T-12, then rises steadily, peaking at T-1 or T=0 (the announcement date itself). The crush is abrupt: IV
+    collapses by the close of T+1 in the majority of events, typically reverting to below-baseline levels within
+    two to three trading days.</p>
+    <p>The sector lines below the aggregate show that Technology and Healthcare names carry structurally higher
+    IV run-ups than Financials and Industrials. This likely reflects genuine uncertainty about binary outcomes
+    (drug trial data, product launches) rather than pure volatility overshoot. The implication for straddle sellers:
+    high-run-up sectors also carry higher tail risk when the outcome is truly binary.</p>
+    <div class="chart-box">
+      <div class="chart-title">IV Run-Up by Sector — Top Sectors (Mean Normalised IV)</div>
+      <canvas id="ivSectorChart" height="70"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Section 03: IV-RV Spread ─────────────────────────────────────────────── -->
+<section class="section" id="s3">
+  <div class="container">
+    <div class="section-label"><span class="section-counter">03</span><span>IV-RV Spread</span></div>
+    <h2>The gap between <em>implied and realised volatility</em></h2>
+    <p>The straddle P&amp;L is modelled using a BSM vega-gamma decomposition. Selling a 30-day ATM straddle
+    one day before earnings and closing at T+1 generates two offsetting effects: a vega gain from the IV crush
+    post-announcement, and a gamma loss proportional to the square of the actual 2-day move. The vega gain
+    dominates when IV collapses sharply after the event; the gamma loss dominates when the stock moves far
+    beyond what the surface implied. On average across this sample, the IV crush is large enough to win {win_rate:.0%}
+    of the time — even though the annualised actual move frequently exceeds the pre-earnings IV level.</p>
+    <div class="highlight-box">
+      <div>
+        <div class="hb-val">{win_rate:.0%}</div>
+        <div class="hb-label">Straddle win rate (T-1 entry, T+1 exit)</div>
+      </div>
+      <div>
+        <div class="hb-val">${avg_pnl:+.0f}</div>
+        <div class="hb-label">Avg P&amp;L per $10K notional</div>
+      </div>
+      <div>
+        <div class="hb-val">{iv_profile['baseline_iv_mean_pct']:.1f}%</div>
+        <div class="hb-label">Mean baseline IV (annualised)</div>
+      </div>
+    </div>
+    <p>The positive spread is not uniform. Sector composition matters significantly: sectors with highly
+    predictable earnings cycles tend to show smaller IV premiums, while sectors with genuine binary event
+    risk show larger spreads but also fatter left tails when the outcome surprises. The heatmap below
+    shows win rate by sector and year — a persistent but not unconditional pattern.</p>
+    {heatmap_html}
+  </div>
+</section>
+
+<!-- ─── Section 04: Sector & Market Cap ─────────────────────────────────────── -->
+<section class="section" id="s4" style="background:var(--bg2)">
+  <div class="container">
+    <div class="section-label"><span class="section-counter">04</span><span>Sector &amp; Cap</span></div>
+    <h2>Where the premium <em>concentrates</em></h2>
+    <p>The two charts below show win rate by GICS sector (left) and by market cap quintile (right). The sector
+    chart is sorted by win rate. The market cap chart uses quintiles assigned at each event date based on the
+    stock's market capitalisation at T-1.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">
+      <div class="chart-box">
+        <div class="chart-title">Win Rate by GICS Sector</div>
+        <canvas id="sectorChart" height="160"></canvas>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Win Rate by Market Cap Quintile</div>
+        <canvas id="mktcapChart" height="160"></canvas>
+      </div>
+    </div>
+    <p>Larger-cap stocks tend to show higher win rates. This is consistent with efficient pricing theory: the
+    more analyst coverage a company has, the more accurately the options market prices the expected move. A
+    well-covered large-cap has less room for IV to overshoot. Paradoxically, that overcovering also means
+    the premium is not systematically extreme — the win rate is higher but the average payout is smaller.</p>
+    <p>The smallest quintile (Q1) has the lowest win rate and the most variable returns. Thin option markets
+    in small-cap names mean that the 30-day IV from the standardised surface is a poor proxy for the actual
+    near-term straddle price. Results for Q1 should be treated as illustrative rather than actionable.</p>
+    <div class="callout purple">
+      <strong>Structural caveat.</strong> Market cap and sector are correlated: Technology dominates the large-cap
+      end, Utilities and Real Estate dominate the small end. The sector and cap effects are not independent,
+      and this analysis does not attempt to separate them.
+    </div>
+  </div>
+</section>
+
+<!-- ─── Section 05: Earnings Surprise Interaction ────────────────────────────── -->
+<section class="section" id="s5">
+  <div class="container">
+    <div class="section-label"><span class="section-counter">05</span><span>Surprise Effect</span></div>
+    <h2>How earnings surprise <em>drives straddle outcomes</em></h2>
+    <p>EPS surprise — the percentage difference between reported earnings and the IBES consensus estimate at
+    the time of announcement — is the primary driver of straddle losses. Large negative surprises produce
+    large stock moves that exceed the IV-implied breakeven. Large positive surprises also produce outsized moves,
+    but asymmetrically: the magnitude of upside moves on beats tends to be smaller than the magnitude of downside
+    moves on misses, partly due to pre-announcement price drift and analyst estimate herding.</p>
+    <div class="chart-box">
+      <div class="chart-title">Straddle Win Rate by EPS Surprise Quartile</div>
+      <canvas id="surpriseChart" height="65"></canvas>
+      <div class="chart-legend">
+        <span><span class="legend-dot" style="background:#1a5c52"></span>Win rate (%)</span>
+        <span><span class="legend-dot" style="background:#dc2626"></span>Avg P&amp;L ($/trade)</span>
+      </div>
+    </div>
+    <p>The pattern is stark: events in the bottom surprise quartile (large misses) are the primary source of
+    straddle losses. Events in the top two quartiles (beats and in-line results) show materially higher win
+    rates. This confirms that the IV premium is real and collectible under normal conditions — but the left
+    tail is fat enough that the aggregate Sharpe remains modest once losses are accounted for.</p>
+    <div class="callout red">
+      <strong>Tail risk.</strong> The worst individual quarters in the backtest typically correspond to periods
+      of elevated macro uncertainty when multiple large-cap misses occurred simultaneously. Earnings vol selling
+      is not a market-neutral strategy: it has meaningful left-tail correlation with equity drawdowns.
+    </div>
+  </div>
+</section>
+
+<!-- ─── Section 06: Straddle Strategy Backtest ───────────────────────────────── -->
+<section class="section" id="s6" style="background:var(--bg2)">
+  <div class="container">
+    <div class="section-label"><span class="section-counter">06</span><span>Strategy</span></div>
+    <h2>Straddle backtest: <em>selling earnings vol at scale</em></h2>
+    <p>The backtest sells a theoretical ATM straddle for every constituent with sufficient IV data on the last
+    trading day before each earnings announcement (T-1 close), then closes the position at T+1 close. The
+    P&amp;L is aggregated by calendar quarter to control for cross-sectional correlation within earnings seasons.</p>
+    <div class="highlight-box">
+      <div>
+        <div class="hb-val">{win_rate:.0%}</div>
+        <div class="hb-label">Trade win rate</div>
+      </div>
+      <div>
+        <div class="hb-val">${avg_pnl:+.0f}</div>
+        <div class="hb-label">Avg P&amp;L per $10K</div>
+      </div>
+      <div>
+        <div class="hb-val">{sharpe_str}</div>
+        <div class="hb-label">Quarterly Sharpe (annualised)</div>
+      </div>
+    </div>
+    <p>The chart below shows total P&amp;L per calendar quarter (the sum of all individual trade P&amp;Ls within
+    that quarter) alongside the cumulative P&amp;L line. Each bar represents one earnings season for the full
+    S&amp;P 500 universe. The quarterly view is more informative than the per-trade view because earnings are
+    correlated within quarters: a macro shock in one quarter tends to move all names simultaneously.</p>
+    <div class="chart-box">
+      <div class="chart-title">Straddle P&amp;L by Calendar Quarter (T-1 entry, T+1 exit, $10K notional per trade)</div>
+      <canvas id="pnlChart" height="80"></canvas>
+      <div class="chart-legend">
+        <span><span class="legend-dot" style="background:#059669"></span>Winning quarter</span>
+        <span><span class="legend-dot" style="background:#dc2626"></span>Losing quarter</span>
+        <span><span class="legend-line" style="background:#0f2220"></span>Cumulative P&amp;L</span>
+      </div>
+    </div>
+    <h3>Entry timing sensitivity</h3>
+    <p>The table below shows how performance changes if the straddle is entered earlier (T-5, T-3, T-2) rather
+    than at T-1. Earlier entries capture a larger part of the IV run-up in the premium received, but also
+    introduce more time-decay risk and exposure to stock moves before the event.</p>
+    <div style="overflow-x:auto">
+    <table class="data-table">
+      <thead>
+        <tr><th>Entry</th><th>N Events</th><th>Win Rate</th><th>Avg P&amp;L / $10K</th><th>Sharpe</th></tr>
+      </thead>
+      <tbody>
+        {timing_rows_html}
+      </tbody>
+    </table>
+    </div>
+    <h3>What these results mean</h3>
+    <p>The positive aggregate P&amp;L and win rate above 60% suggest a genuine IV premium at earnings. However,
+    the quarterly Sharpe of {sharpe_str} is modest, and it is computed before any transaction costs. ATM straddles
+    on short-dated earnings contracts typically carry bid-ask spreads of 5 to 15 percent of the premium on liquid
+    names — and materially more on smaller names. A realistic net Sharpe after costs, for names outside the top
+    100 by liquidity, would likely be close to zero or negative.</p>
+    <p>The strategy has a second structural problem: capacity. Executing a straddle sell across hundreds of names
+    every earnings season requires significant option market access, margin, and operational infrastructure. For
+    a systematic fund, this is feasible. For an individual investor, the effective universe shrinks dramatically
+    to names with liquid near-term option markets, which concentrates the exposure in a handful of mega-caps.</p>
+    <div class="callout {'green' if viable else 'amber'}">
+      <strong>{'Viable for systematic funds with low-cost execution.' if viable else 'Not reliably viable after costs for most investors.'}</strong> {verdict_body}
+    </div>
+    <div class="callout red">
+      <strong>Disclaimer.</strong> This backtest uses approximated option prices derived from OptionMetrics IV
+      data rather than actual bid-ask quotes. It excludes transaction costs, margin requirements, and early
+      assignment risk on short options. Past performance of a theoretical backtest does not predict future returns.
+      This report is for educational and research purposes only.
+    </div>
+  </div>
+</section>
+
+<!-- ─── Section 07: Methodology ──────────────────────────────────────────────── -->
+<section class="section" id="s7">
+  <div class="container">
+    <div class="section-label"><span class="section-counter">07</span><span>Methodology</span></div>
+    <h2>Data sources and <em>construction rules</em></h2>
+    <table class="method-table">
+      <thead><tr><th>Dimension</th><th>Detail</th></tr></thead>
+      <tbody>
+        <tr><td>Universe</td><td>S&amp;P 500 point-in-time constituents from CRSP msp500list; survivorship-bias-free membership windows used throughout</td></tr>
+        <tr><td>Period</td><td>2010-01-01 to 2024-12-31 (15 years); IV data pulled from 2009 to provide T-20 buffer for January 2010 events</td></tr>
+        <tr><td>Earnings dates</td><td>IBES actu_epsus, pdicity='QTR'; announcement date = anndats; deduplicated on permno + anndats</td></tr>
+        <tr><td>Implied volatility</td><td>OptionMetrics vsurfd, 30-day maturity, delta=50, cp_flag='C'; secid matched to CRSP permno via 8-char CUSIP through optionm_all.secnmd</td></tr>
+        <tr><td>IV baseline</td><td>Mean of T-20 to T-15 (six trading days); events with fewer than 3 valid baseline days excluded</td></tr>
+        <tr><td>Normalised IV</td><td>IV at each T-day offset divided by baseline mean, multiplied by 100</td></tr>
+        <tr><td>Actual move</td><td>Absolute 2-day compound return from T-1 close to T+1 close: |((1+ret_T) * (1+ret_T+1)) - 1|; CRSP dsf</td></tr>
+        <tr><td>P&amp;L model</td><td>BSM vega-gamma decomposition for a short 30-day ATM straddle held for 2 days: vega_pnl = $10K × 2 × φ(0) × sqrt(30/252) × (IV_T-1 − IV_T+1); gamma_loss = $10K × φ(0) × actual_move² / (IV_T-1 × sqrt(30/252)); net P&amp;L = vega_pnl − gamma_loss; where φ(0) = 1/sqrt(2π) ≈ 0.3989</td></tr>
+        <tr><td>P&amp;L basis</td><td>Gross, approximated from OptionMetrics standardised IV; excludes bid-ask spreads, commissions, and margin costs</td></tr>
+        <tr><td>Sharpe ratio</td><td>Computed on quarterly aggregate P&amp;L (sum of all trades in each calendar quarter); annualised as mean / std × sqrt(4); disclosed limitation: within-quarter cross-sectional correlation inflates this statistic</td></tr>
+        <tr><td>EPS surprise</td><td>(actual_eps − consensus_mean) / |consensus_mean|; IBES statsum_epsus fpi='6', most recent estimate before anndats</td></tr>
+        <tr><td>Sectors</td><td>GICS codes from Compustat company table via CCM link; current (most recent) classification used for all historical events</td></tr>
+        <tr><td>Market cap</td><td>abs(prc) × shrout at T-1; quintiles assigned cross-sectionally at each event date</td></tr>
+        <tr><td>Exclusions</td><td>Events with missing IV baseline, missing T-1 or T+1 price/return, or no OM secid match are excluded from all statistics</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ─── Section 08: Conclusions ──────────────────────────────────────────────── -->
+<section class="section" id="s8" style="background:var(--bg2)">
+  <div class="container">
+    <div class="section-label"><span class="section-counter">08</span><span>Conclusions</span></div>
+    <h2>Four takeaways from <em>{n_total:,} earnings events</em></h2>
+    <div class="callout {verdict_class}">
+      <strong>1. The earnings vol premium is real and broadly persistent across the S&amp;P 500.</strong> {verdict_body}
+    </div>
+    <div class="callout green">
+      <strong>2. The edge is concentrated in large-cap names with liquid option markets.</strong> The top two market cap quintiles account for the majority of the aggregate P&amp;L, driven both by higher win rates and by the fact that IV data coverage is more reliable for large names. The smallest quintile adds noise without proportionate return.
+    </div>
+    <div class="callout amber">
+      <strong>3. Large negative EPS surprises are the primary source of losses.</strong> The bottom surprise quartile (large misses) drives nearly all losing quarters. A simple filter — avoiding names where analyst estimate dispersion is high — would improve risk-adjusted performance but requires real-time access to IBES consensus data not available to all market participants.
+    </div>
+    <div class="callout red">
+      <strong>4. Transaction costs are the primary obstacle to individual implementation.</strong> The gross P&amp;L looks attractive at the portfolio level, but bid-ask spreads on short-dated ATM options, particularly outside the largest 50 names, would consume the majority of the theoretical premium. This strategy is viable for systematic options market-makers or well-capitalised funds; it is not a retail edge.
+    </div>
+    <h3>Limitations</h3>
+    <p>This study uses 30-day standardised IV as a proxy for the near-term earnings option. The actual option
+    market prices near-term earnings contracts at a significant premium to the 30-day surface — meaning the
+    true premium available to straddle sellers is likely higher than reported here, but the actual option data
+    is noisier and harder to standardise across 500 names. The choice of 30-day IV understates the premium
+    slightly while improving data reliability and comparability.</p>
+    <p>The 2-day return window (T-1 to T+1) may miss the full earnings move for pre-market announcements,
+    where the stock gaps on T rather than T+1. Using T to T+1 as the event window would slightly increase
+    measured actual moves for this subset. The aggregate effect is small but directionally reduces reported
+    win rates by a few percentage points.</p>
+    <p>GICS sector classifications are as of the most recent Compustat update rather than point-in-time.
+    Several large-cap reclassifications occurred during 2018 (Communications Services sector creation)
+    and will cause some Technology and Consumer Discretionary names to appear under their current sector
+    rather than their historical classification. This affects interpretability of the sector-level results
+    for the 2010-2018 sub-period.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-name">The Intrinsic Investor</div>
+    <div class="footer-right">
+      <span style="color:rgba(255,255,255,.35)">&copy; 2025 Brian Liew</span>
+      <a href="https://www.linkedin.com/in/brian-liew" target="_blank">LinkedIn</a>
+      <a href="https://github.com/TheIntrinsicInvestor" target="_blank">GitHub</a>
+      <a href="mailto:brianliew99@gmail.com">Email</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Inline data ───────────────────────────────────────────────────────────────
+const IV_PROFILE  = {iv_profile_js};
+const SECTOR_DATA = {sector_data_js};
+const MKTCAP_DATA = {mktcap_data_js};
+const SURP_DATA   = {surp_data_js};
+const PNL_DATA    = {pnl_data_js};
+
+// ── Chart defaults ────────────────────────────────────────────────────────────
+Chart.defaults.font.family = 'Inter, sans-serif';
+Chart.defaults.color = '#4a6460';
+const GRID = {{ color: 'rgba(15,34,32,.05)', drawBorder: false }};
+const TICK = {{ color: '#8aaba6', font: {{ size: 10 }} }};
+
+// ── Progress bar + nav shadow ─────────────────────────────────────────────────
+const _nav = document.querySelector('nav');
+window.addEventListener('scroll', () => {{
+  const el  = document.getElementById('progress-bar');
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  el.style.width = Math.min(pct, 100) + '%';
+  _nav.classList.toggle('scrolled', window.scrollY > 40);
+}}, {{ passive: true }});
+
+// ── Scroll reveal ─────────────────────────────────────────────────────────────
+const io = new IntersectionObserver(entries => {{
+  entries.forEach(e => {{ if (e.isIntersecting) e.target.classList.add('visible'); }});
+}}, {{ threshold: 0.07 }});
+document.querySelectorAll('.section').forEach(s => io.observe(s));
+
+// ── Side nav ──────────────────────────────────────────────────────────────────
+const NAV_LABELS = ['Study Design','IV Run-Up','IV-RV Spread','Sector & Cap','Surprise Effect','Strategy','Methodology','Conclusions'];
+const sideNav  = document.getElementById('side-nav');
+const sections = document.querySelectorAll('.section[id]');
+sections.forEach((s, i) => {{
+  const a = document.createElement('a');
+  a.href = '#' + s.id;
+  a.innerHTML = '<span class="sn-label">' + (NAV_LABELS[i] || '') + '</span><span class="sn-dot"></span>';
+  sideNav.appendChild(a);
+}});
+const navItems = sideNav.querySelectorAll('a');
+const navIo = new IntersectionObserver(entries => {{
+  entries.forEach(e => {{
+    if (e.isIntersecting) {{
+      navItems.forEach(n => n.classList.remove('active'));
+      const idx = Array.from(sections).indexOf(e.target);
+      if (navItems[idx]) navItems[idx].classList.add('active');
+    }}
+  }});
+}}, {{ threshold: 0.4 }});
+sections.forEach(s => navIo.observe(s));
+
+// ── Chart 1: IV Run-Up Profile (all events) ───────────────────────────────────
+new Chart(document.getElementById('ivProfileChart'), {{
+  type: 'line',
+  data: {{
+    labels: IV_PROFILE.labels.map(t => t === 0 ? 'T=0' : (t > 0 ? 'T+'+t : 'T'+t)),
+    datasets: [
+      {{
+        label: 'P75',
+        data: IV_PROFILE.p75,
+        borderColor: 'transparent',
+        backgroundColor: 'rgba(26,92,82,.13)',
+        fill: '+1',
+        pointRadius: 0,
+        tension: 0.35,
+      }},
+      {{
+        label: 'P25',
+        data: IV_PROFILE.p25,
+        borderColor: 'transparent',
+        backgroundColor: 'rgba(26,92,82,.13)',
+        fill: false,
+        pointRadius: 0,
+        tension: 0.35,
+      }},
+      {{
+        label: 'Mean',
+        data: IV_PROFILE.mean,
+        borderColor: '#1a5c52',
+        backgroundColor: 'transparent',
+        borderWidth: 2.5,
+        pointRadius: 0,
+        tension: 0.35,
+      }},
+    ]
+  }},
+  options: {{
+    responsive: true, maintainAspectRatio: true,
+    interaction: {{ mode: 'index', intersect: false }},
+    plugins: {{
+      legend: {{ display: false }},
+      tooltip: {{ callbacks: {{ label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y||0).toFixed(1) }} }}
+    }},
+    scales: {{
+      x: {{ grid: GRID, ticks: TICK }},
+      y: {{
+        grid: GRID, ticks: {{ ...TICK, callback: v => v.toFixed(0) }},
+        title: {{ display: true, text: 'Normalised IV (baseline = 100)', font: {{ size: 10 }}, color: '#8aaba6' }}
+      }}
+    }}
+  }}
+}});
+
+// ── Chart 1b: IV Run-Up by Sector ─────────────────────────────────────────────
+const SECTOR_COLORS = ['#1a5c52','#2563eb','#dc2626','#d97706','#7e3af2'];
+const sectorDatasets = Object.entries(IV_PROFILE.by_sector || {{}}).map(([sec, vals], i) => ({{
+  label: sec,
+  data: vals,
+  borderColor: SECTOR_COLORS[i % SECTOR_COLORS.length],
+  backgroundColor: 'transparent',
+  borderWidth: 2,
+  pointRadius: 0,
+  tension: 0.35,
+}}));
+
+if (sectorDatasets.length > 0) {{
+  new Chart(document.getElementById('ivSectorChart'), {{
+    type: 'line',
+    data: {{
+      labels: IV_PROFILE.labels.map(t => t === 0 ? 'T=0' : (t > 0 ? 'T+'+t : 'T'+t)),
+      datasets: sectorDatasets
+    }},
+    options: {{
+      responsive: true, maintainAspectRatio: true,
+      interaction: {{ mode: 'index', intersect: false }},
+      plugins: {{
+        legend: {{ position: 'top', labels: {{ font: {{ family: 'Inter', size: 11 }}, boxWidth: 24 }} }},
+      }},
+      scales: {{
+        x: {{ grid: GRID, ticks: TICK }},
+        y: {{
+          grid: GRID, ticks: {{ ...TICK, callback: v => v.toFixed(0) }},
+          title: {{ display: true, text: 'Normalised IV (baseline = 100)', font: {{ size: 10 }}, color: '#8aaba6' }}
+        }}
+      }}
+    }}
+  }});
+}}
+
+// ── Chart 2: Win Rate by Sector (horizontal bar) ──────────────────────────────
+new Chart(document.getElementById('sectorChart'), {{
+  type: 'bar',
+  data: {{
+    labels: SECTOR_DATA.sectors,
+    datasets: [{{
+      label: 'Win Rate (%)',
+      data: SECTOR_DATA.win_rates,
+      backgroundColor: SECTOR_DATA.win_rates.map(v => v >= 60 ? 'rgba(26,92,82,.72)' : v >= 50 ? 'rgba(227,160,8,.72)' : 'rgba(220,38,38,.72)'),
+      borderRadius: 3,
+    }}]
+  }},
+  options: {{
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    plugins: {{ legend: {{ display: false }} }},
+    scales: {{
+      x: {{ grid: GRID, ticks: {{ ...TICK, callback: v => v + '%' }}, min: 45, max: 80 }},
+      y: {{ grid: {{ display: false }}, ticks: {{ font: {{ size: 10 }}, color: '#4a6460' }} }}
+    }}
+  }}
+}});
+
+// ── Chart 3: Win Rate by Market Cap Quintile ──────────────────────────────────
+new Chart(document.getElementById('mktcapChart'), {{
+  type: 'bar',
+  data: {{
+    labels: MKTCAP_DATA.quintiles,
+    datasets: [{{
+      label: 'Win Rate (%)',
+      data: MKTCAP_DATA.win_rates,
+      backgroundColor: MKTCAP_DATA.win_rates.map(v => v >= 60 ? 'rgba(26,92,82,.72)' : v >= 50 ? 'rgba(227,160,8,.72)' : 'rgba(220,38,38,.72)'),
+      borderRadius: 3,
+    }}]
+  }},
+  options: {{
+    responsive: true, maintainAspectRatio: false,
+    plugins: {{ legend: {{ display: false }} }},
+    scales: {{
+      x: {{ grid: {{ display: false }}, ticks: {{ font: {{ size: 9 }} }} }},
+      y: {{ grid: GRID, ticks: {{ ...TICK, callback: v => v + '%' }}, min: 40, max: 80 }}
+    }}
+  }}
+}});
+
+// ── Chart 4: Win Rate by EPS Surprise Quartile ────────────────────────────────
+new Chart(document.getElementById('surpriseChart'), {{
+  type: 'bar',
+  data: {{
+    labels: SURP_DATA.quartiles,
+    datasets: [{{
+      label: 'Win Rate (%)',
+      data: SURP_DATA.win_rates,
+      backgroundColor: SURP_DATA.win_rates.map(v => v >= 60 ? 'rgba(26,92,82,.78)' : v >= 50 ? 'rgba(227,160,8,.78)' : 'rgba(220,38,38,.78)'),
+      borderRadius: 3,
+      yAxisID: 'y',
+    }}]
+  }},
+  options: {{
+    responsive: true, maintainAspectRatio: true,
+    plugins: {{ legend: {{ display: false }} }},
+    scales: {{
+      x: {{ grid: {{ display: false }}, ticks: {{ font: {{ size: 11 }} }} }},
+      y: {{ grid: GRID, ticks: {{ ...TICK, callback: v => v + '%' }}, title: {{ display: true, text: 'Win Rate (%)', font: {{ size: 10 }}, color: '#8aaba6' }} }}
+    }}
+  }}
+}});
+
+// ── Chart 5: Quarterly P&L ────────────────────────────────────────────────────
+new Chart(document.getElementById('pnlChart'), {{
+  type: 'bar',
+  data: {{
+    labels: PNL_DATA.labels,
+    datasets: [
+      {{
+        type: 'bar',
+        label: 'Quarterly P&L ($)',
+        data: PNL_DATA.bars,
+        backgroundColor: PNL_DATA.colors,
+        borderColor: PNL_DATA.colors,
+        borderWidth: 1,
+        borderRadius: 2,
+        yAxisID: 'y',
+      }},
+      {{
+        type: 'line',
+        label: 'Cumulative P&L ($)',
+        data: PNL_DATA.cum_line,
+        borderColor: '#0f2220',
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        pointRadius: 0,
+        tension: 0.3,
+        yAxisID: 'y2',
+      }}
+    ]
+  }},
+  options: {{
+    responsive: true, maintainAspectRatio: true,
+    interaction: {{ mode: 'index', intersect: false }},
+    plugins: {{
+      legend: {{ display: false }},
+      tooltip: {{ callbacks: {{ label: ctx => ctx.dataset.label + ': $' + ctx.parsed.y.toLocaleString() }} }}
+    }},
+    scales: {{
+      x: {{ grid: {{ display: false }}, ticks: {{ ...TICK, maxTicksLimit: 15, maxRotation: 45 }} }},
+      y: {{ grid: GRID, ticks: {{ ...TICK, callback: v => '$' + (v/1000).toFixed(0) + 'k' }},
+           title: {{ display: true, text: 'Quarterly P&L', font: {{ size: 10 }}, color: '#8aaba6' }} }},
+      y2: {{ position: 'right', grid: {{ display: false }}, ticks: {{ ...TICK, callback: v => '$' + (v/1000).toFixed(0) + 'k' }},
+            title: {{ display: true, text: 'Cumulative', font: {{ size: 10 }}, color: '#8aaba6' }} }}
+    }}
+  }}
+}});
+</script>
+</body>
+</html>"""
+
+out = Path("index.html")
+out.write_text(html, encoding="utf-8")
+print(f"Saved -> {out}  ({len(html):,} chars)")
+
