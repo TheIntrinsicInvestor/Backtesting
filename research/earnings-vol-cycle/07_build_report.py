@@ -283,7 +283,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
     <p class="hero-sub">
       Does implied volatility systematically overstate realised moves at earnings? This study analyses {n_total:,} earnings events
       across S&amp;P 500 constituents from 2010 to 2024, measuring the IV run-up, the IV-RV spread at announcement, and the
-      profitability of selling ATM straddles at earnings — segmented by sector, market cap, and earnings surprise magnitude.
+      profitability of selling ATM straddles at earnings, segmented by sector, market cap, and earnings surprise magnitude.
     </p>
     <div class="hero-meta">
       <div class="hero-meta-item"><strong>Author</strong>Brian Liew, BSc Accounting and Finance, LSE</div>
@@ -330,8 +330,8 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
     <h2>What the study asks and <em>how it is constructed</em></h2>
     <p>The central question is whether the implied volatility priced into options before earnings announcements
     exceeds the subsequent realised move on a systematic, measurable basis. If it does, selling ATM straddles at
-    earnings represents a structural rather than speculative edge. If it does not — or if the edge is consumed by
-    transaction costs — the strategy has no rational basis.</p>
+    earnings represents a structural rather than speculative edge. If it does not (or if the edge is consumed by
+    transaction costs), the strategy has no rational basis.</p>
     <p>The universe is constructed from CRSP's S&amp;P 500 constituent list (<code>crsp.msp500list</code>),
     using point-in-time membership windows to avoid survivorship bias. Every permno that held membership between
     January 2010 and December 2024 is included for the quarters it was in the index. Earnings announcement dates
@@ -342,11 +342,11 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
     specific event). All IV values are normalised to this baseline (baseline = 100), making the run-up comparable
     across stocks with different volatility levels. The straddle P&amp;L uses a BSM ATM approximation: theoretical
     straddle value equals the 30-day IV times the square root of two trading days over one trading year times
-    the square root of two over pi — applied to a $10,000 notional position.</p>
+    the square root of two over pi, applied to a $10,000 notional position.</p>
     <div class="callout blue">
       <strong>Data note.</strong> OptionMetrics does not provide reliable individual-stock option quotes for every
       constituent in every quarter. Events with fewer than three valid baseline IV observations (T-20 to T-15)
-      are excluded. Coverage is highest for large-cap names; the smallest quintile has materially lower data density.
+      are excluded. Coverage is highest for large-cap names. The smallest quintile has materially lower data density.
     </div>
     <div class="callout amber">
       <strong>P&amp;L methodology caveat.</strong> Straddle P&amp;L is approximated from IV and price data rather
@@ -367,7 +367,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
     from T-20 to T-15, a period far enough before the announcement that options have not yet begun pricing the
     specific event risk.</p>
     <div class="chart-box">
-      <div class="chart-title">IV Run-Up Profile — Mean Normalised IV, T-20 to T+5 (baseline = 100)</div>
+      <div class="chart-title">IV Run-Up Profile: Mean Normalised IV, T-20 to T+5 (baseline = 100)</div>
       <canvas id="ivProfileChart" height="70"></canvas>
       <div class="chart-legend">
         <span><span class="legend-line" style="background:#1a5c52"></span>Mean (all events)</span>
@@ -383,7 +383,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
     (drug trial data, product launches) rather than pure volatility overshoot. The implication for straddle sellers:
     high-run-up sectors also carry higher tail risk when the outcome is truly binary.</p>
     <div class="chart-box">
-      <div class="chart-title">IV Run-Up by Sector — Top Sectors (Mean Normalised IV)</div>
+      <div class="chart-title">IV Run-Up by Sector: Top Sectors (Mean Normalised IV)</div>
       <canvas id="ivSectorChart" height="70"></canvas>
     </div>
   </div>
@@ -397,9 +397,9 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
     <p>The straddle P&amp;L is modelled using a BSM vega-gamma decomposition. Selling a 30-day ATM straddle
     one day before earnings and closing at T+1 generates two offsetting effects: a vega gain from the IV crush
     post-announcement, and a gamma loss proportional to the square of the actual 2-day move. The vega gain
-    dominates when IV collapses sharply after the event; the gamma loss dominates when the stock moves far
+    dominates when IV collapses sharply after the event. The gamma loss dominates when the stock moves far
     beyond what the surface implied. On average across this sample, the IV crush is large enough to win {win_rate:.0%}
-    of the time — even though the annualised actual move frequently exceeds the pre-earnings IV level.</p>
+    of the time, even though the annualised actual move frequently exceeds the pre-earnings IV level.</p>
     <div class="highlight-box">
       <div>
         <div class="hb-val">{win_rate:.0%}</div>
@@ -417,7 +417,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
     <p>The positive spread is not uniform. Sector composition matters significantly: sectors with highly
     predictable earnings cycles tend to show smaller IV premiums, while sectors with genuine binary event
     risk show larger spreads but also fatter left tails when the outcome surprises. The heatmap below
-    shows win rate by sector and year — a persistent but not unconditional pattern.</p>
+    shows win rate by sector and year: a persistent but not unconditional pattern.</p>
     {heatmap_html}
   </div>
 </section>
@@ -427,26 +427,22 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
   <div class="container">
     <div class="section-label"><span class="section-counter">04</span><span>Sector &amp; Cap</span></div>
     <h2>Where the premium <em>concentrates</em></h2>
-    <p>The two charts below show win rate by GICS sector (left) and by market cap quintile (right). The sector
-    chart is sorted by win rate. The market cap chart uses quintiles assigned at each event date based on the
-    stock's market capitalisation at T-1.</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">
+    <p>The two charts show win rate by GICS sector (sorted descending) and by market cap quintile. Quintiles
+    are assigned at each event date using the stock's market capitalisation at T-1.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;align-items:start">
       <div class="chart-box">
         <div class="chart-title">Win Rate by GICS Sector</div>
-        <canvas id="sectorChart" height="160"></canvas>
+        <div style="position:relative;height:260px"><canvas id="sectorChart"></canvas></div>
       </div>
       <div class="chart-box">
         <div class="chart-title">Win Rate by Market Cap Quintile</div>
-        <canvas id="mktcapChart" height="160"></canvas>
+        <div style="position:relative;height:260px"><canvas id="mktcapChart"></canvas></div>
       </div>
     </div>
-    <p>Larger-cap stocks tend to show higher win rates. This is consistent with efficient pricing theory: the
-    more analyst coverage a company has, the more accurately the options market prices the expected move. A
-    well-covered large-cap has less room for IV to overshoot. Paradoxically, that overcovering also means
-    the premium is not systematically extreme — the win rate is higher but the average payout is smaller.</p>
-    <p>The smallest quintile (Q1) has the lowest win rate and the most variable returns. Thin option markets
-    in small-cap names mean that the 30-day IV from the standardised surface is a poor proxy for the actual
-    near-term straddle price. Results for Q1 should be treated as illustrative rather than actionable.</p>
+    <p>Larger-cap names show higher win rates. More analyst coverage means options price the expected move
+    more accurately, leaving less room for IV to overshoot. The smallest quintile (Q1) has the lowest win
+    rate and most variable returns: thin option markets make the 30-day IV surface a poor proxy for the
+    actual near-term straddle price. Q1 results should be treated as illustrative rather than actionable.</p>
     <div class="callout purple">
       <strong>Structural caveat.</strong> Market cap and sector are correlated: Technology dominates the large-cap
       end, Utilities and Real Estate dominate the small end. The sector and cap effects are not independent,
@@ -460,8 +456,8 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
   <div class="container">
     <div class="section-label"><span class="section-counter">05</span><span>Surprise Effect</span></div>
     <h2>How earnings surprise <em>drives straddle outcomes</em></h2>
-    <p>EPS surprise — the percentage difference between reported earnings and the IBES consensus estimate at
-    the time of announcement — is the primary driver of straddle losses. Large negative surprises produce
+    <p>EPS surprise (the percentage difference between reported earnings and the IBES consensus estimate at
+    the time of announcement) is the primary driver of straddle losses. Large negative surprises produce
     large stock moves that exceed the IV-implied breakeven. Large positive surprises also produce outsized moves,
     but asymmetrically: the magnitude of upside moves on beats tends to be smaller than the magnitude of downside
     moves on misses, partly due to pre-announcement price drift and analyst estimate herding.</p>
@@ -475,7 +471,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
     </div>
     <p>The pattern is stark: events in the bottom surprise quartile (large misses) are the primary source of
     straddle losses. Events in the top two quartiles (beats and in-line results) show materially higher win
-    rates. This confirms that the IV premium is real and collectible under normal conditions — but the left
+    rates. This confirms that the IV premium is real and collectible under normal conditions, but the left
     tail is fat enough that the aggregate Sharpe remains modest once losses are accounted for.</p>
     <div class="callout red">
       <strong>Tail risk.</strong> The worst individual quarters in the backtest typically correspond to periods
@@ -538,7 +534,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
     <p>The positive aggregate P&amp;L and win rate above 60% suggest a genuine IV premium at earnings. However,
     the quarterly Sharpe of {sharpe_str} is modest, and it is computed before any transaction costs. ATM straddles
     on short-dated earnings contracts typically carry bid-ask spreads of 5 to 15 percent of the premium on liquid
-    names — and materially more on smaller names. A realistic net Sharpe after costs, for names outside the top
+    names, and materially more on smaller names. A realistic net Sharpe after costs, for names outside the top
     100 by liquidity, would likely be close to zero or negative.</p>
     <p>The strategy has a second structural problem: capacity. Executing a straddle sell across hundreds of names
     every earnings season requires significant option market access, margin, and operational infrastructure. For
@@ -595,14 +591,14 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
       <strong>2. The edge is concentrated in large-cap names with liquid option markets.</strong> The top two market cap quintiles account for the majority of the aggregate P&amp;L, driven both by higher win rates and by the fact that IV data coverage is more reliable for large names. The smallest quintile adds noise without proportionate return.
     </div>
     <div class="callout amber">
-      <strong>3. Large negative EPS surprises are the primary source of losses.</strong> The bottom surprise quartile (large misses) drives nearly all losing quarters. A simple filter — avoiding names where analyst estimate dispersion is high — would improve risk-adjusted performance but requires real-time access to IBES consensus data not available to all market participants.
+      <strong>3. Large negative EPS surprises are the primary source of losses.</strong> The bottom surprise quartile (large misses) drives nearly all losing quarters. A simple filter (avoiding names where analyst estimate dispersion is high) would improve risk-adjusted performance but requires real-time access to IBES consensus data not available to all market participants.
     </div>
     <div class="callout red">
-      <strong>4. Transaction costs are the primary obstacle to individual implementation.</strong> The gross P&amp;L looks attractive at the portfolio level, but bid-ask spreads on short-dated ATM options, particularly outside the largest 50 names, would consume the majority of the theoretical premium. This strategy is viable for systematic options market-makers or well-capitalised funds; it is not a retail edge.
+      <strong>4. Transaction costs are the primary obstacle to individual implementation.</strong> The gross P&amp;L looks attractive at the portfolio level, but bid-ask spreads on short-dated ATM options, particularly outside the largest 50 names, would consume the majority of the theoretical premium. This strategy is viable for systematic options market-makers or well-capitalised funds. It is not a retail edge.
     </div>
     <h3>Limitations</h3>
     <p>This study uses 30-day standardised IV as a proxy for the near-term earnings option. The actual option
-    market prices near-term earnings contracts at a significant premium to the 30-day surface — meaning the
+    market prices near-term earnings contracts at a significant premium to the 30-day surface, meaning the
     true premium available to straddle sellers is likely higher than reported here, but the actual option data
     is noisier and harder to standardise across 500 names. The choice of 30-day IV understates the premium
     slightly while improving data reliability and comparability.</p>
