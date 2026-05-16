@@ -102,7 +102,7 @@ h1 em{font-style:italic;color:#1a5c52}
 .log-row:first-of-type{border-top:1px solid #e2ddd0}
 .log-date{font-family:'JetBrains Mono',monospace;font-size:11px;color:#aaa9a0;min-width:72px;flex-shrink:0;padding-top:1px}
 .log-body{display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap;flex:1}
-.log-title{font-family:'Inter',sans-serif;font-size:13.5px;color:#0f2220;font-weight:400}
+.log-title{font-family:'Inter',sans-serif;font-size:13.5px;color:#0f2220;font-weight:400;text-decoration:none}
 .log-tag{font-family:'Inter',sans-serif;font-size:10px;font-weight:600;padding:2px 9px;border-radius:3px;white-space:nowrap;flex-shrink:0}
 .tag-pub{background:rgba(26,92,82,.1);color:#1a5c52}
 .tag-wip{background:rgba(160,144,112,.1);color:#8a7a60}
@@ -257,7 +257,7 @@ function renderLog() {
     return `<div class="log-row">
       <div class="log-date">${r.date}</div>
       <div class="log-body">
-        <span class="log-title">${r.title}</span>
+        ${r.url ? `<a class="log-title" href="${r.url}">${r.title}</a>` : `<span class="log-title">${r.title}</span>`}
         ${tag}
         ${arrow}
       </div>
