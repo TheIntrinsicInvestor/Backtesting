@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="The Intrinsic Investor"/>
+<meta property="og:description" content="Systematic quant research on institutional data — honest backtests, published independently."/>
+<meta property="og:url" content="https://theintrinsicinvestor.com/"/>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -38,8 +42,6 @@ body::after {
 /* Change 8: Ghost decorative number — hero positioning */
 .hero{position:relative;padding:4rem 2.5rem 3.5rem;display:grid;grid-template-columns:1.15fr 1fr;gap:3.5rem;align-items:start;max-width:1200px;margin:0 auto}
 .hero>div{position:relative;z-index:1}
-.hero::before{content:'04';position:absolute;right:-0.05em;top:50%;transform:translateY(-54%);font-family:'Fraunces',serif;font-size:22rem;font-weight:600;font-style:italic;color:rgba(15,34,32,0.03);line-height:1;pointer-events:none;user-select:none;z-index:0}
-@media(max-width:768px){.hero::before{display:none}}
 
 /* Change 6: Hero animations */
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
@@ -131,18 +133,9 @@ footer{background:#0f2220;padding:1.5rem 2.5rem;display:flex;justify-content:spa
 .footer-logo{font-family:'Inter',sans-serif;font-style:normal;font-weight:500;font-size:13px;color:rgba(255,255,255,.5)}
 .footer-copy{font-family:'Inter',sans-serif;font-size:11px;color:rgba(255,255,255,.3)}
 
-/* Change 9: Stats strip */
-.stats-strip{background:#0f2220;padding:2rem 2.5rem;display:grid;grid-template-columns:repeat(4,1fr)}
-.stat-cell{padding:0 2rem;border-right:1px solid rgba(255,255,255,0.08)}
-.stat-cell:first-child{padding-left:0}
-.stat-cell:last-child{border-right:none}
-.stat-num{font-family:'Fraunces',serif;font-size:2rem;font-style:italic;font-weight:300;color:rgba(168,198,190,0.75);line-height:1;margin-bottom:0.3rem}
-.stat-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.1em;text-transform:uppercase}
-@media(max-width:768px){.stats-strip{grid-template-columns:1fr 1fr;gap:1.25rem;padding:1.5rem 1.25rem}.stat-cell{padding:0;border-right:none}}
-
-/* Change 13 (partial): Stats strip and contact section scroll-reveal */
-.stats-strip,.contact-section{opacity:0;transform:translateY(12px);transition:opacity 0.5s ease,transform 0.5s ease}
-.stats-strip.visible,.contact-section.visible{opacity:1;transform:translateY(0)}
+/* Contact section scroll-reveal */
+.contact-section{opacity:0;transform:translateY(12px);transition:opacity 0.5s ease,transform 0.5s ease}
+.contact-section.visible{opacity:1;transform:translateY(0)}
 
 /* Change 12: Prefers-reduced-motion */
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
