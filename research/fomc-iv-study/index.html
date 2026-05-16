@@ -101,6 +101,9 @@ p:last-child{margin-bottom:0}
 .callout.blue{background:var(--blue-bg);border-color:var(--blue2)}
 .callout.purple{background:var(--purple-bg);border-color:var(--purple)}
 .callout strong{font-weight:600}
+.callout-icon{font-size:1.1rem;flex-shrink:0;margin-top:.1rem}
+.callout-body{font-size:.9rem;color:var(--ink);line-height:1.6}
+.callout-body strong{font-weight:600}
 .highlight-box{background:var(--ink);border-radius:4px;padding:2rem;margin:1.5rem 0;display:grid;grid-template-columns:repeat(3,1fr)}
 .highlight-box > div{padding:0 1.5rem;border-right:1px solid rgba(255,255,255,.1)}
 .highlight-box > div:first-child{padding-left:0}
@@ -314,7 +317,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
       <canvas id="profileChart" height="80"></canvas>
       <div class="chart-legend">
         <span><span class="legend-line" style="background:#1a5c52"></span>SPX IV (mean)</span>
-        <span><span class="legend-line" style="background:#1a5c52;opacity:.25"></span>SPX Â±1 SD band</span>
+        <span><span class="legend-line" style="background:#1a5c52;opacity:.25"></span>SPX &plusmn;1 SD band</span>
         <span><span class="legend-line" style="background:#2563eb;border-top:2px dashed #2563eb"></span>TLT IV</span>
         <span><span class="legend-line" style="background:#d97706;border-top:2px dashed #d97706"></span>VIX</span>
       </div>
@@ -1494,7 +1497,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
 </tbody></table>
     </div>
     <p style="font-size:.75rem;color:var(--hint);font-family:JetBrains Mono,monospace">
-      Values are (IV / baseline mean) - 100. âš¡ denotes emergency meeting. Baseline = mean(T-20 to T-15) = 100.
+      Values are (IV / baseline mean) - 100. &#x26A1; denotes emergency meeting. Baseline = mean(T-20 to T-15) = 100.
     </p>
   </div>
 </section>
@@ -1802,25 +1805,37 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
     <div class="section-label"><span class="section-counter">07</span><span>Conclusions</span></div>
     <h2>Four takeaways from a systematic FOMC options study</h2>
     <div class="callout green">
-      <strong>â‘  The pre-meeting IV build-up is real and consistent.</strong> SPX implied vol rises
-      systematically in the 5 to 10 trading days before FOMC announcements, normalising to a peak
-      at or just before T=0. The pattern holds across hike, hold, and cut meetings, though the
-      magnitude varies by rate cycle era.
+      <div class="callout-icon">&#x2460;</div>
+      <div class="callout-body">
+        <strong>The pre-meeting IV build-up is real and consistent.</strong> SPX implied vol rises
+        systematically in the 5 to 10 trading days before FOMC announcements, normalising to a peak
+        at or just before T=0. The pattern holds across hike, hold, and cut meetings, though the
+        magnitude varies by rate cycle era.
+      </div>
     </div>
     <div class="callout green">
-      <strong>&#x2461; The IV crush is reliable but not uniform.</strong> Hawkish Hold meetings enter the
-      announcement with pre-elevated IV that decays slowly rather than crushing, limiting short-vol
-      profitability. Neutral and Dovish Hold meetings show a pronounced delayed IV spike around T+3
-      before mean-reverting, rather than a clean immediate crush.
+      <div class="callout-icon">&#x2461;</div>
+      <div class="callout-body">
+        <strong>The IV crush is reliable but not uniform.</strong> Hawkish Hold meetings enter the
+        announcement with pre-elevated IV that decays slowly rather than crushing, limiting short-vol
+        profitability. Neutral and Dovish Hold meetings show a pronounced delayed IV spike around T+3
+        before mean-reverting, rather than a clean immediate crush.
+      </div>
     </div>
     <div class="callout green">
-      <strong>â‘¢ Communication surprises matter more than rate decisions.</strong> Within hold meetings,
-      the communication surprise layer (hawkish vs. dovish dot plot or statement) drives larger
-      divergences in IV behaviour than the rate decision itself. The Fed's forward guidance regime
-      has effectively made the rate decision a secondary variable.
+      <div class="callout-icon">&#x2462;</div>
+      <div class="callout-body">
+        <strong>Communication surprises matter more than rate decisions.</strong> Within hold meetings,
+        the communication surprise layer (hawkish vs. dovish dot plot or statement) drives larger
+        divergences in IV behaviour than the rate decision itself. The Fed's forward guidance regime
+        has effectively made the rate decision a secondary variable.
+      </div>
     </div>
     <div class="callout green">
-      <strong>â‘£ Neither straddle strategy offers a viable edge after realistic costs.</strong> Strategy A produces a 51% win rate and negative Sharpe in aggregate. Strategy B's positive headline is driven entirely by the 2022 to 2023 hiking cycle (n=15 meetings). In the current Hold regime, both strategies lose money before transaction costs. These strategies should not be carried out.
+      <div class="callout-icon">&#x2463;</div>
+      <div class="callout-body">
+        <strong>Neither straddle strategy offers a viable edge after realistic costs.</strong> Strategy A produces a 51% win rate and negative Sharpe in aggregate. Strategy B's positive headline is driven entirely by the 2022 to 2023 hiking cycle (n=15 meetings). In the current Hold regime, both strategies lose money before transaction costs. These strategies should not be carried out.
+      </div>
     </div>
     <h3>Limitations and what this study cannot claim</h3>
     <p>
