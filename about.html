@@ -131,7 +131,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
       <div class="sb-label">Quick Facts</div>
       <div class="fact-list">
         <div class="fact-item"><strong>University</strong>London School of Economics (LSE)</div>
-        <div class="fact-item"><strong>Focus</strong>Systematic market research</div>
+        <div class="fact-item"><strong>Focus</strong>Options, vol &amp; systematic research</div>
         <div class="fact-item"><strong>Data</strong>WRDS / OptionMetrics</div>
         <div class="fact-item"><strong>Location</strong>London, United Kingdom</div>
       </div>
@@ -164,8 +164,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
 
     <div class="section">
       <div class="sec-label">Introduction</div>
-      <div class="sec-heading">Genuinely <em>curious</em> about markets.</div>
-      <p>Finance student at LSE with a genuine interest in markets and systematic strategy research. I build backtests on institutional data and publish results honestly, covering methodology, limitations, and all.</p>
+      <div class="sec-heading">Markets, risk, and the numbers <em>behind them.</em></div>
+      <p>I'm drawn to the questions investors actually face: when does an implied vol premium disappear? What does a Fed meeting signal about the vol surface across rate regimes? How does options market microstructure translate into risk for an intraday position? I study Accounting and Finance at LSE and run each study from end to end, from institutional data pull through to a concrete published finding.</p>
       <p>Outside of finance, you'll find me on a tennis court, behind a guitar, or on a mountain somewhere pretending I know what I'm doing on a snowboard.</p>
     </div>
 
@@ -180,9 +180,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
     <div class="section">
       <div class="sec-label">Data &amp; Methodology</div>
       <div class="sec-heading">Institutional <em>infrastructure.</em></div>
-      <p>All data is sourced through Wharton Research Data Services (WRDS), accessed via LSE Library. WRDS is the same data infrastructure used by academic researchers, quantitative hedge funds, and institutional asset managers worldwide. No retail proxies, no adjusted-close workarounds.</p>
-      <p>The specific databases vary by study: OptionMetrics IvyDB for implied volatility surfaces and options pricing, TAQ for intraday trade-and-quote data, CRSP for equity prices, Compustat for fundamentals, IBES for earnings announcement dates, and FRED for macro series.</p>
-      <p>The analysis pipeline runs end-to-end in Python. Raw data is pulled via SQL queries against WRDS, cached locally to Parquet files, processed with pandas and scipy, and the final output is built as a standalone interactive HTML report. All code is published on GitHub.</p>
+      <p>All data is sourced through Wharton Research Data Services (WRDS), the same infrastructure used by institutional asset managers, quantitative hedge funds, and academic researchers worldwide. Databases vary by study: OptionMetrics IvyDB for implied volatility surfaces, TAQ for intraday trade-and-quote data, CRSP for equity prices, Compustat for fundamentals, IBES for earnings dates, and FRED for macro series.</p>
+      <p>The full pipeline, from raw data pull to published interactive report, is built and maintained independently. All code is published on GitHub.</p>
     </div>
 
     <div class="section">
@@ -191,17 +190,18 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
       <div>
         <div style="font-family:'Inter',sans-serif;font-size:15px;font-weight:600;color:#0f2220;margin-bottom:.2rem">London School of Economics</div>
         <div style="font-size:13px;color:#1a5c52;font-weight:500;font-family:'Inter',sans-serif;margin-bottom:.6rem">BSc Accounting & Finance</div>
-        <p style="margin:0">WRDS access via LSE Library. Head of Derivatives, LSE Trading Society.</p>
+        <div style="font-size:13px;color:#0f2220;font-weight:500;font-family:'Inter',sans-serif;margin-bottom:.4rem">Head of Derivatives, LSE Trading Society</div>
+        <p style="margin:0">WRDS institutional data access via LSE Library.</p>
       </div>
     </div>
 
     <div class="section">
-      <div class="sec-label">Technical Skills</div>
+      <div class="sec-label">Research Infrastructure</div>
       <div class="sec-heading">Built to <em>research.</em></div>
-      <p>Every study on this site is produced end-to-end, from raw SQL queries against WRDS databases to the interactive HTML report you read in the browser.</p>
+      <p>Every study is produced end-to-end: institutional data pull, statistical analysis, and interactive published output, without commercial software or third-party platforms.</p>
       <div class="skills-grid">
         <div>
-          <div class="skill-group-label">Data & Analysis</div>
+          <div class="skill-group-label">Analysis</div>
           <div class="skill-pills"><span class="pill">Python</span><span class="pill">pandas</span><span class="pill">SQL</span><span class="pill">scipy</span><span class="pill">SQLAlchemy</span></div>
         </div>
         <div>
@@ -211,10 +211,6 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
         <div>
           <div class="skill-group-label">Visualisation</div>
           <div class="skill-pills"><span class="pill">Chart.js</span><span class="pill">Plotly.js</span><span class="pill">matplotlib</span></div>
-        </div>
-        <div>
-          <div class="skill-group-label">Publishing</div>
-          <div class="skill-pills"><span class="pill">HTML / CSS</span><span class="pill">JavaScript</span><span class="pill">GitHub Pages</span></div>
         </div>
       </div>
     </div>
