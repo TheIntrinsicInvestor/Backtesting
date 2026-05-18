@@ -681,14 +681,14 @@ html += f"""      </tbody>
     </table>
     </div>
     <h3>What these results mean</h3>
-    <p style="text-align:justify;hyphens:auto">
+    <p style="text-align:justify;hyphens:none">
       Aggregate results do not support Strategy A as a systematic trade. The {pre_win:.0%} win rate
       is statistically indistinguishable from random, and the annualised Sharpe of {pre_sharpe:.2f}
       is negative. The strategy loses more on its bad trades than it earns on its good ones, driven
       by a small number of large losses around meetings that delivered unexpected policy shifts or
       aggressive communication tone changes.
     </p>
-    <p style="text-align:justify;hyphens:auto">
+    <p style="text-align:justify;hyphens:none">
       Disaggregating by meeting type reveals where the edge concentrates and where it collapses.
       Hold meetings with Neutral communication ({sg_pre_neutral['n']} trades) are the only
       consistently profitable cohort: {sg_pre_neutral['win_rate']:.0%} win rate, avg
@@ -716,7 +716,7 @@ html += f"""      </tbody>
         <div class="hb-label">Avg P&amp;L, Hike meetings<br>({sg_pre_hike['n']} trades)</div>
       </div>
     </div>
-    <p style="text-align:justify;hyphens:auto">
+    <p style="text-align:justify;hyphens:none">
       Implementation viability is limited even for the Hold/Neutral cohort. Communication tone is
       confirmed only after the FOMC statement is released, so pre-classifying a meeting as Neutral
       is impossible in practice. A systematic strategy cannot select only these meetings in advance.
@@ -776,7 +776,7 @@ html += f"""      </tbody>
       </tbody>
     </table>
     <h3>What these results mean</h3>
-    <p style="text-align:justify;hyphens:auto">
+    <p style="text-align:justify;hyphens:none">
       The T+5 aggregate looks constructive at {post_win:.0%} win rate and a positive Sharpe, but this
       headline number conceals a sharply bifurcated picture driven almost entirely by the rate cycle.
       Hike meetings ({sg_post_hike['n']} trades) account for nearly all the strategy's edge:
@@ -801,14 +801,14 @@ html += f"""      </tbody>
         <div class="hb-label">Avg P&amp;L, Hold meetings<br>({sg_post_hold['n']} trades)</div>
       </div>
     </div>
-    <p style="text-align:justify;hyphens:auto">
+    <p style="text-align:justify;hyphens:none">
       The mechanism for the hike-cycle edge is intuitive. During the 2022 to 2023 hiking campaign,
       each meeting resolved acute uncertainty about the terminal rate. After a hike was delivered,
       implied vol deflated steadily over the following days as markets reprocessed the Fed's
       trajectory. The T+1 straddle entry captures the peak of post-hike IV, and the T+5 exit
       harvests most of the mean-reversion before other macro events introduce noise.
     </p>
-    <p style="text-align:justify;hyphens:auto">
+    <p style="text-align:justify;hyphens:none">
       Implementation viability is cycle-dependent. The 15 hike meetings (2022 to 2023) drove the
       majority of this strategy's cumulative P&amp;L and produced a commercially attractive Sharpe.
       As of 2025, the Fed is in a hold and gradual-cut stance, which means the operative regime

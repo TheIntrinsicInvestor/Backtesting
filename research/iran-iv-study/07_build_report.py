@@ -433,8 +433,8 @@ html = f"""<!DOCTYPE html>
     </div>
   </div>
   <div class="kpi-tabs">
-    <div class="kpi-tab active" onclick="switchTab('full')">Full sample (n=11)</div>
-    <div class="kpi-tab" onclick="switchTab('adj')">Ex-event-2 / ex-GFC (n=10)</div>
+    <div class="kpi-tab active" onclick="switchTab('full', this)">Full sample (n=11)</div>
+    <div class="kpi-tab" onclick="switchTab('adj', this)">Ex-event-2 / ex-GFC (n=10)</div>
   </div>
   <div id="panel-full" class="kpi-panel active">
     <div class="kpi-cells">
@@ -937,11 +937,11 @@ html = f"""<!DOCTYPE html>
 
 <script>
 // ── Tab switcher ──────────────────────────────────────────────────────────────
-function switchTab(id) {{
+function switchTab(id, el) {{
   document.querySelectorAll('.kpi-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.kpi-panel').forEach(p => p.classList.remove('active'));
   document.getElementById('panel-' + id).classList.add('active');
-  event.target.classList.add('active');
+  el.classList.add('active');
 }}
 
 // ── Chart 1: IV Profile ───────────────────────────────────────────────────────

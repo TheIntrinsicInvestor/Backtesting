@@ -7,6 +7,7 @@
 <meta property="og:title" content="The Intrinsic Investor"/>
 <meta property="og:description" content="Systematic quant research on institutional data — honest backtests, published independently."/>
 <meta property="og:url" content="https://theintrinsicinvestor.com/"/>
+<title>The Intrinsic Investor</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -167,7 +168,7 @@ const REPORTS = [
     date: "May 2026",
     title: "The FOMC Vol Crush: Implied Volatility Dynamics Around Federal Reserve Decisions",
     tag: "SPX / TLT / VIX · FOMC Event Study",
-    meta: "87% win rate post-hike · -2.1% hold crush · 58 meetings · OptionMetrics + FRED",
+    meta: "69% post-announce win rate · -2.1% hold crush · 55 meetings · OptionMetrics + FRED",
     url: "/research/fomc-iv-study/",
     status: "published"
   },
@@ -215,7 +216,7 @@ const REPORTS = [
     date: "Jan 2026",
     title: "Selling Earnings Volatility: A Short Straddle Strategy Across the Magnificent Seven",
     tag: "Mag 7 · Earnings",
-    meta: "68% win rate · Sharpe 1.4+ · 2015–2024",
+    meta: "68% win rate · Sharpe 1.4+ · 2019–2024",
     url: "/research/short-straddle/",
     status: "published"
   }
@@ -223,36 +224,18 @@ const REPORTS = [
 
 function renderCards() {
   return REPORTS.slice(0, 3).map(r => {
-    const isWip = r.status === "wip";
-    const style = isWip
-      ? 'style="background:#f7f4ec;border:1px dashed #d0c9b8;display:block;border-radius:6px;padding:1.35rem;text-decoration:none"'
-      : 'class="card"';
-    const tag = isWip
-      ? `<div style="font-family:'Inter',sans-serif;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#8a7a60;margin-bottom:.4rem">${r.tag}</div>`
-      : `<div class="ctag">${r.tag}</div>`;
-    const title = isWip
-      ? `<div style="font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:#8aa49e;margin-bottom:.45rem;line-height:1.35">${r.title}</div>`
-      : `<div class="ctitle">${r.title}</div>`;
-    const el = r.url ? `<a href="${r.url}" ${style}>` : `<div ${style}>`;
-    const close = r.url ? `</a>` : `</div>`;
-    return `${el}${tag}${title}<div class="cmeta">${r.meta}</div>${close}`;
+    return `<a href="${r.url}" class="card"><div class="ctag">${r.tag}</div><div class="ctitle">${r.title}</div><div class="cmeta">${r.meta}</div></a>`;
   }).join('');
 }
 
 function renderLog() {
   return REPORTS.filter(r => r.status === 'published').map(r => {
-    const tag = r.status === "published"
-      ? `<span class="log-tag tag-pub">Published</span>`
-      : `<span class="log-tag tag-wip">In progress</span>`;
-    const arrow = r.url
-      ? `<a class="log-arrow" href="${r.url}">Read →</a>`
-      : '';
     return `<div class="log-row">
       <div class="log-date">${r.date}</div>
       <div class="log-body">
-        ${r.url ? `<a class="log-title" href="${r.url}">${r.title}</a>` : `<span class="log-title">${r.title}</span>`}
-        ${tag}
-        ${arrow}
+        <a class="log-title" href="${r.url}">${r.title}</a>
+        <span class="log-tag tag-pub">Published</span>
+        <a class="log-arrow" href="${r.url}">Read →</a>
       </div>
     </div>`;
   }).join('');
@@ -270,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); io.unobserve(entry.target); } });
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-  document.querySelectorAll('.log-row, .stats-strip, .contact-section').forEach(el => io.observe(el));
+  document.querySelectorAll('.log-row, .contact-section').forEach(el => io.observe(el));
 });
 </script>
 

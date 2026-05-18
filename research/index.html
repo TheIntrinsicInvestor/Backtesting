@@ -170,12 +170,12 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
       <div class="report-left">
         <div class="ctag">SPX / TLT / VIX &middot; FOMC Event Study</div>
         <div class="report-title">The FOMC Vol Crush: Implied Volatility Dynamics Around Federal Reserve Decisions</div>
-        <div class="report-desc">An event study of SPX, TLT, and VIX implied volatility across 58 FOMC meetings (2018 to 2024), classified by rate decision type and communication surprise. Hold meetings crush vol reliably (-2.1%), while hike meetings spike it (+2.0%). Post-announcement short straddles after hike decisions show an 87% win rate with a Sharpe of 2.75, challenging the conventional sell-FOMC-vol narrative.</div>
+        <div class="report-desc">An event study of SPX, TLT, and VIX implied volatility across 55 FOMC meetings (2018 to 2024), classified by rate decision type and communication surprise. Hold meetings crush vol reliably (-2.1%), while hike meetings spike it (+2.0%). Post-announcement short straddles after hike decisions show an 87% win rate with a Sharpe of 2.75, challenging the conventional sell-FOMC-vol narrative.</div>
         <div class="report-metrics">
-          <div class="rm"><div class="rm-val">87%</div><div class="rm-lbl">Post-hike win rate</div></div>
+          <div class="rm"><div class="rm-val">69%</div><div class="rm-lbl">Post-announce win rate</div></div>
           <div class="rm"><div class="rm-val">2.75</div><div class="rm-lbl">Post-hike Sharpe</div></div>
           <div class="rm"><div class="rm-val">-2.1%</div><div class="rm-lbl">Hold meeting IV crush</div></div>
-          <div class="rm"><div class="rm-val">58</div><div class="rm-lbl">Meetings analysed</div></div>
+          <div class="rm"><div class="rm-val">55</div><div class="rm-lbl">Meetings analysed</div></div>
         </div>
         <span class="read-link">Read report &rarr;</span>
       </div>
@@ -227,7 +227,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
       <div class="report-left">
         <div class="ctag">XLE / USO / XOM / CVX · Geopolitical IV</div>
         <div class="report-title">IV Behaviour in Energy Sector Options Around Iran-Related Geopolitical Events</div>
-        <div class="report-desc">An event study of 30-day ATM implied volatility across four energy instruments around fifteen Iran-related escalation events from 2003 to 2026. IV peaks at T+2 and mean-reverts by T+17, supporting a short vol strategy with a 90% win rate at a T+20 exit (ex-GFC, n=10).</div>
+        <div class="report-desc">An event study of 30-day ATM implied volatility across four energy instruments around fifteen Iran-related escalation events identified from 2003 to 2026, eleven with OptionMetrics IV data. IV peaks at T+2 and mean-reverts by T+17, supporting a short vol strategy with a 90% win rate at a T+20 exit (ex-GFC, n=10).</div>
         <div class="report-metrics">
           <div class="rm"><div class="rm-val">90%</div><div class="rm-lbl">Win rate (ex-GFC)</div></div>
           <div class="rm"><div class="rm-val">+9.08</div><div class="rm-lbl">Avg P&L (IV pts)</div></div>
@@ -322,7 +322,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
         <div class="sb-stat-lbl">Geopolitical events identified</div>
       </div>
       <div class="sb-stat">
-        <div class="sb-stat-num">1.94</div>
+        <div class="sb-stat-num">1.95</div>
         <div class="sb-stat-lbl">Highest Sharpe achieved</div>
       </div>
     </div>
@@ -335,6 +335,9 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
       <div class="sb-source-item"><div class="sb-source-name">IBES Actuals</div>Earnings announcement dates</div>
       <div class="sb-source-item"><div class="sb-source-name">Compustat</div>Equity & ETF price data</div>
       <div class="sb-source-item"><div class="sb-source-name">yfinance</div>Underlying price data</div>
+      <div class="sb-source-item"><div class="sb-source-name">CRSP</div>SPY daily returns & S&amp;P 500 universe</div>
+      <div class="sb-source-item"><div class="sb-source-name">TAQ</div>Intraday trade &amp; quote data</div>
+      <div class="sb-source-item"><div class="sb-source-name">FRED</div>Fed funds rate &amp; VIX series</div>
       <div class="sb-source-item"><div class="sb-source-name">WRDS Platform</div>All data accessed via LSE</div>
     </div>
   </div>
