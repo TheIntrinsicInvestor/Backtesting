@@ -379,14 +379,14 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
     collapses by the close of T+1 in the majority of events, typically reverting to below-baseline levels within
     two to three trading days.</p>
     <p>The sector breakdown reveals a clear hierarchy. Consumer Discretionary leads at a T-1 peak of 110 normalised
-    IV, followed closely by Technology and Consumer Staples at 109 — the latter is counterintuitive given that staples
+    IV, followed closely by Technology and Consumer Staples at 109 (the latter is counterintuitive given that staples
     earnings are typically uneventful, but the IV build reflects systematic option positioning ahead of any scheduled
-    announcement rather than genuine binary uncertainty. Healthcare and Industrials sit in a mid-tier around 107.
+    announcement rather than genuine binary uncertainty). Healthcare and Industrials sit in a mid-tier around 107.
     Financials (105) and Energy (102) carry the lowest pre-earnings build. Energy is the sharpest outlier: oil-linked
     names carry macro uncertainty that does not resolve at the earnings date, so IV barely compresses at T+1, unlike
     the 21-22 point collapses in Consumer Discretionary, Technology, and Consumer Staples. For straddle sellers, the
     highest-crush sectors offer the most reliable post-event IV decay, but their elevated run-ups also reflect
-    genuinely binary outcomes on guidance and product cycles — consistent with the larger left tails in those sectors.</p>
+    genuinely binary outcomes on guidance and product cycles, consistent with the larger left tails in those sectors.</p>
     <div class="chart-box">
       <div class="chart-title">IV Run-Up by Sector: 7 Major Sectors (Mean Normalised IV)</div>
       <canvas id="ivSectorChart" height="70"></canvas>
