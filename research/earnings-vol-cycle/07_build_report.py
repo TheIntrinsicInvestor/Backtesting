@@ -78,7 +78,7 @@ heatmap_html = f"""
 </div>
 <p style="font-size:.75rem;color:var(--hint);margin-top:.5rem">
   Win rate (%) for T-1 entry, T+1 exit straddle. Cells with fewer than 5 events shown as —.
-  Color scale centred at the mean win rate ({_HM_MEAN:.0f}%):
+  Color scale centred at the mean win rate (69%):
   <span style="background:#bbf7d0;padding:1px 6px;border-radius:2px">green</span> = above average,
   <span style="background:#fecaca;padding:1px 6px;border-radius:2px">red</span> = below average.
 </p>
