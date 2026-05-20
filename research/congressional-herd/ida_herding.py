@@ -1,73 +1,33 @@
 """
 IDA: Congressional Herding Events
-Pulls Senate + House trade disclosures and counts herding events
+Reads scraped Capitol Trades data and counts herding events
 at different thresholds and window sizes before committing to full study.
 """
 
-import requests
 import pandas as pd
-from datetime import datetime, timedelta
+from pathlib import Path
+from datetime import timedelta
 
-SENATE_URLS = [
-    "https://raw.githubusercontent.com/timothycarambat/senate-stock-watcher-data/master/aggregate/all_transactions.json",
-]
+DATA_PATH = Path(__file__).parent / "data" / "all_trades.parquet"
 
-def fetch_json(urls, label):
-    for url in urls:
-        try:
-            r = requests.get(url, timeout=30)
-            if r.status_code == 200:
-                data = r.json()
-                print(f"  {label}: {len(data):,} raw records")
-                return data
-            print(f"  {label}: HTTP {r.status_code}")
-        except Exception as e:
-            print(f"  {label}: error - {e}")
-    print(f"  {label}: all sources failed")
-    return []
 
-def parse_trades(raw, chamber):
-    rows = []
-    for t in raw:
-        ticker = str(t.get("ticker") or "").strip().upper()
-        if not ticker or ticker in {"N/A", "--", "", "NONE"}:
-            continue
-        if " " in ticker or "/" in ticker or len(ticker) > 5:
-            continue
+def load_trades():
+    if not DATA_PATH.exists():
+        raise FileNotFoundError(f"Parquet not found: {DATA_PATH}\nRun scrape_capitol_trades.py first.")
 
-        date_str = (t.get("transaction_date") or t.get("disclosure_date") or "")[:10]
-        date = None
-        for fmt in ("%m/%d/%Y", "%Y-%m-%d"):
-            try:
-                date = datetime.strptime(date_str, fmt)
-                break
-            except ValueError:
-                continue
-        if date is None:
-            continue
+    df = pd.read_parquet(DATA_PATH)
+    df["trade_date"] = pd.to_datetime(df["trade_date"])
 
-        tx = str(t.get("type") or "").lower()
-        if any(w in tx for w in ["purchase", "buy"]):
-            direction = "buy"
-        elif any(w in tx for w in ["sale", "sell", "exchange"]):
-            direction = "sell"
-        else:
-            continue
+    # Keep only buy/sell; drop exchange, receive, etc.
+    df = df[df["tx_type"].isin(["buy", "sell"])].copy()
+    df = df.rename(columns={"trade_date": "date", "tx_type": "direction"})
 
-        name = (
-            t.get("senator") or t.get("representative") or t.get("politician") or ""
-        ).strip()
-        if not name:
-            continue
+    # Drop rows missing ticker or name
+    df = df[df["ticker"].notna() & (df["ticker"] != "")]
+    df = df[df["name"].notna() & (df["name"] != "")]
 
-        rows.append({
-            "chamber": chamber,
-            "name": name,
-            "ticker": ticker,
-            "date": date,
-            "direction": direction,
-        })
-    return rows
+    return df[["chamber", "name", "ticker", "date", "direction"]].reset_index(drop=True)
+
 
 def find_herding_events(df, min_politicians, window_days, direction="buy"):
     trades = df[df["direction"] == direction].copy()
@@ -98,21 +58,13 @@ def find_herding_events(df, min_politicians, window_days, direction="buy"):
         columns=["ticker", "window_start", "politician_count", "politicians"]
     )
 
+
 def main():
     print("=" * 60)
     print("Congressional Herding IDA")
     print("=" * 60)
 
-    all_trades = []
-    senate_raw = fetch_json(SENATE_URLS, "Senate")
-    all_trades.extend(parse_trades(senate_raw, "Senate"))
-
-    if not all_trades:
-        print("\nNo data retrieved.")
-        return
-
-    df = pd.DataFrame(all_trades)
-    df = df[df["date"] >= datetime(2012, 1, 1)]
+    df = load_trades()
 
     print()
     print("--- Dataset Overview ---")
@@ -120,6 +72,10 @@ def main():
     print(f"Date range         : {df['date'].min().date()} to {df['date'].max().date()}")
     print(f"Unique politicians : {df['name'].nunique()}")
     print(f"Unique tickers     : {df['ticker'].nunique()}")
+
+    by_chamber = df["chamber"].value_counts()
+    for ch, n in by_chamber.items():
+        print(f"  {ch:<8}: {n:,}")
 
     by_dir = df["direction"].value_counts()
     print(f"Buys               : {by_dir.get('buy', 0):,}")
