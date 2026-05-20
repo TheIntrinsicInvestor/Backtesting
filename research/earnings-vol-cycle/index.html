@@ -271,7 +271,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}
     post-announcement, and a gamma loss proportional to the square of the actual 2-day move. The structural
     question is not whether you win more often than not, but whether IV systematically overprices the expected
     move. Across this sample, IV exceeded realised vol by -16.1pp on average, a persistent premium
-    that translates into a positive expected value for sellers in 69% of individual events.</p>
+    that translates into a positive expected value for sellers in 68.7% of individual events.</p>
     <div class="highlight-box">
       <div>
         <div class="hb-val">-16.1pp</div>
@@ -502,7 +502,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}
       <strong>2. The edge is concentrated in large-cap names with liquid option markets.</strong> The top two market cap quintiles account for the majority of the aggregate P&amp;L, driven by more consistent IV-RV spreads and the fact that IV data coverage is more reliable for large names. The smallest quintile adds noise without proportionate return.
     </div>
     <div class="callout amber">
-      <strong>3. Large negative EPS surprises are the primary source of losses.</strong> Events where the company misses consensus by more than 10% produce near-zero average P&amp;L despite a wide IV-RV spread: the occasional stock move that dwarfs the implied range wipes out the premium collected across the rest of those trades. A simple filter (avoiding names where analyst estimate dispersion is high) would improve risk-adjusted performance but requires real-time access to IBES consensus data not available to all market participants.
+      <strong>3. Large negative EPS surprises are the primary source of losses.</strong> Events where the company misses consensus by more than 10% produce an average loss of -$41 per trade despite carrying the widest IV-RV spread of any category: the stock moves on severe misses frequently clear the straddle breakeven by multiples of the implied range, overwhelming the premium. A simple filter (avoiding names where analyst estimate dispersion is high) would improve risk-adjusted performance but requires real-time access to IBES consensus data not available to all market participants.
     </div>
     <div class="callout red">
       <strong>4. Transaction costs are the primary obstacle to individual implementation.</strong> The gross P&amp;L looks attractive at the portfolio level, but bid-ask spreads on short-dated ATM options, particularly outside the largest 50 names, would consume the majority of the theoretical premium. This strategy is viable for systematic options market-makers or well-capitalised funds. It is not a retail edge.
