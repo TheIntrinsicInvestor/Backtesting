@@ -562,10 +562,10 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
     a systematic fund, this is feasible. For an individual investor, the effective universe shrinks dramatically
     to names with liquid near-term option markets, which concentrates the exposure in a handful of mega-caps.</p>
     <div class="callout {'green' if viable else 'amber'}">
-      <strong>{'Viable for systematic funds with low-cost execution.' if viable else 'Not reliably viable after costs for most investors.'}</strong> {verdict_body}
+      <strong>{'Viable for systematic funds with low-cost execution' if viable else 'Not reliably viable after costs for most investors'}</strong> {verdict_body}
     </div>
     <div class="callout red">
-      <strong>Disclaimer.</strong> This backtest uses approximated option prices derived from OptionMetrics IV
+      <strong>Disclaimer</strong> This backtest uses approximated option prices derived from OptionMetrics IV
       data rather than actual bid-ask quotes. It excludes transaction costs, margin requirements, and early
       assignment risk on short options. Past performance of a theoretical backtest does not predict future returns.
       This report is for educational and research purposes only.
