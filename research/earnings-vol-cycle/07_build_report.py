@@ -835,11 +835,14 @@ new Chart(document.getElementById('mktcapChart'), {{
   }}
 }});
 
-// ── Chart 4: Avg P&L and IV-RV Spread by EPS Surprise Quartile ───────────────
+// ── Chart 4: Avg P&L and IV-RV Spread by EPS Surprise Category ───────────────
 new Chart(document.getElementById('surpriseChart'), {{
   type: 'bar',
   data: {{
-    labels: SURP_DATA.quartiles,
+    labels: (() => {{
+      const tot = SURP_DATA.n_events.reduce((a,b) => a+b, 0);
+      return SURP_DATA.quartiles.map((q, i) => [q, 'n=' + SURP_DATA.n_events[i].toLocaleString() + ' (' + (SURP_DATA.n_events[i]/tot*100).toFixed(1) + '%)']);
+    }})(),
     datasets: [
       {{
         label: 'Avg P&L ($/trade)',
@@ -867,7 +870,7 @@ new Chart(document.getElementById('surpriseChart'), {{
     interaction: {{ mode: 'index', intersect: false }},
     plugins: {{ legend: {{ display: false }} }},
     scales: {{
-      x: {{ grid: {{ display: false }}, ticks: {{ font: {{ size: 11 }} }} }},
+      x: {{ grid: {{ display: false }}, ticks: {{ font: {{ size: 10 }} }} }},
       y: {{ grid: GRID, ticks: {{ ...TICK, callback: v => '$' + v }}, title: {{ display: true, text: 'Avg P&L ($)', font: {{ size: 10 }}, color: '#8aaba6' }} }},
       y2: {{ position: 'right', grid: {{ display: false }}, ticks: {{ ...TICK, callback: v => v + 'pp' }}, title: {{ display: true, text: 'IV-RV Spread (pp)', font: {{ size: 10 }}, color: '#8aaba6' }} }}
     }}
