@@ -285,7 +285,7 @@ sector_grp = (
         ivrv_spread= ("ivrv_spread_pct", "mean"),
     )
     .reset_index()
-    .sort_values("win_rate", ascending=False)
+    .sort_values("ivrv_spread", ascending=True)
 )
 
 chart_sector = {
@@ -332,10 +332,11 @@ surp_grp = (
     events_df.dropna(subset=["surprise_q"])
     .groupby("surprise_q", observed=True)
     .agg(
-        n          = ("is_win", "count"),
-        win_rate   = ("is_win", "mean"),
-        avg_pnl    = ("pnl_usd", "mean"),
+        n            = ("is_win", "count"),
+        win_rate     = ("is_win", "mean"),
+        avg_pnl      = ("pnl_usd", "mean"),
         avg_surprise = ("surprise_pct", "mean"),
+        ivrv_spread  = ("ivrv_spread_pct", "mean"),
     )
     .reset_index()
 )
@@ -345,6 +346,7 @@ chart_surprise = {
     "win_rates"      : [round(v * 100, 1) for v in surp_grp["win_rate"]],
     "avg_pnl"        : [round(v, 0) for v in surp_grp["avg_pnl"]],
     "avg_surprise"   : [round(v, 1) for v in surp_grp["avg_surprise"]],
+    "ivrv_spread"    : [round(v, 1) for v in surp_grp["ivrv_spread"]],
     "n_events"       : surp_grp["n"].tolist(),
 }
 
@@ -390,9 +392,10 @@ chart_pnl = {
         "win_rate_trades"  : round(float(events_df["is_win"].mean()), 4),
         "avg_pnl_per_trade": round(float(events_df["pnl_usd"].mean()), 2),
         "total_pnl"        : round(float(pnl_quarterly["total_pnl"].sum()), 0),
-        "sharpe_quarterly" : round(float(sharpe_q), 3) if sharpe_q and not np.isnan(sharpe_q) else None,
-        "max_dd"           : round(mdd, 0),
-        "n_total_events"   : int(len(events_df)),
+        "sharpe_quarterly"  : round(float(sharpe_q), 3) if sharpe_q and not np.isnan(sharpe_q) else None,
+        "max_dd"            : round(mdd, 0),
+        "n_total_events"    : int(len(events_df)),
+        "ivrv_spread_mean"  : round(float(events_df["ivrv_spread_pct"].mean()), 1),
     }
 }
 
@@ -441,22 +444,26 @@ with open("charts/data_timing.json", "w") as f:
     json.dump(chart_timing, f, indent=2)
 print("Saved charts/data_timing.json")
 
-# ── Chart 7: Sector × Year win rate heatmap ───────────────────────────────────
+# ── Chart 7: Sector × Year avg P&L heatmap ───────────────────────────────────
 heat_sectors = [s for s in sector_grp["sector"].tolist() if s != "Unknown"]
 heat_years   = sorted(events_df["year"].unique().tolist())
 
-heatmap = {"sectors": heat_sectors, "years": heat_years, "win_rates": [], "n_events": []}
+heatmap = {"sectors": heat_sectors, "years": heat_years, "avg_pnl": [], "win_rates": [], "n_events": []}
 for sec in heat_sectors:
-    row_wr = []
-    row_n  = []
+    row_pnl = []
+    row_wr  = []
+    row_n   = []
     for yr in heat_years:
         sub = events_df[(events_df["sector"] == sec) & (events_df["year"] == yr)]
         if len(sub) >= 5:
+            row_pnl.append(round(float(sub["pnl_usd"].mean()), 1))
             row_wr.append(round(float(sub["is_win"].mean() * 100), 1))
             row_n.append(int(len(sub)))
         else:
+            row_pnl.append(None)
             row_wr.append(None)
             row_n.append(0)
+    heatmap["avg_pnl"].append(row_pnl)
     heatmap["win_rates"].append(row_wr)
     heatmap["n_events"].append(row_n)
 

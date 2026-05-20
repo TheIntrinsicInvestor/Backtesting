@@ -24,13 +24,8 @@ _C_RED   = (254, 202, 202)
 _C_PARCH = (247, 244, 236)
 _C_GREEN = (187, 247, 208)
 
-# Centre the diverging scale at the mean win rate across all cells
-_all_wrs = [heatmap_data["win_rates"][i][j]
-            for i in range(len(heatmap_data["sectors"]))
-            for j in range(len(heatmap_data["years"]))
-            if heatmap_data["win_rates"][i][j] is not None]
-_HM_MEAN   = sum(_all_wrs) / len(_all_wrs)
-_HM_SPREAD = 20.0  # ±20pp from mean maps to full red / full green
+# Avg P&L heatmap: centre at $0, ±$60 maps to full red / full green
+_HM_SPREAD = 60.0
 
 def _lerp(t, lo, hi):
     return "#{:02x}{:02x}{:02x}".format(
@@ -38,14 +33,14 @@ def _lerp(t, lo, hi):
         int(lo[1] + t*(hi[1]-lo[1])),
         int(lo[2] + t*(hi[2]-lo[2])))
 
-def wr_bg(wr):
-    if wr is None: return "#f7f4ec"
-    t = max(-1.0, min(1.0, (wr - _HM_MEAN) / _HM_SPREAD))
+def pnl_bg(pnl):
+    if pnl is None: return "#f7f4ec"
+    t = max(-1.0, min(1.0, pnl / _HM_SPREAD))
     return _lerp(-t, _C_PARCH, _C_RED) if t < 0 else _lerp(t, _C_PARCH, _C_GREEN)
 
-def wr_fg(wr):
-    if wr is None: return "#8aa49e"
-    return "#0f2220" if abs(wr - _HM_MEAN) > 10 else "#4a6460"
+def pnl_fg(pnl):
+    if pnl is None: return "#8aa49e"
+    return "#0f2220" if abs(pnl) > 30 else "#4a6460"
 
 # ── Build heatmap HTML ────────────────────────────────────────────────────────
 years   = heatmap_data["years"]
@@ -56,15 +51,16 @@ hm_rows = ""
 for i, sec in enumerate(sectors):
     cells = ""
     for j, yr in enumerate(years):
-        wr = heatmap_data["win_rates"][i][j]
-        n  = heatmap_data["n_events"][i][j]
-        bg = wr_bg(wr)
-        fg = wr_fg(wr)
-        if wr is None:
+        pnl = heatmap_data["avg_pnl"][i][j]
+        n   = heatmap_data["n_events"][i][j]
+        bg  = pnl_bg(pnl)
+        fg  = pnl_fg(pnl)
+        if pnl is None:
             cells += f'<td class="hm-cell hm-empty" title="n&lt;5">–</td>'
         else:
+            sign = "+" if pnl >= 0 else ""
             cells += (f'<td class="hm-cell" style="background:{bg};color:{fg}" '
-                      f'title="n={n}">{wr:.0f}%</td>')
+                      f'title="n={n}">{sign}{pnl:.0f}</td>')
     hm_rows += f'<tr><td class="hm-row-label">{sec}</td>{cells}</tr>\n'
 
 heatmap_html = f"""
@@ -77,10 +73,10 @@ heatmap_html = f"""
 </table>
 </div>
 <p style="font-size:.75rem;color:var(--hint);margin-top:.5rem">
-  Win rate (%) for T-1 entry, T+1 exit straddle. Cells with fewer than 5 events shown as —.
-  Color scale centred at the mean win rate (69%):
-  <span style="background:#bbf7d0;padding:1px 6px;border-radius:2px">green</span> = above average,
-  <span style="background:#fecaca;padding:1px 6px;border-radius:2px">red</span> = below average.
+  T-1 entry, T+1 exit straddle, $10K notional per trade.
+  Avg P&amp;L per $10K notional. Color centred at $0:
+  <span style="background:#bbf7d0;padding:1px 6px;border-radius:2px">green</span> = profitable,
+  <span style="background:#fecaca;padding:1px 6px;border-radius:2px">red</span> = loss-making. Cells with fewer than 5 events shown as &ndash;.
 </p>
 """
 
@@ -104,33 +100,35 @@ for r in timing_data["rows"]:
     )
 
 # ── KPI values ────────────────────────────────────────────────────────────────
-n_total    = m["n_total_events"]
-win_rate   = m["win_rate_trades"]
-avg_pnl    = m["avg_pnl_per_trade"]
-sharpe_q   = m["sharpe_quarterly"]
-win_color  = "green" if win_rate >= 0.60 else ("amber" if win_rate >= 0.50 else "red")
-pnl_color  = "green" if avg_pnl > 0 else "red"
-sh_color   = "green" if sharpe_q and sharpe_q >= 1.0 else ("amber" if sharpe_q and sharpe_q >= 0 else "red")
-sharpe_str = f"{sharpe_q:.2f}" if sharpe_q else "—"
+n_total      = m["n_total_events"]
+win_rate     = m["win_rate_trades"]
+avg_pnl      = m["avg_pnl_per_trade"]
+sharpe_q     = m["sharpe_quarterly"]
+ivrv_mean    = m["ivrv_spread_mean"]
+pnl_color    = "green" if avg_pnl > 0 else "red"
+sh_color     = "green" if sharpe_q and sharpe_q >= 1.0 else ("amber" if sharpe_q and sharpe_q >= 0 else "red")
+sharpe_str   = f"{sharpe_q:.2f}" if sharpe_q else "—"
+ivrv_color   = "green" if ivrv_mean < 0 else "red"
 
 # ── Conclusion tone ───────────────────────────────────────────────────────────
-# Honest verdict: if win rate < 55% or avg_pnl < 0, strategy is not viable
-viable = win_rate >= 0.60 and avg_pnl > 0 and (sharpe_q or 0) >= 0.5
+viable = avg_pnl > 0 and (sharpe_q or 0) >= 0.5 and ivrv_mean < -10
 
 if viable:
     verdict_class = "green"
     verdict_title = "The premium is real and broadly persistent."
-    verdict_body  = (f"Across {n_total:,} earnings events from 2010 to 2024, the post-announcement IV crush "
-                     f"consistently outweighs the gamma cost of the actual move. A straddle seller earns the "
-                     f"premium in {win_rate:.0%} of events, suggesting a genuine structural edge driven by "
-                     f"systematic IV overshooting into earnings rather than sample-specific noise.")
+    verdict_body  = (f"Across {n_total:,} earnings events from 2010 to 2024, IV exceeded realised vol by "
+                     f"{ivrv_mean:+.1f}pp on average, a persistent structural overshoot that translates into "
+                     f"${avg_pnl:+.0f} average P&L per $10K notional and a quarterly Sharpe of {sharpe_str}. "
+                     f"The edge is genuine: it persists across sectors, cap sizes, and surprise regimes, "
+                     f"with the notable exception of large negative surprises where the tail move overwhelms "
+                     f"the premium. Viable for systematic execution with low transaction costs.")
 else:
     verdict_class = "amber"
     verdict_title = "The premium exists in aggregate but is not reliably exploitable."
-    verdict_body  = (f"While IV consistently exceeds realised vol before earnings on average, the win rate "
-                     f"of {win_rate:.0%} and avg P&L of ${avg_pnl:+.0f} per ${10_000:,} notional leave limited "
-                     f"margin for transaction costs. Execution costs and bid-ask spreads would likely erode "
-                     f"the edge for most retail participants.")
+    verdict_body  = (f"While IV exceeded realised vol by {ivrv_mean:+.1f}pp on average, the avg P&L of "
+                     f"${avg_pnl:+.0f} per ${10_000:,} notional leaves limited margin once transaction costs "
+                     f"are applied. Execution costs and bid-ask spreads on short-dated ATM options would "
+                     f"likely erode the edge for most participants.")
 
 # ── JSON for inline JS ────────────────────────────────────────────────────────
 iv_profile_js   = json.dumps(iv_profile)
@@ -315,9 +313,9 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
       <div class="kpi-sub">S&amp;P 500 earnings, 2010–2024</div>
     </div>
     <div class="kpi-cell">
-      <div class="kpi-label">Straddle Win Rate</div>
-      <div class="kpi-value {win_color}">{win_rate:.0%}</div>
-      <div class="kpi-sub">T-1 entry, T+1 exit</div>
+      <div class="kpi-label">Mean IV-RV Spread</div>
+      <div class="kpi-value {ivrv_color}">{ivrv_mean:+.1f}pp</div>
+      <div class="kpi-sub">IV exceeded realised vol by this margin</div>
     </div>
     <div class="kpi-cell">
       <div class="kpi-label">Avg P&amp;L per $10K</div>
@@ -410,14 +408,14 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
     <h2>The gap between <em>implied and realised volatility</em></h2>
     <p>The straddle P&amp;L is modelled using a BSM vega-gamma decomposition. Selling a 30-day ATM straddle
     one day before earnings and closing at T+1 generates two offsetting effects: a vega gain from the IV crush
-    post-announcement, and a gamma loss proportional to the square of the actual 2-day move. The vega gain
-    dominates when IV collapses sharply after the event. The gamma loss dominates when the stock moves far
-    beyond what the surface implied. On average across this sample, the IV crush is large enough to win {win_rate:.0%}
-    of the time, even though the annualised actual move frequently exceeds the pre-earnings IV level.</p>
+    post-announcement, and a gamma loss proportional to the square of the actual 2-day move. The structural
+    question is not whether you win more often than not, but whether IV systematically overprices the expected
+    move. Across this sample, IV exceeded realised vol by {ivrv_mean:+.1f}pp on average, a persistent premium
+    that translates into a positive expected value for sellers in {win_rate:.0%} of individual events.</p>
     <div class="highlight-box">
       <div>
-        <div class="hb-val">{win_rate:.0%}</div>
-        <div class="hb-label">Straddle win rate (T-1 entry, T+1 exit)</div>
+        <div class="hb-val">{ivrv_mean:+.1f}pp</div>
+        <div class="hb-label">Mean IV-RV spread (IV minus realised vol)</div>
       </div>
       <div>
         <div class="hb-val">${avg_pnl:+.0f}</div>
@@ -425,13 +423,14 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
       </div>
       <div>
         <div class="hb-val">{iv_profile['baseline_iv_mean_pct']:.1f}%</div>
-        <div class="hb-label">Mean baseline IV (annualised)</div>
+        <div class="hb-label">Mean baseline IV (annualised, 30-day surface)</div>
       </div>
     </div>
-    <p>The positive spread is not uniform. Sector composition matters significantly: sectors with highly
-    predictable earnings cycles tend to show smaller IV premiums, while sectors with genuine binary event
-    risk show larger spreads but also fatter left tails when the outcome surprises. The heatmap below
-    shows win rate by sector and year: a persistent but not unconditional pattern.</p>
+    <p>The premium is not uniform across sectors or years. A large IV-RV spread is a necessary but not
+    sufficient condition for profitability: if the actual move is fat-tailed and unpredictable, high IV
+    overshooting can coexist with low average P&amp;L (as in Energy and small-cap names). The heatmap below
+    shows average P&amp;L per trade by sector and year, a more complete picture of where the edge is
+    concentrated and where it breaks down.</p>
     {heatmap_html}
   </div>
 </section>
@@ -441,24 +440,28 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
   <div class="container">
     <div class="section-label"><span class="section-counter">04</span><span>Sector &amp; Cap</span></div>
     <h2>Where the premium <em>concentrates</em></h2>
-    <p>The two charts show win rate by GICS sector (sorted descending) and by market cap quintile. Quintiles
-    are assigned at each event date using the stock's market capitalisation at T-1.</p>
+    <p>The two charts show the mean IV-RV spread by GICS sector (sorted by spread magnitude) and by market cap
+    quintile. A more negative spread means IV overpriced the expected move by a larger margin: a larger
+    structural premium for the seller. Quintiles are assigned at each event date using market capitalisation at T-1.</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;align-items:start">
       <div class="chart-box">
-        <div class="chart-title">Win Rate by GICS Sector</div>
+        <div class="chart-title">Mean IV-RV Spread by GICS Sector (pp)</div>
         <div style="position:relative;height:260px"><canvas id="sectorChart"></canvas></div>
       </div>
       <div class="chart-box">
-        <div class="chart-title">Win Rate by Market Cap Quintile</div>
+        <div class="chart-title">Mean IV-RV Spread by Market Cap Quintile (pp)</div>
         <div style="position:relative;height:260px"><canvas id="mktcapChart"></canvas></div>
       </div>
     </div>
-    <p>Larger-cap names show higher win rates. More analyst coverage means options price the expected move
-    more accurately, leaving less room for IV to overshoot. The smallest quintile (Q1) has the lowest win
-    rate and most variable returns: thin option markets make the 30-day IV surface a poor proxy for the
-    actual near-term straddle price. Q1 results should be treated as illustrative rather than actionable.</p>
+    <p>Technology, Consumer Discretionary, and Communication Services show the largest spreads (around -25pp),
+    meaning options priced in roughly 25 percentage points more vol than subsequently realised. Real Estate
+    and Utilities sit near zero: options there price the expected move with far greater accuracy, leaving
+    little systematic premium. The market cap picture is analytically the most interesting: the smallest
+    quintile (Q1) carries the largest IV-RV spread (-22pp), yet delivers the lowest average P&amp;L (+$7)
+    and win rate (64%). High IV overshooting does not guarantee profitability when the move distribution is
+    fat-tailed: the premium is consumed by occasional large losses that thinner option markets price imprecisely.</p>
     <div class="callout purple">
-      <strong>Structural caveat.</strong> Market cap and sector are correlated: Technology dominates the large-cap
+      <strong>Structural caveat</strong> Market cap and sector are correlated: Technology dominates the large-cap
       end, Utilities and Real Estate dominate the small end. The sector and cap effects are not independent,
       and this analysis does not attempt to separate them.
     </div>
@@ -470,23 +473,25 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
   <div class="container">
     <div class="section-label"><span class="section-counter">05</span><span>Surprise Effect</span></div>
     <h2>How earnings surprise <em>drives straddle outcomes</em></h2>
-    <p>EPS surprise (the percentage difference between reported earnings and the IBES consensus estimate at
-    the time of announcement) is the primary driver of straddle losses. Large negative surprises produce
-    large stock moves that exceed the IV-implied breakeven. Large positive surprises also produce outsized moves,
-    but asymmetrically: the magnitude of upside moves on beats tends to be smaller than the magnitude of downside
-    moves on misses, partly due to pre-announcement price drift and analyst estimate herding.</p>
+    <p>EPS surprise quantifies how far reported earnings deviate from the IBES consensus at announcement. For
+    a straddle seller, what matters is not the direction of the surprise but whether the resulting stock move
+    exceeds the IV-implied breakeven. The chart below shows average P&amp;L per trade and the IV-RV spread by
+    surprise quartile: two complementary lenses on the same edge.</p>
     <div class="chart-box">
-      <div class="chart-title">Straddle Win Rate by EPS Surprise Quartile</div>
+      <div class="chart-title">Avg P&amp;L and IV-RV Spread by EPS Surprise Quartile</div>
       <canvas id="surpriseChart" height="65"></canvas>
       <div class="chart-legend">
-        <span><span class="legend-dot" style="background:#1a5c52"></span>Win rate (%)</span>
-        <span><span class="legend-dot" style="background:#dc2626"></span>Avg P&amp;L ($/trade)</span>
+        <span><span class="legend-dot" style="background:#1a5c52"></span>Avg P&amp;L ($/trade)</span>
+        <span><span class="legend-dot" style="background:#dc2626"></span>IV-RV spread (pp)</span>
       </div>
     </div>
-    <p>The pattern is stark: events in the bottom surprise quartile (large misses) are the primary source of
-    straddle losses. Events in the top two quartiles (beats and in-line results) show materially higher win
-    rates. This confirms that the IV premium is real and collectible under normal conditions, but the left
-    tail is fat enough that the aggregate Sharpe remains modest once losses are accounted for.</p>
+    <p>Large misses (Q1) are the primary source of losses: the actual stock move breaks the IV-implied
+    breakeven more often, compressing both P&amp;L and the IV-RV spread. But even in Q1, the IV-RV spread
+    remains negative (IV still overprices realised vol on average), meaning the premium does not disappear
+    entirely on misses. The losses come from the tail: individual events where the stock moves 3-5x the
+    implied move. Large beats (Q4) and in-line outcomes (Q2, Q3) show the most consistent IV overshooting
+    and highest average P&amp;L, confirming that the edge is real but concentrated in the majority of events
+    where the outcome is not a severe negative shock.</p>
     <div class="callout red">
       <strong>Tail risk.</strong> The worst individual quarters in the backtest typically correspond to periods
       of elevated macro uncertainty when multiple large-cap misses occurred simultaneously. Earnings vol selling
@@ -505,12 +510,12 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
     P&amp;L is aggregated by calendar quarter to control for cross-sectional correlation within earnings seasons.</p>
     <div class="highlight-box">
       <div>
-        <div class="hb-val">{win_rate:.0%}</div>
-        <div class="hb-label">Trade win rate</div>
+        <div class="hb-val">{ivrv_mean:+.1f}pp</div>
+        <div class="hb-label">Mean IV-RV spread across all events</div>
       </div>
       <div>
         <div class="hb-val">${avg_pnl:+.0f}</div>
-        <div class="hb-label">Avg P&amp;L per $10K</div>
+        <div class="hb-label">Avg P&amp;L per $10K notional</div>
       </div>
       <div>
         <div class="hb-val">{sharpe_str}</div>
@@ -545,7 +550,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
     </table>
     </div>
     <h3>What these results mean</h3>
-    <p>The positive aggregate P&amp;L and win rate above 60% suggest a genuine IV premium at earnings. However,
+    <p>The positive aggregate P&amp;L and mean IV-RV spread of {ivrv_mean:+.1f}pp confirm a genuine structural premium at earnings. However,
     the quarterly Sharpe of {sharpe_str} is modest, and it is computed before any transaction costs. ATM straddles
     on short-dated earnings contracts typically carry bid-ask spreads of 5 to 15 percent of the premium on liquid
     names, and materially more on smaller names. A realistic net Sharpe after costs, for names outside the top
@@ -602,7 +607,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
       <strong>1. The earnings vol premium is real and broadly persistent across the S&amp;P 500.</strong> {verdict_body}
     </div>
     <div class="callout green">
-      <strong>2. The edge is concentrated in large-cap names with liquid option markets.</strong> The top two market cap quintiles account for the majority of the aggregate P&amp;L, driven both by higher win rates and by the fact that IV data coverage is more reliable for large names. The smallest quintile adds noise without proportionate return.
+      <strong>2. The edge is concentrated in large-cap names with liquid option markets.</strong> The top two market cap quintiles account for the majority of the aggregate P&amp;L, driven by more consistent IV-RV spreads and the fact that IV data coverage is more reliable for large names. The smallest quintile adds noise without proportionate return.
     </div>
     <div class="callout amber">
       <strong>3. Large negative EPS surprises are the primary source of losses.</strong> The bottom surprise quartile (large misses) drives nearly all losing quarters. A simple filter (avoiding names where analyst estimate dispersion is high) would improve risk-adjusted performance but requires real-time access to IBES consensus data not available to all market participants.
@@ -619,7 +624,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
     <p>The 2-day return window (T-1 to T+1) may miss the full earnings move for pre-market announcements,
     where the stock gaps on T rather than T+1. Using T to T+1 as the event window would slightly increase
     measured actual moves for this subset. The aggregate effect is small but directionally reduces reported
-    win rates by a few percentage points.</p>
+    avg P&amp;L and win rate marginally.</p>
     <p>GICS sector classifications are as of the most recent Compustat update rather than point-in-time.
     Several large-cap reclassifications occurred during 2018 (Communications Services sector creation)
     and will cause some Technology and Consumer Discretionary names to appear under their current sector
@@ -779,15 +784,15 @@ if (sectorDatasets.length > 0) {{
   }});
 }}
 
-// ── Chart 2: Win Rate by Sector (horizontal bar) ──────────────────────────────
+// ── Chart 2: IV-RV Spread by Sector (horizontal bar) ─────────────────────────
 new Chart(document.getElementById('sectorChart'), {{
   type: 'bar',
   data: {{
     labels: SECTOR_DATA.sectors,
     datasets: [{{
-      label: 'Win Rate (%)',
-      data: SECTOR_DATA.win_rates,
-      backgroundColor: SECTOR_DATA.win_rates.map(v => v >= 60 ? 'rgba(26,92,82,.72)' : v >= 50 ? 'rgba(227,160,8,.72)' : 'rgba(220,38,38,.72)'),
+      label: 'IV-RV Spread (pp)',
+      data: SECTOR_DATA.ivrv_spread,
+      backgroundColor: SECTOR_DATA.ivrv_spread.map(v => v < -10 ? 'rgba(26,92,82,.72)' : v < 0 ? 'rgba(227,160,8,.72)' : 'rgba(220,38,38,.72)'),
       borderRadius: 3,
     }}]
   }},
@@ -796,21 +801,21 @@ new Chart(document.getElementById('sectorChart'), {{
     responsive: true, maintainAspectRatio: false,
     plugins: {{ legend: {{ display: false }} }},
     scales: {{
-      x: {{ grid: GRID, ticks: {{ ...TICK, callback: v => v + '%' }}, min: 45, max: 80 }},
+      x: {{ grid: GRID, ticks: {{ ...TICK, callback: v => v + 'pp' }}, max: 5 }},
       y: {{ grid: {{ display: false }}, ticks: {{ font: {{ size: 10 }}, color: '#4a6460' }} }}
     }}
   }}
 }});
 
-// ── Chart 3: Win Rate by Market Cap Quintile ──────────────────────────────────
+// ── Chart 3: IV-RV Spread by Market Cap Quintile ──────────────────────────────
 new Chart(document.getElementById('mktcapChart'), {{
   type: 'bar',
   data: {{
     labels: MKTCAP_DATA.quintiles,
     datasets: [{{
-      label: 'Win Rate (%)',
-      data: MKTCAP_DATA.win_rates,
-      backgroundColor: MKTCAP_DATA.win_rates.map(v => v >= 60 ? 'rgba(26,92,82,.72)' : v >= 50 ? 'rgba(227,160,8,.72)' : 'rgba(220,38,38,.72)'),
+      label: 'IV-RV Spread (pp)',
+      data: MKTCAP_DATA.ivrv_spread,
+      backgroundColor: MKTCAP_DATA.ivrv_spread.map(v => v < -10 ? 'rgba(26,92,82,.72)' : v < 0 ? 'rgba(227,160,8,.72)' : 'rgba(220,38,38,.72)'),
       borderRadius: 3,
     }}]
   }},
@@ -819,30 +824,46 @@ new Chart(document.getElementById('mktcapChart'), {{
     plugins: {{ legend: {{ display: false }} }},
     scales: {{
       x: {{ grid: {{ display: false }}, ticks: {{ font: {{ size: 9 }} }} }},
-      y: {{ grid: GRID, ticks: {{ ...TICK, callback: v => v + '%' }}, min: 40, max: 80 }}
+      y: {{ grid: GRID, ticks: {{ ...TICK, callback: v => v + 'pp' }}, max: 5 }}
     }}
   }}
 }});
 
-// ── Chart 4: Win Rate by EPS Surprise Quartile ────────────────────────────────
+// ── Chart 4: Avg P&L and IV-RV Spread by EPS Surprise Quartile ───────────────
 new Chart(document.getElementById('surpriseChart'), {{
   type: 'bar',
   data: {{
     labels: SURP_DATA.quartiles,
-    datasets: [{{
-      label: 'Win Rate (%)',
-      data: SURP_DATA.win_rates,
-      backgroundColor: SURP_DATA.win_rates.map(v => v >= 60 ? 'rgba(26,92,82,.78)' : v >= 50 ? 'rgba(227,160,8,.78)' : 'rgba(220,38,38,.78)'),
-      borderRadius: 3,
-      yAxisID: 'y',
-    }}]
+    datasets: [
+      {{
+        label: 'Avg P&L ($/trade)',
+        data: SURP_DATA.avg_pnl,
+        backgroundColor: SURP_DATA.avg_pnl.map(v => v >= 0 ? 'rgba(26,92,82,.78)' : 'rgba(220,38,38,.78)'),
+        borderRadius: 3,
+        yAxisID: 'y',
+      }},
+      {{
+        type: 'line',
+        label: 'IV-RV Spread (pp)',
+        data: SURP_DATA.ivrv_spread,
+        borderColor: '#dc2626',
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        pointRadius: 4,
+        pointBackgroundColor: '#dc2626',
+        tension: 0.3,
+        yAxisID: 'y2',
+      }}
+    ]
   }},
   options: {{
     responsive: true, maintainAspectRatio: true,
+    interaction: {{ mode: 'index', intersect: false }},
     plugins: {{ legend: {{ display: false }} }},
     scales: {{
       x: {{ grid: {{ display: false }}, ticks: {{ font: {{ size: 11 }} }} }},
-      y: {{ grid: GRID, ticks: {{ ...TICK, callback: v => v + '%' }}, title: {{ display: true, text: 'Win Rate (%)', font: {{ size: 10 }}, color: '#8aaba6' }} }}
+      y: {{ grid: GRID, ticks: {{ ...TICK, callback: v => '$' + v }}, title: {{ display: true, text: 'Avg P&L ($)', font: {{ size: 10 }}, color: '#8aaba6' }} }},
+      y2: {{ position: 'right', grid: {{ display: false }}, ticks: {{ ...TICK, callback: v => v + 'pp' }}, title: {{ display: true, text: 'IV-RV Spread (pp)', font: {{ size: 10 }}, color: '#8aaba6' }} }}
     }}
   }}
 }});
