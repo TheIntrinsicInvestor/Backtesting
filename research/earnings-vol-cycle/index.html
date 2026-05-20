@@ -215,12 +215,12 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}
     straddle value equals the 30-day IV times the square root of two trading days over one trading year times
     the square root of two over pi, applied to a $10,000 notional position.</p>
     <div class="callout blue">
-      <strong>Data note.</strong> OptionMetrics does not provide reliable individual-stock option quotes for every
+      <strong>Data note</strong> OptionMetrics does not provide reliable individual-stock option quotes for every
       constituent in every quarter. Events with fewer than three valid baseline IV observations (T-20 to T-15)
       are excluded. Coverage is highest for large-cap names. The smallest quintile has materially lower data density.
     </div>
     <div class="callout amber">
-      <strong>P&amp;L methodology caveat.</strong> Straddle P&amp;L is approximated from IV and price data rather
+      <strong>P&amp;L methodology caveat</strong> Straddle P&amp;L is approximated from IV and price data rather
       than from actual bid-ask option quotes. The 30-day IV captures the smoothed surface, not the near-term
       earnings-specific contract. Actual transaction costs (bid-ask spread on short-dated ATM options is typically
       5-15% of premium) would reduce the reported edge materially for smaller and less liquid names.
@@ -340,7 +340,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}
     rate and most variable returns: thin option markets make the 30-day IV surface a poor proxy for the
     actual near-term straddle price. Q1 results should be treated as illustrative rather than actionable.</p>
     <div class="callout purple">
-      <strong>Structural caveat.</strong> Market cap and sector are correlated: Technology dominates the large-cap
+      <strong>Structural caveat</strong> Market cap and sector are correlated: Technology dominates the large-cap
       end, Utilities and Real Estate dominate the small end. The sector and cap effects are not independent,
       and this analysis does not attempt to separate them.
     </div>
@@ -370,7 +370,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}
     rates. This confirms that the IV premium is real and collectible under normal conditions, but the left
     tail is fat enough that the aggregate Sharpe remains modest once losses are accounted for.</p>
     <div class="callout red">
-      <strong>Tail risk.</strong> The worst individual quarters in the backtest typically correspond to periods
+      <strong>Tail risk</strong> The worst individual quarters in the backtest typically correspond to periods
       of elevated macro uncertainty when multiple large-cap misses occurred simultaneously. Earnings vol selling
       is not a market-neutral strategy: it has meaningful left-tail correlation with equity drawdowns.
     </div>
@@ -444,7 +444,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}
       <strong>Viable for systematic funds with low-cost execution.</strong> Across 35,862 earnings events from 2010 to 2024, the post-announcement IV crush consistently outweighs the gamma cost of the actual move. A straddle seller earns the premium in 69% of events, suggesting a genuine structural edge driven by systematic IV overshooting into earnings rather than sample-specific noise.
     </div>
     <div class="callout red">
-      <strong>Disclaimer.</strong> This backtest uses approximated option prices derived from OptionMetrics IV
+      <strong>Disclaimer</strong> This backtest uses approximated option prices derived from OptionMetrics IV
       data rather than actual bid-ask quotes. It excludes transaction costs, margin requirements, and early
       assignment risk on short options. Past performance of a theoretical backtest does not predict future returns.
       This report is for educational and research purposes only.
