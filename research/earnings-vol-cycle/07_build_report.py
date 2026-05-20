@@ -378,12 +378,17 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
     T-12, then rises steadily, peaking at T-1 or T=0 (the announcement date itself). The crush is abrupt: IV
     collapses by the close of T+1 in the majority of events, typically reverting to below-baseline levels within
     two to three trading days.</p>
-    <p>The sector lines below the aggregate show that Technology and Healthcare names carry structurally higher
-    IV run-ups than Financials and Industrials. This likely reflects genuine uncertainty about binary outcomes
-    (drug trial data, product launches) rather than pure volatility overshoot. The implication for straddle sellers:
-    high-run-up sectors also carry higher tail risk when the outcome is truly binary.</p>
+    <p>The sector breakdown reveals a clear hierarchy. Consumer Discretionary leads at a T-1 peak of 110 normalised
+    IV, followed closely by Technology and Consumer Staples at 109 — the latter is counterintuitive given that staples
+    earnings are typically uneventful, but the IV build reflects systematic option positioning ahead of any scheduled
+    announcement rather than genuine binary uncertainty. Healthcare and Industrials sit in a mid-tier around 107.
+    Financials (105) and Energy (102) carry the lowest pre-earnings build. Energy is the sharpest outlier: oil-linked
+    names carry macro uncertainty that does not resolve at the earnings date, so IV barely compresses at T+1, unlike
+    the 21-22 point collapses in Consumer Discretionary, Technology, and Consumer Staples. For straddle sellers, the
+    highest-crush sectors offer the most reliable post-event IV decay, but their elevated run-ups also reflect
+    genuinely binary outcomes on guidance and product cycles — consistent with the larger left tails in those sectors.</p>
     <div class="chart-box">
-      <div class="chart-title">IV Run-Up by Sector: Top Sectors (Mean Normalised IV)</div>
+      <div class="chart-title">IV Run-Up by Sector: 7 Major Sectors (Mean Normalised IV)</div>
       <canvas id="ivSectorChart" height="70"></canvas>
     </div>
   </div>
@@ -730,7 +735,7 @@ new Chart(document.getElementById('ivProfileChart'), {{
 }});
 
 // ── Chart 1b: IV Run-Up by Sector ─────────────────────────────────────────────
-const SECTOR_COLORS = ['#1a5c52','#2563eb','#dc2626','#d97706','#7e3af2'];
+const SECTOR_COLORS = ['#1a5c52','#2563eb','#dc2626','#d97706','#7e3af2','#0891b2','#65a30d'];
 const sectorDatasets = Object.entries(IV_PROFILE.by_sector || {{}}).map(([sec, vals], i) => ({{
   label: sec,
   data: vals,

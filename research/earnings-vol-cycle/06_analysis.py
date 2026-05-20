@@ -249,15 +249,11 @@ profile_p75  = events_df[norm_cols].quantile(0.75)
 def safe_list(series):
     return [round(v, 2) if not np.isnan(v) else None for v in series]
 
-# Top 4 sectors by event count
-top_sectors = (
-    events_df["sector"]
-    .value_counts()
-    .head(5)
-    .index.tolist()
-)
-# Exclude Unknown
-top_sectors = [s for s in top_sectors if s != "Unknown"][:4]
+TARGET_SECTORS = [
+    "Financials", "Industrials", "Consumer Discretionary", "Technology",
+    "Healthcare", "Energy", "Consumer Staples",
+]
+top_sectors = [s for s in TARGET_SECTORS if s in events_df["sector"].unique()]
 
 by_sector_profiles = {}
 for sec in top_sectors:

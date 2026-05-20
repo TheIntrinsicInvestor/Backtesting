@@ -3,10 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta property="og:type" content="article"/>
-<meta property="og:title" content="The Earnings Vol Premium — The Intrinsic Investor"/>
-<meta property="og:description" content="IV dynamics across 35,862 S&P 500 earnings events, 2010–2024. 68.7% straddle win rate, quarterly Sharpe 1.95. OptionMetrics + CRSP + IBES data."/>
-<meta property="og:url" content="https://theintrinsicinvestor.com/research/earnings-vol-cycle/"/>
 <title>The Earnings Vol Premium | The Intrinsic Investor</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -215,12 +211,12 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}
     straddle value equals the 30-day IV times the square root of two trading days over one trading year times
     the square root of two over pi, applied to a $10,000 notional position.</p>
     <div class="callout blue">
-      <strong>Data note</strong> OptionMetrics does not provide reliable individual-stock option quotes for every
+      <strong>Data note.</strong> OptionMetrics does not provide reliable individual-stock option quotes for every
       constituent in every quarter. Events with fewer than three valid baseline IV observations (T-20 to T-15)
       are excluded. Coverage is highest for large-cap names. The smallest quintile has materially lower data density.
     </div>
     <div class="callout amber">
-      <strong>P&amp;L methodology caveat</strong> Straddle P&amp;L is approximated from IV and price data rather
+      <strong>P&amp;L methodology caveat.</strong> Straddle P&amp;L is approximated from IV and price data rather
       than from actual bid-ask option quotes. The 30-day IV captures the smoothed surface, not the near-term
       earnings-specific contract. Actual transaction costs (bid-ask spread on short-dated ATM options is typically
       5-15% of premium) would reduce the reported edge materially for smaller and less liquid names.
@@ -249,12 +245,17 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}
     T-12, then rises steadily, peaking at T-1 or T=0 (the announcement date itself). The crush is abrupt: IV
     collapses by the close of T+1 in the majority of events, typically reverting to below-baseline levels within
     two to three trading days.</p>
-    <p>The sector lines below the aggregate show that Technology and Healthcare names carry structurally higher
-    IV run-ups than Financials and Industrials. This likely reflects genuine uncertainty about binary outcomes
-    (drug trial data, product launches) rather than pure volatility overshoot. The implication for straddle sellers:
-    high-run-up sectors also carry higher tail risk when the outcome is truly binary.</p>
+    <p>The sector breakdown reveals a clear hierarchy. Consumer Discretionary leads at a T-1 peak of 110 normalised
+    IV, followed closely by Technology and Consumer Staples at 109 — the latter is counterintuitive given that staples
+    earnings are typically uneventful, but the IV build reflects systematic option positioning ahead of any scheduled
+    announcement rather than genuine binary uncertainty. Healthcare and Industrials sit in a mid-tier around 107.
+    Financials (105) and Energy (102) carry the lowest pre-earnings build. Energy is the sharpest outlier: oil-linked
+    names carry macro uncertainty that does not resolve at the earnings date, so IV barely compresses at T+1, unlike
+    the 21-22 point collapses in Consumer Discretionary, Technology, and Consumer Staples. For straddle sellers, the
+    highest-crush sectors offer the most reliable post-event IV decay, but their elevated run-ups also reflect
+    genuinely binary outcomes on guidance and product cycles — consistent with the larger left tails in those sectors.</p>
     <div class="chart-box">
-      <div class="chart-title">IV Run-Up by Sector: Top Sectors (Mean Normalised IV)</div>
+      <div class="chart-title">IV Run-Up by Sector: 7 Major Sectors (Mean Normalised IV)</div>
       <canvas id="ivSectorChart" height="70"></canvas>
     </div>
   </div>
@@ -340,7 +341,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}
     rate and most variable returns: thin option markets make the 30-day IV surface a poor proxy for the
     actual near-term straddle price. Q1 results should be treated as illustrative rather than actionable.</p>
     <div class="callout purple">
-      <strong>Structural caveat</strong> Market cap and sector are correlated: Technology dominates the large-cap
+      <strong>Structural caveat.</strong> Market cap and sector are correlated: Technology dominates the large-cap
       end, Utilities and Real Estate dominate the small end. The sector and cap effects are not independent,
       and this analysis does not attempt to separate them.
     </div>
@@ -370,7 +371,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}
     rates. This confirms that the IV premium is real and collectible under normal conditions, but the left
     tail is fat enough that the aggregate Sharpe remains modest once losses are accounted for.</p>
     <div class="callout red">
-      <strong>Tail risk</strong> The worst individual quarters in the backtest typically correspond to periods
+      <strong>Tail risk.</strong> The worst individual quarters in the backtest typically correspond to periods
       of elevated macro uncertainty when multiple large-cap misses occurred simultaneously. Earnings vol selling
       is not a market-neutral strategy: it has meaningful left-tail correlation with equity drawdowns.
     </div>
@@ -444,7 +445,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}
       <strong>Viable for systematic funds with low-cost execution.</strong> Across 35,862 earnings events from 2010 to 2024, the post-announcement IV crush consistently outweighs the gamma cost of the actual move. A straddle seller earns the premium in 69% of events, suggesting a genuine structural edge driven by systematic IV overshooting into earnings rather than sample-specific noise.
     </div>
     <div class="callout red">
-      <strong>Disclaimer</strong> This backtest uses approximated option prices derived from OptionMetrics IV
+      <strong>Disclaimer.</strong> This backtest uses approximated option prices derived from OptionMetrics IV
       data rather than actual bid-ask quotes. It excludes transaction costs, margin requirements, and early
       assignment risk on short options. Past performance of a theoretical backtest does not predict future returns.
       This report is for educational and research purposes only.
@@ -514,13 +515,6 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}
   </div>
 </section>
 
-<div style="max-width:900px;margin:0 auto;padding:2.5rem 2rem">
-  <div style="background:#eef7f5;border:1px solid #b8d8d2;border-left:3px solid #1a5c52;border-radius:0 6px 6px 0;padding:1.25rem 1.5rem">
-    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#1a5c52;margin-bottom:.6rem">For the desk</div>
-    <p style="font-size:13.5px;color:#2a4440;line-height:1.8;margin:0;text-align:justify;hyphens:none">The earnings vol premium is real at scale but practically accessible only to well-capitalised participants who can manage bid-ask friction on short-dated ATM options. For a portfolio analyst, the more actionable finding is the concentration in large-cap names and the tail risk pattern: negative EPS surprises in the bottom quartile drive nearly all losing events. A pre-earnings estimate dispersion screen could materially improve risk-adjusted outcomes without needing to trade options at all. The sector breakdown also provides a signal for sector-specific vol positioning ahead of earnings cycles, with Technology and Healthcare showing the most consistent premium.</p>
-  </div>
-</div>
-
 <footer>
   <div class="footer-inner">
     <div class="footer-name">The Intrinsic Investor</div>
@@ -535,7 +529,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}
 
 <script>
 // ── Inline data ───────────────────────────────────────────────────────────────
-const IV_PROFILE  = {"labels": [-20, -19, -18, -17, -16, -15, -14, -13, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5], "mean": [98.17, 98.62, 99.41, 100.47, 101.34, 101.99, 102.37, 102.85, 103.19, 103.57, 103.78, 103.84, 103.99, 104.32, 104.68, 104.8, 104.97, 105.29, 105.79, 106.91, 99.0, 90.39, 89.75, 89.66, 89.68, 89.81], "p25": [94.29, 95.6, 96.87, 97.92, 98.44, 98.34, 97.58, 97.25, 96.93, 96.77, 96.37, 95.77, 95.66, 95.49, 95.43, 95.2, 94.79, 94.73, 94.79, 95.19, 85.2, 78.66, 77.79, 77.67, 77.56, 77.29], "p75": [101.41, 101.26, 101.66, 102.75, 104.04, 105.4, 106.37, 107.4, 108.24, 109.02, 109.52, 109.99, 110.59, 111.12, 111.73, 112.22, 112.67, 113.26, 113.85, 115.37, 108.7, 97.87, 97.18, 97.28, 97.39, 97.6], "by_sector": {"Financials": [98.75, 98.98, 99.44, 100.27, 100.93, 101.64, 101.95, 102.29, 102.35, 102.73, 102.94, 102.65, 102.61, 103.29, 103.48, 103.59, 103.37, 103.73, 103.91, 104.61, 98.68, 92.18, 90.88, 91.0, 91.24, 91.22], "Industrials": [97.99, 98.48, 99.44, 100.31, 101.54, 102.25, 102.4, 103.1, 103.75, 104.05, 104.44, 104.49, 104.85, 105.1, 105.47, 105.53, 105.71, 105.92, 106.07, 107.75, 96.11, 89.89, 88.94, 89.0, 89.26, 89.19], "Consumer Discretionary": [97.36, 98.12, 99.35, 100.73, 101.69, 102.75, 103.12, 103.8, 104.31, 104.93, 105.01, 105.18, 105.54, 105.95, 106.4, 106.83, 107.11, 107.68, 108.55, 110.12, 98.46, 87.39, 86.35, 86.26, 86.1, 86.04], "Technology": [97.14, 98.19, 99.17, 100.73, 101.92, 102.85, 103.59, 104.01, 104.65, 105.22, 105.48, 105.61, 105.82, 106.31, 106.97, 107.07, 107.3, 107.71, 108.08, 109.25, 106.27, 87.43, 86.19, 86.19, 86.16, 86.14]}, "n_events": 35861, "baseline_iv_mean_pct": 34.0};
+const IV_PROFILE  = {"labels": [-20, -19, -18, -17, -16, -15, -14, -13, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5], "mean": [98.17, 98.62, 99.41, 100.47, 101.34, 101.99, 102.37, 102.85, 103.19, 103.57, 103.78, 103.84, 103.99, 104.32, 104.68, 104.8, 104.97, 105.29, 105.79, 106.91, 99.0, 90.39, 89.75, 89.66, 89.68, 89.81], "p25": [94.29, 95.6, 96.87, 97.92, 98.44, 98.34, 97.58, 97.25, 96.93, 96.77, 96.37, 95.77, 95.66, 95.49, 95.43, 95.2, 94.79, 94.73, 94.79, 95.19, 85.2, 78.66, 77.79, 77.67, 77.56, 77.29], "p75": [101.41, 101.26, 101.66, 102.75, 104.04, 105.4, 106.37, 107.4, 108.24, 109.02, 109.52, 109.99, 110.59, 111.12, 111.73, 112.22, 112.67, 113.26, 113.85, 115.37, 108.7, 97.87, 97.18, 97.28, 97.39, 97.6], "by_sector": {"Financials": [98.75, 98.98, 99.44, 100.27, 100.93, 101.64, 101.95, 102.29, 102.35, 102.73, 102.94, 102.65, 102.61, 103.29, 103.48, 103.59, 103.37, 103.73, 103.91, 104.61, 98.68, 92.18, 90.88, 91.0, 91.24, 91.22], "Industrials": [97.99, 98.48, 99.44, 100.31, 101.54, 102.25, 102.4, 103.1, 103.75, 104.05, 104.44, 104.49, 104.85, 105.1, 105.47, 105.53, 105.71, 105.92, 106.07, 107.75, 96.11, 89.89, 88.94, 89.0, 89.26, 89.19], "Consumer Discretionary": [97.36, 98.12, 99.35, 100.73, 101.69, 102.75, 103.12, 103.8, 104.31, 104.93, 105.01, 105.18, 105.54, 105.95, 106.4, 106.83, 107.11, 107.68, 108.55, 110.12, 98.46, 87.39, 86.35, 86.26, 86.1, 86.04], "Technology": [97.14, 98.19, 99.17, 100.73, 101.92, 102.85, 103.59, 104.01, 104.65, 105.22, 105.48, 105.61, 105.82, 106.31, 106.97, 107.07, 107.3, 107.71, 108.08, 109.25, 106.27, 87.43, 86.19, 86.19, 86.16, 86.14], "Healthcare": [98.09, 98.41, 99.31, 100.63, 101.41, 102.15, 102.31, 102.91, 103.45, 103.79, 104.1, 104.29, 104.36, 104.74, 105.28, 105.38, 105.25, 105.53, 106.05, 107.32, 98.4, 89.71, 89.97, 89.42, 89.76, 89.5], "Energy": [99.05, 99.34, 99.66, 100.06, 101.01, 100.89, 101.12, 101.22, 101.33, 101.43, 100.89, 100.81, 100.93, 101.05, 101.08, 101.28, 101.56, 101.56, 102.16, 102.49, 100.01, 96.23, 95.92, 95.86, 95.87, 96.2], "Consumer Staples": [97.8, 98.7, 99.33, 100.76, 101.45, 101.95, 102.42, 102.85, 103.27, 103.71, 104.07, 104.03, 104.87, 105.02, 105.5, 105.78, 105.84, 106.39, 107.23, 109.06, 91.19, 87.41, 87.4, 87.27, 87.26, 87.47]}, "n_events": 35861, "baseline_iv_mean_pct": 34.0};
 const SECTOR_DATA = {"sectors": ["Consumer Discretionary", "Technology", "Consumer Staples", "Healthcare", "Communication Services", "Industrials", "Financials", "Materials", "Real Estate", "Energy", "Utilities"], "win_rates": [73.4, 72.6, 72.0, 69.8, 69.5, 69.1, 67.8, 65.7, 64.6, 59.7, 59.3], "avg_pnl": [74.0, 55.0, 44.0, 28.0, 24.0, 24.0, 18.0, -3.0, 23.0, -25.0, 4.0], "ivrv_spread": [-25.4, -25.8, -19.2, -17.0, -25.2, -17.8, -9.0, -14.2, 0.2, -5.1, -0.1], "n_events": [4959, 4661, 2385, 4265, 1411, 4988, 5083, 1982, 1821, 2248, 1884]};
 const MKTCAP_DATA = {"quintiles": ["Q1 (Smallest)", "Q2", "Q3", "Q4", "Q5 (Largest)"], "win_rates": [64.1, 68.6, 69.5, 69.7, 71.6], "avg_pnl": [7.0, 39.0, 40.0, 34.0, 31.0], "avg_mktcap_m": [3533.0, 8473.0, 15007.0, 28683.0, 83647.0], "ivrv_spread": [-22.0, -17.2, -14.8, -12.9, -13.6], "n_events": [7173, 7172, 7172, 7172, 7173]};
 const SURP_DATA   = {"quartiles": ["Large Beat (Q4)", "Large Miss (Q1)", "Slight Beat (Q3)", "Slight Miss (Q2)"], "win_rates": [68.1, 64.4, 70.8, 72.3], "avg_pnl": [36.0, -2.0, 43.0, 50.0], "avg_surprise": [287.5, -53.9, 11.2, 3.0], "n_events": [8888, 9555, 8907, 8278]};
@@ -637,7 +631,7 @@ new Chart(document.getElementById('ivProfileChart'), {
 });
 
 // ── Chart 1b: IV Run-Up by Sector ─────────────────────────────────────────────
-const SECTOR_COLORS = ['#1a5c52','#2563eb','#dc2626','#d97706','#7e3af2'];
+const SECTOR_COLORS = ['#1a5c52','#2563eb','#dc2626','#d97706','#7e3af2','#0891b2','#65a30d'];
 const sectorDatasets = Object.entries(IV_PROFILE.by_sector || {}).map(([sec, vals], i) => ({
   label: sec,
   data: vals,
