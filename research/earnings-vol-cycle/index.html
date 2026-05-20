@@ -211,12 +211,12 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}
     straddle value equals the 30-day IV times the square root of two trading days over one trading year times
     the square root of two over pi, applied to a $10,000 notional position.</p>
     <div class="callout blue">
-      <strong>Data note.</strong> OptionMetrics does not provide reliable individual-stock option quotes for every
+      <strong>Data note</strong> OptionMetrics does not provide reliable individual-stock option quotes for every
       constituent in every quarter. Events with fewer than three valid baseline IV observations (T-20 to T-15)
       are excluded. Coverage is highest for large-cap names. The smallest quintile has materially lower data density.
     </div>
     <div class="callout amber">
-      <strong>P&amp;L methodology caveat.</strong> Straddle P&amp;L is approximated from IV and price data rather
+      <strong>P&amp;L methodology caveat</strong> Straddle P&amp;L is approximated from IV and price data rather
       than from actual bid-ask option quotes. The 30-day IV captures the smoothed surface, not the near-term
       earnings-specific contract. Actual transaction costs (bid-ask spread on short-dated ATM options is typically
       5-15% of premium) would reduce the reported edge materially for smaller and less liquid names.
@@ -371,13 +371,15 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}
         <span><span class="legend-dot" style="background:#dc2626"></span>IV-RV spread (pp)</span>
       </div>
     </div>
-    <p>Large misses (Q1) are the primary source of losses: the actual stock move breaks the IV-implied
-    breakeven more often, compressing both P&amp;L and the IV-RV spread. But even in Q1, the IV-RV spread
-    remains negative (IV still overprices realised vol on average), meaning the premium does not disappear
-    entirely on misses. The losses come from the tail: individual events where the stock moves 3-5x the
-    implied move. Large beats (Q4) and in-line outcomes (Q2, Q3) show the most consistent IV overshooting
-    and highest average P&amp;L, confirming that the edge is real but concentrated in the majority of events
-    where the outcome is not a severe negative shock.</p>
+    <p>Slight misses (Q2) and slight beats (Q3) are the most profitable quartiles (+$50 and +$43 average
+    P&amp;L respectively): when the reported figure is close to consensus, the stock rarely moves beyond the
+    straddle breakeven, and the IV premium is captured reliably. Large beats (Q4) also perform well (+$36),
+    with the widest IV-RV spread of any quartile (-18.3pp). The counter-intuitive result is large misses (Q1):
+    despite carrying an IV-RV spread of -17.5pp (nearly as wide as large beats), average P&amp;L collapses to
+    near zero (-$2). IV still overprices realised vol on average even on big misses, but the distribution is
+    fat-tailed: a minority of events where the stock gaps 3-5x the implied move wipe out the premium
+    collected across the rest of the sample. Large surprises in either direction attract the widest IV-RV
+    spreads, reflecting the extra premium the market embeds for high-uncertainty events.</p>
     <div class="callout red">
       <strong>Tail risk</strong> The worst individual quarters in the backtest typically correspond to periods
       of elevated macro uncertainty when multiple large-cap misses occurred simultaneously. Earnings vol selling
