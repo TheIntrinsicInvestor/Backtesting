@@ -427,8 +427,10 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}
     </div>
     <h3>Entry timing sensitivity</h3>
     <p>The table below shows how performance changes if the straddle is entered earlier (T-5, T-3, T-2) rather
-    than at T-1. Earlier entries capture a larger part of the IV run-up in the premium received, but also
-    introduce more time-decay risk and exposure to stock moves before the event.</p>
+    than at T-1. For a short straddle, time decay works in your favour regardless of entry. The risk of
+    entering earlier is vega exposure: IV continues running up between entry and the event, and as a short
+    seller, rising IV works against you. Earlier entries also carry more pre-announcement delta risk if the
+    stock drifts before the number drops.</p>
     <div style="overflow-x:auto">
     <table class="data-table">
       <thead>
