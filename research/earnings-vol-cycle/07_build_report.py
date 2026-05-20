@@ -24,6 +24,14 @@ _C_RED   = (254, 202, 202)
 _C_PARCH = (247, 244, 236)
 _C_GREEN = (187, 247, 208)
 
+# Centre the diverging scale at the mean win rate across all cells
+_all_wrs = [heatmap_data["win_rates"][i][j]
+            for i in range(len(heatmap_data["sectors"]))
+            for j in range(len(heatmap_data["years"]))
+            if heatmap_data["win_rates"][i][j] is not None]
+_HM_MEAN   = sum(_all_wrs) / len(_all_wrs)
+_HM_SPREAD = 20.0  # ±20pp from mean maps to full red / full green
+
 def _lerp(t, lo, hi):
     return "#{:02x}{:02x}{:02x}".format(
         int(lo[0] + t*(hi[0]-lo[0])),
@@ -32,12 +40,12 @@ def _lerp(t, lo, hi):
 
 def wr_bg(wr):
     if wr is None: return "#f7f4ec"
-    t = max(0.0, min(1.0, wr / 100.0))
-    return _lerp(t*2, _C_RED, _C_PARCH) if t < 0.5 else _lerp((t-0.5)*2, _C_PARCH, _C_GREEN)
+    t = max(-1.0, min(1.0, (wr - _HM_MEAN) / _HM_SPREAD))
+    return _lerp(-t, _C_PARCH, _C_RED) if t < 0 else _lerp(t, _C_PARCH, _C_GREEN)
 
 def wr_fg(wr):
     if wr is None: return "#8aa49e"
-    return "#0f2220" if (wr < 40 or wr > 75) else "#4a6460"
+    return "#0f2220" if abs(wr - _HM_MEAN) > 10 else "#4a6460"
 
 # ── Build heatmap HTML ────────────────────────────────────────────────────────
 years   = heatmap_data["years"]
@@ -70,8 +78,9 @@ heatmap_html = f"""
 </div>
 <p style="font-size:.75rem;color:var(--hint);margin-top:.5rem">
   Win rate (%) for T-1 entry, T+1 exit straddle. Cells with fewer than 5 events shown as —.
-  Color: <span style="background:#bbf7d0;padding:1px 6px;border-radius:2px">green</span> = high win rate,
-  <span style="background:#fecaca;padding:1px 6px;border-radius:2px">red</span> = low win rate.
+  Color scale centred at the mean win rate ({_HM_MEAN:.0f}%):
+  <span style="background:#bbf7d0;padding:1px 6px;border-radius:2px">green</span> = above average,
+  <span style="background:#fecaca;padding:1px 6px;border-radius:2px">red</span> = below average.
 </p>
 """
 
