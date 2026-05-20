@@ -475,23 +475,27 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
     <h2>How earnings surprise <em>drives straddle outcomes</em></h2>
     <p>EPS surprise quantifies how far reported earnings deviate from the IBES consensus at announcement. For
     a straddle seller, what matters is not the direction of the surprise but whether the resulting stock move
-    exceeds the IV-implied breakeven. The chart below shows average P&amp;L per trade and the IV-RV spread by
-    surprise quartile: two complementary lenses on the same edge.</p>
+    exceeds the IV-implied breakeven. Events are split into four absolute categories: large miss (below -10%),
+    slight miss (-10% to 0%), slight beat (0% to +10%), and large beat (above +10%). The chart below shows
+    average P&amp;L per trade and the IV-RV spread by category: two complementary lenses on the same edge.</p>
     <div class="chart-box">
-      <div class="chart-title">Avg P&amp;L and IV-RV Spread by EPS Surprise Quartile</div>
+      <div class="chart-title">Avg P&amp;L and IV-RV Spread by EPS Surprise Category</div>
       <canvas id="surpriseChart" height="65"></canvas>
       <div class="chart-legend">
         <span><span class="legend-dot" style="background:#1a5c52"></span>Avg P&amp;L ($/trade)</span>
         <span><span class="legend-dot" style="background:#dc2626"></span>IV-RV spread (pp)</span>
       </div>
     </div>
-    <p>Large misses (Q1) are the primary source of losses: the actual stock move breaks the IV-implied
-    breakeven more often, compressing both P&amp;L and the IV-RV spread. But even in Q1, the IV-RV spread
-    remains negative (IV still overprices realised vol on average), meaning the premium does not disappear
-    entirely on misses. The losses come from the tail: individual events where the stock moves 3-5x the
-    implied move. Large beats (Q4) and in-line outcomes (Q2, Q3) show the most consistent IV overshooting
-    and highest average P&amp;L, confirming that the edge is real but concentrated in the majority of events
-    where the outcome is not a severe negative shock.</p>
+    <p>Large misses (consensus miss of more than 10%) are the single damaging category: despite carrying the
+    widest IV-RV spread of any group (-22pp), average P&amp;L collapses to -$41. The IV overprice is real in
+    aggregate but stock moves on severe misses frequently clear the straddle breakeven by multiples of the
+    implied range. Slight misses (0 to -10%) barely break even (+$4), with the stock move typically landing
+    just inside the breakeven zone. Slight beats are the most profitable (+$48, 72% win rate), showing the
+    narrowest IV-RV spread (-13pp): option markets price these low-uncertainty confirmations with the least
+    excess IV, yet the move is almost always contained. Large beats also perform well (+$38), with a wider
+    spread (-18pp) that reflects greater uncertainty priced into pre-announcement IV for big upside events.
+    The pattern is asymmetric: on the downside, only large misses are damaging; on the upside, both slight
+    and large beats are consistently profitable.</p>
     <div class="callout red">
       <strong>Tail risk</strong> The worst individual quarters in the backtest typically correspond to periods
       of elevated macro uncertainty when multiple large-cap misses occurred simultaneously. Earnings vol selling
@@ -610,7 +614,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
       <strong>2. The edge is concentrated in large-cap names with liquid option markets.</strong> The top two market cap quintiles account for the majority of the aggregate P&amp;L, driven by more consistent IV-RV spreads and the fact that IV data coverage is more reliable for large names. The smallest quintile adds noise without proportionate return.
     </div>
     <div class="callout amber">
-      <strong>3. Large negative EPS surprises are the primary source of losses.</strong> The bottom surprise quartile (large misses) drives nearly all losing quarters. A simple filter (avoiding names where analyst estimate dispersion is high) would improve risk-adjusted performance but requires real-time access to IBES consensus data not available to all market participants.
+      <strong>3. Large negative EPS surprises are the primary source of losses.</strong> Events where the company misses consensus by more than 10% produce near-zero average P&amp;L despite a wide IV-RV spread: the occasional stock move that dwarfs the implied range wipes out the premium collected across the rest of those trades. A simple filter (avoiding names where analyst estimate dispersion is high) would improve risk-adjusted performance but requires real-time access to IBES consensus data not available to all market participants.
     </div>
     <div class="callout red">
       <strong>4. Transaction costs are the primary obstacle to individual implementation.</strong> The gross P&amp;L looks attractive at the portfolio level, but bid-ask spreads on short-dated ATM options, particularly outside the largest 50 names, would consume the majority of the theoretical premium. This strategy is viable for systematic options market-makers or well-capitalised funds. It is not a retail edge.

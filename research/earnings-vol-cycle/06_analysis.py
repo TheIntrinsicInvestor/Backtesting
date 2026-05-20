@@ -220,15 +220,19 @@ events_df["mktcap_q"] = pd.qcut(
     labels=["Q1 (Smallest)", "Q2", "Q3", "Q4", "Q5 (Largest)"]
 )
 
-# ── Surprise quartiles ────────────────────────────────────────────────────────
+# ── Surprise categories (absolute thresholds: ±10%) ──────────────────────────
+SURP_ORDER = ["Large Miss", "Slight Miss", "Slight Beat", "Large Beat"]
+
+def _classify_surprise(s):
+    if s < -10:  return "Large Miss"
+    elif s < 0:  return "Slight Miss"
+    elif s < 10: return "Slight Beat"
+    else:        return "Large Beat"
+
 surp_valid = events_df.dropna(subset=["surprise_pct"])
 events_df["surprise_q"] = None
 if len(surp_valid) > 100:
-    events_df.loc[surp_valid.index, "surprise_q"] = pd.qcut(
-        surp_valid["surprise_pct"],
-        q=4,
-        labels=["Large Miss (Q1)", "Slight Miss (Q2)", "Slight Beat (Q3)", "Large Beat (Q4)"]
-    ).values
+    events_df.loc[surp_valid.index, "surprise_q"] = surp_valid["surprise_pct"].map(_classify_surprise)
 
 # ── Helper: compute metrics dict ──────────────────────────────────────────────
 def metrics(df, label=""):
@@ -330,7 +334,7 @@ print("Saved charts/data_mktcap_analysis.json")
 # ── Chart 4: Earnings surprise interaction ────────────────────────────────────
 surp_grp = (
     events_df.dropna(subset=["surprise_q"])
-    .groupby("surprise_q", observed=True)
+    .groupby("surprise_q")
     .agg(
         n            = ("is_win", "count"),
         win_rate     = ("is_win", "mean"),
@@ -340,6 +344,8 @@ surp_grp = (
     )
     .reset_index()
 )
+surp_grp["surprise_q"] = pd.Categorical(surp_grp["surprise_q"], categories=SURP_ORDER, ordered=True)
+surp_grp = surp_grp.sort_values("surprise_q")
 
 chart_surprise = {
     "quartiles"      : surp_grp["surprise_q"].astype(str).tolist(),
