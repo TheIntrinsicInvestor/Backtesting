@@ -484,6 +484,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
       <div class="chart-legend">
         <span><span class="legend-dot" style="background:#1a5c52"></span>Avg P&amp;L ($/trade)</span>
         <span><span class="legend-dot" style="background:#dc2626"></span>IV-RV spread (pp)</span>
+        <span style="margin-left:auto;font-size:0.72rem;color:var(--muted)">n = number of events</span>
       </div>
     </div>
     <p>Large misses (consensus miss of more than 10%) are the single damaging category: despite carrying the
