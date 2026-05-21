@@ -119,7 +119,8 @@ def parse_row(row):
     if ":" in ticker:
         ticker = ticker.split(":")[0]
 
-    # Trade date (4th cell, index 3)
+    # Disclosure / Filed date (3rd cell, index 2) and Trade date (4th cell, index 3)
+    disclosure_date = parse_trade_date(cells[2]) if len(cells) > 2 else None
     trade_date = parse_trade_date(cells[3]) if len(cells) > 3 else None
 
     # Owner
@@ -147,6 +148,7 @@ def parse_row(row):
         "issuer": issuer,
         "ticker": ticker,
         "trade_date": trade_date,
+        "disclosure_date": disclosure_date,
         "owner": owner,
         "tx_type": tx_type,
         "size": size,
@@ -240,6 +242,7 @@ def main():
     # Final save
     df = pd.DataFrame(all_records)
     df["trade_date"] = pd.to_datetime(df["trade_date"])
+    df["disclosure_date"] = pd.to_datetime(df["disclosure_date"])
     df.to_parquet(out_path, index=False)
     print(f"\nSaved {len(df):,} trades to {out_path}")
 
@@ -252,6 +255,11 @@ def main():
     print("--- Summary ---")
     print(f"Total trades        : {len(df):,}")
     print(f"Date range          : {df['trade_date'].min().date()} to {df['trade_date'].max().date()}")
+    # Disclosure lag validation
+    lag = (df["disclosure_date"] - df["trade_date"]).dt.days
+    valid_lag = lag[lag >= 0]
+    pct_valid = len(valid_lag) / len(lag) * 100 if len(lag) else 0
+    print(f"Disclosure lag (days): median={lag.median():.0f}, mean={lag.mean():.0f}, pct_nonneg={pct_valid:.1f}%")
     print(f"Unique politicians  : {df['name'].nunique()}")
     print(f"Unique tickers      : {df['ticker'].nunique()}")
     print(f"Chambers            :")
