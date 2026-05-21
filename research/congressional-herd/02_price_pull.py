@@ -19,7 +19,7 @@ def map_tickers(db, tickers):
     frames = []
     for chunk in chunks:
         df = db.raw_sql(
-            "SELECT DISTINCT ticker, permno, comnam, siccd, namedt, nameendt "
+            "SELECT DISTINCT ticker, permno, comnam, siccd, namedt, nameenddt "
             "FROM crsp.stocknames "
             "WHERE ticker IN %(tickers)s",
             params={"tickers": tuple(chunk)},
@@ -30,7 +30,7 @@ def map_tickers(db, tickers):
     result = (
         result.sort_values("namedt")
         .drop_duplicates(subset=["ticker"], keep="last")
-        .drop(columns=["namedt", "nameendt"])
+        .drop(columns=["namedt", "nameenddt"])
         .reset_index(drop=True)
     )
     return result

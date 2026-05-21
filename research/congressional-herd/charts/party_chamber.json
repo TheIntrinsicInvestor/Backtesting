@@ -1,0 +1,14 @@
+{
+  "bipartisan": {
+    "n": 83,
+    "share_of_total": 0.83,
+    "mean_excess": -0.0049,
+    "win_rate": 0.5181
+  },
+  "partisan": {
+    "n": 17,
+    "share_of_total": 0.17,
+    "mean_excess": 0.0031,
+    "win_rate": 0.5294
+  }
+}

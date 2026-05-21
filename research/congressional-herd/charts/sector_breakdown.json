@@ -1,0 +1,38 @@
+[
+  {
+    "sector": "Information Technology",
+    "n_events": 35,
+    "win_rate_60d": 0.4,
+    "mean_excess_60d": -0.038
+  },
+  {
+    "sector": "Consumer Discretionary",
+    "n_events": 22,
+    "win_rate_60d": 0.5909,
+    "mean_excess_60d": 0.0162
+  },
+  {
+    "sector": "Financials",
+    "n_events": 18,
+    "win_rate_60d": 0.7778,
+    "mean_excess_60d": 0.0555
+  },
+  {
+    "sector": "Health Care",
+    "n_events": 6,
+    "win_rate_60d": 0.6667,
+    "mean_excess_60d": 0.0004
+  },
+  {
+    "sector": "Communication Services",
+    "n_events": 5,
+    "win_rate_60d": 0.6,
+    "mean_excess_60d": 0.0181
+  },
+  {
+    "sector": "Consumer Staples",
+    "n_events": 5,
+    "win_rate_60d": 0.2,
+    "mean_excess_60d": -0.051
+  }
+]

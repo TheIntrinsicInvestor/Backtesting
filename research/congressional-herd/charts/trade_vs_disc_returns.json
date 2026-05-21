@@ -1,0 +1,40 @@
+{
+  "horizons": [
+    10,
+    20,
+    60,
+    90,
+    180,
+    252
+  ],
+  "disc_mean": [
+    0.0123,
+    0.0112,
+    -0.0035,
+    -0.0092,
+    -0.102,
+    -0.1138
+  ],
+  "trade_mean": [
+    -0.0036,
+    0.003,
+    0.0001,
+    -0.0241,
+    -0.1164,
+    -0.0442
+  ],
+  "n_events": [
+    129,
+    114,
+    100,
+    98,
+    63,
+    42
+  ],
+  "lag_n": 131,
+  "lag_days_median": 26.0,
+  "lag_period_mean_return": 0.0258,
+  "lag_period_mean_excess": -0.0089,
+  "lag_period_median_excess": -0.0039,
+  "lag_period_win_rate": 0.4656
+}

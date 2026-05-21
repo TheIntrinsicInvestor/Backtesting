@@ -1,15 +1,55 @@
+"""
+Build all chart JSONs for the congressional-herd critique report.
+
+Inputs (from earlier scripts):
+  data/all_trades.parquet
+  data/event_returns_buy.parquet     (includes disc-date + trade-date returns)
+  data/event_returns_sell.parquet    (same)
+  data/etf_prices.parquet            (NANC, KRUZ, SPY)
+  data/politician_committees.parquet (committee assignments + categories)
+
+Outputs (research/congressional-herd/charts/*.json):
+  Section 02 (Dead zone):    lag_histogram.json
+  Section 03 (What they buy): largest_herds.json, sector_breakdown.json
+  Section 04 (Trade vs disc): trade_vs_disc_returns.json
+  Section 05 (Committee):     committee_jurisdiction.json
+  Section 06 (ETF wrappers):  etf_performance.json
+  Section 07 (Aggregate):     kpi_strip.json, forward_returns_curve.json, sensitivity_heatmap.json
+  Section 08 (Sells):         sell_herd_returns.json
+"""
+
 import json
+from pathlib import Path
 import numpy as np
 import pandas as pd
-from pathlib import Path
 from scipy import stats as scipy_stats
 
-CHARTS_DIR = Path(__file__).parent / "charts"
-CHARTS_DIR.mkdir(exist_ok=True)
-DATA_DIR = Path(__file__).parent / "data"
+HERE = Path(__file__).parent
+DATA = HERE / "data"
+CHARTS = HERE / "charts"
+CHARTS.mkdir(exist_ok=True)
 
 HORIZONS = [10, 20, 60, 90, 180, 252]
 
+# Sector tickers for the committee jurisdiction test
+JURISDICTION_TICKERS = {
+    "Financials":  None,   # use sector classification
+    "Energy":      None,
+    "Defense":     ["LMT", "RTX", "NOC", "GD", "BA", "LHX", "HII", "LDOS", "TDG"],
+    "Health":      None,
+    "IT":          None,
+}
+
+JURISDICTION_SECTORS = {
+    "Financials":  ["Financials"],
+    "Energy":      ["Energy"],
+    "Health":      ["Health Care"],
+    "IT":          ["Information Technology"],
+    # Defense: ticker-based (defense contractors aren't a GICS sector)
+}
+
+
+# ── Helpers ───────────────────────────────────────────────────────────────────
 
 def safe(v):
     if v is None:
@@ -22,8 +62,13 @@ def safe(v):
     return float(v)
 
 
-def compute_stats(excess_series, horizon_days):
-    er = excess_series.dropna()
+def round_or_none(v, decimals=4):
+    s = safe(v)
+    return None if s is None else round(s, decimals)
+
+
+def compute_stats(series, horizon_days=60):
+    er = series.dropna()
     n = len(er)
     if n < 5:
         return {"n": n, "win_rate": None, "mean": None, "median": None, "std": None, "sharpe": None, "t_stat": None}
@@ -42,324 +87,471 @@ def compute_stats(excess_series, horizon_days):
     }
 
 
-def main():
-    df = pd.read_parquet(DATA_DIR / "event_returns.parquet")
-    df["entry_date"] = pd.to_datetime(df["entry_date"])
+def write(name, obj):
+    path = CHARTS / name
+    with open(path, "w") as f:
+        json.dump(obj, f, indent=2)
+    return path
 
-    for col in ["window_start", "entry_trade_date", "entry_disclosure_date"]:
-        if col in df.columns:
-            df[col] = pd.to_datetime(df[col])
 
-    primary = df[(df["threshold"] == 3) & (df["window_days"] == 30)].copy()
+# ── Section 02: lag histogram ─────────────────────────────────────────────────
 
-    # ── 1. KPI strip ─────────────────────────────────────────────────────────────
-    p60 = primary[primary["censored_60d"] == False].copy()
-    kpi_stats = compute_stats(p60["ret_60d_excess"], 60)
-    kpi = {
-        "n_events": kpi_stats["n"],
-        "win_rate_60d": round(kpi_stats["win_rate"], 4) if kpi_stats["win_rate"] is not None else None,
-        "mean_excess_60d": round(kpi_stats["mean"], 4) if kpi_stats["mean"] is not None else None,
-        "sharpe_60d": round(kpi_stats["sharpe"], 4) if kpi_stats["sharpe"] is not None else None,
-        "t_stat_60d": round(kpi_stats["t_stat"], 4) if kpi_stats["t_stat"] is not None else None,
+def build_lag_histogram():
+    trades = pd.read_parquet(DATA / "all_trades.parquet")
+    trades["trade_date"] = pd.to_datetime(trades["trade_date"])
+    trades["disclosure_date"] = pd.to_datetime(trades["disclosure_date"])
+    lag = (trades["disclosure_date"] - trades["trade_date"]).dt.days
+    lag = lag.dropna()
+    # Filter to non-negative (true reporting lag); also cap at 365 for display
+    valid = lag[(lag >= 0) & (lag <= 365)]
+    bins = list(range(0, 105, 5))  # 0-5, 5-10, ..., 95-100, then 100+ as overflow
+    counts, edges = np.histogram(valid.clip(upper=100), bins=bins)
+    bin_labels = [f"{int(edges[i])}-{int(edges[i+1])}" for i in range(len(bins) - 1)]
+    bin_labels[-1] = "95-100+"
+    return {
+        "bin_labels": bin_labels,
+        "counts": counts.tolist(),
+        "median": float(valid.median()),
+        "mean": float(valid.mean()),
+        "p25": float(valid.quantile(0.25)),
+        "p75": float(valid.quantile(0.75)),
+        "p90": float(valid.quantile(0.90)),
+        "n_total": int(len(lag)),
+        "n_valid": int(len(valid)),
+        "n_negative": int((lag < 0).sum()),
+        "n_over_45": int((valid > 45).sum()),  # over STOCK Act 45-day limit
     }
-    with open(CHARTS_DIR / "kpi_strip.json", "w") as f:
-        json.dump(kpi, f, indent=2)
-    print(
-        f"KPI: n={kpi['n_events']}, "
-        f"win_rate_60d={kpi['win_rate_60d']:.1%}, "
-        f"mean_excess={kpi['mean_excess_60d']:.2%}, "
-        f"sharpe={kpi['sharpe_60d']:.2f}, "
-        f"t={kpi['t_stat_60d']:.2f}"
-    )
 
-    # ── 2. Forward returns curve ──────────────────────────────────────────────────
-    curve = {"horizons": HORIZONS, "mean_excess": [], "p25_excess": [], "p75_excess": [], "n_events": []}
-    for n in HORIZONS:
-        censor_col = f"censored_{n}d"
-        ret_col = f"ret_{n}d_excess"
-        sub = primary[primary[censor_col] == False][ret_col].dropna()
-        curve["mean_excess"].append(round(float(sub.mean()), 4) if len(sub) >= 5 else None)
-        curve["p25_excess"].append(round(float(sub.quantile(0.25)), 4) if len(sub) >= 5 else None)
-        curve["p75_excess"].append(round(float(sub.quantile(0.75)), 4) if len(sub) >= 5 else None)
-        curve["n_events"].append(int(len(sub)))
-    with open(CHARTS_DIR / "forward_returns_curve.json", "w") as f:
-        json.dump(curve, f, indent=2)
 
-    # ── 3. Sensitivity heatmap ────────────────────────────────────────────────────
-    thresholds = [2, 3, 4, 5]
-    windows = [14, 30, 60]
-    win_rates = []
-    n_events_grid = []
-    for thr in thresholds:
-        row_wr = []
-        row_n = []
-        for win in windows:
-            sub = df[(df["threshold"] == thr) & (df["window_days"] == win)]
-            sub60 = sub[sub["censored_60d"] == False]["ret_60d_excess"].dropna()
-            n = len(sub60)
-            row_wr.append(round(float((sub60 > 0).mean()), 4) if n >= 5 else None)
-            row_n.append(int(n))
-        win_rates.append(row_wr)
-        n_events_grid.append(row_n)
-    sens = {
-        "thresholds": thresholds,
-        "windows": windows,
-        "win_rates": win_rates,
-        "n_events": n_events_grid,
-    }
-    with open(CHARTS_DIR / "sensitivity_heatmap.json", "w") as f:
-        json.dump(sens, f, indent=2)
-    primary_wr = win_rates[thresholds.index(3)][windows.index(30)]
-    print(f"Sensitivity: win rates at (3+,30d) = {primary_wr:.1%}" if primary_wr is not None else "Sensitivity: win rates at (3+,30d) = N/A")
+# ── Section 03: what they buy ─────────────────────────────────────────────────
 
-    # ── 4. Sector breakdown ───────────────────────────────────────────────────────
-    sector_rows = []
-    for sec, grp in p60.groupby("sector"):
-        sub = grp["ret_60d_excess"].dropna()
-        n = len(sub)
-        if n < 5:
-            continue
-        sector_rows.append({
-            "sector": str(sec),
-            "win_rate_60d": round(float((sub > 0).mean()), 4),
-            "mean_excess_60d": round(float(sub.mean()), 4),
-            "n_events": int(n),
-        })
-    sector_rows.sort(key=lambda x: x["n_events"], reverse=True)
-    with open(CHARTS_DIR / "sector_breakdown.json", "w") as f:
-        json.dump(sector_rows, f, indent=2)
-
-    # ── 5. Market cap breakdown ───────────────────────────────────────────────────
-    p60_mktcap = p60.dropna(subset=["mkt_cap_at_entry"]).copy()
-    p60_mktcap["mktcap_q"] = pd.qcut(
-        p60_mktcap["mkt_cap_at_entry"],
-        q=5,
-        labels=["Q1 (Smallest)", "Q2", "Q3", "Q4", "Q5 (Largest)"],
-    )
-    mktcap_rows = []
-    for i, label in enumerate(["Q1 (Smallest)", "Q2", "Q3", "Q4", "Q5 (Largest)"], start=1):
-        sub = p60_mktcap[p60_mktcap["mktcap_q"] == label]["ret_60d_excess"].dropna()
-        n = len(sub)
-        mktcap_rows.append({
-            "quintile": i,
-            "label": label,
-            "win_rate_60d": round(float((sub > 0).mean()), 4) if n >= 5 else None,
-            "mean_excess_60d": round(float(sub.mean()), 4) if n >= 5 else None,
-            "n_events": int(n),
-        })
-    with open(CHARTS_DIR / "mkt_cap_breakdown.json", "w") as f:
-        json.dump(mktcap_rows, f, indent=2)
-
-    # ── 6. Party / chamber breakdown ─────────────────────────────────────────────
-    def _all_dem(row):
-        parties = row["parties_in_herd"]
-        return isinstance(parties, list) and len(parties) > 0 and all(p == "Democrat" for p in parties)
-
-    def _all_rep(row):
-        parties = row["parties_in_herd"]
-        return isinstance(parties, list) and len(parties) > 0 and all(p == "Republican" for p in parties)
-
-    def _house_only(row):
-        chambers = row["chambers_in_herd"]
-        return isinstance(chambers, list) and len(chambers) > 0 and all(c == "House" for c in chambers)
-
-    def _senate_only(row):
-        chambers = row["chambers_in_herd"]
-        return isinstance(chambers, list) and len(chambers) > 0 and all(c == "Senate" for c in chambers)
-
-    def _both_chambers(row):
-        chambers = row["chambers_in_herd"]
-        return isinstance(chambers, list) and "House" in chambers and "Senate" in chambers
-
-    masks = {
-        "All Dem": p60.apply(_all_dem, axis=1),
-        "All Rep": p60.apply(_all_rep, axis=1),
-        "Bipartisan": p60["is_bipartisan"] == True,
-        "House Only": p60.apply(_house_only, axis=1),
-        "Senate Only": p60.apply(_senate_only, axis=1),
-        "Both Chambers": p60.apply(_both_chambers, axis=1),
-    }
-    categories = list(masks.keys())
-    pc_win_rate, pc_mean_excess, pc_n_events, pc_sharpe = [], [], [], []
-    for cat in categories:
-        sub = p60[masks[cat]]["ret_60d_excess"].dropna()
-        n = len(sub)
-        st = compute_stats(sub, 60)
-        pc_win_rate.append(round(st["win_rate"], 4) if st["win_rate"] is not None else None)
-        pc_mean_excess.append(round(st["mean"], 4) if st["mean"] is not None else None)
-        pc_n_events.append(int(n))
-        pc_sharpe.append(round(st["sharpe"], 4) if st["sharpe"] is not None else None)
-    party_chamber = {
-        "categories": categories,
-        "win_rate": pc_win_rate,
-        "mean_excess": pc_mean_excess,
-        "n_events": pc_n_events,
-        "sharpe": pc_sharpe,
-    }
-    with open(CHARTS_DIR / "party_chamber.json", "w") as f:
-        json.dump(party_chamber, f, indent=2)
-
-    # ── 7. Top politicians ────────────────────────────────────────────────────────
-    p60_pol = p60.copy()
-    p60_pol["politicians_exploded"] = p60_pol["politicians"].apply(
-        lambda x: x if isinstance(x, list) else []
-    )
-    exploded = p60_pol.explode("politicians_exploded")
-    exploded = exploded.dropna(subset=["politicians_exploded"])
-    exploded = exploded[exploded["politicians_exploded"].astype(str).str.strip() != ""]
-
-    pol_rows = []
-    for name, grp in exploded.groupby("politicians_exploded"):
-        sub = grp["ret_60d_excess"].dropna()
-        n = len(sub)
-        if n < 10:
-            continue
-        pol_rows.append({
-            "name": str(name),
-            "n_events": int(n),
-            "win_rate_60d": round(float((sub > 0).mean()), 4),
-            "mean_excess_60d": round(float(sub.mean()), 4),
-        })
-    pol_rows.sort(key=lambda x: x["n_events"], reverse=True)
-    pol_rows = pol_rows[:20]
-    with open(CHARTS_DIR / "top_politicians.json", "w") as f:
-        json.dump(pol_rows, f, indent=2)
-
-    # ── 8 & 9. Portfolio equity curves ───────────────────────────────────────────
-    mean_pol_count = float(primary["politician_count"].mean())
-
-    def build_equity_curve(events_df, size_weighted=False):
-        events_sorted = events_df.dropna(subset=["ret_60d_abs"]).sort_values("entry_date").copy()
-        if len(events_sorted) == 0:
-            return {"dates": [], "strategy_value": [], "spy_value": [], "total_events": 0}
-
-        if size_weighted:
-            events_sorted["position_size"] = 10_000 * (events_sorted["politician_count"] / mean_pol_count)
-        else:
-            events_sorted["position_size"] = 10_000.0
-
-        first_entry = events_sorted["entry_date"].min()
-        last_entry = events_sorted["entry_date"].max()
-        last_exit = last_entry + pd.Timedelta(days=84)
-        all_dates = pd.date_range(start=first_entry, end=last_exit, freq="D")
-
-        strat_vals = []
-        spy_vals = []
-        for d in all_dates:
-            active = events_sorted[
-                (events_sorted["entry_date"] <= d) &
-                (d < events_sorted["entry_date"] + pd.Timedelta(days=84))
-            ]
-            if len(active) == 0:
-                strat_vals.append(np.nan)
-                spy_vals.append(np.nan)
-                continue
-            strat_total = 0.0
-            spy_total = 0.0
-            for _, ev in active.iterrows():
-                entry = ev["entry_date"]
-                exit_d = entry + pd.Timedelta(days=84)
-                duration = (exit_d - entry).days
-                if duration <= 0:
-                    fraction = 1.0
-                else:
-                    fraction = min(1.0, (d - entry).days / duration)
-                pos_size = ev["position_size"]
-                strat_total += pos_size * (1.0 + ev["ret_60d_abs"] * fraction)
-                spy_total += pos_size * (1.0 + (ev["ret_60d_spy"] if pd.notna(ev["ret_60d_spy"]) else 0.0) * fraction)
-            strat_vals.append(strat_total)
-            spy_vals.append(spy_total)
-
-        strat_series = pd.Series(strat_vals, index=all_dates)
-        spy_series = pd.Series(spy_vals, index=all_dates)
-        strat_series = strat_series.dropna()
-        spy_series = spy_series.dropna()
-
-        if len(strat_series) == 0:
-            return {"dates": [], "strategy_value": [], "spy_value": [], "total_events": int(len(events_sorted))}
-
-        strat_rebased = strat_series / strat_series.iloc[0] * 100
-        spy_rebased = spy_series / spy_series.iloc[0] * 100
-
-        combined = pd.DataFrame({"strat": strat_rebased, "spy": spy_rebased}).dropna()
-
-        if len(combined) > 500:
-            step = len(combined) // 500 + 1
-            combined = combined.iloc[::step]
-
-        return {
-            "dates": [d.strftime("%Y-%m-%d") for d in combined.index],
-            "strategy_value": [round(v, 4) for v in combined["strat"]],
-            "spy_value": [round(v, 4) for v in combined["spy"]],
-            "total_events": int(len(events_sorted)),
-        }
-
-    eq_curve = build_equity_curve(primary, size_weighted=False)
-    with open(CHARTS_DIR / "portfolio_eq_weight.json", "w") as f:
-        json.dump(eq_curve, f, indent=2)
-
-    sw_curve = build_equity_curve(primary, size_weighted=True)
-    with open(CHARTS_DIR / "portfolio_size_weighted.json", "w") as f:
-        json.dump(sw_curve, f, indent=2)
-
-    # ── 10. Bipartisan vs partisan ────────────────────────────────────────────────
-    bip = p60[p60["is_bipartisan"] == True]["ret_60d_excess"]
-    par = p60[p60["is_bipartisan"] == False]["ret_60d_excess"]
-    bip_stats = compute_stats(bip, 60)
-    par_stats = compute_stats(par, 60)
-
-    def _stats_dict(st):
-        return {
-            "n": st["n"],
-            "win_rate": round(st["win_rate"], 4) if st["win_rate"] is not None else None,
-            "mean_excess": round(st["mean"], 4) if st["mean"] is not None else None,
-            "median_excess": round(st["median"], 4) if st["median"] is not None else None,
-            "sharpe": round(st["sharpe"], 4) if st["sharpe"] is not None else None,
-            "t_stat": round(st["t_stat"], 4) if st["t_stat"] is not None else None,
-        }
-
-    bvp = {"bipartisan": _stats_dict(bip_stats), "partisan": _stats_dict(par_stats)}
-    with open(CHARTS_DIR / "bipartisan_vs_partisan.json", "w") as f:
-        json.dump(bvp, f, indent=2)
-
-    # ── 11. Largest herds ─────────────────────────────────────────────────────────
+def build_largest_herds(buy_returns):
+    primary = buy_returns[(buy_returns["threshold"] == 3) & (buy_returns["window_days"] == 30)]
     top_herds = primary.sort_values("politician_count", ascending=False).head(10)
-    herd_rows = []
+    rows = []
     for _, row in top_herds.iterrows():
         pols = row["politicians"] if isinstance(row["politicians"], list) else []
         preview = ", ".join(pols[:4])
         if len(pols) > 4:
-            preview += "..."
-        excess_val = safe(row.get("ret_60d_excess"))
-        censored = row.get("censored_60d", False)
-        herd_rows.append({
+            preview += f", and {len(pols) - 4} more"
+        excess = row.get("ret_60d_disc_excess")
+        censored = row.get("censored_60d_disc", False)
+        rows.append({
             "ticker": str(row["ticker"]),
-            "window_start": row["window_start"].strftime("%Y-%m-%d") if pd.notna(row["window_start"]) else None,
+            "window_start": pd.to_datetime(row["window_start"]).strftime("%Y-%m-%d"),
             "politician_count": int(row["politician_count"]),
             "politicians_preview": preview,
-            "excess_60d": None if censored else (round(excess_val, 4) if excess_val is not None else None),
+            "excess_60d": None if censored else round_or_none(excess),
         })
-    with open(CHARTS_DIR / "largest_herds.json", "w") as f:
-        json.dump(herd_rows, f, indent=2)
+    return rows
 
-    # ── Final summary ─────────────────────────────────────────────────────────────
-    written = [
-        "kpi_strip.json",
-        "forward_returns_curve.json",
-        "sensitivity_heatmap.json",
-        "sector_breakdown.json",
-        "mkt_cap_breakdown.json",
-        "party_chamber.json",
-        "top_politicians.json",
-        "portfolio_eq_weight.json",
-        "portfolio_size_weighted.json",
-        "bipartisan_vs_partisan.json",
-        "largest_herds.json",
-    ]
-    print("\nJSON files written:")
-    for fname in written:
-        path = CHARTS_DIR / fname
-        print(f"  {path}")
+
+def build_top_herded_tickers(buy_returns):
+    """All threshold-3, 30d events grouped by ticker; top 15 by event count."""
+    primary = buy_returns[(buy_returns["threshold"] == 3) & (buy_returns["window_days"] == 30)]
+    top = primary.groupby("ticker").size().sort_values(ascending=False).head(15)
+    rows = []
+    for ticker, count in top.items():
+        sub = primary[primary["ticker"] == ticker]
+        # average disc-date 60d excess across all events for this ticker (non-censored only)
+        excess_series = sub.loc[sub["censored_60d_disc"] == False, "ret_60d_disc_excess"].dropna()
+        rows.append({
+            "ticker": str(ticker),
+            "event_count": int(count),
+            "mean_excess_60d": round_or_none(excess_series.mean()) if len(excess_series) else None,
+            "n_with_returns": int(len(excess_series)),
+        })
+    return rows
+
+
+def build_sector_breakdown(buy_returns):
+    primary = buy_returns[(buy_returns["threshold"] == 3) & (buy_returns["window_days"] == 30)]
+    p60 = primary[primary["censored_60d_disc"] == False].copy()
+    rows = []
+    for sec, grp in p60.groupby("sector"):
+        sub = grp["ret_60d_disc_excess"].dropna()
+        n = len(sub)
+        if n < 5:
+            continue
+        rows.append({
+            "sector": str(sec),
+            "n_events": int(n),
+            "win_rate_60d": round_or_none(float((sub > 0).mean())),
+            "mean_excess_60d": round_or_none(float(sub.mean())),
+        })
+    rows.sort(key=lambda x: x["n_events"], reverse=True)
+    return rows
+
+
+def build_party_chamber(buy_returns):
+    primary = buy_returns[(buy_returns["threshold"] == 3) & (buy_returns["window_days"] == 30)]
+    p60 = primary[primary["censored_60d_disc"] == False].copy()
+    bip = p60[p60["is_bipartisan"] == True]["ret_60d_disc_excess"]
+    par = p60[p60["is_bipartisan"] == False]["ret_60d_disc_excess"]
+    return {
+        "bipartisan": {
+            "n": int(len(bip.dropna())),
+            "share_of_total": round_or_none(len(p60[p60["is_bipartisan"] == True]) / max(1, len(p60))),
+            "mean_excess": round_or_none(bip.mean()),
+            "win_rate": round_or_none(float((bip.dropna() > 0).mean()) if len(bip.dropna()) else None),
+        },
+        "partisan": {
+            "n": int(len(par.dropna())),
+            "share_of_total": round_or_none(len(p60[p60["is_bipartisan"] == False]) / max(1, len(p60))),
+            "mean_excess": round_or_none(par.mean()),
+            "win_rate": round_or_none(float((par.dropna() > 0).mean()) if len(par.dropna()) else None),
+        },
+    }
+
+
+# ── Section 04: trade-date vs disclosure-date ─────────────────────────────────
+
+def build_trade_vs_disc(buy_returns):
+    """
+    KEY SECTION: quantify what the disclosure-follower misses.
+    Headline metric is excess_during_lag: stock return minus SPY return DURING the lag period.
+    That gap is captured by the politician and fully missed by the follower.
+    """
+    primary = buy_returns[(buy_returns["threshold"] == 3) & (buy_returns["window_days"] == 30)]
+
+    # Lag-period stats: what happens during the avg 28-day delay
+    lag_series = primary[["ret_during_lag", "spy_ret_during_lag", "excess_during_lag", "disc_trade_lag_days"]].dropna()
+    lag_n = len(lag_series)
+    lag_mean = float(lag_series["ret_during_lag"].mean()) if lag_n else None
+    lag_excess_mean = float(lag_series["excess_during_lag"].mean()) if lag_n else None
+    lag_excess_median = float(lag_series["excess_during_lag"].median()) if lag_n else None
+    lag_excess_winrate = float((lag_series["excess_during_lag"] > 0).mean()) if lag_n else None
+    lag_days_median = float(lag_series["disc_trade_lag_days"].median()) if lag_n else None
+
+    # Horizon-by-horizon: forward returns from each entry point
+    out = {
+        "horizons": HORIZONS,
+        "disc_mean": [],     # mean excess return when entering on disc_date, holding N days
+        "trade_mean": [],    # mean excess return when entering on trade_date, holding N days
+        "n_events": [],
+        # During-lag headline
+        "lag_n": int(lag_n),
+        "lag_days_median": round_or_none(lag_days_median),
+        "lag_period_mean_return": round_or_none(lag_mean),
+        "lag_period_mean_excess": round_or_none(lag_excess_mean),
+        "lag_period_median_excess": round_or_none(lag_excess_median),
+        "lag_period_win_rate": round_or_none(lag_excess_winrate),
+    }
+    for h in HORIZONS:
+        disc_col = f"ret_{h}d_disc_excess"
+        trade_col = f"ret_{h}d_trade_excess"
+        paired = primary[primary[f"censored_{h}d_disc"] == False].copy()
+        paired = paired[paired[f"censored_{h}d_trade"] == False]
+        paired = paired.dropna(subset=[disc_col, trade_col])
+        n = len(paired)
+        if n < 5:
+            out["disc_mean"].append(None)
+            out["trade_mean"].append(None)
+            out["n_events"].append(int(n))
+            continue
+        out["disc_mean"].append(round_or_none(paired[disc_col].mean()))
+        out["trade_mean"].append(round_or_none(paired[trade_col].mean()))
+        out["n_events"].append(int(n))
+
+    return out
+
+
+# ── Section 05: committee jurisdiction ────────────────────────────────────────
+
+def build_committee_jurisdiction(buy_returns):
+    cmt_path = DATA / "politician_committees.parquet"
+    if not cmt_path.exists():
+        return {"error": "committee data not available", "categories": []}
+    cmt = pd.read_parquet(cmt_path)
+
+    # politician name -> set of categories
+    name_to_cats = {}
+    for _, row in cmt.iterrows():
+        cats = row.get("committee_categories")
+        if isinstance(cats, np.ndarray):
+            cats = cats.tolist()
+        if not isinstance(cats, list):
+            cats = []
+        name_to_cats[row["name"]] = set(cats)
+
+    primary = buy_returns[(buy_returns["threshold"] == 3) & (buy_returns["window_days"] == 30)].copy()
+    primary = primary[primary["censored_60d_disc"] == False]
+
+    # For each event, get the set of categories represented by any herd member
+    def event_cats(politicians):
+        if not isinstance(politicians, (list, np.ndarray)):
+            return set()
+        s = set()
+        for p in politicians:
+            s |= name_to_cats.get(p, set())
+        return s
+
+    primary["event_cats"] = primary["politicians"].apply(event_cats)
+
+    # Defense: ticker-based test
+    defense_tickers = set(JURISDICTION_TICKERS["Defense"])
+
+    out = {"categories": []}
+    for cat in ["Financials", "Energy", "Health", "IT", "Defense"]:
+        # Define "in jurisdiction" for an event: ticker matches jurisdiction AND >=1 herd member sits on that category's committee
+        if cat == "Defense":
+            ticker_match = primary["ticker"].isin(defense_tickers)
+        else:
+            sectors = JURISDICTION_SECTORS.get(cat, [])
+            ticker_match = primary["sector"].isin(sectors)
+
+        cat_match = primary["event_cats"].apply(lambda s: cat in s)
+
+        in_juris = primary[ticker_match & cat_match]
+        out_juris = primary[ticker_match & ~cat_match]
+        random_other = primary[~ticker_match]
+
+        def _agg(sub):
+            s = sub["ret_60d_disc_excess"].dropna()
+            if len(s) < 3:
+                return {"n": int(len(s)), "mean_excess": None, "win_rate": None}
+            return {
+                "n": int(len(s)),
+                "mean_excess": round_or_none(s.mean()),
+                "win_rate": round_or_none(float((s > 0).mean())),
+            }
+
+        out["categories"].append({
+            "category": cat,
+            "in_jurisdiction": _agg(in_juris),       # ticker in sector AND herd member on committee
+            "out_jurisdiction": _agg(out_juris),     # ticker in sector but NO herd member on committee
+            "non_sector":       _agg(random_other),  # ticker NOT in sector (baseline)
+        })
+
+    return out
+
+
+# ── Section 06: ETF wrappers ──────────────────────────────────────────────────
+
+def build_etf_performance():
+    etf_path = DATA / "etf_prices.parquet"
+    if not etf_path.exists():
+        return {"error": "etf data not available"}
+    df = pd.read_parquet(etf_path)
+    df["date"] = pd.to_datetime(df["date"])
+    df = df.sort_values(["ticker", "date"])
+
+    # Inception of NANC/KRUZ is 2023-02. Rebase all to 100 from the latest common start date.
+    common_start = max(df[df["ticker"] == t]["date"].min() for t in ["NANC", "KRUZ", "SPY"])
+    df = df[df["date"] >= common_start].copy()
+
+    out = {"start_date": common_start.strftime("%Y-%m-%d")}
+    series = {}
+    for t in ["NANC", "KRUZ", "SPY"]:
+        sub = df[df["ticker"] == t].sort_values("date").reset_index(drop=True)
+        if sub.empty:
+            continue
+        rebased = (sub["prc"] / sub.iloc[0]["prc"]) * 100
+        # Downsample to ~250 points for chart performance
+        if len(sub) > 260:
+            step = len(sub) // 250 + 1
+            keep = list(range(0, len(sub), step)) + [len(sub) - 1]
+            keep = sorted(set(keep))
+        else:
+            keep = list(range(len(sub)))
+        series[t] = {
+            "dates": sub.iloc[keep]["date"].dt.strftime("%Y-%m-%d").tolist(),
+            "values": [round(float(rebased.iloc[i]), 3) for i in keep],
+            "cum_return": round_or_none(float((sub.iloc[-1]["prc"] / sub.iloc[0]["prc"]) - 1)),
+        }
+    out["series"] = series
+    # Annualised stats
+    for t in ["NANC", "KRUZ", "SPY"]:
+        sub = df[df["ticker"] == t].dropna(subset=["ret"])
+        if sub.empty:
+            continue
+        daily_ret = sub["ret"].values
+        ann_ret = (1 + np.mean(daily_ret)) ** 252 - 1
+        ann_vol = np.std(daily_ret) * np.sqrt(252)
+        sharpe = ann_ret / ann_vol if ann_vol > 0 else 0
+        series[t]["ann_return"] = round_or_none(float(ann_ret))
+        series[t]["ann_vol"] = round_or_none(float(ann_vol))
+        series[t]["sharpe"] = round_or_none(float(sharpe))
+    # Excess vs SPY (cumulative)
+    spy_cum = series.get("SPY", {}).get("cum_return")
+    for t in ["NANC", "KRUZ"]:
+        if t in series and spy_cum is not None:
+            series[t]["cum_excess_vs_spy"] = round_or_none(series[t]["cum_return"] - spy_cum)
+    return out
+
+
+# ── Section 07: aggregate backtest ────────────────────────────────────────────
+
+def build_kpi_strip(buy_returns):
+    primary = buy_returns[(buy_returns["threshold"] == 3) & (buy_returns["window_days"] == 30)]
+    p60 = primary[primary["censored_60d_disc"] == False]
+    stats = compute_stats(p60["ret_60d_disc_excess"], 60)
+    return {
+        "n_events": stats["n"],
+        "win_rate_60d": round_or_none(stats["win_rate"]),
+        "mean_excess_60d": round_or_none(stats["mean"]),
+        "sharpe_60d": round_or_none(stats["sharpe"]),
+        "t_stat_60d": round_or_none(stats["t_stat"]),
+    }
+
+
+def build_forward_returns_curve(buy_returns):
+    primary = buy_returns[(buy_returns["threshold"] == 3) & (buy_returns["window_days"] == 30)]
+    out = {"horizons": HORIZONS, "mean_excess": [], "p25_excess": [], "p75_excess": [], "n_events": []}
+    for h in HORIZONS:
+        sub = primary[primary[f"censored_{h}d_disc"] == False][f"ret_{h}d_disc_excess"].dropna()
+        if len(sub) >= 5:
+            out["mean_excess"].append(round_or_none(sub.mean()))
+            out["p25_excess"].append(round_or_none(sub.quantile(0.25)))
+            out["p75_excess"].append(round_or_none(sub.quantile(0.75)))
+        else:
+            out["mean_excess"].append(None)
+            out["p25_excess"].append(None)
+            out["p75_excess"].append(None)
+        out["n_events"].append(int(len(sub)))
+    return out
+
+
+def build_sensitivity(buy_returns):
+    thresholds = [2, 3, 4, 5]
+    windows = [14, 30, 60]
+    win_rates, mean_excess, n_grid = [], [], []
+    for thr in thresholds:
+        row_wr, row_me, row_n = [], [], []
+        for win in windows:
+            sub = buy_returns[(buy_returns["threshold"] == thr) & (buy_returns["window_days"] == win)]
+            sub60 = sub[sub["censored_60d_disc"] == False]["ret_60d_disc_excess"].dropna()
+            n = len(sub60)
+            row_wr.append(round_or_none(float((sub60 > 0).mean())) if n >= 5 else None)
+            row_me.append(round_or_none(float(sub60.mean())) if n >= 5 else None)
+            row_n.append(int(n))
+        win_rates.append(row_wr)
+        mean_excess.append(row_me)
+        n_grid.append(row_n)
+    return {
+        "thresholds": thresholds,
+        "windows": windows,
+        "win_rates": win_rates,
+        "mean_excess": mean_excess,
+        "n_events": n_grid,
+    }
+
+
+# ── Section 08: sells ─────────────────────────────────────────────────────────
+
+def build_sell_herd_returns(sell_returns):
+    primary = sell_returns[(sell_returns["threshold"] == 3) & (sell_returns["window_days"] == 30)]
+    p60 = primary[primary["censored_60d_disc"] == False]
+
+    # forward returns curve for sells
+    curve = {"horizons": HORIZONS, "mean_excess": [], "n_events": []}
+    for h in HORIZONS:
+        sub = primary[primary[f"censored_{h}d_disc"] == False][f"ret_{h}d_disc_excess"].dropna()
+        curve["mean_excess"].append(round_or_none(sub.mean()) if len(sub) >= 5 else None)
+        curve["n_events"].append(int(len(sub)))
+
+    stats60 = compute_stats(p60["ret_60d_disc_excess"], 60)
+
+    # Trade-date vs disclosure-date for sells too
+    paired = primary[
+        (primary["censored_60d_disc"] == False) &
+        (primary["censored_60d_trade"] == False)
+    ].dropna(subset=["ret_60d_disc_excess", "ret_60d_trade_excess"])
+    disc_mean = float(paired["ret_60d_disc_excess"].mean()) if len(paired) else None
+    trade_mean = float(paired["ret_60d_trade_excess"].mean()) if len(paired) else None
+
+    # Top sold tickers (sell herds)
+    top_sold = primary.groupby("ticker").size().sort_values(ascending=False).head(10)
+    top_rows = []
+    for ticker, count in top_sold.items():
+        sub = primary[primary["ticker"] == ticker]
+        excess_series = sub.loc[sub["censored_60d_disc"] == False, "ret_60d_disc_excess"].dropna()
+        top_rows.append({
+            "ticker": str(ticker),
+            "event_count": int(count),
+            "mean_excess_60d": round_or_none(excess_series.mean()) if len(excess_series) else None,
+            "n_with_returns": int(len(excess_series)),
+        })
+
+    return {
+        "kpi": {
+            "n_events": stats60["n"],
+            "win_rate_60d": round_or_none(stats60["win_rate"]),
+            "mean_excess_60d": round_or_none(stats60["mean"]),
+            "sharpe_60d": round_or_none(stats60["sharpe"]),
+            "t_stat_60d": round_or_none(stats60["t_stat"]),
+        },
+        "curve": curve,
+        "trade_vs_disc": {
+            "n_paired": int(len(paired)),
+            "disc_mean_60d": round_or_none(disc_mean),
+            "trade_mean_60d": round_or_none(trade_mean),
+        },
+        "top_sold_tickers": top_rows,
+    }
+
+
+# ── Main ──────────────────────────────────────────────────────────────────────
+
+def main():
+    print("Loading data...")
+    buy = pd.read_parquet(DATA / "event_returns_buy.parquet")
+    sell = pd.read_parquet(DATA / "event_returns_sell.parquet")
+
+    print("\n--- Section 02: lag histogram ---")
+    lag = build_lag_histogram()
+    write("lag_histogram.json", lag)
+    print(f"  median={lag['median']:.1f}d, mean={lag['mean']:.1f}d, n_over_45={lag['n_over_45']:,} ({lag['n_over_45']/lag['n_valid']*100:.1f}%)")
+
+    print("\n--- Section 03: what they buy ---")
+    write("largest_herds.json", build_largest_herds(buy))
+    write("top_herded_tickers.json", build_top_herded_tickers(buy))
+    write("sector_breakdown.json", build_sector_breakdown(buy))
+    write("party_chamber.json", build_party_chamber(buy))
+
+    print("\n--- Section 04: trade-date vs disclosure-date ---")
+    tvd = build_trade_vs_disc(buy)
+    write("trade_vs_disc_returns.json", tvd)
+    print(f"  DURING LAG (median {tvd['lag_days_median']:.0f}d): "
+          f"mean stock ret {tvd['lag_period_mean_return']:+.4f}  "
+          f"mean excess vs SPY {tvd['lag_period_mean_excess']:+.4f}  "
+          f"win rate {tvd['lag_period_win_rate']:.1%}  n={tvd['lag_n']}")
+    for i, h in enumerate(HORIZONS):
+        if tvd["disc_mean"][i] is not None:
+            print(f"  {h}d:   disc-entry={tvd['disc_mean'][i]:+.4f}  trade-entry={tvd['trade_mean'][i]:+.4f}  n={tvd['n_events'][i]}")
+
+    print("\n--- Section 05: committee jurisdiction ---")
+    cmt = build_committee_jurisdiction(buy)
+    write("committee_jurisdiction.json", cmt)
+    def _fmt(v):
+        return f"{v:+.4f}" if v is not None else " NA   "
+    for c in cmt.get("categories", []):
+        ij = c["in_jurisdiction"]
+        oj = c["out_jurisdiction"]
+        print(f"  {c['category']:<12} in-juris n={ij['n']:>3} mean={_fmt(ij['mean_excess'])} | out-juris n={oj['n']:>3} mean={_fmt(oj['mean_excess'])}")
+
+    print("\n--- Section 06: ETF wrappers ---")
+    etf = build_etf_performance()
+    write("etf_performance.json", etf)
+    for t in ["NANC", "KRUZ", "SPY"]:
+        s = etf.get("series", {}).get(t)
+        if s:
+            print(f"  {t}: cum_ret={s['cum_return']:+.2%}  ann={s.get('ann_return', 0):+.2%}  sharpe={s.get('sharpe', 0):+.2f}")
+
+    print("\n--- Section 07: aggregate backtest ---")
+    kpi = build_kpi_strip(buy)
+    write("kpi_strip.json", kpi)
+    write("forward_returns_curve.json", build_forward_returns_curve(buy))
+    write("sensitivity_heatmap.json", build_sensitivity(buy))
+    print(f"  KPI: n={kpi['n_events']}, win_rate={kpi['win_rate_60d']:.1%}, mean_excess={kpi['mean_excess_60d']:+.2%}, sharpe={kpi['sharpe_60d']:+.2f}, t={kpi['t_stat_60d']:+.2f}")
+
+    print("\n--- Section 08: sells ---")
+    sells = build_sell_herd_returns(sell)
+    write("sell_herd_returns.json", sells)
+    skpi = sells["kpi"]
+    print(f"  Sell KPI: n={skpi['n_events']}, win_rate={skpi['win_rate_60d']:.1%}, mean_excess={skpi['mean_excess_60d']:+.2%}, sharpe={skpi['sharpe_60d']:+.2f}, t={skpi['t_stat_60d']:+.2f}")
+
+    print("\nAll chart JSONs written.")
 
 
 if __name__ == "__main__":

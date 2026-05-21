@@ -1,3 +1,4 @@
+import argparse
 import re
 import pandas as pd
 from pathlib import Path
@@ -7,7 +8,6 @@ DATA_DIR = Path(__file__).parent / "data"
 DATA_DIR.mkdir(exist_ok=True)
 
 INPUT = DATA_DIR / "all_trades.parquet"
-OUTPUT = DATA_DIR / "events_buy.parquet"
 
 ETF_TICKERS = {
     "SPY","QQQ","VTI","VOO","IWM","EEM","GLD","TLT","SLV","IAU","BND","AGG",
@@ -89,28 +89,33 @@ def find_herding_events_extended(df, min_politicians, window_days):
     return events
 
 
-def load_and_filter():
+def load_and_filter(tx_type):
     df = pd.read_parquet(INPUT)
     df["trade_date"] = pd.to_datetime(df["trade_date"])
     df["disclosure_date"] = pd.to_datetime(df["disclosure_date"])
 
-    df = df[df["tx_type"] == "buy"].copy()
+    df = df[df["tx_type"] == tx_type].copy()
     df = df[df["ticker"].notna() & (df["ticker"] != "") & (df["ticker"] != "N/A")]
 
     ticker_mask = df["ticker"].isin(ETF_TICKERS)
     issuer_mask = df["issuer"].str.lower().str.contains("|".join(ETF_ISSUER_KEYWORDS), na=False)
     df = df[~(ticker_mask | issuer_mask)].copy()
 
-    print(f"Rows after filtering: {len(df):,}")
+    print(f"tx_type={tx_type} | Rows after filtering: {len(df):,}")
     print(f"Unique tickers: {df['ticker'].nunique()}")
     return df
 
 
 def main():
-    if OUTPUT.exists():
-        print(f"Notice: {OUTPUT.name} already exists — re-running.")
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--tx-type", choices=["buy", "sell"], default="buy")
+    args = ap.parse_args()
 
-    df = load_and_filter()
+    output = DATA_DIR / f"events_{args.tx_type}.parquet"
+    if output.exists():
+        print(f"Notice: {output.name} already exists — re-running.")
+
+    df = load_and_filter(args.tx_type)
 
     all_events = []
     for threshold in THRESHOLDS:
@@ -120,8 +125,8 @@ def main():
             print(f"  threshold={threshold}, window={window}d -> {len(events)} events")
 
     result = pd.DataFrame(all_events)
-    result.to_parquet(OUTPUT, index=False)
-    print(f"\nSaved {len(result):,} total event rows to {OUTPUT.name}")
+    result.to_parquet(output, index=False)
+    print(f"\nSaved {len(result):,} total event rows to {output.name}")
 
     print("\n--- Event count grid (threshold x window) ---")
     grid = result.groupby(["threshold", "window_days"]).size().unstack("window_days")

@@ -1,0 +1,7 @@
+{
+  "n_events": 100,
+  "win_rate_60d": 0.52,
+  "mean_excess_60d": -0.0035,
+  "sharpe_60d": -0.0434,
+  "t_stat_60d": -0.2117
+}

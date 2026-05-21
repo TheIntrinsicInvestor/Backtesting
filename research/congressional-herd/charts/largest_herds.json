@@ -1,0 +1,72 @@
+[
+  {
+    "ticker": "AAPL",
+    "window_start": "2024-10-02",
+    "politician_count": 6,
+    "politicians_preview": "",
+    "excess_60d": null
+  },
+  {
+    "ticker": "MSFT",
+    "window_start": "2024-11-19",
+    "politician_count": 5,
+    "politicians_preview": "",
+    "excess_60d": null
+  },
+  {
+    "ticker": "AVGO",
+    "window_start": "2024-06-24",
+    "politician_count": 5,
+    "politicians_preview": "",
+    "excess_60d": 0.0887
+  },
+  {
+    "ticker": "JNJ",
+    "window_start": "2024-11-15",
+    "politician_count": 5,
+    "politicians_preview": "",
+    "excess_60d": null
+  },
+  {
+    "ticker": "ABT",
+    "window_start": "2024-07-02",
+    "politician_count": 5,
+    "politicians_preview": "",
+    "excess_60d": 0.0044
+  },
+  {
+    "ticker": "GOOGL",
+    "window_start": "2023-10-02",
+    "politician_count": 5,
+    "politicians_preview": "",
+    "excess_60d": 0.0241
+  },
+  {
+    "ticker": "TSLA",
+    "window_start": "2024-10-21",
+    "politician_count": 5,
+    "politicians_preview": "",
+    "excess_60d": null
+  },
+  {
+    "ticker": "MSFT",
+    "window_start": "2024-06-13",
+    "politician_count": 5,
+    "politicians_preview": "",
+    "excess_60d": -0.1157
+  },
+  {
+    "ticker": "HD",
+    "window_start": "2024-05-28",
+    "politician_count": 4,
+    "politicians_preview": "",
+    "excess_60d": 0.1055
+  },
+  {
+    "ticker": "CRM",
+    "window_start": "2024-10-14",
+    "politician_count": 4,
+    "politicians_preview": "",
+    "excess_60d": null
+  }
+]

@@ -1,0 +1,94 @@
+{
+  "categories": [
+    {
+      "category": "Financials",
+      "in_jurisdiction": {
+        "n": 3,
+        "mean_excess": 0.0666,
+        "win_rate": 1.0
+      },
+      "out_jurisdiction": {
+        "n": 15,
+        "mean_excess": 0.0533,
+        "win_rate": 0.7333
+      },
+      "non_sector": {
+        "n": 82,
+        "mean_excess": -0.0165,
+        "win_rate": 0.4634
+      }
+    },
+    {
+      "category": "Energy",
+      "in_jurisdiction": {
+        "n": 0,
+        "mean_excess": null,
+        "win_rate": null
+      },
+      "out_jurisdiction": {
+        "n": 0,
+        "mean_excess": null,
+        "win_rate": null
+      },
+      "non_sector": {
+        "n": 100,
+        "mean_excess": -0.0035,
+        "win_rate": 0.52
+      }
+    },
+    {
+      "category": "Health",
+      "in_jurisdiction": {
+        "n": 6,
+        "mean_excess": 0.0004,
+        "win_rate": 0.6667
+      },
+      "out_jurisdiction": {
+        "n": 0,
+        "mean_excess": null,
+        "win_rate": null
+      },
+      "non_sector": {
+        "n": 94,
+        "mean_excess": -0.0038,
+        "win_rate": 0.5106
+      }
+    },
+    {
+      "category": "IT",
+      "in_jurisdiction": {
+        "n": 32,
+        "mean_excess": -0.0398,
+        "win_rate": 0.375
+      },
+      "out_jurisdiction": {
+        "n": 3,
+        "mean_excess": -0.018,
+        "win_rate": 0.6667
+      },
+      "non_sector": {
+        "n": 65,
+        "mean_excess": 0.015,
+        "win_rate": 0.5846
+      }
+    },
+    {
+      "category": "Defense",
+      "in_jurisdiction": {
+        "n": 1,
+        "mean_excess": null,
+        "win_rate": null
+      },
+      "out_jurisdiction": {
+        "n": 0,
+        "mean_excess": null,
+        "win_rate": null
+      },
+      "non_sector": {
+        "n": 99,
+        "mean_excess": -0.0033,
+        "win_rate": 0.5253
+      }
+    }
+  ]
+}
