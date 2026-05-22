@@ -3,19 +3,19 @@
     {
       "category": "Financials",
       "in_jurisdiction": {
-        "n": 3,
-        "mean_excess": 0.0666,
-        "win_rate": 1.0
+        "n": 19,
+        "mean_excess": -0.0157,
+        "win_rate": 0.5789
       },
       "out_jurisdiction": {
-        "n": 15,
-        "mean_excess": 0.0533,
-        "win_rate": 0.7333
+        "n": 43,
+        "mean_excess": 0.0052,
+        "win_rate": 0.6279
       },
       "non_sector": {
-        "n": 82,
-        "mean_excess": -0.0165,
-        "win_rate": 0.4634
+        "n": 278,
+        "mean_excess": 0.0025,
+        "win_rate": 0.4568
       }
     },
     {
@@ -31,53 +31,53 @@
         "win_rate": null
       },
       "non_sector": {
-        "n": 100,
-        "mean_excess": -0.0035,
-        "win_rate": 0.52
+        "n": 340,
+        "mean_excess": 0.0019,
+        "win_rate": 0.4853
       }
     },
     {
       "category": "Health",
       "in_jurisdiction": {
-        "n": 6,
-        "mean_excess": 0.0004,
-        "win_rate": 0.6667
+        "n": 15,
+        "mean_excess": -0.0087,
+        "win_rate": 0.5333
       },
       "out_jurisdiction": {
-        "n": 0,
-        "mean_excess": null,
-        "win_rate": null
+        "n": 6,
+        "mean_excess": -0.0777,
+        "win_rate": 0.3333
       },
       "non_sector": {
-        "n": 94,
-        "mean_excess": -0.0038,
-        "win_rate": 0.5106
+        "n": 319,
+        "mean_excess": 0.0038,
+        "win_rate": 0.4859
       }
     },
     {
       "category": "IT",
       "in_jurisdiction": {
-        "n": 32,
-        "mean_excess": -0.0398,
-        "win_rate": 0.375
+        "n": 105,
+        "mean_excess": 0.0241,
+        "win_rate": 0.5238
       },
       "out_jurisdiction": {
-        "n": 3,
-        "mean_excess": -0.018,
-        "win_rate": 0.6667
+        "n": 13,
+        "mean_excess": 0.0424,
+        "win_rate": 0.5385
       },
       "non_sector": {
-        "n": 65,
-        "mean_excess": 0.015,
-        "win_rate": 0.5846
+        "n": 222,
+        "mean_excess": -0.0111,
+        "win_rate": 0.464
       }
     },
     {
       "category": "Defense",
       "in_jurisdiction": {
-        "n": 1,
-        "mean_excess": null,
-        "win_rate": null
+        "n": 3,
+        "mean_excess": -0.0926,
+        "win_rate": 0.0
       },
       "out_jurisdiction": {
         "n": 0,
@@ -85,9 +85,9 @@
         "win_rate": null
       },
       "non_sector": {
-        "n": 99,
-        "mean_excess": -0.0033,
-        "win_rate": 0.5253
+        "n": 337,
+        "mean_excess": 0.0027,
+        "win_rate": 0.4896
       }
     }
   ]

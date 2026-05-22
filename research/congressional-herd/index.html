@@ -151,7 +151,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
     <div class="hero-meta">
       <div class="hero-meta-item"><strong>Author</strong>Brian Liew, BSc Accounting and Finance, LSE</div>
       <div class="hero-meta-item"><strong>Published</strong>May 2025</div>
-      <div class="hero-meta-item"><strong>Period</strong>2023 to 2024, n=100 herding events</div>
+      <div class="hero-meta-item"><strong>Period</strong>2023 to 2024, n=340 herding events</div>
       <div class="hero-meta-item"><strong>Data</strong>Capitol Trades, CRSP, congress-legislators, Yahoo Finance</div>
       <a href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/congressional-herd" target="_blank" rel="noopener" class="gh-btn">
         <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
@@ -170,17 +170,17 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
     </div>
     <div class="kpi-cell">
       <div class="kpi-label">Excess during lag (vs SPY)</div>
-      <div class="kpi-value red">-0.9%</div>
+      <div class="kpi-value red">-0.7%</div>
       <div class="kpi-sub">n=131. Politicians underperform too</div>
     </div>
     <div class="kpi-cell">
       <div class="kpi-label">Aggregate signal (60d)</div>
-      <div class="kpi-value red">-0.4%</div>
-      <div class="kpi-sub">n=100, t=-0.21, indistinguishable from zero</div>
+      <div class="kpi-value red">+0.2%</div>
+      <div class="kpi-sub">n=340, t=+0.20, indistinguishable from zero</div>
     </div>
     <div class="kpi-cell">
       <div class="kpi-label">KRUZ vs SPY (cumulative)</div>
-      <div class="kpi-value red">-19.6%</div>
+      <div class="kpi-value red">-19.9%</div>
       <div class="kpi-sub">Republican-tracking ETF, Feb 2023 to Dec 2024</div>
     </div>
   </div>
@@ -271,19 +271,19 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
       Even setting the disclosure lag aside, the second problem is the universe of stocks Congress actually trades. If congressional members held genuine informational advantages, you would expect their high-conviction herds to concentrate in less-followed securities where private information is more likely to matter. Instead, the data shows the opposite. The most herded names in the 2023 to 2024 sample are Microsoft, Apple, Google, Nvidia, JPMorgan, and Amazon. These are the most analysed equities in global markets. There is no information edge to be had in MSFT that is not already priced into a stock owned by every index fund on earth.
     </p>
     <p>
-      The party composition reinforces the point. Of the 83 herding events with complete party data at the primary threshold, 83% involve both parties buying simultaneously. There are essentially no exclusively Democratic or exclusively Republican high-conviction herds. Whatever drives the herding, it is not partisan-specific information. Both sides of the aisle converge on the same large-cap names independently, which is what you would expect if the underlying behaviour were a function of mainstream financial advisor recommendations and brand-name familiarity rather than committee-jurisdiction or insider channels.
+      The party composition reinforces the point. Of the 297 herding events with complete party data at the primary threshold, 87% involve both parties buying simultaneously. There are essentially no exclusively Democratic or exclusively Republican high-conviction herds. Whatever drives the herding, it is not partisan-specific information. Both sides of the aisle converge on the same large-cap names independently, which is what you would expect if the underlying behaviour were a function of mainstream financial advisor recommendations and brand-name familiarity rather than committee-jurisdiction or insider channels.
     </p>
     <div class="highlight-box">
       <div>
-        <div class="hb-val">100</div>
+        <div class="hb-val">340</div>
         <div class="hb-label">Herding events (3+ pols, 30d)</div>
       </div>
       <div>
-        <div class="hb-val">83%</div>
+        <div class="hb-val">87%</div>
         <div class="hb-label">Bipartisan (both parties present)</div>
       </div>
       <div>
-        <div class="hb-val">35</div>
+        <div class="hb-val">118</div>
         <div class="hb-label">Information Tech herds (largest cluster)</div>
       </div>
     </div>
@@ -302,72 +302,72 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
   </thead>
   <tbody>
     <tr>
+      <td style="font-family:var(--mono);font-weight:600">AMZN</td>
+      <td style="font-family:var(--mono)">2025-03-20</td>
+      <td style="text-align:right;font-family:var(--mono)">11</td>
+      <td style="font-size:.75rem;color:var(--muted)"></td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-5.3%</td>
+    </tr>
+    <tr>
+      <td style="font-family:var(--mono);font-weight:600">UNH</td>
+      <td style="font-family:var(--mono)">2025-03-31</td>
+      <td style="text-align:right;font-family:var(--mono)">10</td>
+      <td style="font-size:.75rem;color:var(--muted)"></td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-47.6%</td>
+    </tr>
+    <tr>
+      <td style="font-family:var(--mono);font-weight:600">MSFT</td>
+      <td style="font-family:var(--mono)">2025-01-24</td>
+      <td style="text-align:right;font-family:var(--mono)">8</td>
+      <td style="font-size:.75rem;color:var(--muted)"></td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+15.7%</td>
+    </tr>
+    <tr>
+      <td style="font-family:var(--mono);font-weight:600">NVDA</td>
+      <td style="font-family:var(--mono)">2025-04-03</td>
+      <td style="text-align:right;font-family:var(--mono)">8</td>
+      <td style="font-size:.75rem;color:var(--muted)"></td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+27.0%</td>
+    </tr>
+    <tr>
+      <td style="font-family:var(--mono);font-weight:600">AMZN</td>
+      <td style="font-family:var(--mono)">2025-02-04</td>
+      <td style="text-align:right;font-family:var(--mono)">8</td>
+      <td style="font-size:.75rem;color:var(--muted)"></td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.2%</td>
+    </tr>
+    <tr>
+      <td style="font-family:var(--mono);font-weight:600">AMZN</td>
+      <td style="font-family:var(--mono)">2024-12-24</td>
+      <td style="text-align:right;font-family:var(--mono)">7</td>
+      <td style="font-size:.75rem;color:var(--muted)"></td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-6.9%</td>
+    </tr>
+    <tr>
+      <td style="font-family:var(--mono);font-weight:600">NVDA</td>
+      <td style="font-family:var(--mono)">2025-02-24</td>
+      <td style="text-align:right;font-family:var(--mono)">7</td>
+      <td style="font-size:.75rem;color:var(--muted)"></td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+31.4%</td>
+    </tr>
+    <tr>
+      <td style="font-family:var(--mono);font-weight:600">NVDA</td>
+      <td style="font-family:var(--mono)">2025-01-02</td>
+      <td style="text-align:right;font-family:var(--mono)">7</td>
+      <td style="font-size:.75rem;color:var(--muted)"></td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-1.8%</td>
+    </tr>
+    <tr>
       <td style="font-family:var(--mono);font-weight:600">AAPL</td>
       <td style="font-family:var(--mono)">2024-10-02</td>
       <td style="text-align:right;font-family:var(--mono)">6</td>
       <td style="font-size:.75rem;color:var(--muted)"></td>
-      <td style="text-align:right;font-family:var(--mono);"><span style="color:var(--hint)">Censored</span></td>
-    </tr>
-    <tr>
-      <td style="font-family:var(--mono);font-weight:600">MSFT</td>
-      <td style="font-family:var(--mono)">2024-11-19</td>
-      <td style="text-align:right;font-family:var(--mono)">5</td>
-      <td style="font-size:.75rem;color:var(--muted)"></td>
-      <td style="text-align:right;font-family:var(--mono);"><span style="color:var(--hint)">Censored</span></td>
-    </tr>
-    <tr>
-      <td style="font-family:var(--mono);font-weight:600">AVGO</td>
-      <td style="font-family:var(--mono)">2024-06-24</td>
-      <td style="text-align:right;font-family:var(--mono)">5</td>
-      <td style="font-size:.75rem;color:var(--muted)"></td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+8.9%</td>
-    </tr>
-    <tr>
-      <td style="font-family:var(--mono);font-weight:600">JNJ</td>
-      <td style="font-family:var(--mono)">2024-11-15</td>
-      <td style="text-align:right;font-family:var(--mono)">5</td>
-      <td style="font-size:.75rem;color:var(--muted)"></td>
-      <td style="text-align:right;font-family:var(--mono);"><span style="color:var(--hint)">Censored</span></td>
-    </tr>
-    <tr>
-      <td style="font-family:var(--mono);font-weight:600">ABT</td>
-      <td style="font-family:var(--mono)">2024-07-02</td>
-      <td style="text-align:right;font-family:var(--mono)">5</td>
-      <td style="font-size:.75rem;color:var(--muted)"></td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.4%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+7.2%</td>
     </tr>
     <tr>
       <td style="font-family:var(--mono);font-weight:600">GOOGL</td>
-      <td style="font-family:var(--mono)">2023-10-02</td>
-      <td style="text-align:right;font-family:var(--mono)">5</td>
-      <td style="font-size:.75rem;color:var(--muted)"></td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+2.4%</td>
-    </tr>
-    <tr>
-      <td style="font-family:var(--mono);font-weight:600">TSLA</td>
-      <td style="font-family:var(--mono)">2024-10-21</td>
-      <td style="text-align:right;font-family:var(--mono)">5</td>
-      <td style="font-size:.75rem;color:var(--muted)"></td>
-      <td style="text-align:right;font-family:var(--mono);"><span style="color:var(--hint)">Censored</span></td>
-    </tr>
-    <tr>
-      <td style="font-family:var(--mono);font-weight:600">MSFT</td>
-      <td style="font-family:var(--mono)">2024-06-13</td>
-      <td style="text-align:right;font-family:var(--mono)">5</td>
-      <td style="font-size:.75rem;color:var(--muted)"></td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-11.6%</td>
-    </tr>
-    <tr>
-      <td style="font-family:var(--mono);font-weight:600">HD</td>
-      <td style="font-family:var(--mono)">2024-05-28</td>
-      <td style="text-align:right;font-family:var(--mono)">4</td>
-      <td style="font-size:.75rem;color:var(--muted)"></td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+10.5%</td>
-    </tr>
-    <tr>
-      <td style="font-family:var(--mono);font-weight:600">CRM</td>
-      <td style="font-family:var(--mono)">2024-10-14</td>
-      <td style="text-align:right;font-family:var(--mono)">4</td>
+      <td style="font-family:var(--mono)">2025-10-10</td>
+      <td style="text-align:right;font-family:var(--mono)">6</td>
       <td style="font-size:.75rem;color:var(--muted)"></td>
       <td style="text-align:right;font-family:var(--mono);"><span style="color:var(--hint)">Censored</span></td>
     </tr>
@@ -388,45 +388,57 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
   <tbody>
     <tr>
       <td>Information Technology</td>
-      <td style="text-align:right;font-family:var(--mono)">35</td>
-      <td style="text-align:right;font-family:var(--mono)">40.0%</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-3.8%</td>
+      <td style="text-align:right;font-family:var(--mono)">118</td>
+      <td style="text-align:right;font-family:var(--mono)">52.5%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+2.6%</td>
     </tr>
     <tr>
       <td>Consumer Discretionary</td>
-      <td style="text-align:right;font-family:var(--mono)">22</td>
-      <td style="text-align:right;font-family:var(--mono)">59.1%</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+1.6%</td>
+      <td style="text-align:right;font-family:var(--mono)">88</td>
+      <td style="text-align:right;font-family:var(--mono)">38.6%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-1.4%</td>
     </tr>
     <tr>
       <td>Financials</td>
-      <td style="text-align:right;font-family:var(--mono)">18</td>
-      <td style="text-align:right;font-family:var(--mono)">77.8%</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+5.5%</td>
+      <td style="text-align:right;font-family:var(--mono)">62</td>
+      <td style="text-align:right;font-family:var(--mono)">61.3%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-0.1%</td>
     </tr>
     <tr>
       <td>Health Care</td>
-      <td style="text-align:right;font-family:var(--mono)">6</td>
-      <td style="text-align:right;font-family:var(--mono)">66.7%</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.0%</td>
+      <td style="text-align:right;font-family:var(--mono)">21</td>
+      <td style="text-align:right;font-family:var(--mono)">47.6%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-2.8%</td>
     </tr>
     <tr>
-      <td>Communication Services</td>
-      <td style="text-align:right;font-family:var(--mono)">5</td>
-      <td style="text-align:right;font-family:var(--mono)">60.0%</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+1.8%</td>
+      <td>Industrials</td>
+      <td style="text-align:right;font-family:var(--mono)">21</td>
+      <td style="text-align:right;font-family:var(--mono)">61.9%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+1.5%</td>
     </tr>
     <tr>
       <td>Consumer Staples</td>
-      <td style="text-align:right;font-family:var(--mono)">5</td>
-      <td style="text-align:right;font-family:var(--mono)">20.0%</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-5.1%</td>
+      <td style="text-align:right;font-family:var(--mono)">12</td>
+      <td style="text-align:right;font-family:var(--mono)">16.7%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-5.8%</td>
+    </tr>
+    <tr>
+      <td>Communication Services</td>
+      <td style="text-align:right;font-family:var(--mono)">7</td>
+      <td style="text-align:right;font-family:var(--mono)">42.9%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-2.6%</td>
+    </tr>
+    <tr>
+      <td>Materials</td>
+      <td style="text-align:right;font-family:var(--mono)">7</td>
+      <td style="text-align:right;font-family:var(--mono)">14.3%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-7.1%</td>
     </tr>
   </tbody>
 </table>
 
     <div class="callout purple">
-      <strong>Sector concentration.</strong> Information Technology is the most-herded sector and also the worst-performing for followers: 35 events at -3.8% mean excess versus SPY. Apparent positives in Financials (n=18) and Consumer Discretionary (n=22) are too thinly sampled to support inference. Real Estate, Utilities, and Energy do not even produce enough herds at the 3+ threshold to compute statistics.
+      <strong>Sector concentration.</strong> Information Technology is the most-herded sector and also the worst-performing for followers: 118 events at -2.6% mean excess versus SPY. Apparent positives in Financials (n=18) and Consumer Discretionary (n=22) are too thinly sampled to support inference. Real Estate, Utilities, and Energy do not even produce enough herds at the 3+ threshold to compute statistics.
     </div>
   </div>
 </section>
@@ -437,22 +449,22 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
     <div class="section-label"><span class="section-counter">04</span><span>The Smoking Gun</span></div>
     <h2>Even the politicians do not <em>beat the market</em></h2>
     <p>
-      Here is the critical test. The standard pushback against disclosure-lag critiques is that politicians clearly profit from their trades, and even if the public misses some of that gain, what remains might still be a worthwhile signal. To check this, the analysis computes returns two ways for every primary herding event: once from the trade date itself (the politician's actual entry), and once from the disclosure date (the follower's earliest possible entry). The 131 events with both dates available form the test sample.
+      Here is the critical test. The standard pushback against disclosure-lag critiques is that politicians clearly profit from their trades, and even if the public misses some of that gain, what remains might still be a worthwhile signal. To check this, the analysis computes returns two ways for every primary herding event: once from the trade date itself (the politician's actual entry), and once from the disclosure date (the follower's earliest possible entry). The 376 events with both dates available form the test sample.
     </p>
     <p>
-      During the median 26-day lag window, the herded stocks rose +2.6% in absolute terms. That sounds informative until you compare against the market. SPY rose +3.5% over the same windows. The herded stocks underperformed the index by -0.9% during the politicians' own holding window. 46.6% of these stocks beat SPY during the lag period, meaning 53.4% underperformed even before any follower could enter.
+      During the median 26-day lag window, the herded stocks rose +2.3% in absolute terms. That sounds informative until you compare against the market. SPY rose +2.9% over the same windows. The herded stocks underperformed the index by -0.7% during the politicians' own holding window. 48.4% of these stocks beat SPY during the lag period, meaning 51.6% underperformed even before any follower could enter.
     </p>
     <div class="highlight-box">
       <div>
-        <div class="hb-val">-0.9%</div>
+        <div class="hb-val">-0.7%</div>
         <div class="hb-label">Mean excess vs SPY during lag</div>
       </div>
       <div>
-        <div class="hb-val">47%</div>
+        <div class="hb-val">48%</div>
         <div class="hb-label">Win rate during lag (less than half)</div>
       </div>
       <div>
-        <div class="hb-val">+2.6%</div>
+        <div class="hb-val">+2.3%</div>
         <div class="hb-label">Absolute return during lag (pure beta)</div>
       </div>
     </div>
@@ -502,16 +514,16 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
     <tr>
       <td>Financials</td>
       <td style="font-size:.78rem;color:var(--muted)">In-jurisdiction (member on relevant cmte)</td>
-      <td style="text-align:right;font-family:var(--mono)">3</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+6.7%</td>
-      <td style="text-align:right;font-family:var(--mono)">100.0%</td>
+      <td style="text-align:right;font-family:var(--mono)">19</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-1.6%</td>
+      <td style="text-align:right;font-family:var(--mono)">57.9%</td>
     </tr>
     <tr>
       <td></td>
       <td style="font-size:.78rem;color:var(--muted)">Same members, buying other sectors</td>
-      <td style="text-align:right;font-family:var(--mono)">82</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-1.7%</td>
-      <td style="text-align:right;font-family:var(--mono)">46.3%</td>
+      <td style="text-align:right;font-family:var(--mono)">278</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.2%</td>
+      <td style="text-align:right;font-family:var(--mono)">45.7%</td>
     </tr>
     <tr>
       <td>Energy</td>
@@ -523,51 +535,51 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
     <tr>
       <td></td>
       <td style="font-size:.78rem;color:var(--muted)">Same members, buying other sectors</td>
-      <td style="text-align:right;font-family:var(--mono)">100</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-0.4%</td>
-      <td style="text-align:right;font-family:var(--mono)">52.0%</td>
+      <td style="text-align:right;font-family:var(--mono)">340</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.2%</td>
+      <td style="text-align:right;font-family:var(--mono)">48.5%</td>
     </tr>
     <tr>
       <td>Health</td>
       <td style="font-size:.78rem;color:var(--muted)">In-jurisdiction (member on relevant cmte)</td>
-      <td style="text-align:right;font-family:var(--mono)">6</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.0%</td>
-      <td style="text-align:right;font-family:var(--mono)">66.7%</td>
+      <td style="text-align:right;font-family:var(--mono)">15</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-0.9%</td>
+      <td style="text-align:right;font-family:var(--mono)">53.3%</td>
     </tr>
     <tr>
       <td></td>
       <td style="font-size:.78rem;color:var(--muted)">Same members, buying other sectors</td>
-      <td style="text-align:right;font-family:var(--mono)">94</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-0.4%</td>
-      <td style="text-align:right;font-family:var(--mono)">51.1%</td>
+      <td style="text-align:right;font-family:var(--mono)">319</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.4%</td>
+      <td style="text-align:right;font-family:var(--mono)">48.6%</td>
     </tr>
     <tr>
       <td>IT</td>
       <td style="font-size:.78rem;color:var(--muted)">In-jurisdiction (member on relevant cmte)</td>
-      <td style="text-align:right;font-family:var(--mono)">32</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-4.0%</td>
-      <td style="text-align:right;font-family:var(--mono)">37.5%</td>
+      <td style="text-align:right;font-family:var(--mono)">105</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+2.4%</td>
+      <td style="text-align:right;font-family:var(--mono)">52.4%</td>
     </tr>
     <tr>
       <td></td>
       <td style="font-size:.78rem;color:var(--muted)">Same members, buying other sectors</td>
-      <td style="text-align:right;font-family:var(--mono)">65</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+1.5%</td>
-      <td style="text-align:right;font-family:var(--mono)">58.5%</td>
+      <td style="text-align:right;font-family:var(--mono)">222</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-1.1%</td>
+      <td style="text-align:right;font-family:var(--mono)">46.4%</td>
     </tr>
     <tr>
       <td>Defense</td>
       <td style="font-size:.78rem;color:var(--muted)">In-jurisdiction (member on relevant cmte)</td>
-      <td style="text-align:right;font-family:var(--mono)">1</td>
-      <td style="text-align:right;font-family:var(--mono);"><span style="color:var(--hint)">n too small</span></td>
-      <td style="text-align:right;font-family:var(--mono)">&#8212;</td>
+      <td style="text-align:right;font-family:var(--mono)">3</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-9.3%</td>
+      <td style="text-align:right;font-family:var(--mono)">0.0%</td>
     </tr>
     <tr>
       <td></td>
       <td style="font-size:.78rem;color:var(--muted)">Same members, buying other sectors</td>
-      <td style="text-align:right;font-family:var(--mono)">99</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-0.3%</td>
-      <td style="text-align:right;font-family:var(--mono)">52.5%</td>
+      <td style="text-align:right;font-family:var(--mono)">337</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.3%</td>
+      <td style="text-align:right;font-family:var(--mono)">49.0%</td>
     </tr>
   </tbody>
 </table>
@@ -602,23 +614,23 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
     </div>
     <div class="highlight-box">
       <div>
-        <div class="hb-val">+54.0%</div>
-        <div class="hb-label">NANC cumulative (Sharpe +1.80)</div>
+        <div class="hb-val">+79.2%</div>
+        <div class="hb-label">NANC cumulative (Sharpe +1.46)</div>
       </div>
       <div>
-        <div class="hb-val">+45.7%</div>
-        <div class="hb-label">SPY cumulative (Sharpe +1.89)</div>
+        <div class="hb-val">+64.2%</div>
+        <div class="hb-label">SPY cumulative (Sharpe +1.46)</div>
       </div>
       <div>
-        <div class="hb-val">+26.0%</div>
-        <div class="hb-label">KRUZ cumulative (Sharpe +1.14)</div>
+        <div class="hb-val">+44.4%</div>
+        <div class="hb-label">KRUZ cumulative (Sharpe +1.10)</div>
       </div>
     </div>
     <p>
-      The headline numbers tell two stories. NANC's +54.0% cumulative return narrowly beat SPY's +45.7% in absolute terms, but its risk-adjusted return (Sharpe +1.80) trailed SPY's +1.89. NANC took more risk to deliver a modestly higher return, which is consistent with a portfolio that overweights tech mega-caps. Tech crushed the market in 2023 and 2024. A portfolio that herds into the same names Congress herds into, also herds into the names that drove the bull market. That is sector beta, not informational alpha.
+      The headline numbers tell two stories. NANC's +79.2% cumulative return narrowly beat SPY's +64.2% in absolute terms, but its risk-adjusted return (Sharpe +1.46) trailed SPY's +1.46. NANC took more risk to deliver a modestly higher return, which is consistent with a portfolio that overweights tech mega-caps. Tech crushed the market in 2023 and 2024. A portfolio that herds into the same names Congress herds into, also herds into the names that drove the bull market. That is sector beta, not informational alpha.
     </p>
     <p>
-      KRUZ is the sharper indictment. The Republican-tracking ETF returned +26.0% cumulative over the same period, trailing SPY by roughly 20 percentage points. Sharpe of +1.14 is significantly below SPY's +1.89. If congressional information were valuable, KRUZ should at minimum match the index. It does not. Investors paying 0.75% annually to follow Republican members' trades have underperformed by a margin that swamps the expense ratio many times over.
+      KRUZ is the sharper indictment. The Republican-tracking ETF returned +44.4% cumulative over the same period, trailing SPY by roughly 20 percentage points. Sharpe of +1.10 is significantly below SPY's +1.46. If congressional information were valuable, KRUZ should at minimum match the index. It does not. Investors paying 0.75% annually to follow Republican members' trades have underperformed by a margin that swamps the expense ratio many times over.
     </p>
     <div class="callout red">
       <strong>If you are paying 0.75% in fees for this, stop.</strong> NANC's cumulative outperformance is sector beta, not alpha. Risk-adjusted, it loses to SPY at lower cost. KRUZ has underperformed SPY by approximately 20 points over 22 months. Both wrappers are wrapping disclosure data that, on the evidence in Sections 02 to 05, has no informational content for outside investors.
@@ -632,7 +644,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
     <div class="section-label"><span class="section-counter">07</span><span>Aggregate Backtest</span></div>
     <h2>What you actually get from <em>mechanically following the feed</em></h2>
     <p>
-      Pulling everything together, the aggregate backtest mechanically buys every herding event on the first trading day on or after the disclosure date and holds for 60 days. Across 100 events with complete return data in the primary parameter set (3+ politicians, 30-day rolling window), the win rate is 52.0%. Mean 60-day excess return versus SPY is -0.4%. Sharpe is -0.04. The t-statistic of -0.21 is well within noise.
+      Pulling everything together, the aggregate backtest mechanically buys every herding event on the first trading day on or after the disclosure date and holds for 60 days. Across 340 events with complete return data in the primary parameter set (3+ politicians, 30-day rolling window), the win rate is 48.5%. Mean 60-day excess return versus SPY is +0.2%. Sharpe is +0.02. The t-statistic of +0.20 is well within noise.
     </p>
     <div class="chart-box">
       <div class="chart-title">Mean excess return vs SPY by holding horizon (with IQR band)</div>
@@ -660,27 +672,27 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
   <tbody>
     <tr>
       <td class="hm-row-label">2+</td>
-      <td class="hm-cell" style="background:#f7f2ea">48.5%<br><span style="font-size:.65rem;color:#8aa49e">n=305</span></td>
-      <td class="hm-cell" style="background:#f7f1ea">47.2%<br><span style="font-size:.65rem;color:#8aa49e">n=398</span></td>
-      <td class="hm-cell" style="background:#f7f2ea">48.0%<br><span style="font-size:.65rem;color:#8aa49e">n=454</span></td>
+      <td class="hm-cell" style="background:#f7f1e9">46.7%<br><span style="font-size:.65rem;color:#8aa49e">n=910</span></td>
+      <td class="hm-cell" style="background:#f7f0e9">46.4%<br><span style="font-size:.65rem;color:#8aa49e">n=1072</span></td>
+      <td class="hm-cell" style="background:#f7f0e8">45.4%<br><span style="font-size:.65rem;color:#8aa49e">n=1089</span></td>
     </tr>
     <tr>
       <td class="hm-row-label">3+</td>
-      <td class="hm-cell" style="background:#f4f4ea">52.2%<br><span style="font-size:.65rem;color:#8aa49e">n=46</span></td>
-      <td class="hm-cell hm-primary" style="background:#f4f4ea">52.0%<br><span style="font-size:.65rem;color:#8aa49e">n=100</span></td>
-      <td class="hm-cell" style="background:#f7f2ea">47.8%<br><span style="font-size:.65rem;color:#8aa49e">n=157</span></td>
+      <td class="hm-cell" style="background:#f3f4ea">53.3%<br><span style="font-size:.65rem;color:#8aa49e">n=212</span></td>
+      <td class="hm-cell hm-primary" style="background:#f7f2eb">48.5%<br><span style="font-size:.65rem;color:#8aa49e">n=340</span></td>
+      <td class="hm-cell" style="background:#f7f1ea">47.2%<br><span style="font-size:.65rem;color:#8aa49e">n=458</span></td>
     </tr>
     <tr>
       <td class="hm-row-label">4+</td>
-      <td class="hm-cell" style="background:#f7f4ec">&#8212;<br><span style="font-size:.65rem;color:#8aa49e">n=4</span></td>
-      <td class="hm-cell" style="background:#fadeda">24.0%<br><span style="font-size:.65rem;color:#8aa49e">n=25</span></td>
-      <td class="hm-cell" style="background:#f7efe8">44.4%<br><span style="font-size:.65rem;color:#8aa49e">n=54</span></td>
+      <td class="hm-cell" style="background:#f5f4eb">50.9%<br><span style="font-size:.65rem;color:#8aa49e">n=57</span></td>
+      <td class="hm-cell" style="background:#f7f2ea">47.7%<br><span style="font-size:.65rem;color:#8aa49e">n=130</span></td>
+      <td class="hm-cell" style="background:#f7f3eb">49.3%<br><span style="font-size:.65rem;color:#8aa49e">n=205</span></td>
     </tr>
     <tr>
       <td class="hm-row-label">5+</td>
-      <td class="hm-cell" style="background:#f7f4ec">&#8212;<br><span style="font-size:.65rem;color:#8aa49e">n=0</span></td>
-      <td class="hm-cell" style="background:#eef4e8">57.1%<br><span style="font-size:.65rem;color:#8aa49e">n=7</span></td>
-      <td class="hm-cell" style="background:#f9e2dd">29.4%<br><span style="font-size:.65rem;color:#8aa49e">n=17</span></td>
+      <td class="hm-cell" style="background:#edf4e7">58.3%<br><span style="font-size:.65rem;color:#8aa49e">n=24</span></td>
+      <td class="hm-cell" style="background:#ebf4e6">60.0%<br><span style="font-size:.65rem;color:#8aa49e">n=55</span></td>
+      <td class="hm-cell" style="background:#f7f1e9">46.8%<br><span style="font-size:.65rem;color:#8aa49e">n=109</span></td>
     </tr>
   </tbody>
 </table>
@@ -697,7 +709,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
     <div class="section-label"><span class="section-counter">08</span><span>The Sell Side</span></div>
     <h2>A hint of something, <em>but not enough to act on</em></h2>
     <p>
-      The buy-side signal is conclusively null. The sell-side is more interesting, though it still does not survive a hard look. Applying the same 3+ politician, 30-day herding definition to disclosed sales rather than buys produces 115 sell-herding events with complete 60-day returns. The mean excess return versus SPY after a sell-herd is -2.4%, with a 46.1% win rate and a t-statistic of -1.56. That is a directional signal pointing the way the hypothesis would predict (sell herds are followed by underperformance), but the t-statistic does not cross any conventional significance threshold.
+      The buy-side signal is conclusively null. The sell-side is more interesting, though it still does not survive a hard look. Applying the same 3+ politician, 30-day herding definition to disclosed sales rather than buys produces 404 sell-herding events with complete 60-day returns. The mean excess return versus SPY after a sell-herd is -0.5%, with a 44.5% win rate and a t-statistic of -0.65. That is a directional signal pointing the way the hypothesis would predict (sell herds are followed by underperformance), but the t-statistic does not cross any conventional significance threshold.
     </p>
     <div class="chart-box">
       <div class="chart-title">Mean excess return vs SPY after sell herd, by holding horizon</div>
@@ -723,63 +735,63 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
   <tbody>
     <tr>
       <td style="font-family:var(--mono);font-weight:600">MSFT</td>
-      <td style="text-align:right;font-family:var(--mono)">11</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-2.2%</td>
-      <td style="text-align:right;font-family:var(--mono)">10</td>
-    </tr>
-    <tr>
-      <td style="font-family:var(--mono);font-weight:600">NVDA</td>
-      <td style="text-align:right;font-family:var(--mono)">6</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-46.1%</td>
-      <td style="text-align:right;font-family:var(--mono)">4</td>
+      <td style="text-align:right;font-family:var(--mono)">19</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.3%</td>
+      <td style="text-align:right;font-family:var(--mono)">18</td>
     </tr>
     <tr>
       <td style="font-family:var(--mono);font-weight:600">GOOGL</td>
-      <td style="text-align:right;font-family:var(--mono)">6</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-0.5%</td>
-      <td style="text-align:right;font-family:var(--mono)">6</td>
+      <td style="text-align:right;font-family:var(--mono)">14</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+4.9%</td>
+      <td style="text-align:right;font-family:var(--mono)">12</td>
+    </tr>
+    <tr>
+      <td style="font-family:var(--mono);font-weight:600">NVDA</td>
+      <td style="text-align:right;font-family:var(--mono)">13</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-15.6%</td>
+      <td style="text-align:right;font-family:var(--mono)">11</td>
     </tr>
     <tr>
       <td style="font-family:var(--mono);font-weight:600">AAPL</td>
-      <td style="text-align:right;font-family:var(--mono)">5</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-3.8%</td>
-      <td style="text-align:right;font-family:var(--mono)">5</td>
-    </tr>
-    <tr>
-      <td style="font-family:var(--mono);font-weight:600">TSLA</td>
-      <td style="text-align:right;font-family:var(--mono)">4</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-3.9%</td>
-      <td style="text-align:right;font-family:var(--mono)">3</td>
+      <td style="text-align:right;font-family:var(--mono)">12</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.5%</td>
+      <td style="text-align:right;font-family:var(--mono)">11</td>
     </tr>
     <tr>
       <td style="font-family:var(--mono);font-weight:600">JPM</td>
-      <td style="text-align:right;font-family:var(--mono)">4</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+3.5%</td>
-      <td style="text-align:right;font-family:var(--mono)">4</td>
+      <td style="text-align:right;font-family:var(--mono)">9</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+2.9%</td>
+      <td style="text-align:right;font-family:var(--mono)">9</td>
     </tr>
     <tr>
-      <td style="font-family:var(--mono);font-weight:600">VZ</td>
-      <td style="text-align:right;font-family:var(--mono)">3</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.1%</td>
-      <td style="text-align:right;font-family:var(--mono)">3</td>
-    </tr>
-    <tr>
-      <td style="font-family:var(--mono);font-weight:600">LLY</td>
-      <td style="text-align:right;font-family:var(--mono)">3</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-3.5%</td>
-      <td style="text-align:right;font-family:var(--mono)">2</td>
-    </tr>
-    <tr>
-      <td style="font-family:var(--mono);font-weight:600">LOW</td>
-      <td style="text-align:right;font-family:var(--mono)">3</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+6.3%</td>
-      <td style="text-align:right;font-family:var(--mono)">3</td>
+      <td style="font-family:var(--mono);font-weight:600">UNH</td>
+      <td style="text-align:right;font-family:var(--mono)">8</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-8.9%</td>
+      <td style="text-align:right;font-family:var(--mono)">7</td>
     </tr>
     <tr>
       <td style="font-family:var(--mono);font-weight:600">META</td>
-      <td style="text-align:right;font-family:var(--mono)">3</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+21.1%</td>
-      <td style="text-align:right;font-family:var(--mono)">3</td>
+      <td style="text-align:right;font-family:var(--mono)">8</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+11.2%</td>
+      <td style="text-align:right;font-family:var(--mono)">7</td>
+    </tr>
+    <tr>
+      <td style="font-family:var(--mono);font-weight:600">TSLA</td>
+      <td style="text-align:right;font-family:var(--mono)">8</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+12.2%</td>
+      <td style="text-align:right;font-family:var(--mono)">8</td>
+    </tr>
+    <tr>
+      <td style="font-family:var(--mono);font-weight:600">CMCSA</td>
+      <td style="text-align:right;font-family:var(--mono)">8</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-8.0%</td>
+      <td style="text-align:right;font-family:var(--mono)">6</td>
+    </tr>
+    <tr>
+      <td style="font-family:var(--mono);font-weight:600">JNJ</td>
+      <td style="text-align:right;font-family:var(--mono)">7</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+1.8%</td>
+      <td style="text-align:right;font-family:var(--mono)">6</td>
     </tr>
   </tbody>
 </table>
@@ -815,15 +827,15 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
         <tr><td>Lag-period return</td><td>Stock return from trade date to disclosure date, minus SPY return over same window; measures what followers cannot capture</td></tr>
         <tr><td>Committee data</td><td>unitedstates/congress-legislators YAML (committee-membership-current, legislators-current); 184 of 201 trader names matched (91.5%)</td></tr>
         <tr><td>Statistical tests</td><td>One-sample t-test of 60-day excess return against zero, primary combination; Sharpe annualised as mean/std &#215; sqrt(252/horizon); p-values omitted because results are clearly non-significant</td></tr>
-        <tr><td>Out of scope</td><td>Politicians' own trades evaluated against pre-trade prices (would require pre-trade-date price benchmarks); IPO-related disclosures and ESOP grants; options trades; non-US equities; events from 2025 onward (CRSP cutoff)</td></tr>
+        <tr><td>Out of scope</td><td>Politicians' own trades evaluated against pre-trade prices (would require pre-trade-date price benchmarks); IPO-related disclosures and ESOP grants; options trades; non-US equities; disclosures filed after 2025-12-31 (CRSP price coverage limit)</td></tr>
       </tbody>
     </table>
 
     <div class="callout red">
-      <strong>Verdict on NANC and KRUZ.</strong> Both wrappers are paying 0.75% annually to deliver beta-tilted exposure to mega-cap equities, dressed in a disclosure-tracking narrative that the underlying data does not support. KRUZ has underperformed SPY by approximately 20 points cumulatively. NANC has narrowly outperformed in absolute terms but trails on risk-adjusted basis. Neither product justifies the fee, and neither captures any informational edge that survives the disclosure lag.
+      <strong>Verdict on NANC and KRUZ.</strong> Both wrappers are paying 0.75% annually to deliver beta-tilted exposure to mega-cap equities, dressed in a disclosure-tracking narrative that the underlying data does not support. KRUZ has underperformed SPY by approximately 20 percentage points cumulatively over the nearly three-year comparison window. NANC has outperformed SPY by roughly 15 percentage points in absolute terms but its Sharpe ratio (1.46) is identical to SPY's, confirming it adds no risk-adjusted value above a plain index fund. Neither product captures any informational edge that survives the disclosure lag.
     </div>
     <div class="callout amber">
-      <strong>Sample-window limitation.</strong> The CRSP data ends December 2024, restricting the usable backtest window to 18 months and the primary sample to n=100 events. The qualitative direction of every result (null buy signal, weak directional sell signal, no committee-jurisdiction edge, KRUZ underperformance) is consistent with the academic literature on longer samples. A definitive replication on 5+ years of post-cutoff data would not be expected to change the verdict, but it would tighten the confidence intervals.
+      <strong>Sample-window limitation.</strong> The CRSP price data extends through December 2025, giving a usable backtest window of approximately 2.5 years and a primary sample of n=340 events. The qualitative direction of every result (null buy signal, weak directional sell signal, no committee-jurisdiction edge, KRUZ underperformance) is consistent with the academic literature on longer samples. A definitive replication on 5+ years of post-cutoff data would not be expected to change the verdict, but it would tighten the confidence intervals.
     </div>
     <div class="callout blue">
       <strong>What this report does not claim.</strong> It does not claim that politicians never have informational advantages on individual trades. It claims that the disclosure-based wrappers and tracking products sold to retail investors do not capture any such advantages if they exist. The two questions are different and the literature consensus on the second one has been stable for over a decade.
@@ -837,7 +849,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
 <div style="background:#eef7f5;border-left:3px solid #1a5c52;padding:1.2rem 1.5rem;margin:0 auto 2rem;border-radius:0 3px 3px 0;max-width:900px">
   <span style="font-family:var(--mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);font-weight:600;display:block;margin-bottom:.5rem">For the desk</span>
   <p style="font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:0;text-align:left;hyphens:none">
-    Median disclosure lag 27d (mean 30.8d, p90 42d, 6.8% late). Lag-period excess vs SPY -0.9% (n=131, win rate 46.6%): even politicians' own entry underperforms the index. Aggregate buy backtest (3+, 30d, 60d hold): n=100, mean excess -0.4%, Sharpe -0.04, t=-0.21. Sell-side n=115, mean excess -2.4%, t=-1.56 (directional but not significant). NANC cum +54.0% Sharpe +1.80 vs SPY +45.7% Sharpe +1.89; KRUZ cum +26.0% Sharpe +1.14. IT in-jurisdiction n=32 mean excess -4.0%. Verdict: NANC and KRUZ should not be held.
+    Median disclosure lag 27d (mean 30.9d, p90 42d, 6.8% late). Lag-period excess vs SPY -0.7% (n=131, win rate 48.4%): even politicians' own entry underperforms the index. Aggregate buy backtest (3+, 30d, 60d hold): n=340, mean excess +0.2%, Sharpe +0.02, t=+0.20. Sell-side n=404, mean excess -0.5%, t=-0.65 (directional but not significant). NANC cum +79.2% Sharpe +1.46 vs SPY +64.2% Sharpe +1.46; KRUZ cum +44.4% Sharpe +1.10. IT in-jurisdiction n=32 mean excess -4.0%. Verdict: NANC and KRUZ should not be held.
   </p>
 </div>
 
@@ -895,7 +907,7 @@ const TICK = { color: '#8aaba6', font: { size: 10 } };
 
 // Section 02: lag histogram
 const lagLabels = ["0-5", "5-10", "10-15", "15-20", "20-25", "25-30", "30-35", "35-40", "40-45", "45-50", "50-55", "55-60", "60-65", "65-70", "70-75", "75-80", "80-85", "85-90", "90-95", "95-100+"];
-const lagCounts = [425, 1168, 2867, 3504, 4624, 4388, 4114, 3994, 1771, 875, 216, 205, 99, 117, 22, 23, 16, 1, 8, 634];
+const lagCounts = [426, 1168, 2869, 3505, 4629, 4395, 4122, 4008, 1796, 877, 216, 205, 99, 117, 22, 23, 16, 1, 8, 634];
 new Chart(document.getElementById('lagChart'), {
   type: 'bar',
   data: {
@@ -935,8 +947,8 @@ new Chart(document.getElementById('lagChart'), {
 
 // Section 04: trade-date vs disclosure-date
 const tvdLabels = ["10d hold", "20d hold", "60d hold", "90d hold", "180d hold", "252d hold"];
-const tvdDisc = [0.0123, 0.0112, -0.0035, -0.0092, -0.102, -0.1138];
-const tvdTrade = [-0.0036, 0.003, 0.0001, -0.0241, -0.1164, -0.0442];
+const tvdDisc = [0.0039, 0.0018, 0.0019, -0.0033, -0.0282, -0.094];
+const tvdTrade = [-0.0036, -0.0019, -0.0019, -0.0071, -0.0384, -0.0961];
 new Chart(document.getElementById('tvdChart'), {
   type: 'bar',
   data: {
@@ -974,10 +986,10 @@ new Chart(document.getElementById('tvdChart'), {
 });
 
 // Section 06: ETF chart
-const etfDates = ["2023-02-07", "2023-02-09", "2023-02-13", "2023-02-15", "2023-02-17", "2023-02-22", "2023-02-24", "2023-02-28", "2023-03-02", "2023-03-06", "2023-03-08", "2023-03-10", "2023-03-14", "2023-03-16", "2023-03-20", "2023-03-22", "2023-03-24", "2023-03-28", "2023-03-30", "2023-04-03", "2023-04-05", "2023-04-10", "2023-04-12", "2023-04-14", "2023-04-18", "2023-04-20", "2023-04-24", "2023-04-26", "2023-04-28", "2023-05-02", "2023-05-04", "2023-05-08", "2023-05-10", "2023-05-12", "2023-05-16", "2023-05-18", "2023-05-22", "2023-05-24", "2023-05-26", "2023-05-31", "2023-06-02", "2023-06-06", "2023-06-08", "2023-06-12", "2023-06-14", "2023-06-16", "2023-06-21", "2023-06-23", "2023-06-27", "2023-06-29", "2023-07-03", "2023-07-06", "2023-07-10", "2023-07-12", "2023-07-14", "2023-07-18", "2023-07-20", "2023-07-24", "2023-07-26", "2023-07-28", "2023-08-01", "2023-08-03", "2023-08-07", "2023-08-09", "2023-08-11", "2023-08-15", "2023-08-17", "2023-08-21", "2023-08-23", "2023-08-25", "2023-08-29", "2023-08-31", "2023-09-05", "2023-09-07", "2023-09-11", "2023-09-13", "2023-09-15", "2023-09-19", "2023-09-21", "2023-09-25", "2023-09-27", "2023-09-29", "2023-10-03", "2023-10-05", "2023-10-09", "2023-10-11", "2023-10-13", "2023-10-17", "2023-10-19", "2023-10-23", "2023-10-25", "2023-10-27", "2023-10-31", "2023-11-02", "2023-11-06", "2023-11-08", "2023-11-10", "2023-11-14", "2023-11-16", "2023-11-20", "2023-11-22", "2023-11-27", "2023-11-29", "2023-12-01", "2023-12-05", "2023-12-07", "2023-12-11", "2023-12-13", "2023-12-15", "2023-12-19", "2023-12-21", "2023-12-26", "2023-12-28", "2024-01-02", "2024-01-04", "2024-01-08", "2024-01-10", "2024-01-12", "2024-01-17", "2024-01-19", "2024-01-23", "2024-01-25", "2024-01-29", "2024-01-31", "2024-02-02", "2024-02-06", "2024-02-08", "2024-02-12", "2024-02-14", "2024-02-16", "2024-02-21", "2024-02-23", "2024-02-27", "2024-02-29", "2024-03-04", "2024-03-06", "2024-03-08", "2024-03-12", "2024-03-14", "2024-03-18", "2024-03-20", "2024-03-22", "2024-03-26", "2024-03-28", "2024-04-02", "2024-04-04", "2024-04-08", "2024-04-10", "2024-04-12", "2024-04-16", "2024-04-18", "2024-04-22", "2024-04-24", "2024-04-26", "2024-04-30", "2024-05-02", "2024-05-06", "2024-05-08", "2024-05-10", "2024-05-14", "2024-05-16", "2024-05-20", "2024-05-22", "2024-05-24", "2024-05-29", "2024-05-31", "2024-06-04", "2024-06-06", "2024-06-10", "2024-06-12", "2024-06-14", "2024-06-18", "2024-06-21", "2024-06-25", "2024-06-27", "2024-07-01", "2024-07-03", "2024-07-08", "2024-07-10", "2024-07-12", "2024-07-16", "2024-07-18", "2024-07-22", "2024-07-24", "2024-07-26", "2024-07-30", "2024-08-01", "2024-08-05", "2024-08-07", "2024-08-09", "2024-08-13", "2024-08-15", "2024-08-19", "2024-08-21", "2024-08-23", "2024-08-27", "2024-08-29", "2024-09-03", "2024-09-05", "2024-09-09", "2024-09-11", "2024-09-13", "2024-09-17", "2024-09-19", "2024-09-23", "2024-09-25", "2024-09-27", "2024-10-01", "2024-10-03", "2024-10-07", "2024-10-09", "2024-10-11", "2024-10-15", "2024-10-17", "2024-10-21", "2024-10-23", "2024-10-25", "2024-10-29", "2024-10-31", "2024-11-04", "2024-11-06", "2024-11-08", "2024-11-12", "2024-11-14", "2024-11-18", "2024-11-20", "2024-11-22", "2024-11-26", "2024-11-29", "2024-12-03", "2024-12-05", "2024-12-09", "2024-12-11", "2024-12-13", "2024-12-17", "2024-12-19", "2024-12-23", "2024-12-26", "2024-12-30"];
-const nancV = [100.0, 97.684, 98.3, 99.058, 97.079, 94.923, 94.531, 94.88, 95.41, 96.765, 95.803, 91.837, 93.494, 95.257, 94.327, 95.19, 95.422, 95.347, 97.554, 99.136, 97.695, 98.233, 97.491, 98.842, 99.442, 98.818, 98.94, 97.071, 99.533, 98.418, 97.083, 99.333, 99.682, 99.211, 99.647, 102.521, 102.21, 100.349, 103.738, 103.133, 105.418, 105.834, 105.497, 106.753, 107.691, 108.512, 107.177, 107.02, 107.617, 107.778, 109.368, 108.363, 108.06, 110.397, 111.673, 113.161, 111.798, 111.724, 112.155, 112.992, 113.106, 110.797, 111.857, 109.733, 109.541, 109.266, 107.523, 108.532, 109.501, 108.559, 110.687, 111.771, 111.425, 110.247, 111.111, 110.569, 109.941, 109.623, 106.635, 106.631, 105.065, 105.815, 104.303, 105.344, 107.248, 108.543, 106.906, 108.233, 106.046, 104.429, 103.337, 102.061, 104.068, 107.22, 108.602, 109.442, 110.503, 112.67, 113.102, 114.158, 114.252, 114.221, 114.558, 116.164, 115.265, 115.795, 116.533, 118.406, 119.317, 120.943, 119.909, 120.864, 120.943, 119.556, 117.932, 120.294, 121.538, 121.76, 120.745, 123.103, 124.233, 125.104, 126.452, 123.836, 127.006, 126.808, 128.552, 129.424, 128.532, 128.869, 127.141, 130.454, 130.494, 131.365, 132.792, 132.118, 132.871, 134.536, 133.743, 133.545, 135.645, 136.596, 135.962, 136.477, 135.526, 133.545, 135.17, 134.179, 133.505, 130.85, 129.444, 128.671, 130.533, 132.118, 130.256, 131.405, 135.011, 134.734, 135.328, 136.24, 137.547, 138.221, 137.666, 139.172, 139.568, 137.864, 138.578, 140.797, 141.312, 142.976, 143.016, 144.918, 144.601, 143.967, 144.443, 144.443, 146.067, 146.82, 148.326, 147.454, 147.969, 144.244, 144.363, 140.797, 141.312, 139.608, 139.648, 131.92, 132.475, 136.834, 140.163, 143.65, 145.592, 145.909, 146.067, 145.988, 143.809, 141.074, 140.084, 139.014, 142.105, 144.482, 144.958, 147.296, 147.018, 147.692, 147.732, 146.067, 146.622, 147.098, 149.872, 150.862, 150.585, 151.576, 152.21, 150.981, 150.941, 152.17, 148.405, 149.475, 155.419, 157.084, 157.322, 156.569, 153.874, 155.34, 156.965, 158.213, 158.312, 159.105, 161.007, 159.461, 160.65, 158.55, 158.114, 153.359, 156.212, 157.599, 154.017];
-const kruzV = [100.0, 98.496, 99.736, 100.119, 98.524, 96.588, 96.583, 96.852, 97.503, 98.309, 96.898, 93.454, 93.575, 92.896, 92.5, 92.131, 92.157, 93.21, 95.049, 96.938, 95.623, 96.114, 96.182, 96.896, 97.44, 96.501, 96.599, 94.143, 96.59, 94.936, 93.398, 94.639, 94.311, 93.984, 93.894, 96.195, 96.071, 94.457, 95.184, 94.353, 97.07, 97.143, 98.164, 98.474, 99.034, 99.92, 98.931, 97.666, 99.153, 99.799, 101.148, 99.415, 100.319, 102.026, 101.879, 103.285, 103.15, 103.402, 103.517, 103.665, 104.23, 102.321, 103.027, 102.1, 101.84, 100.85, 99.437, 99.795, 100.163, 99.622, 101.461, 101.689, 101.37, 100.518, 100.711, 100.445, 100.615, 100.285, 98.294, 98.459, 97.538, 97.744, 95.799, 96.088, 97.797, 98.622, 97.377, 99.093, 96.834, 94.931, 94.423, 93.77, 95.818, 98.472, 99.209, 98.541, 98.931, 101.134, 101.24, 102.313, 102.471, 102.575, 102.931, 104.897, 104.104, 104.304, 105.739, 107.61, 108.847, 110.156, 109.558, 110.427, 110.45, 110.011, 108.527, 109.874, 109.571, 109.303, 107.916, 109.548, 110.366, 111.253, 111.941, 110.74, 112.129, 111.511, 112.648, 113.392, 112.849, 113.526, 113.154, 115.324, 115.468, 116.046, 117.006, 116.991, 117.339, 118.203, 117.434, 117.446, 119.285, 119.285, 119.365, 120.924, 119.504, 118.498, 119.684, 118.213, 116.495, 115.447, 114.566, 115.487, 116.493, 116.38, 115.087, 115.352, 118.005, 118.383, 119.445, 119.517, 120.171, 120.278, 119.65, 119.347, 117.85, 119.353, 117.949, 119.024, 119.053, 119.21, 118.229, 119.634, 119.734, 119.684, 119.553, 119.465, 120.604, 120.349, 121.094, 122.523, 124.641, 122.323, 122.603, 119.724, 121.471, 121.683, 121.084, 114.719, 115.294, 117.809, 118.851, 121.124, 122.283, 122.788, 123.446, 123.602, 123.412, 121.437, 119.868, 119.623, 120.313, 121.764, 123.02, 124.556, 124.618, 124.374, 125.421, 124.914, 124.62, 125.437, 127.025, 127.762, 127.1, 128.215, 127.811, 126.999, 125.968, 126.612, 125.169, 125.274, 131.39, 131.841, 131.557, 130.877, 130.185, 130.204, 132.632, 133.516, 133.875, 133.116, 132.996, 131.557, 131.517, 130.478, 128.934, 125.285, 126.964, 128.239, 126.029];
-const spyV  = [100.0, 98.049, 99.432, 99.709, 98.09, 95.99, 95.47, 95.441, 95.814, 97.418, 96.081, 92.948, 94.35, 95.405, 95.196, 94.802, 95.682, 95.645, 97.604, 99.357, 98.547, 99.033, 98.655, 99.722, 100.145, 99.581, 99.763, 97.763, 100.561, 99.33, 97.949, 99.789, 99.816, 99.511, 99.187, 101.358, 101.252, 99.39, 101.549, 101.025, 103.459, 103.486, 103.752, 104.881, 105.698, 106.644, 105.547, 105.127, 105.846, 106.317, 107.695, 106.693, 106.693, 108.236, 109.027, 110.219, 109.731, 110.221, 110.539, 110.881, 110.774, 108.92, 109.374, 108.171, 108.146, 107.477, 105.875, 106.615, 107.511, 106.768, 108.998, 109.287, 109.017, 107.952, 108.826, 108.355, 107.973, 107.812, 105.055, 105.26, 103.755, 104.103, 102.669, 103.377, 105.274, 106.256, 105.082, 106.183, 103.847, 102.393, 101.685, 100.012, 101.843, 104.902, 106.102, 106.482, 107.3, 109.278, 109.643, 110.625, 110.81, 110.678, 110.71, 111.803, 111.194, 111.591, 112.507, 114.579, 114.758, 116.105, 115.582, 116.303, 116.558, 115.57, 114.257, 116.046, 116.526, 116.555, 115.482, 117.961, 118.555, 119.33, 120.123, 118.071, 120.876, 120.785, 121.846, 122.497, 121.907, 122.137, 121.575, 124.177, 123.952, 124.233, 125.265, 124.641, 125.123, 126.36, 125.913, 125.791, 127.66, 127.839, 127.251, 128.295, 127.258, 125.843, 127.229, 126.1, 125.298, 123.503, 122.519, 122.568, 123.964, 124.663, 123.123, 123.871, 126.701, 126.853, 127.749, 128.352, 129.674, 130.01, 129.954, 129.858, 129.039, 129.35, 129.6, 131.138, 131.383, 132.781, 133.13, 134.53, 133.985, 134.064, 134.443, 134.189, 135.695, 136.635, 138.121, 137.794, 138.992, 135.99, 136.48, 133.178, 133.968, 133.367, 133.616, 127.309, 127.624, 131.15, 133.377, 136.091, 137.701, 137.949, 138.321, 138.18, 137.391, 135.848, 135.24, 134.453, 136.423, 138.291, 138.552, 140.498, 140.606, 140.697, 141.05, 140.347, 140.149, 140.144, 142.45, 143.052, 143.101, 143.736, 144.052, 142.659, 142.919, 143.592, 140.352, 140.64, 145.881, 147.645, 147.327, 146.451, 145.167, 145.747, 146.984, 148.252, 148.721, 149.057, 149.736, 149.247, 149.933, 149.131, 149.151, 144.661, 147.275, 148.922, 145.673];
+const etfDates = ["2023-02-07", "2023-02-10", "2023-02-15", "2023-02-21", "2023-02-24", "2023-03-01", "2023-03-06", "2023-03-09", "2023-03-14", "2023-03-17", "2023-03-22", "2023-03-27", "2023-03-30", "2023-04-04", "2023-04-10", "2023-04-13", "2023-04-18", "2023-04-21", "2023-04-26", "2023-05-01", "2023-05-04", "2023-05-09", "2023-05-12", "2023-05-17", "2023-05-22", "2023-05-25", "2023-05-31", "2023-06-05", "2023-06-08", "2023-06-13", "2023-06-16", "2023-06-22", "2023-06-27", "2023-06-30", "2023-07-06", "2023-07-11", "2023-07-14", "2023-07-19", "2023-07-24", "2023-07-27", "2023-08-01", "2023-08-04", "2023-08-09", "2023-08-14", "2023-08-17", "2023-08-22", "2023-08-25", "2023-08-30", "2023-09-05", "2023-09-08", "2023-09-13", "2023-09-18", "2023-09-21", "2023-09-26", "2023-09-29", "2023-10-04", "2023-10-09", "2023-10-12", "2023-10-17", "2023-10-20", "2023-10-25", "2023-10-30", "2023-11-02", "2023-11-07", "2023-11-10", "2023-11-15", "2023-11-20", "2023-11-24", "2023-11-29", "2023-12-04", "2023-12-07", "2023-12-12", "2023-12-15", "2023-12-20", "2023-12-26", "2023-12-29", "2024-01-04", "2024-01-09", "2024-01-12", "2024-01-18", "2024-01-23", "2024-01-26", "2024-01-31", "2024-02-05", "2024-02-08", "2024-02-13", "2024-02-16", "2024-02-22", "2024-02-27", "2024-03-01", "2024-03-06", "2024-03-11", "2024-03-14", "2024-03-19", "2024-03-22", "2024-03-27", "2024-04-02", "2024-04-05", "2024-04-10", "2024-04-15", "2024-04-18", "2024-04-23", "2024-04-26", "2024-05-01", "2024-05-06", "2024-05-09", "2024-05-14", "2024-05-17", "2024-05-22", "2024-05-28", "2024-05-31", "2024-06-05", "2024-06-10", "2024-06-13", "2024-06-18", "2024-06-24", "2024-06-27", "2024-07-02", "2024-07-08", "2024-07-11", "2024-07-16", "2024-07-19", "2024-07-24", "2024-07-29", "2024-08-01", "2024-08-06", "2024-08-09", "2024-08-14", "2024-08-19", "2024-08-22", "2024-08-27", "2024-08-30", "2024-09-05", "2024-09-10", "2024-09-13", "2024-09-18", "2024-09-23", "2024-09-26", "2024-10-01", "2024-10-04", "2024-10-09", "2024-10-14", "2024-10-17", "2024-10-22", "2024-10-25", "2024-10-30", "2024-11-04", "2024-11-07", "2024-11-12", "2024-11-15", "2024-11-20", "2024-11-25", "2024-11-29", "2024-12-04", "2024-12-09", "2024-12-12", "2024-12-17", "2024-12-20", "2024-12-26", "2024-12-31", "2025-01-06", "2025-01-10", "2025-01-15", "2025-01-21", "2025-01-24", "2025-01-29", "2025-02-03", "2025-02-06", "2025-02-11", "2025-02-14", "2025-02-20", "2025-02-25", "2025-02-28", "2025-03-05", "2025-03-10", "2025-03-13", "2025-03-18", "2025-03-21", "2025-03-26", "2025-03-31", "2025-04-03", "2025-04-08", "2025-04-11", "2025-04-16", "2025-04-22", "2025-04-25", "2025-04-30", "2025-05-05", "2025-05-08", "2025-05-13", "2025-05-16", "2025-05-21", "2025-05-27", "2025-05-30", "2025-06-04", "2025-06-09", "2025-06-12", "2025-06-17", "2025-06-23", "2025-06-26", "2025-07-01", "2025-07-07", "2025-07-10", "2025-07-15", "2025-07-18", "2025-07-23", "2025-07-28", "2025-07-31", "2025-08-05", "2025-08-08", "2025-08-13", "2025-08-18", "2025-08-21", "2025-08-26", "2025-08-29", "2025-09-04", "2025-09-09", "2025-09-12", "2025-09-17", "2025-09-22", "2025-09-25", "2025-09-30", "2025-10-03", "2025-10-08", "2025-10-13", "2025-10-16", "2025-10-21", "2025-10-24", "2025-10-29", "2025-11-03", "2025-11-06", "2025-11-11", "2025-11-14", "2025-11-19", "2025-11-24", "2025-11-28", "2025-12-03", "2025-12-08", "2025-12-11", "2025-12-16", "2025-12-19", "2025-12-24", "2025-12-30", "2025-12-31"];
+const nancV = [100.0, 96.947, 99.058, 94.91, 94.53, 94.071, 96.763, 93.879, 93.494, 94.336, 95.189, 95.617, 97.552, 98.445, 98.234, 99.033, 99.442, 99.049, 97.069, 99.562, 97.081, 99.007, 99.212, 101.106, 102.212, 101.927, 103.132, 105.19, 105.497, 107.499, 108.51, 107.903, 107.617, 109.263, 108.363, 109.125, 111.673, 113.616, 111.722, 111.654, 113.105, 110.614, 109.734, 110.367, 107.523, 108.167, 108.559, 111.259, 111.425, 110.3, 110.569, 109.958, 106.636, 104.935, 105.815, 105.574, 107.248, 107.836, 108.232, 104.451, 103.336, 103.581, 107.22, 109.34, 110.503, 112.996, 114.157, 114.235, 114.56, 115.24, 115.797, 117.029, 119.317, 117.64, 119.749, 119.67, 116.843, 119.172, 120.636, 120.475, 123.086, 123.729, 122.693, 125.481, 127.366, 126.042, 127.68, 128.74, 129.289, 131.41, 130.899, 131.213, 132.509, 132.98, 135.336, 135.179, 134.276, 133.922, 132.941, 129.682, 128.25, 129.643, 130.899, 128.454, 133.765, 133.547, 134.982, 136.239, 136.396, 138.791, 136.592, 139.615, 140.008, 141.814, 143.581, 141.696, 143.11, 143.502, 145.465, 145.112, 146.604, 141.657, 139.497, 139.89, 138.359, 132.47, 135.571, 139.576, 144.248, 142.952, 144.641, 144.013, 138.791, 138.202, 143.149, 142.56, 145.662, 147.154, 144.719, 146.8, 148.488, 150.844, 150.177, 151.197, 149.548, 150.216, 148.096, 155.32, 155.87, 152.14, 153.907, 155.83, 156.851, 159.914, 157.99, 158.265, 156.655, 153.867, 156.144, 151.472, 155.045, 150.357, 153.514, 156.616, 158.971, 157.636, 155.948, 159.128, 158.618, 160.679, 159.639, 153.435, 152.768, 149.823, 140.95, 139.851, 142.56, 143.856, 144.641, 141.264, 136.082, 127.051, 136.082, 134.197, 134.668, 142.285, 142.874, 146.368, 147.939, 153.514, 155.212, 152.258, 154.967, 154.142, 156.144, 158.147, 158.854, 157.754, 158.618, 162.78, 163.801, 164.664, 166.078, 164.837, 165.36, 166.196, 167.373, 166.202, 165.253, 168.276, 170.671, 170.357, 168.237, 170.632, 170.75, 171.712, 172.517, 173.106, 173.498, 176.796, 173.577, 175.854, 176.835, 177.856, 175.736, 174.637, 178.022, 179.348, 182.371, 182.568, 178.363, 181.763, 177.935, 175.344, 176.443, 180.264, 180.133, 180.408, 181.429, 178.406, 179.165, 181.704, 180.408, 179.181];
+const kruzV = [100.0, 98.773, 100.119, 96.8, 96.583, 96.776, 98.309, 95.151, 93.575, 91.556, 92.131, 93.015, 95.049, 95.844, 96.114, 97.228, 97.44, 96.487, 94.143, 96.431, 93.398, 94.289, 93.984, 95.154, 96.071, 94.204, 94.353, 96.41, 98.164, 99.33, 99.92, 98.598, 99.153, 100.734, 99.415, 101.373, 101.879, 103.552, 103.402, 102.853, 104.23, 102.033, 102.1, 102.065, 99.437, 99.461, 99.622, 101.755, 101.37, 100.452, 100.445, 100.594, 98.294, 97.178, 97.744, 96.197, 97.797, 97.757, 99.093, 95.702, 94.423, 94.932, 98.472, 98.805, 98.931, 101.611, 102.313, 102.744, 102.931, 104.8, 104.304, 105.931, 108.847, 107.638, 109.317, 109.048, 107.435, 108.389, 108.203, 107.512, 109.256, 110.095, 109.626, 110.221, 111.515, 110.281, 112.384, 113.495, 114.306, 115.69, 115.814, 116.232, 116.252, 116.985, 118.085, 119.351, 118.302, 118.303, 117.024, 114.497, 113.414, 115.226, 115.209, 113.383, 116.818, 117.693, 118.314, 119.097, 118.446, 117.803, 118.153, 117.735, 117.855, 117.839, 118.431, 118.916, 118.35, 118.69, 119.138, 120.438, 123.387, 120.182, 118.52, 120.38, 119.865, 115.019, 116.624, 118.398, 121.053, 120.748, 122.359, 123.259, 118.662, 118.243, 120.539, 121.567, 123.364, 123.902, 123.658, 124.724, 125.747, 127.503, 126.925, 126.302, 124.701, 124.902, 124.014, 130.352, 130.233, 128.532, 128.894, 132.054, 132.528, 131.955, 130.233, 129.442, 127.637, 125.061, 126.949, 124.1, 125.722, 123.704, 127.345, 131.896, 131.025, 128.478, 127.639, 129.996, 129.201, 129.341, 130.154, 126.237, 126.237, 123.183, 119.193, 118.202, 121.936, 122.477, 122.477, 122.477, 122.477, 122.477, 122.477, 113.243, 114.414, 118.978, 120.004, 121.966, 123.442, 127.294, 128.274, 126.367, 127.527, 126.844, 128.219, 129.734, 130.038, 128.915, 129.371, 131.5, 133.133, 133.744, 135.484, 134.224, 135.2, 136.69, 137.349, 135.739, 135.017, 135.734, 138.742, 137.95, 137.139, 138.988, 138.934, 139.197, 138.979, 140.803, 140.81, 142.691, 142.087, 144.077, 145.245, 146.3, 143.53, 141.983, 144.174, 147.103, 145.38, 143.807, 143.916, 146.738, 141.292, 138.248, 142.3, 144.281, 146.656, 145.627, 146.3, 143.372, 146.577, 146.063, 144.351];
+const spyV  = [100.0, 98.278, 99.709, 96.122, 95.47, 95.075, 97.418, 94.309, 94.35, 93.93, 94.441, 95.496, 97.233, 98.43, 98.656, 99.586, 99.764, 99.28, 97.392, 100.077, 97.577, 98.974, 99.133, 100.01, 100.867, 99.87, 100.641, 102.869, 103.357, 105.171, 105.846, 105.135, 105.053, 106.766, 105.894, 106.568, 108.211, 109.637, 109.396, 108.984, 109.945, 107.616, 107.36, 107.929, 105.082, 105.53, 105.968, 108.627, 108.201, 107.305, 107.544, 106.85, 103.902, 102.575, 102.96, 102.281, 104.119, 104.449, 105.017, 101.445, 100.568, 100.096, 103.75, 105.236, 106.122, 108.307, 109.41, 109.661, 109.494, 109.995, 110.366, 111.78, 113.04, 112.782, 114.562, 114.48, 112.546, 114.136, 114.81, 114.764, 116.78, 117.394, 116.303, 118.632, 120.022, 119.001, 120.309, 122.233, 122.096, 123.522, 122.775, 123.144, 124.028, 124.211, 125.535, 126.007, 124.964, 124.866, 123.828, 121.499, 120.311, 121.788, 122.416, 120.511, 124.418, 125.285, 126.039, 127.52, 127.611, 127.607, 127.019, 128.777, 129.016, 130.651, 132.106, 130.721, 131.595, 132.231, 133.741, 134.03, 136.049, 132.226, 130.357, 131.207, 130.786, 125.762, 128.373, 130.964, 134.784, 133.968, 135.254, 135.764, 132.376, 132.178, 135.362, 135.215, 137.207, 137.841, 136.954, 138.004, 139.006, 140.736, 140.261, 140.495, 139.464, 139.697, 137.241, 143.455, 143.766, 141.08, 142.224, 143.917, 145.126, 146.357, 145.639, 145.555, 145.545, 142.381, 144.835, 141.159, 143.395, 139.813, 142.773, 145.247, 146.432, 144.948, 143.975, 146.034, 145.791, 146.848, 147.012, 143.125, 143.11, 140.432, 135.018, 132.811, 135.124, 135.837, 136.947, 134.731, 129.266, 119.579, 128.601, 126.607, 126.99, 132.624, 133.563, 135.723, 136.097, 141.343, 143.115, 140.384, 142.381, 141.957, 143.532, 144.435, 145.415, 143.917, 144.548, 147.371, 148.763, 149.493, 150.731, 149.845, 151.155, 152.752, 153.409, 152.239, 151.249, 153.467, 155.324, 154.941, 153.074, 155.389, 155.363, 156.343, 156.634, 158.34, 158.766, 160.611, 158.494, 160.452, 161.182, 162.121, 159.696, 159.118, 161.683, 163.118, 165.56, 164.585, 161.447, 164.503, 161.837, 159.597, 161.066, 164.597, 164.717, 164.655, 165.989, 163.508, 163.923, 166.28, 165.469, 164.243];
 new Chart(document.getElementById('etfChart'), {
   type: 'line',
   data: {
@@ -1023,9 +1035,9 @@ new Chart(document.getElementById('etfChart'), {
 
 // Section 07: forward returns curve
 const curveLabels = ["10d", "20d", "60d", "90d", "180d", "252d"];
-const curveMean = [0.0123, 0.0112, -0.0035, -0.0092, -0.102, -0.1138];
-const curveP25 = [-0.0204, -0.033, -0.0722, -0.1009, -0.2142, -0.275];
-const curveP75 = [0.0307, 0.051, 0.0662, 0.0807, 0.074, 0.082];
+const curveMean = [0.0039, 0.0018, 0.0019, -0.0033, -0.0282, -0.094];
+const curveP25 = [-0.0304, -0.0441, -0.0921, -0.1172, -0.1821, -0.2688];
+const curveP75 = [0.0311, 0.0407, 0.0802, 0.0943, 0.13, 0.0661];
 new Chart(document.getElementById('curveChart'), {
   type: 'line',
   data: {
@@ -1086,7 +1098,7 @@ new Chart(document.getElementById('curveChart'), {
 
 // Section 08: sell-side curve
 const sellLabels = ["10d", "20d", "60d", "90d", "180d", "252d"];
-const sellData = [0.0034, -0.0141, -0.0242, -0.0311, -0.0793, -0.1212];
+const sellData = [0.0009, -0.0017, -0.0055, -0.0056, 0.0012, -0.0608];
 new Chart(document.getElementById('sellChart'), {
   type: 'bar',
   data: {

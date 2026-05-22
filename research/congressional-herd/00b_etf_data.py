@@ -21,7 +21,7 @@ OUT = DATA_DIR / "etf_prices.parquet"
 
 TICKERS = ["NANC", "KRUZ", "SPY"]
 START = "2023-02-01"
-END   = "2024-12-31"
+END   = "2025-12-31"
 
 # Expense ratios (annualised), used in the report for fee-drag annotation
 EXPENSE_RATIOS = {"NANC": 0.0075, "KRUZ": 0.0075, "SPY": 0.000945}
@@ -34,8 +34,8 @@ def pull_from_wrds():
 
     print(f"Looking up permnos for {TICKERS}...")
     df_map = db.raw_sql(
-        "SELECT DISTINCT ticker, permno, comnam, namedt, nameenddt "
-        "FROM crsp.stocknames "
+        "SELECT DISTINCT ticker, permno, issuernm AS comnam, namedt, nameenddt "
+        "FROM crsp.stocknames_v2 "
         "WHERE ticker IN %(tickers)s",
         params={"tickers": tuple(TICKERS)},
     )
@@ -57,9 +57,9 @@ def pull_from_wrds():
     permnos = df_map["permno"].astype(int).tolist()
     print(f"Pulling prices for permnos {permnos}, {START} to {END}...")
     prices = db.raw_sql(
-        "SELECT date, permno, prc, ret "
-        "FROM crsp.dsf "
-        "WHERE permno IN %(permnos)s AND date BETWEEN %(s)s AND %(e)s",
+        "SELECT dlycaldt AS date, permno, dlyprc AS prc, dlyret AS ret "
+        "FROM crsp.dsf_v2 "
+        "WHERE permno IN %(permnos)s AND dlycaldt BETWEEN %(s)s AND %(e)s",
         params={"permnos": tuple(permnos), "s": START, "e": END},
     )
     db.close()
@@ -79,7 +79,7 @@ def pull_from_compustat():
     # Compustat security identifier lookup
     print("Looking up Compustat gvkey/iid for tickers...")
     sec = db.raw_sql(
-        "SELECT DISTINCT gvkey, iid, tic, conm "
+        "SELECT DISTINCT gvkey, iid, tic "
         "FROM comp.security "
         "WHERE tic IN %(tickers)s",
         params={"tickers": tuple(TICKERS)},
@@ -115,49 +115,49 @@ def pull_from_compustat():
     return prices[["date", "ticker", "prc", "ret"]]
 
 
-def pull_from_stooq():
-    """Direct HTTP fetch from stooq -- bypasses pandas_datareader parser issues."""
+def pull_from_yahoo_direct(tickers=None):
+    """Direct Yahoo Finance v8 API -- avoids yfinance library rate-limit."""
     import requests
-    from io import StringIO
-    d1 = START.replace("-", "")
-    d2 = END.replace("-", "")
-    headers = {"User-Agent": "Mozilla/5.0"}
+    from datetime import datetime
+    if tickers is None:
+        tickers = TICKERS
+    p1 = int(datetime.strptime(START, "%Y-%m-%d").timestamp())
+    p2 = int(datetime.strptime(END, "%Y-%m-%d").timestamp()) + 86400
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
     frames = []
-    for t in TICKERS:
-        print(f"Pulling {t} from stooq...")
-        url = f"https://stooq.com/q/d/l/?s={t.lower()}.us&i=d&d1={d1}&d2={d2}"
+    for t in tickers:
+        print(f"Pulling {t} from Yahoo direct...")
+        url = (f"https://query1.finance.yahoo.com/v8/finance/chart/{t}"
+               f"?interval=1d&period1={p1}&period2={p2}")
         try:
             r = requests.get(url, headers=headers, timeout=30)
             r.raise_for_status()
-            text = r.text.strip()
-            if text.startswith("<") or "No data" in text or len(text) < 50:
-                print(f"  {t}: no data ({text[:80]!r})")
-                continue
-            hist = pd.read_csv(StringIO(text))
-            if "Close" not in hist.columns or "Date" not in hist.columns:
-                print(f"  {t}: unexpected columns {list(hist.columns)}")
-                continue
-            hist = hist.dropna(subset=["Close", "Date"]).sort_values("Date").reset_index(drop=True)
+            result = r.json()["chart"]["result"][0]
+            timestamps = result["timestamp"]
+            closes = result["indicators"]["quote"][0]["close"]
             s = pd.DataFrame({
-                "date": pd.to_datetime(hist["Date"]),
+                "date": pd.to_datetime(timestamps, unit="s", utc=True).tz_convert(None),
                 "ticker": t,
-                "prc": hist["Close"].values,
-            })
+                "prc": closes,
+            }).dropna(subset=["prc"])
+            s["date"] = s["date"].dt.normalize()
             s["ret"] = s["prc"].pct_change()
             frames.append(s)
             print(f"  ok: {len(s)} rows, {s['date'].min().date()} to {s['date'].max().date()}")
         except Exception as e:
-            print(f"  failed: {e}")
+            print(f"  {t} failed: {e}")
     if not frames:
         return pd.DataFrame()
     return pd.concat(frames, ignore_index=True)
 
 
-def pull_from_yfinance():
+def pull_from_yfinance(tickers=None):
     import yfinance as yf
     import time
+    if tickers is None:
+        tickers = TICKERS
     frames = []
-    for t in TICKERS:
+    for t in tickers:
         print(f"Pulling {t} from yfinance...")
         for attempt in range(5):
             try:
@@ -186,53 +186,88 @@ def pull_from_yfinance():
     return pd.concat(frames, ignore_index=True)
 
 
+def _sufficient(sub, label):
+    """Return True if sub has >=100 rows starting within 30 days of START."""
+    start_dt = pd.Timestamp(START)
+    if sub.empty or len(sub) < 100:
+        return False
+    if sub["date"].min() > start_dt + pd.Timedelta(days=30):
+        print(f"  {label}: late start {sub['date'].min().date()} for {sub['ticker'].iloc[0]}")
+        return False
+    return True
+
+
 def main():
     if OUT.exists():
         print(f"{OUT.name} already exists -- re-pulling.")
 
-    df = None
+    collected = {}  # ticker -> DataFrame
+
+    # --- CRSP ---
     try:
-        df = pull_from_wrds()
+        crsp = pull_from_wrds()
     except Exception as e:
-        print(f"WRDS pull failed: {e}")
-        df = None
+        print(f"CRSP failed: {e}")
+        crsp = None
 
-    # CRSP daily often has sparse coverage for newer ETFs (NANC and KRUZ launched 2023).
-    # If any ticker has <100 days of data, fall back to yfinance entirely for consistency.
-    if df is not None and not df.empty:
-        counts = df.groupby("ticker").size()
-        thin = counts[counts < 100]
-        if not thin.empty:
-            print(f"\nCRSP coverage too thin for: {thin.to_dict()} -- falling back to yfinance")
-            df = None
+    if crsp is not None and not crsp.empty:
+        for t in TICKERS:
+            sub = crsp[crsp["ticker"] == t]
+            if _sufficient(sub, "CRSP"):
+                collected[t] = sub
+                print(f"  CRSP ok: {t} {len(sub)} days {sub['date'].min().date()} to {sub['date'].max().date()}")
 
-    if df is None or df.empty:
-        print("\nTrying Compustat (WRDS)...")
+    missing = [t for t in TICKERS if t not in collected]
+
+    # --- Compustat ---
+    if missing:
+        print(f"\nMissing after CRSP: {missing} -- trying Compustat")
         try:
-            df = pull_from_compustat()
+            comp = pull_from_compustat()
         except Exception as e:
-            print(f"Compustat pull failed: {e}")
-            df = None
+            print(f"Compustat failed: {e}")
+            comp = None
 
-    if df is not None and not df.empty:
-        counts = df.groupby("ticker").size()
-        thin = counts[counts < 100]
-        if not thin.empty:
-            print(f"\nCompustat coverage too thin for: {thin.to_dict()} -- trying stooq")
-            df = None
+        if comp is not None and not comp.empty:
+            for t in list(missing):
+                sub = comp[comp["ticker"] == t]
+                if _sufficient(sub, "Compustat"):
+                    collected[t] = sub
+                    missing.remove(t)
+                    print(f"  Compustat ok: {t} {len(sub)} days {sub['date'].min().date()} to {sub['date'].max().date()}")
 
-    if df is None or df.empty:
-        print("\nTrying stooq...")
-        df = pull_from_stooq()
+    # --- Yahoo direct ---
+    if missing:
+        print(f"\nMissing after Compustat: {missing} -- trying Yahoo direct API")
+        yf_df = pull_from_yahoo_direct(tickers=missing)
+        if not yf_df.empty:
+            for t in list(missing):
+                sub = yf_df[yf_df["ticker"] == t]
+                if not sub.empty:
+                    collected[t] = sub
+                    missing.remove(t)
+                    print(f"  Yahoo direct ok: {t} {len(sub)} days")
 
-    if df is None or df.empty:
-        print("\nFalling back to yfinance...")
-        df = pull_from_yfinance()
+    # --- yfinance (final fallback) ---
+    if missing:
+        print(f"\nMissing after Yahoo direct: {missing} -- trying yfinance")
+        yf_df2 = pull_from_yfinance(tickers=missing)
+        if not yf_df2.empty:
+            for t in list(missing):
+                sub = yf_df2[yf_df2["ticker"] == t]
+                if not sub.empty:
+                    collected[t] = sub
+                    missing.remove(t)
+                    print(f"  yfinance ok: {t} {len(sub)} days")
 
-    if df is None or df.empty:
+    if missing:
+        print(f"WARNING: no data obtained for: {missing}")
+
+    if not collected:
         print("FATAL: no data from any source")
         return
 
+    df = pd.concat(list(collected.values()), ignore_index=True)
     df = df.sort_values(["ticker", "date"]).reset_index(drop=True)
     df.to_parquet(OUT, index=False)
 

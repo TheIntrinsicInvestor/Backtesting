@@ -15,15 +15,23 @@ Output: data/earnings_dates.parquet
 """
 
 import builtins
+import getpass
 import os
 import wrds
 import pandas as pd
 
 _u = os.environ.get("WRDS_USERNAME", "hoovyalert")
+_p = os.environ.get("PGPASSWORD", "")
 def _ai(p=""):
-    v = _u if "username" in p.lower() else ""
+    if "username" in p.lower():
+        v = _u
+    elif "y/n" in p.lower() or "y/n" in p:
+        v = "n"
+    else:
+        v = ""
     print(p + v); return v
 builtins.input = _ai
+getpass.getpass = lambda p="": _p
 
 DATA_DIR = "data"
 os.makedirs(DATA_DIR, exist_ok=True)

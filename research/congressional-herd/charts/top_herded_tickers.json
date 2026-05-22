@@ -1,92 +1,92 @@
 [
   {
-    "ticker": "AAPL",
-    "event_count": 7,
-    "mean_excess_60d": -0.0499,
-    "n_with_returns": 6
+    "ticker": "GOOGL",
+    "event_count": 15,
+    "mean_excess_60d": 0.0813,
+    "n_with_returns": 13
   },
   {
-    "ticker": "GOOGL",
-    "event_count": 7,
-    "mean_excess_60d": -0.0117,
-    "n_with_returns": 6
+    "ticker": "AAPL",
+    "event_count": 15,
+    "mean_excess_60d": -0.0102,
+    "n_with_returns": 13
   },
   {
     "ticker": "MSFT",
-    "event_count": 7,
-    "mean_excess_60d": -0.0547,
-    "n_with_returns": 5
-  },
-  {
-    "ticker": "JPM",
-    "event_count": 7,
-    "mean_excess_60d": 0.0466,
-    "n_with_returns": 6
-  },
-  {
-    "ticker": "JNJ",
-    "event_count": 6,
-    "mean_excess_60d": -0.0487,
-    "n_with_returns": 4
+    "event_count": 15,
+    "mean_excess_60d": -0.0135,
+    "n_with_returns": 13
   },
   {
     "ticker": "NVDA",
-    "event_count": 4,
-    "mean_excess_60d": 0.0558,
-    "n_with_returns": 4
+    "event_count": 13,
+    "mean_excess_60d": 0.0833,
+    "n_with_returns": 12
+  },
+  {
+    "ticker": "JPM",
+    "event_count": 12,
+    "mean_excess_60d": 0.0455,
+    "n_with_returns": 12
+  },
+  {
+    "ticker": "JNJ",
+    "event_count": 10,
+    "mean_excess_60d": 0.0058,
+    "n_with_returns": 9
   },
   {
     "ticker": "HD",
-    "event_count": 3,
-    "mean_excess_60d": 0.0059,
-    "n_with_returns": 3
-  },
-  {
-    "ticker": "WFC",
-    "event_count": 3,
-    "mean_excess_60d": 0.0871,
-    "n_with_returns": 2
-  },
-  {
-    "ticker": "COST",
-    "event_count": 2,
-    "mean_excess_60d": 0.007,
-    "n_with_returns": 1
-  },
-  {
-    "ticker": "INTC",
-    "event_count": 2,
-    "mean_excess_60d": -0.1067,
-    "n_with_returns": 2
-  },
-  {
-    "ticker": "PG",
-    "event_count": 2,
-    "mean_excess_60d": 0.0071,
-    "n_with_returns": 1
-  },
-  {
-    "ticker": "AMD",
-    "event_count": 2,
-    "mean_excess_60d": -0.1465,
-    "n_with_returns": 2
-  },
-  {
-    "ticker": "AMZN",
-    "event_count": 2,
-    "mean_excess_60d": -0.0223,
-    "n_with_returns": 2
-  },
-  {
-    "ticker": "PANW",
-    "event_count": 2,
-    "mean_excess_60d": -0.1165,
-    "n_with_returns": 2
+    "event_count": 9,
+    "mean_excess_60d": -0.0284,
+    "n_with_returns": 8
   },
   {
     "ticker": "META",
-    "event_count": 2,
-    "mean_excess_60d": null,
-    "n_with_returns": 0
+    "event_count": 9,
+    "mean_excess_60d": -0.0657,
+    "n_with_returns": 8
+  },
+  {
+    "ticker": "UNH",
+    "event_count": 9,
+    "mean_excess_60d": -0.1026,
+    "n_with_returns": 8
+  },
+  {
+    "ticker": "AMZN",
+    "event_count": 8,
+    "mean_excess_60d": -0.0326,
+    "n_with_returns": 7
+  },
+  {
+    "ticker": "MRK",
+    "event_count": 7,
+    "mean_excess_60d": -0.0511,
+    "n_with_returns": 7
+  },
+  {
+    "ticker": "TSLA",
+    "event_count": 6,
+    "mean_excess_60d": 0.1192,
+    "n_with_returns": 5
+  },
+  {
+    "ticker": "AVGO",
+    "event_count": 6,
+    "mean_excess_60d": 0.1963,
+    "n_with_returns": 5
+  },
+  {
+    "ticker": "AMD",
+    "event_count": 5,
+    "mean_excess_60d": 0.1657,
+    "n_with_returns": 5
+  },
+  {
+    "ticker": "AMAT",
+    "event_count": 5,
+    "mean_excess_60d": 0.0301,
+    "n_with_returns": 5
   }
 ]

@@ -16,17 +16,24 @@ Output: data/straddle_prices.parquet
 """
 
 import builtins
+import getpass
 import os
 import wrds
 import pandas as pd
 import numpy as np
 
 _u = os.environ.get("WRDS_USERNAME", "hoovyalert")
+_p = os.environ.get("PGPASSWORD", "")
 def _ai(p=""):
-    v = _u if "username" in p.lower() else ""
+    if "username" in p.lower():
+        v = _u
+    elif "y/n" in p.lower() or "y/n" in p:
+        v = "n"
+    else:
+        v = ""
     print(p + v); return v
 builtins.input = _ai
-import os
+getpass.getpass = lambda p="": _p
 from datetime import timedelta
 
 DATA_DIR = "data"
@@ -39,12 +46,12 @@ earnings = pd.read_parquet(os.path.join(DATA_DIR, "earnings_dates.parquet"))
 # These are the stable OptionMetrics secids for each stock.
 SECID_MAP = {
     "AAPL" : 101594,
-    "MSFT" : 102357,
-    "NVDA" : 105054,
-    "AMZN" : 101231,
-    "GOOGL": 108105,
-    "META" : 121015,
-    "TSLA" : 116380,
+    "MSFT" : 107525,
+    "NVDA" : 108321,
+    "AMZN" : 101310,
+    "GOOGL": 121812,
+    "META" : 154402,
+    "TSLA" : 143439,
 }
 
 earnings["secid"] = earnings["ticker"].map(SECID_MAP)
@@ -73,7 +80,7 @@ for _, row in earnings.iterrows():
           ON o.secid = u.secid AND o.date = u.date
         WHERE o.secid = {secid}
           AND o.date IN ({dates_str})
-          AND o.ss_flag = 0
+          AND o.ss_flag = '0'
           AND o.best_bid > 0
           AND o.best_offer > 0
           AND o.exdate > o.date

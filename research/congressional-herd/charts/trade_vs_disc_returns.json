@@ -8,33 +8,33 @@
     252
   ],
   "disc_mean": [
-    0.0123,
-    0.0112,
-    -0.0035,
-    -0.0092,
-    -0.102,
-    -0.1138
+    0.0039,
+    0.0018,
+    0.0019,
+    -0.0033,
+    -0.0282,
+    -0.094
   ],
   "trade_mean": [
     -0.0036,
-    0.003,
-    0.0001,
-    -0.0241,
-    -0.1164,
-    -0.0442
+    -0.0019,
+    -0.0019,
+    -0.0071,
+    -0.0384,
+    -0.0961
   ],
   "n_events": [
-    129,
-    114,
-    100,
-    98,
-    63,
-    42
+    374,
+    362,
+    340,
+    338,
+    200,
+    129
   ],
-  "lag_n": 131,
-  "lag_days_median": 26.0,
-  "lag_period_mean_return": 0.0258,
-  "lag_period_mean_excess": -0.0089,
-  "lag_period_median_excess": -0.0039,
-  "lag_period_win_rate": 0.4656
+  "lag_n": 376,
+  "lag_days_median": 26.5,
+  "lag_period_mean_return": 0.0227,
+  "lag_period_mean_excess": -0.0067,
+  "lag_period_median_excess": -0.0021,
+  "lag_period_win_rate": 0.484
 }
