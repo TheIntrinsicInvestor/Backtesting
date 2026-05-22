@@ -19,8 +19,8 @@ def map_tickers(db, tickers):
     frames = []
     for chunk in chunks:
         df = db.raw_sql(
-            "SELECT DISTINCT ticker, permno, comnam, siccd, namedt, nameenddt "
-            "FROM crsp.stocknames "
+            "SELECT DISTINCT ticker, permno, issuernm AS comnam, siccd, namedt, nameenddt "
+            "FROM crsp.stocknames_v2 "
             "WHERE ticker IN %(tickers)s",
             params={"tickers": tuple(chunk)},
         )
@@ -38,9 +38,9 @@ def map_tickers(db, tickers):
 
 def pull_prices(db, permnos, start_date, end_date):
     df = db.raw_sql(
-        "SELECT date, permno, prc, ret, cfacpr, vol, shrout "
-        "FROM crsp.dsf "
-        "WHERE permno IN %(permnos)s AND date BETWEEN %(start)s AND %(end)s",
+        "SELECT dlycaldt AS date, permno, dlyprc AS prc, dlyret AS ret, dlycumfacpr AS cfacpr, dlyvol AS vol, shrout "
+        "FROM crsp.dsf_v2 "
+        "WHERE permno IN %(permnos)s AND dlycaldt BETWEEN %(start)s AND %(end)s",
         params={"permnos": tuple(permnos), "start": start_date, "end": end_date},
     )
     df["prc"] = df["prc"].abs()

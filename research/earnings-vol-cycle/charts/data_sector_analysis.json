@@ -1,0 +1,67 @@
+{
+  "sectors": [
+    "Technology",
+    "Consumer Discretionary",
+    "Communication Services",
+    "Consumer Staples",
+    "Healthcare",
+    "Industrials",
+    "Materials",
+    "Financials",
+    "Energy",
+    "Utilities",
+    "Real Estate"
+  ],
+  "win_rates": [
+    72.8,
+    73.6,
+    69.5,
+    72.0,
+    70.1,
+    69.4,
+    65.8,
+    68.7,
+    60.0,
+    60.0,
+    64.7
+  ],
+  "avg_pnl": [
+    58.0,
+    75.0,
+    23.0,
+    45.0,
+    27.0,
+    23.0,
+    -3.0,
+    22.0,
+    -22.0,
+    4.0,
+    23.0
+  ],
+  "ivrv_spread": [
+    -26.2,
+    -26.0,
+    -25.3,
+    -19.3,
+    -18.7,
+    -18.3,
+    -14.7,
+    -9.0,
+    -5.1,
+    -0.3,
+    -0.2
+  ],
+  "n_events": [
+    4824,
+    5203,
+    1486,
+    2498,
+    4412,
+    5262,
+    2086,
+    5305,
+    2345,
+    1977,
+    1929
+  ]
+}

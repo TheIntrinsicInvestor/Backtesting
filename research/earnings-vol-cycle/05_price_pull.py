@@ -6,12 +6,19 @@ Columns: permno, date, prc, ret, shrout, mktcap_m (market cap $M)
 """
 
 import os
+import builtins
 import wrds
 import pandas as pd
 import numpy as np
 from pathlib import Path
 
-YEARS      = list(range(2009, 2025))
+_u = os.environ.get("WRDS_USERNAME", "hoovyalert")
+def _ai(p=""):
+    v = _u if "username" in p.lower() else ""
+    print(p + v); return v
+builtins.input = _ai
+
+YEARS      = list(range(2009, 2026))
 CACHE_DIR  = Path("data/prices_by_year")
 FINAL_FILE = Path("data/prices.parquet")
 
@@ -42,13 +49,13 @@ for year in YEARS:
         print(f"  {year}: cache hit — {len(chunk):,} rows")
     else:
         query = f"""
-            SELECT permno, date, prc, ret, shrout, cfacshr
-            FROM crsp.dsf
+            SELECT permno, dlycaldt AS date, dlyprc AS prc, dlyret AS ret, shrout, dlycumfacshr AS cfacshr
+            FROM crsp.dsf_v2
             WHERE permno IN ({perm_sql})
-              AND date BETWEEN '{year}-01-01' AND '{year}-12-31'
-              AND prc IS NOT NULL
+              AND dlycaldt BETWEEN '{year}-01-01' AND '{year}-12-31'
+              AND dlyprc IS NOT NULL
         """
-        print(f"  {year}: querying crsp.dsf...", end=" ", flush=True)
+        print(f"  {year}: querying crsp.dsf_v2...", end=" ", flush=True)
         chunk = db.raw_sql(query, date_cols=["date"])
         chunk["permno"] = chunk["permno"].astype(int)
         chunk.to_parquet(year_cache, index=False)

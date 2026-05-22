@@ -116,7 +116,7 @@ viable = avg_pnl > 0 and (sharpe_q or 0) >= 0.5 and ivrv_mean < -10
 if viable:
     verdict_class = "green"
     verdict_title = "The premium is real and broadly persistent."
-    verdict_body  = (f"Across {n_total:,} earnings events from 2010 to 2024, IV exceeded realised vol by "
+    verdict_body  = (f"Across {n_total:,} earnings events from 2010 to 2025, IV exceeded realised vol by "
                      f"{ivrv_mean:+.1f}pp on average, a persistent structural overshoot that translates into "
                      f"${avg_pnl:+.0f} average P&L per $10K notional and a quarterly Sharpe of {sharpe_str}. "
                      f"The edge is genuine: it persists across sectors, cap sizes, and surprise regimes, "
@@ -289,13 +289,13 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
     <h1>The Earnings Vol Premium: <em>IV Dynamics Across the S&amp;P 500</em></h1>
     <p class="hero-sub">
       Does implied volatility systematically overstate realised moves at earnings? This study analyses {n_total:,} earnings events
-      across S&amp;P 500 constituents from 2010 to 2024, measuring the IV run-up, the IV-RV spread at announcement, and the
+      across S&amp;P 500 constituents from 2010 to 2025, measuring the IV run-up, the IV-RV spread at announcement, and the
       profitability of selling ATM straddles at earnings, segmented by sector, market cap, and earnings surprise magnitude.
     </p>
     <div class="hero-meta">
       <div class="hero-meta-item"><strong>Author</strong>Brian Liew, BSc Accounting and Finance, LSE</div>
       <div class="hero-meta-item"><strong>Published</strong>May 2025</div>
-      <div class="hero-meta-item"><strong>Period</strong>2010 to 2024, n={n_total:,} events</div>
+      <div class="hero-meta-item"><strong>Period</strong>2010 to 2025, n={n_total:,} events</div>
       <div class="hero-meta-item"><strong>Data</strong>OptionMetrics, IBES, CRSP</div>
       <a href="https://github.com/TheIntrinsicInvestor/Backtesting" target="_blank" rel="noopener" class="gh-btn">
         <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
@@ -310,7 +310,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
     <div class="kpi-cell">
       <div class="kpi-label">Events Analysed</div>
       <div class="kpi-value blue">{n_total:,}</div>
-      <div class="kpi-sub">S&amp;P 500 earnings, 2010–2024</div>
+      <div class="kpi-sub">S&amp;P 500 earnings, 2010&ndash;2025</div>
     </div>
     <div class="kpi-cell">
       <div class="kpi-label">Mean IV-RV Spread</div>
@@ -341,7 +341,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
     transaction costs), the strategy has no rational basis.</p>
     <p>The universe is constructed from CRSP's S&amp;P 500 constituent list (<code>crsp.msp500list</code>),
     using point-in-time membership windows to avoid survivorship bias. Every permno that held membership between
-    January 2010 and December 2024 is included for the quarters it was in the index. Earnings announcement dates
+    January 2010 and August 2025 is included for the quarters it was in the index. Earnings announcement dates
     come from IBES (<code>ibes.actu_epsus</code>, quarterly, <code>pdicity='QTR'</code>), and implied volatility
     from the OptionMetrics standardised surface (<code>optionm_all.vsurfd</code>, 30-day maturity, 50-delta call).</p>
     <p>For each event, we define an event window from T-20 to T+5 trading days relative to the announcement date T.
@@ -582,7 +582,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
       <thead><tr><th>Dimension</th><th>Detail</th></tr></thead>
       <tbody>
         <tr><td>Universe</td><td>S&amp;P 500 point-in-time constituents from CRSP msp500list; survivorship-bias-free membership windows used throughout</td></tr>
-        <tr><td>Period</td><td>2010-01-01 to 2024-12-31 (15 years); IV data pulled from 2009 to provide T-20 buffer for January 2010 events</td></tr>
+        <tr><td>Period</td><td>2010-01-01 to 2025-08-29 (15+ years); IV data pulled from 2009 to provide T-20 buffer for January 2010 events</td></tr>
         <tr><td>Earnings dates</td><td>IBES actu_epsus, pdicity='QTR'; announcement date = anndats; deduplicated on permno + anndats</td></tr>
         <tr><td>Implied volatility</td><td>OptionMetrics vsurfd, 30-day maturity, delta=50, cp_flag='C'; secid matched to CRSP permno via 8-char CUSIP through optionm_all.secnmd</td></tr>
         <tr><td>IV baseline</td><td>Mean of T-20 to T-15 (six trading days); events with fewer than 3 valid baseline days excluded</td></tr>

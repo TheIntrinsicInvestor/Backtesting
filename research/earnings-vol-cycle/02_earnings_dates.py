@@ -6,13 +6,20 @@ Columns: permno, ticker, anndats, pends, actual_eps, consensus_eps, surprise_pct
 """
 
 import os
+import builtins
 import wrds
 import pandas as pd
 from pathlib import Path
 
+_u = os.environ.get("WRDS_USERNAME", "hoovyalert")
+def _ai(p=""):
+    v = _u if "username" in p.lower() else ""
+    print(p + v); return v
+builtins.input = _ai
+
 CACHE = Path("data/earnings_dates.parquet")
 START = "2009-01-01"   # extra year for T-20 buffer
-END   = "2024-12-31"
+END   = "2025-12-31"
 
 if CACHE.exists():
     df = pd.read_parquet(CACHE)

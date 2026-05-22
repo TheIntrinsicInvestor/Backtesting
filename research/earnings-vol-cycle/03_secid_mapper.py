@@ -6,9 +6,16 @@ Columns: permno, secid, cusip8, ticker_om, issuer
 """
 
 import os
+import builtins
 import wrds
 import pandas as pd
 from pathlib import Path
+
+_u = os.environ.get("WRDS_USERNAME", "hoovyalert")
+def _ai(p=""):
+    v = _u if "username" in p.lower() else ""
+    print(p + v); return v
+builtins.input = _ai
 
 CACHE = Path("data/secid_map.parquet")
 

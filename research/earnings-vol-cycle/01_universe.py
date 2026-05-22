@@ -5,13 +5,20 @@ Columns: permno, ticker, company, ncusip, siccd, gsector, sector, start_date, en
 """
 
 import os
+import builtins
 import wrds
 import pandas as pd
 from pathlib import Path
 
+_u = os.environ.get("WRDS_USERNAME", "hoovyalert")
+def _ai(p=""):
+    v = _u if "username" in p.lower() else ""
+    print(p + v); return v
+builtins.input = _ai
+
 CACHE = Path("data/sp500_constituents.parquet")
 START = "2010-01-01"
-END   = "2024-12-31"
+END   = "2025-08-31"
 
 GICS_MAP = {
     10: "Energy",
@@ -39,10 +46,10 @@ db = wrds.Connection(wrds_username=os.environ.get("WRDS_USERNAME"))
 # ── 1. S&P 500 membership windows ────────────────────────────────────────────
 print("Pulling S&P 500 constituent list...")
 sp500 = db.raw_sql(f"""
-    SELECT permno, start, ending
-    FROM crsp.msp500list
-    WHERE start <= '{END}'
-      AND (ending IS NULL OR ending >= '{START}')
+    SELECT permno, mbrstartdt AS start, mbrenddt AS ending
+    FROM crsp.msp500list_v2
+    WHERE mbrstartdt <= '{END}'
+      AND (mbrenddt IS NULL OR mbrenddt >= '{START}')
 """)
 sp500.columns = ["permno", "start_date", "end_date"]
 permnos = tuple(map(int, sp500["permno"].unique()))
@@ -51,8 +58,8 @@ print(f"  {len(permnos):,} unique permnos")
 # ── 2. Latest name / ticker / CUSIP for each permno ──────────────────────────
 print("Pulling name data from msenames...")
 names = db.raw_sql(f"""
-    SELECT DISTINCT ON (permno) permno, ticker, comnam, ncusip, siccd
-    FROM crsp.msenames
+    SELECT DISTINCT ON (permno) permno, ticker, issuernm AS comnam, cusip AS ncusip, siccd
+    FROM crsp.stocknames_v2
     WHERE permno IN {permnos}
     ORDER BY permno, namedt DESC
 """)

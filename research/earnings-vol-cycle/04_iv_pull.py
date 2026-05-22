@@ -7,11 +7,18 @@ Columns: secid, date, impl_volatility
 """
 
 import os
+import builtins
 import wrds
 import pandas as pd
 from pathlib import Path
 
-YEARS      = list(range(2009, 2025))
+_u = os.environ.get("WRDS_USERNAME", "hoovyalert")
+def _ai(p=""):
+    v = _u if "username" in p.lower() else ""
+    print(p + v); return v
+builtins.input = _ai
+
+YEARS      = list(range(2009, 2026))
 CACHE_DIR  = Path("data/iv_by_year")
 FINAL_FILE = Path("data/iv_panel.parquet")
 

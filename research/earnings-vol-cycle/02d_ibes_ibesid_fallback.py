@@ -34,7 +34,7 @@ builtins.input = _ai
 
 EARNINGS_CACHE = Path("data/earnings_dates.parquet")
 START = "2009-01-01"
-END   = "2024-12-31"
+END   = "2026-08-31"
 
 # (ibes_ticker, permno, date_filter_end)
 # date_filter_end: only keep anndats up to this date (None = no limit)

@@ -15,9 +15,17 @@ Underlying prices from optionm.secprd{year}.
 Output: data/straddle_prices.parquet
 """
 
+import builtins
+import os
 import wrds
 import pandas as pd
 import numpy as np
+
+_u = os.environ.get("WRDS_USERNAME", "hoovyalert")
+def _ai(p=""):
+    v = _u if "username" in p.lower() else ""
+    print(p + v); return v
+builtins.input = _ai
 import os
 from datetime import timedelta
 

@@ -621,7 +621,7 @@ html = f"""<!DOCTYPE html>
       period; negative-GEX days (shown in red) consistently cluster around the
       higher end of the daily vol distribution. The effect is most visible during
       2022&#8202;&#8211;&#8202;2023, when the combination of Fed rate hikes and elevated
-      VIX produced frequent negative-GEX days. During the calmer 2024 bull market,
+      VIX produced frequent negative-GEX days. During the calmer stretches of 2024&ndash;2025,
       positive GEX dominated and intraday vol remained suppressed for extended stretches.
     </p>
 

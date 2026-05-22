@@ -17,9 +17,16 @@ Outputs:
 """
 
 import os
+import builtins
 import wrds
 import pandas as pd
 import numpy as np
+
+_u = os.environ.get("WRDS_USERNAME", "hoovyalert")
+def _ai(p=""):
+    v = _u if "username" in p.lower() else ""
+    print(p + v); return v
+builtins.input = _ai
 
 os.makedirs("data", exist_ok=True)
 
@@ -58,12 +65,12 @@ else:
     db = wrds.Connection(wrds_username=os.environ.get("WRDS_USERNAME"))
 
     crsp = db.raw_sql(f"""
-        SELECT date, openprc, askhi, bidlo, prc, ret
-        FROM crsp.dsf
+        SELECT dlycaldt AS date, dlyopen AS openprc, dlyhigh AS askhi, dlylow AS bidlo, dlyprc AS prc, dlyret AS ret
+        FROM crsp.dsf_v2
         WHERE permno = {SPY_PERMNO}
-          AND date >= '{START_DATE}'
-          AND date <= '{END_DATE}'
-        ORDER BY date
+          AND dlycaldt >= '{START_DATE}'
+          AND dlycaldt <= '{END_DATE}'
+        ORDER BY dlycaldt
     """)
     db.close()
 

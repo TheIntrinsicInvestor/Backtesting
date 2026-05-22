@@ -292,6 +292,28 @@ MEETINGS = [
      "expected_bps": -25, "comm_surprise": "Hawkish",
      "is_emergency": False, "is_outlier": False,
      "notes": "Cut 25bps; dot plot: only 2 cuts in 2025 vs 4 expected; hawkish guidance surprise; S&P -3.0%"},
+
+    # ── 2025 (through OptionMetrics cap: 2025-08-29) ──────────────────────────
+    {"date": "2025-01-29", "prior_upper": 4.50, "actual_change_bps":  0,
+     "expected_bps":  0, "comm_surprise": "Hawkish",
+     "is_emergency": False, "is_outlier": False,
+     "notes": "Hold; statement removed 'inflation has made progress toward 2%' — replaced with 'remains somewhat elevated'; hawkish language shift; Powell: patient, no rush"},
+    {"date": "2025-03-19", "prior_upper": 4.50, "actual_change_bps":  0,
+     "expected_bps":  0, "comm_surprise": "Neutral",
+     "is_emergency": False, "is_outlier": False,
+     "notes": "Hold; tariff and trade war uncertainty dominant; dot plot maintained 2 cuts in 2025 but uncertainty ranges widened; growth forecasts revised down, inflation up; mixed market reaction"},
+    {"date": "2025-05-07", "prior_upper": 4.50, "actual_change_bps":  0,
+     "expected_bps":  0, "comm_surprise": "Neutral",
+     "is_emergency": False, "is_outlier": False,
+     "notes": "Hold; trade war 90-day pause in effect; Powell: 'cross-currents' of inflation and slowing growth; 'no rush to adjust'; neutral communication"},
+    {"date": "2025-06-18", "prior_upper": 4.50, "actual_change_bps":  0,
+     "expected_bps":  0, "comm_surprise": "Neutral",
+     "is_emergency": False, "is_outlier": False,
+     "notes": "Hold; continued patient stance; inflation easing gradually; labour market resilient; no material guidance surprise"},
+    {"date": "2025-07-30", "prior_upper": 4.50, "actual_change_bps":  0,
+     "expected_bps":  0, "comm_surprise": "Dovish",
+     "is_emergency": False, "is_outlier": False,
+     "notes": "Hold; inflation cooling further; Powell more clearly signalled September cut as on the table if data cooperates; dovish lean vs market pricing; S&P +0.6%"},
 ]
 
 # ── Build DataFrame ────────────────────────────────────────────────────────────

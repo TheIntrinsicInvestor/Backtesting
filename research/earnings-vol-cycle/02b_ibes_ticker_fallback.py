@@ -23,7 +23,7 @@ from pathlib import Path
 
 EARNINGS_CACHE = Path("data/earnings_dates.parquet")
 START = "2009-01-01"
-END   = "2024-12-31"
+END   = "2026-08-31"
 
 # ── Load current state ────────────────────────────────────────────────────────
 universe = pd.read_parquet("data/sp500_constituents.parquet")

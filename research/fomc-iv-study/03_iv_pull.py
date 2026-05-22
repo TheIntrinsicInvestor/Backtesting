@@ -28,7 +28,7 @@ SECID_MAP = {
 SECID_TO_TICKER = {v: k for k, v in SECID_MAP.items()}
 SECIDS_SQL = ", ".join(str(s) for s in SECID_MAP.values())
 
-YEARS = list(range(2017, 2025))  # 2017-2024 inclusive
+YEARS = list(range(2017, 2026))  # 2017-2025 inclusive
 
 if os.path.exists(CACHE):
     print(f"Cache found at {CACHE} — skipping WRDS query.")
@@ -36,6 +36,12 @@ if os.path.exists(CACHE):
     print(f"Loaded {len(df):,} rows. Date range: {df['date'].min().date()} to {df['date'].max().date()}")
 else:
     print("No cache — querying WRDS.")
+    import builtins
+    _u2 = os.environ.get("WRDS_USERNAME", "hoovyalert")
+    def _ai2(p=""):
+        v = _u2 if "username" in p.lower() else ""
+        print(p + v); return v
+    builtins.input = _ai2
     db = wrds.Connection(wrds_username=os.environ.get("WRDS_USERNAME"))
 
     chunks = []
