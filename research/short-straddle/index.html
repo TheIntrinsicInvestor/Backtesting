@@ -1,447 +1,804 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<meta property="og:type" content="article"/>
-<meta property="og:title" content="Selling Earnings Vol: Mag7 Straddles — The Intrinsic Investor"/>
-<meta property="og:description" content="Short straddle backtest across the Magnificent Seven, 2019–2025. 74% win rate on NVDA, Sharpe 1.93 on AAPL. Combined edge is narrow."/>
-<meta property="og:url" content="https://theintrinsicinvestor.com/research/short-straddle/"/>
-<title>Selling Earnings Volatility: TheIntrinsicInvestor</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Selling Earnings Volatility: Mag7 Short Straddles | The Intrinsic Investor">
+<meta property="og:description" content="Short straddle backtest across the Magnificent Seven, 2019&#8211;2025. NVDA 74.1% win rate, AAPL Sharpe 1.93. Combined edge is narrow.">
+<meta property="og:url" content="https://theintrinsicinvestor.com/research/short-straddle/">
+<title>Selling Earnings Volatility: Mag7 Short Straddles | The Intrinsic Investor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#f7f4ec;--bg2:#f0ece2;--bg3:#e8e3d8;--card:#fff;
   --ink:#0f2220;--muted:#4a6460;--hint:#8aa49e;
-  --border:#e2ddd0;--accent:#1a5c52;
-  --serif:'Fraunces',serif;--font:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;
+  --border:#e2ddd0;--accent:#1a5c52;--accent2:#144a42;
+  --green:#0E9F6E;--green2:#059669;--green-bg:#ecfdf5;--green-border:#a7f3d0;
+  --red:#E02424;--red2:#dc2626;--red-bg:#fef2f2;--red-border:#fca5a5;
+  --blue:#1e40af;--blue2:#2563eb;--blue-bg:#eff6ff;--blue-border:#bfdbfe;
+  --amber:#E3A008;--amber-bg:#fffbeb;--amber-border:#fcd34d;
+  --purple:#7E3AF2;--purple-bg:#f5f3ff;--purple-border:#c4b5fd;
+  --font:'Inter',sans-serif;--serif:'Fraunces',serif;--mono:'JetBrains Mono',monospace;
 }
-body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.75;font-size:15px;-webkit-font-smoothing:antialiased}
-
-/* NAV */
-nav{position:sticky;top:0;z-index:100;background:rgba(247,244,236,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:box-shadow 0.3s;border-bottom:1px solid var(--border);padding:0 2.5rem;height:62px;display:flex;align-items:center;justify-content:space-between}
-nav.scrolled{box-shadow:0 1px 24px rgba(15,34,32,0.06)}
-.nav-logo{font-family:var(--serif);font-size:21px;font-weight:600;color:var(--ink)}
-.nav-links{display:flex;gap:2rem}
-.nav-links a{font-size:13px;color:var(--ink);text-decoration:none;font-weight:400;position:relative;padding-bottom:2px}
-.nav-links a::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform 0.25s cubic-bezier(0.4,0,0.2,1)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.7}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+  mix-blend-mode:multiply;opacity:0.5}
+#progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;
+  background:linear-gradient(90deg,#1a5c52,#2d9d8f);z-index:9998;transition:width .1s linear}
+nav{position:sticky;top:0;z-index:100;height:62px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 2rem;
+  background:rgba(247,244,236,.92);backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);transition:box-shadow .3s}
+nav.scrolled{box-shadow:0 1px 24px rgba(15,34,32,.06)}
+.nav-logo{font-family:var(--serif);font-weight:600;font-size:1.1rem;color:var(--ink);
+  letter-spacing:-.01em;text-decoration:none}
+.nav-links{display:flex;gap:1.75rem;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:500;
+  position:relative;padding-bottom:2px;transition:color .2s}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
+  background:var(--accent);transform:scaleX(0);transform-origin:left;
+  transition:transform .25s cubic-bezier(.4,0,.2,1)}
 .nav-links a:hover::after{transform:scaleX(1)}
-
-/* HERO */
-.hero{background:var(--ink);color:#fff;padding:56px 2.5rem 48px}
-.hero-inner{max-width:900px;margin:0 auto}
-.hero-tag{font-family:var(--font);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--hint);margin-bottom:1.25rem;display:flex;align-items:center;gap:10px}
-.hero-tag::before{content:'';width:24px;height:1px;background:var(--hint)}
-.hero h1{font-family:var(--serif);font-size:2.3rem;font-weight:600;line-height:1.2;margin-bottom:1rem;color:#fff}
-.hero h1 em{font-style:italic;color:#5ab5a5}
-.hero p{font-family:var(--font);color:rgba(255,255,255,.5);font-size:14px;margin-bottom:1.5rem;font-weight:300;line-height:1.8}
-.hero-meta{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.3);border-top:1px solid rgba(255,255,255,.08);padding-top:1rem;display:flex;gap:1.5rem;flex-wrap:wrap;align-items:center}
-.gh-btn{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.5);text-decoration:none;border:1px solid rgba(255,255,255,.2);padding:2px 8px;border-radius:3px;transition:all .2s;letter-spacing:.02em}
+.hero{background:var(--ink);padding:5rem 2rem 4rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:repeating-linear-gradient(-55deg,transparent,transparent 40px,
+    rgba(255,255,255,.013) 40px,rgba(255,255,255,.013) 41px)}
+.hero-inner{max-width:860px;margin:0 auto;position:relative}
+.hero-tag{display:inline-block;font-family:var(--mono);font-size:.72rem;color:var(--accent);
+  letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(26,92,82,.4);
+  padding:.25rem .75rem;border-radius:2px;margin-bottom:1.5rem;animation:fadeUp .6s ease both}
+.hero h1{font-family:var(--serif);font-size:clamp(1.9rem,4.5vw,3.2rem);font-weight:600;
+  color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:1.25rem;
+  animation:fadeUp .6s .1s ease both}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero-sub{font-size:1rem;color:rgba(255,255,255,.65);max-width:620px;line-height:1.7;
+  margin-bottom:2rem;animation:fadeUp .6s .2s ease both;text-align:left}
+.hero-meta{display:flex;flex-wrap:wrap;gap:2rem;font-family:var(--mono);font-size:.75rem;
+  color:rgba(255,255,255,.5);border-top:1px solid rgba(255,255,255,.1);
+  padding-top:1.5rem;animation:fadeUp .6s .3s ease both}
+.hero-meta-item strong{display:block;color:rgba(255,255,255,.85);font-size:.85rem;margin-bottom:.15rem}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.kpi-strip{background:var(--card);border-bottom:1px solid var(--border);padding:2rem}
+.kpi-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.kpi-cell{padding:1.5rem;border-right:1px solid var(--border)}
+.kpi-cell:last-child{border-right:none}
+.kpi-label{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--hint);margin-bottom:.5rem}
+.kpi-value{font-family:var(--mono);font-size:1.9rem;font-weight:500;color:var(--ink);
+  line-height:1;margin-bottom:.4rem}
+.kpi-value.green{color:var(--green2)}
+.kpi-value.red{color:var(--red2)}
+.kpi-value.blue{color:var(--blue2)}
+.kpi-sub{font-size:.78rem;color:var(--muted)}
+.container{max-width:860px;margin:0 auto;padding:0 2rem}
+.section{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease;
+  padding:4.5rem 0;border-bottom:1px solid var(--border)}
+.section.visible{opacity:1;transform:none}
+.section:last-of-type{border-bottom:none}
+.section-label{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem}
+.section-counter{font-family:var(--mono);font-size:.72rem;color:var(--hint);letter-spacing:.04em}
+.section-label span:last-child{font-size:.72rem;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--hint)}
+h2{font-family:var(--serif);font-size:clamp(1.5rem,3vw,2.1rem);font-weight:600;
+  color:var(--ink);line-height:1.25;letter-spacing:-.02em;margin-bottom:1.25rem}
+h2 em{font-style:italic;color:var(--accent)}
+h3{font-family:var(--serif);font-size:1.15rem;font-weight:600;color:var(--ink);margin:2rem 0 .75rem}
+p{color:var(--muted);line-height:1.75;margin-bottom:1rem;text-align:justify;hyphens:none;word-break:normal;overflow-wrap:normal}
+p:last-child{margin-bottom:0}
+code{font-family:var(--mono);font-size:.85rem;background:var(--bg3);padding:.1rem .35rem;
+  border-radius:3px;color:var(--accent)}
+.callout{display:flex;gap:1rem;padding:1.25rem 1.5rem;border-radius:4px;margin:1.5rem 0;border-left:3px solid}
+.callout.green{background:var(--green-bg);border-color:var(--green2)}
+.callout.amber{background:var(--amber-bg);border-color:var(--amber)}
+.callout.red{background:var(--red-bg);border-color:var(--red2)}
+.callout.blue{background:var(--blue-bg);border-color:var(--blue2)}
+.callout.purple{background:var(--purple-bg);border-color:var(--purple)}
+.callout-body{font-size:.9rem;color:var(--ink);line-height:1.6}
+.callout-body strong{font-weight:600}
+.highlight-box{background:var(--ink);border-radius:4px;padding:2rem;margin:1.5rem 0}
+.hl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.hl-cell{padding:0 1.5rem;border-right:1px solid rgba(255,255,255,.1)}
+.hl-cell:first-child{padding-left:0}
+.hl-cell:last-child{border-right:none}
+.hl-label{font-size:.7rem;font-weight:500;color:rgba(255,255,255,.35);text-transform:uppercase;
+  letter-spacing:.1em;margin-bottom:.5rem}
+.hl-value{font-family:var(--serif);font-style:italic;font-size:1.75rem;color:#5ab5a5;line-height:1.1}
+.hl-sub{font-size:.75rem;color:rgba(255,255,255,.3);margin-top:.3rem}
+.chart-box{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1.5rem;margin:1.5rem 0}
+.chart-title{font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:1rem;letter-spacing:.02em}
+.chart-note{font-size:.8rem;color:var(--hint);margin-top:.75rem}
+.table-wrap{overflow-x:auto;margin:1.5rem 0;border-radius:4px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:.875rem}
+thead tr{background:var(--ink);color:#fff}
+thead th{padding:.7rem .9rem;text-align:left;font-weight:500;font-size:.75rem;letter-spacing:.04em}
+tbody tr{border-bottom:1px solid var(--border)}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--bg3)}
+td{padding:.65rem .9rem;color:var(--muted);vertical-align:middle}
+.n-right{text-align:right;font-family:var(--mono);font-size:.8rem}
+.tg{color:var(--green2);font-weight:600}
+.tr{color:var(--red2);font-weight:600}
+.ty{color:var(--amber);font-weight:600}
+.top-row{background:var(--green-bg)!important}
+.method-table thead tr{background:var(--bg3)}
+.method-table thead th{color:var(--ink);padding:.6rem .9rem;font-weight:600;font-size:.75rem;
+  letter-spacing:.04em;border-bottom:2px solid var(--border)}
+.method-table tbody td{padding:.6rem .9rem;color:var(--muted);vertical-align:top}
+.method-table tbody td:first-child{font-weight:600;color:var(--ink);width:28%;white-space:nowrap}
+#side-nav{position:fixed;right:0;top:50%;transform:translateY(-50%);
+  z-index:50;display:flex;flex-direction:column;gap:2px;padding:10px 6px}
+#side-nav a{display:flex;align-items:center;justify-content:flex-end;gap:7px;
+  text-decoration:none;padding:5px 8px;border-radius:4px;transition:background .2s}
+#side-nav a:hover{background:rgba(26,92,82,.07)}
+.sn-label{font-size:.67rem;font-weight:500;color:var(--hint);white-space:nowrap;
+  letter-spacing:.02em;font-family:var(--font);transition:color .2s;text-align:right}
+.sn-dot{width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;transition:all .2s}
+#side-nav a.active .sn-label{color:var(--accent);font-weight:600}
+#side-nav a.active .sn-dot{background:var(--accent);transform:scale(1.5)}
+#side-nav a:hover .sn-label{color:var(--ink)}
+#side-nav a:hover .sn-dot{background:var(--muted)}
+footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
+.footer-inner{max-width:860px;margin:0 auto;display:flex;
+  justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.footer-name{font-family:var(--serif);font-weight:600;font-size:1rem;color:rgba(255,255,255,.9)}
+.footer-right{font-size:.8rem;text-align:right}
+.footer-right a{color:rgba(255,255,255,.5);text-decoration:none;margin-left:1.2rem}
+.footer-right a:hover{color:rgba(255,255,255,.85)}
+.gh-btn{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.68rem;
+  color:rgba(255,255,255,.5);text-decoration:none;border:1px solid rgba(255,255,255,.2);
+  padding:3px 9px;border-radius:3px;transition:all .2s;letter-spacing:.02em;align-self:center}
 .gh-btn:hover{color:#fff;border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.08)}
-
-/* LAYOUT */
-.wrap{max-width:900px;margin:0 auto;padding:0 2.5rem 60px}
-.section{margin-top:52px}
-.section-title{font-family:var(--serif);font-size:1.45rem;font-weight:600;color:var(--ink);border-bottom:2px solid var(--accent);padding-bottom:.4rem;margin-bottom:1.25rem}
-p{line-height:1.8;margin-bottom:1rem;font-size:14px;color:var(--muted)}
-strong{font-weight:600;color:var(--ink)}
-code{font-family:var(--mono);font-size:.85rem;background:var(--bg3);padding:.1rem .35rem;border-radius:3px;color:var(--accent)}
-
-/* TICKER CARDS */
-.cards{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:2rem}
-@media(max-width:700px){.cards{grid-template-columns:repeat(4,1fr)}}
-.card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:10px 6px;text-align:center}
-.card-ticker{font-family:var(--serif);font-weight:600;font-size:14px;margin-bottom:4px;color:var(--ink)}
-.card-badge{font-family:var(--font);font-size:9px;font-weight:700;text-transform:uppercase;padding:2px 7px;border-radius:10px;display:inline-block;margin-bottom:6px}
-.badge-strong{background:#d4edda;color:#155724}
-.badge-moderate{background:#cce5ff;color:#004085}
-.badge-marginal{background:#fff3cd;color:#856404}
-.badge-avoid{background:#f8d7da;color:#721c24}
-.card-pnl{font-family:var(--serif);font-size:16px;font-weight:600;font-style:italic}
-.card-sub{font-family:var(--font);font-size:10px;color:var(--hint)}
-.pos{color:#059669}.neg{color:#dc2626}
-
-/* CHART CONTAINERS */
-.chart-wrap{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.25rem 1rem .75rem;margin-bottom:1.75rem}
-.chart-label{font-family:var(--font);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--hint);margin-bottom:.75rem}
-.chart-note{font-family:var(--font);font-size:11px;color:var(--hint);font-style:italic;margin-top:.5rem}
-
-/* TABS */
+/* Ticker summary cards */
+.ticker-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin:1.5rem 0}
+.ticker-card{background:var(--bg2);border:1px solid var(--border);border-radius:4px;
+  padding:10px 6px;text-align:center}
+.tc-ticker{font-family:var(--serif);font-weight:600;font-size:14px;margin-bottom:4px;color:var(--ink)}
+.tc-badge{font-family:var(--font);font-size:9px;font-weight:700;text-transform:uppercase;
+  padding:2px 7px;border-radius:10px;display:inline-block;margin-bottom:6px}
+.badge-strong{background:var(--green-bg);color:var(--green2)}
+.badge-moderate{background:var(--blue-bg);color:var(--blue)}
+.badge-selective{background:var(--amber-bg);color:var(--amber)}
+.badge-avoid{background:var(--red-bg);color:var(--red2)}
+.tc-pnl{font-family:var(--serif);font-size:15px;font-weight:600;font-style:italic}
+.tc-sub{font-family:var(--font);font-size:10px;color:var(--hint);margin-top:2px}
+.pos{color:var(--green2)}.neg{color:var(--red2)}
+/* Regime tabs */
 .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1rem}
-.tab{font-family:var(--font);font-size:12px;font-weight:600;padding:5px 14px;border-radius:4px;border:1px solid var(--border);background:var(--card);cursor:pointer;transition:all .15s;color:var(--muted)}
+.tab{font-family:var(--font);font-size:12px;font-weight:600;padding:5px 14px;border-radius:4px;
+  border:1px solid var(--border);background:var(--bg);cursor:pointer;transition:all .15s;color:var(--muted)}
 .tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 .tab:hover:not(.active){border-color:var(--accent);color:var(--accent)}
-
-/* TABLES */
-table{width:100%;border-collapse:collapse;font-family:var(--font);font-size:13px}
-thead tr{background:var(--ink);color:#fff}
-th{padding:8px 10px;text-align:right;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
-th:first-child{text-align:left}
-td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--border);color:var(--muted)}
-td:first-child{text-align:left;font-weight:600;color:var(--ink)}
-tr:nth-child(even){background:var(--bg2)}
-.tg{color:#059669;font-weight:600}.tr{color:#dc2626;font-weight:600}.ty{color:#d97706;font-weight:600}
-
-/* CALLOUTS */
-.callout{border-radius:6px;padding:14px 16px;margin-bottom:1rem;font-family:var(--font);font-size:13px;line-height:1.7;color:var(--muted)}
-.callout strong{display:block;margin-bottom:4px;font-size:13px;color:var(--ink)}
-.callout-red{background:#fff5f5;border-left:3px solid #dc2626}
-.callout-yellow{background:#fffdf0;border-left:3px solid #d97706}
-.callout-blue{background:var(--blue-bg,#eff6ff);border-left:3px solid #2563eb}
-.callout-info{background:#f0fdf4;border-left:3px solid var(--accent)}
-
-/* VERDICT GRID */
-.verdict-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin:1.5rem 0}
-@media(max-width:600px){.verdict-grid{grid-template-columns:1fr}}
-.verdict-box{border-radius:8px;padding:1.25rem;text-align:center;border:1px solid var(--border)}
-.vg{background:#d4edda;border-color:#b8dacc}
-.vy{background:#fff3cd;border-color:#f0d080}
-.vr{background:#f8d7da;border-color:#f0b0b5}
-.verdict-title{font-family:var(--serif);font-weight:600;font-size:1.3rem;font-style:italic;margin-bottom:6px;color:var(--ink)}
-.verdict-tickers{font-family:var(--mono);font-size:13px;font-weight:500;margin-bottom:8px;color:var(--ink)}
-.verdict-desc{font-family:var(--font);font-size:11px;color:var(--muted)}
-
-/* STOCK VERDICTS */
-.stock-verdict{border-left:3px solid var(--border);padding-left:1.25rem;margin-bottom:1.75rem}
-.sv-green{border-color:#059669}.sv-blue{border-color:#2563eb}.sv-yellow{border-color:#d97706}.sv-red{border-color:#dc2626}
-.sv-head{display:flex;align-items:center;gap:10px;margin-bottom:.5rem}
-.sv-ticker{font-family:var(--serif);font-weight:600;font-size:16px;color:var(--ink)}
-.sv-rating{font-family:var(--font);font-size:11px;font-weight:700;text-transform:uppercase}
-.sv-green .sv-rating{color:#059669}.sv-blue .sv-rating{color:#2563eb}.sv-yellow .sv-rating{color:#d97706}.sv-red .sv-rating{color:#dc2626}
-.sv-text{font-size:13.5px;line-height:1.75;color:var(--muted)}
-
-/* FOOTER */
-footer{background:var(--ink);color:#fff;padding:2.5rem}
-.footer-inner{max-width:900px;margin:0 auto}
-.footer-logo{font-family:var(--font);font-size:14px;font-weight:500;color:rgba(255,255,255,.4);margin-bottom:.5rem}
-.footer-copy{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.2)}
-
-@media(max-width:768px){
-  nav{padding:0 1.25rem}
-  .nav-logo{font-size:17px}
-  .nav-links{gap:1.25rem}
-  .hero{padding:2.5rem 1.25rem 2rem}
-  .hero h1{font-size:1.75rem}
-  .wrap{padding:0 1.25rem 3rem}
-  footer{padding:2rem 1.25rem}
+/* Stock verdict blocks */
+.stock-verdict{border-left:3px solid var(--border);padding-left:1.25rem;margin-bottom:2rem}
+.sv-green{border-color:var(--green2)}.sv-blue{border-color:var(--blue2)}
+.sv-amber{border-color:var(--amber)}.sv-red{border-color:var(--red2)}
+.sv-head{display:flex;align-items:center;gap:10px;margin-bottom:.6rem}
+.sv-ticker{font-family:var(--serif);font-weight:600;font-size:1.1rem;color:var(--ink)}
+.sv-rating{font-family:var(--mono);font-size:.68rem;font-weight:500;
+  text-transform:uppercase;letter-spacing:.06em}
+.sv-green .sv-rating{color:var(--green2)}.sv-blue .sv-rating{color:var(--blue2)}
+.sv-amber .sv-rating{color:var(--amber)}.sv-red .sv-rating{color:var(--red2)}
+/* Verdict grid */
+.verdict-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.5rem 0}
+.verdict-box{border-radius:4px;padding:1.25rem;text-align:center;border:1px solid var(--border)}
+.vg{background:var(--green-bg);border-color:var(--green-border)}
+.vy{background:var(--amber-bg);border-color:var(--amber-border)}
+.vr{background:var(--red-bg);border-color:var(--red-border)}
+.verdict-title{font-family:var(--serif);font-weight:600;font-size:1.2rem;
+  font-style:italic;margin-bottom:6px;color:var(--ink)}
+.verdict-tickers{font-family:var(--mono);font-size:.8rem;font-weight:500;margin-bottom:8px;color:var(--ink)}
+.verdict-desc{font-family:var(--font);font-size:.78rem;color:var(--muted)}
+@media(max-width:860px){
+  #side-nav{display:none}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-inner{flex-direction:column;text-align:center}
+  .footer-right{text-align:center}
+  .ticker-grid{grid-template-columns:repeat(4,1fr)}
+  .verdict-grid{grid-template-columns:1fr}
 }
-body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23noise)' opacity='0.07'/%3E%3C/svg%3E");mix-blend-mode:multiply;opacity:0.5}
-#progress-bar{position:fixed;top:0;left:0;height:2px;background:#1a5c52;width:0%;z-index:200;transition:width .1s linear}
-@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-.hero-tag{animation:fadeUp .6s ease both}
-.hero h1{animation:fadeUp .6s .1s ease both}
-.hero p,.hero-sub{animation:fadeUp .6s .2s ease both}
-.hero-meta{animation:fadeUp .6s .3s ease both}
-.section{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease}
-.section.visible{opacity:1;transform:none}
-.chart-wrap{transition:box-shadow .2s,transform .2s}
-.chart-wrap:hover{box-shadow:0 4px 20px rgba(15,34,32,0.08);transform:translateY(-1px)}
-.callout,.callout-red,.callout-yellow,.callout-blue,.callout-info{opacity:0;transform:translateX(-8px);transition:opacity .45s ease,transform .45s ease}
-.callout.visible,.callout-red.visible,.callout-yellow.visible,.callout-blue.visible,.callout-info.visible{opacity:1;transform:none}
-tbody tr{opacity:0;transform:translateY(6px);transition:opacity .35s ease,transform .35s ease}
-tbody tr.visible{opacity:1;transform:none}
-#dot-nav{position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:50}
-#dot-nav a{width:8px;height:8px;border-radius:50%;background:var(--border);border:1px solid var(--hint);display:block;transition:background .2s,transform .2s}
-#dot-nav a.active{background:var(--accent);transform:scale(1.35)}
-@media(max-width:860px){#dot-nav{display:none}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
+@media(max-width:560px){
+  .kpi-cell{border-right:none;border-bottom:1px solid var(--border)}
+  .hl-grid{grid-template-columns:1fr;gap:1rem}
+  .hl-cell{border-right:none;padding:0;border-bottom:1px solid rgba(255,255,255,.08);padding-bottom:1rem}
+  .hl-cell:last-child{border-bottom:none}
+  .ticker-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
+<div id="progress-bar"></div>
+
 <nav>
-  <div class="nav-logo">The Intrinsic Investor</div>
-  <div class="nav-links">
-    <a href="/">Home</a>
-    <a href="/research">Research</a>
-    <a href="/about">About</a>
-  </div>
+  <a href="../../index.html" class="nav-logo">The Intrinsic Investor</a>
+  <ul class="nav-links">
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="../index.html">Research</a></li>
+    <li><a href="../../about.html">About</a></li>
+  </ul>
 </nav>
 
-<!-- HERO -->
-<div class="hero">
+<div id="side-nav" aria-label="Page sections"></div>
+
+<header class="hero">
   <div class="hero-inner">
-    <div class="hero-tag">Systematic Market Research</div>
-    <h1>Selling <em>Earnings Volatility</em>:<br>A Short Straddle Strategy Across the Magnificent Seven</h1>
-    <p>An empirical analysis of implied vs. realised volatility at quarterly earnings events, 2019–2025</p>
+    <div class="hero-tag">Options Backtest</div>
+    <h1>Selling <em>Earnings Volatility:</em> Short Straddles Across the Magnificent Seven</h1>
+    <p class="hero-sub">Options markets systematically overprice earnings moves. This study tests whether that overpricing is large enough and consistent enough to profit from, using short ATM straddles on the Magnificent Seven across Q1 2019 through Q3 2025.</p>
     <div class="hero-meta">
-      <span>Universe: AAPL · MSFT · NVDA · AMZN · GOOGL · META · TSLA</span>
-      <span>189 earnings events</span>
-      <span>Data: OptionMetrics / IBES via WRDS</span>
-      <span>By: Brian Liew (LSE, BSc Accounting and Finance)</span>
-      <span>Published Jan 2026</span>
-      <a class="gh-btn" href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/short-straddle" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg> Code</a>
+      <div class="hero-meta-item"><strong>Author</strong>Brian Liew, BSc Accounting and Finance, LSE</div>
+      <div class="hero-meta-item"><strong>Published</strong>January 2026</div>
+      <div class="hero-meta-item"><strong>Period</strong>Q1 2019 to Q3 2025, n=189 events</div>
+      <div class="hero-meta-item"><strong>Data</strong>OptionMetrics and IBES via WRDS</div>
+      <a href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/short-straddle" target="_blank" rel="noopener" class="gh-btn">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub Code
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="kpi-strip">
+  <div class="kpi-grid">
+    <div class="kpi-cell">
+      <div class="kpi-label">Earnings Events</div>
+      <div class="kpi-value blue">189</div>
+      <div class="kpi-sub">Q1 2019 to Q3 2025, 7 tickers</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">NVDA Win Rate</div>
+      <div class="kpi-value green">74.1%</div>
+      <div class="kpi-sub">Highest win rate in the study</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">AAPL Sharpe</div>
+      <div class="kpi-value green">1.93</div>
+      <div class="kpi-sub">Best risk-adjusted return</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">Combined P&amp;L</div>
+      <div class="kpi-value blue">$682</div>
+      <div class="kpi-sub">All 7 tickers, 189 events</div>
     </div>
   </div>
 </div>
 
-<div class="wrap">
-
-  <!-- Executive Summary -->
-  <div class="section">
-    <div class="section-title">Executive Summary</div>
-    <p>Options markets tend to overprice the magnitude of earnings moves. This report tests whether that overpricing is large enough and consistent enough to profit from, using short ATM straddles on the Magnificent Seven entered 30 minutes before the close on earnings day and closed in the following afternoon. When the actual move falls short of the implied move priced into the straddle, the position wins. That gap is the <em>implied volatility (IV) crush</em>.</p>
-    <p>Across 189 earnings events from Q1 2019 through Q3 2025, the strategy produced a combined total P&L of <strong>$682</strong> trading one contract per event — essentially break-even. The aggregate result masks extreme cross-sectional dispersion: four of seven stocks generated positive total P&L, while AMZN, GOOGL, and META were net destroyers of capital, with AMZN alone accounting for a $22,304 loss driven by a catastrophic 2022 drawdown.</p>
-    <p>The headline finding is that <strong>this strategy is stock-specific, not a general edge</strong>. TSLA accounts for $21,827 of the combined total, entirely masking losses elsewhere. Remove TSLA and AMZN (the two outliers) and the remaining five tickers sum to near zero. NVDA leads on win rate (74.1%) and return on margin (6.60%). AAPL delivers the highest Sharpe ratio (1.93) with the shallowest drawdown in the study. AMZN, META, and GOOGL should be avoided.</p>
-  </div>
-
-  <!-- Strategy Overview -->
-  <div class="section">
-    <div class="section-title">1. Strategy Overview</div>
-    <p><strong>Entry:</strong> Sell an ATM straddle (simultaneously sell one call and one put at the strike closest to the current stock price) on the nearest weekly expiry that covers the earnings date, approximately 15–30 minutes before market close on the earnings announcement day.</p>
-    <p><strong>Exit:</strong> Close the position in the second half of the following trading day, after IV crush has taken effect.</p>
-    <p><strong>Rationale:</strong> In the days leading up to earnings, implied volatility rises as market participants pay up for optionality. Once earnings are released, the uncertainty resolves and IV collapses, regardless of whether the stock moves up or down. A short straddle profits when the actual stock move is smaller than the move priced into the straddle at entry.</p>
-    <div class="callout callout-info">
-      <strong>Core P&L Identity</strong>
-      Profit ≈ Straddle Price Received − |Realised Stock Move|. &nbsp;Edge % = Implied Move % − |Realised Move %|, where Implied Move % = Straddle Price / Spot × 100.
+<!-- 01 Study Design -->
+<section class="section" id="s1">
+<div class="container">
+  <div class="section-label"><span class="section-counter">01</span><span>Study Design</span></div>
+  <h2>The Strategy: <em>Selling the Earnings IV Premium</em></h2>
+  <p>In the days leading up to earnings, implied volatility rises as market participants pay up for optionality. Once earnings are released, the uncertainty resolves and IV collapses, regardless of whether the stock moves up or down. A short straddle profits when the actual stock move is smaller than the move priced into the straddle at entry. That gap is the IV crush.</p>
+  <div class="highlight-box">
+    <div class="hl-grid">
+      <div class="hl-cell">
+        <div class="hl-label">Entry</div>
+        <div class="hl-value">T-0 Close</div>
+        <div class="hl-sub">30 min before close on earnings day</div>
+      </div>
+      <div class="hl-cell">
+        <div class="hl-label">Exit</div>
+        <div class="hl-value">T+1 Afternoon</div>
+        <div class="hl-sub">Following trading day, after IV crush</div>
+      </div>
+      <div class="hl-cell">
+        <div class="hl-label">P&amp;L Identity</div>
+        <div class="hl-value">IV &minus; RV</div>
+        <div class="hl-sub">Premium received minus absolute stock move</div>
+      </div>
     </div>
   </div>
-
-  <!-- Methodology -->
-  <div class="section">
-    <div class="section-title">2. Data &amp; Methodology</div>
-    <p>Options data was sourced from OptionMetrics IvyDB via WRDS (<code>optionm.opprcd{year}</code>). End-of-day closing bid/ask quotes were used to compute the mid-price straddle cost, serving as a proxy for the 3:45–4:00pm entry price. Earnings announcement dates were obtained from the IBES Actuals database (<code>ibes.act_epsus</code>), with ticker corrections applied for Alphabet (GOOG) and Meta (FBK).</p>
-    <p><strong>P&L approximation:</strong> The exit value of the straddle on the following afternoon is estimated as its intrinsic value (the absolute dollar move in the underlying). This slightly overstates profitability on winning trades and is appropriate for historical analysis purposes.</p>
-    <p><strong>Margin assumption:</strong> Margin is estimated at 20% of notional (spot price × 100 shares per contract), consistent with standard broker requirements for naked short options on equity underlyings.</p>
+  <p>The universe is restricted to the Magnificent Seven (AAPL, MSFT, NVDA, AMZN, GOOGL, META, TSLA) for three reasons: deep options liquidity, well-defined quarterly earnings calendars, and sufficient OptionMetrics history to produce 27 events per ticker over the study window.</p>
+  <div class="callout blue">
+    <div class="callout-body"><strong>Margin assumption.</strong> Margin is estimated at 20% of notional (spot price &times; 100 shares per contract), consistent with standard broker requirements for naked short options on equity underlyings.</div>
   </div>
-
-  <!-- Cross-Ticker Results -->
-  <div class="section">
-    <div class="section-title">3. Cross-Ticker Results</div>
-
-    <div class="cards">
-      <div class="card"><div class="card-ticker">AAPL</div><span class="card-badge badge-moderate">Moderate</span><div class="card-pnl pos">+$3,884</div><div class="card-sub">total P&L</div></div>
-      <div class="card"><div class="card-ticker">MSFT</div><span class="card-badge badge-moderate">Moderate</span><div class="card-pnl pos">+$3,436</div><div class="card-sub">total P&L</div></div>
-      <div class="card"><div class="card-ticker">NVDA</div><span class="card-badge badge-strong">★ Strong</span><div class="card-pnl pos">+$5,340</div><div class="card-sub">total P&L</div></div>
-      <div class="card"><div class="card-ticker">AMZN</div><span class="card-badge badge-avoid">Avoid</span><div class="card-pnl neg">&#8722;$22,304</div><div class="card-sub">total P&L</div></div>
-      <div class="card"><div class="card-ticker">GOOGL</div><span class="card-badge badge-avoid">Avoid</span><div class="card-pnl neg">&#8722;$4,583</div><div class="card-sub">total P&L</div></div>
-      <div class="card"><div class="card-ticker">META</div><span class="card-badge badge-avoid">Avoid</span><div class="card-pnl neg">&#8722;$6,918</div><div class="card-sub">total P&L</div></div>
-      <div class="card"><div class="card-ticker">TSLA</div><span class="card-badge badge-marginal">Selective</span><div class="card-pnl pos">+$21,827</div><div class="card-sub">total P&L</div></div>
-    </div>
-
-    <div class="chart-wrap">
-      <div class="chart-label">Figure 1: Total P&L per Ticker (1 contract per earnings event, 27 events each)</div>
-      <canvas id="c1" height="90"></canvas>
-    </div>
-    <div class="chart-wrap">
-      <div class="chart-label">Figure 2: Average Implied Move vs Average Realised Move (%)</div>
-      <canvas id="c2" height="90"></canvas>
-      <div class="chart-note">Stocks where implied exceeds realised exhibit systematic IV overpricing, the precondition for a profitable short straddle. META is the only stock where realised moves consistently exceeded implied.</div>
-    </div>
-    <div class="chart-wrap">
-      <div class="chart-label">Figure 3: Risk-Adjusted Return Metrics (per trade, with Sortino and Calmar capped for readability)</div>
-      <canvas id="c3" height="90"></canvas>
-    </div>
-    <div class="chart-wrap">
-      <div class="chart-label">Figure 4: Win Rate (%) vs Payoff Ratio</div>
-      <canvas id="c4" height="90"></canvas>
-      <div class="chart-note">No stock combines a win rate above 70% with a payoff ratio above 1.0. NVDA leads on win rate (74.1%) but its payoff ratio of 0.48x means each loss averages 2x+ the average win. TSLA has the highest payoff (2.17x) but only a 51.9% win rate, driven by a few outsized winners in 2020&#8211;2021.</div>
-    </div>
-  </div>
-
-  <!-- Regime Analysis -->
-  <div class="section">
-    <div class="section-title">4. Regime Analysis: Year-by-Year Breakdown</div>
-    <div class="tabs" id="tabs"></div>
-    <div class="chart-wrap">
-      <div class="chart-label" id="yearly-label">Annual P&L</div>
-      <canvas id="c5" height="90"></canvas>
-    </div>
-    <div class="callout callout-blue">
-      <strong>Key Regime Observations</strong>
-      <strong style="display:inline;font-weight:600;color:var(--ink)">2020 (COVID):</strong> Mixed. TSLA surged to +$19,822. AMZN lost $9,194 on violent moves. MSFT and NVDA remained profitable.<br><br>
-      <strong style="display:inline;font-weight:600;color:var(--ink)">2022 (Rate shock):</strong> Most destructive year. AMZN lost $36,920. META lost $7,673. NVDA was the exception at +$2,358.<br><br>
-      <strong style="display:inline;font-weight:600;color:var(--ink)">2021:</strong> Best year broadly, with low realised vol and elevated premiums. TSLA generated +$8,339.<br><br>
-      <strong style="display:inline;font-weight:600;color:var(--ink)">2023&#8211;2024:</strong> TSLA deteriorated to 0% win rate both years (combined &#8722;$7,381). MSFT and AAPL remained constructive.<br><br>
-      <strong style="display:inline;font-weight:600;color:var(--ink)">2025:</strong> Partial recovery across most tickers. AAPL (+$1,451), TSLA (+$2,670), META (+$1,472). MSFT was the notable miss at &#8722;$2,411.
-    </div>
-  </div>
-
-  <!-- Risk Metrics Table -->
-  <div class="section">
-    <div class="section-title">5. Comprehensive Risk Metrics Table</div>
-    <div style="overflow-x:auto;border:1px solid var(--border);border-radius:8px;overflow:hidden">
-      <table>
-        <thead><tr>
-          <th>Ticker</th><th>Win%</th><th>AvgEdge%</th><th>Payoff</th>
-          <th>Sharpe</th><th>Sortino</th><th>Calmar</th>
-          <th>MaxDD</th><th>Skew</th><th>Kurt</th><th>ROM%</th>
-        </tr></thead>
-        <tbody>
-          <tr><td>AAPL</td><td class="ty">66.7%</td><td class="tg">0.99%</td><td class="ty">0.970</td><td class="tg">1.925</td><td class="tg">2.237</td><td class="ty">0.217</td><td class="ty">&#8722;$2,655</td><td class="tr">&#8722;2.848</td><td class="tr">9.926</td><td class="tg">4.30%</td></tr>
-          <tr><td>MSFT</td><td class="ty">63.0%</td><td class="tg">1.05%</td><td class="ty">0.941</td><td class="tg">1.463</td><td class="tg">2.730</td><td class="ty">0.173</td><td class="ty">&#8722;$2,948</td><td>&#8722;0.078</td><td>&#8722;0.394</td><td class="tg">3.05%</td></tr>
-          <tr><td>NVDA</td><td class="tg">74.1%</td><td class="tg">1.79%</td><td class="tr">0.476</td><td class="tg">1.309</td><td class="tg">1.152</td><td class="ty">0.111</td><td class="tr">&#8722;$7,130</td><td class="tr">&#8722;1.498</td><td class="ty">2.723</td><td class="tg">6.60%</td></tr>
-          <tr><td>AMZN</td><td class="ty">59.3%</td><td>0.19%</td><td class="tr">0.466</td><td class="ty">0.200</td><td class="ty">0.316</td><td class="tr">&#8722;0.068</td><td class="tr">&#8722;$48,819</td><td class="tr">&#8722;1.253</td><td class="ty">2.065</td><td>0.65%</td></tr>
-          <tr><td>GOOGL</td><td>51.9%</td><td>0.37%</td><td class="ty">0.801</td><td>0.050</td><td>0.098</td><td class="tr">&#8722;0.040</td><td class="tr">&#8722;$17,078</td><td>0.008</td><td>0.644</td><td>0.15%</td></tr>
-          <tr><td>META</td><td>55.6%</td><td class="tr">&#8722;1.34%</td><td class="tr">0.566</td><td class="tr">&#8722;1.172</td><td class="tr">&#8722;1.263</td><td class="tr">&#8722;0.071</td><td class="tr">&#8722;$14,434</td><td class="tr">&#8722;1.079</td><td class="ty">1.348</td><td class="tr">&#8722;7.44%</td></tr>
-          <tr><td>TSLA</td><td>51.9%</td><td>0.50%</td><td class="tg">2.170</td><td class="tr">&#8722;0.079</td><td class="tr">&#8722;0.109</td><td class="ty">0.327</td><td class="tr">&#8722;$9,882</td><td class="tg">1.945</td><td class="tr">5.153</td><td class="tr">&#8722;0.41%</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p style="font-size:11px;color:var(--hint);margin-top:.5rem;font-style:italic">ROM = Return on Margin per trade. Sharpe, Sortino, Calmar computed on a per-trade basis. Skewness &lt;−1 and kurtosis &gt;3 indicate meaningful tail risk.</p>
-  </div>
-
-  <!-- Individual Verdicts -->
-  <div class="section">
-    <div class="section-title">6. Individual Stock Verdicts</div>
-    <div class="stock-verdict sv-green">
-      <div class="sv-head"><span class="sv-ticker">NVDA</span><span class="sv-rating">&#9733; Strong Edge: Highest Win Rate in the Study</span></div>
-      <p class="sv-text">NVDA leads on win rate (74.1%), avg edge (1.79%), and return on margin (6.60%) — the strongest combination of any ticker in this study. The Sharpe of 1.31 reflects a genuine, persistent edge. The caveat is the payoff ratio of 0.48x: each losing trade is on average 2x the size of a winning trade, so the win rate must stay high for the strategy to remain profitable. The 2024 drawdown (&#8722;$4,314) and kurtosis of 2.72 reflect this tail risk. NVDA is best deployed when current implied moves appear elevated relative to historical realisation rates.</p>
-    </div>
-    <div class="stock-verdict sv-blue">
-      <div class="sv-head"><span class="sv-ticker">AAPL</span><span class="sv-rating">Positive Edge: Best Sharpe in the Study</span></div>
-      <p class="sv-text">AAPL delivers the highest Sharpe ratio in the study (1.93) with the shallowest max drawdown (&#8722;$2,655). A 66.7% win rate and avg edge of 0.99% are modest but consistent across all seven years. The 2025 result (+$1,451) confirms the pattern has held into the extended sample. The critical warning: skewness of &#8722;2.85 and kurtosis of 9.93 are the most extreme in the study. Rare but severe outlier losses can negate multiple years of gains. Strict position sizing is required.</p>
-    </div>
-    <div class="stock-verdict sv-blue">
-      <div class="sv-head"><span class="sv-ticker">MSFT</span><span class="sv-rating">Positive Edge: Reliable but Calmar Has Compressed</span></div>
-      <p class="sv-text">MSFT still shows a real edge: Sharpe 1.46, Sortino 2.73, and the shallowest max drawdown of any ticker (&#8722;$2,948). However, the 2025 data changed the story materially. Win rate dropped from a prior 75% to 63.0%, and 2025 was MSFT's first losing year in this study (&#8722;$2,411). Total P&L of $3,436 over seven years is thin relative to the capital commitment. The old characterisation of MSFT as the single best expression of this strategy no longer holds. It remains a reasonable trade with tight risk control, but not the dominant pick.</p>
-    </div>
-    <div class="stock-verdict sv-yellow">
-      <div class="sv-head"><span class="sv-ticker">TSLA</span><span class="sv-rating">Positive Total P&amp;L: Highly Regime-Dependent</span></div>
-      <p class="sv-text">TSLA accounts for $21,827 of the combined $682 total, making it the single driver of the study's headline. A payoff ratio of 2.17x with a 51.9% win rate produced a net profit, but the distribution is extreme: nearly all gains came from 2020&#8211;2021. From 2022 through 2024, TSLA went 6 for 16 (37.5% win rate) and lost $7,689 across those three years. 2025 recovered slightly (+$2,670). A trader running this strategy on TSLA since 2022 would be net negative. The edge existed in a specific macro regime and has not consistently re-emerged.</p>
-    </div>
-    <div class="stock-verdict sv-red">
-      <div class="sv-head"><span class="sv-ticker">GOOGL</span><span class="sv-rating">Avoid: Negative Outcome Across Full Sample</span></div>
-      <p class="sv-text">GOOGL produced a total loss of &#8722;$4,583 across 27 events (Sharpe 0.05, Calmar &#8722;0.04). The market prices GOOGL earnings moves fairly on average: implied (5.52%) and realised (5.14%) are close, leaving minimal edge. Large single-year losses in 2019 (&#8722;$4,317) and 2021 (&#8722;$5,778) dominate the outcome. Win rate of 51.9% with a payoff ratio of 0.80x confirms the structural difficulty. There is no statistical basis for running this strategy on GOOGL.</p>
-    </div>
-    <div class="stock-verdict sv-red">
-      <div class="sv-head"><span class="sv-ticker">META</span><span class="sv-rating">Avoid: Negative Edge</span></div>
-      <p class="sv-text">META is a clear avoid. The avg realised move (8.90%) exceeded the avg implied move (7.56%), meaning options systematically underpriced earnings moves. The avg edge is &#8722;1.34%, second worst in the sample. The 2022 destruction (&#8722;$7,673 in one year) reflects META's extraordinary fundamental repricing. Sharpe of &#8722;1.17 and ROM of &#8722;7.44% per trade are among the worst in the study. 2025 showed a partial recovery (+$1,472) but not enough to offset the structural negative edge.</p>
-    </div>
-    <div class="stock-verdict sv-red">
-      <div class="sv-head"><span class="sv-ticker">AMZN</span><span class="sv-rating">Avoid: Catastrophic Tail Risk</span></div>
-      <p class="sv-text">AMZN is the most structurally dangerous ticker in this study. Despite a 59.3% win rate, AMZN produced a total loss of &#8722;$22,304 driven by 2022 (&#8722;$36,920 in a single year). The payoff ratio of 0.47x means losses are on average 2x+ larger than wins. The max drawdown of &#8722;$48,819 would require roughly 15 average winning trades to recover. 2019 (+$12,066) and 2021 (+$9,747) were large positive years, but the 2022 destruction wiped out both and then some. Do not run this strategy on AMZN.</p>
-    </div>
-  </div>
-
-  <!-- Risk Considerations -->
-  <div class="section">
-    <div class="section-title">7. Strategy-Level Risk Considerations</div>
-    <div class="callout callout-red"><strong>Tail Risk &amp; Short Vol Asymmetry</strong>Short straddles have theoretically unlimited loss potential. Five of seven tickers exhibit negative P&L skewness. AAPL's kurtosis of 10.29 is particularly alarming, indicating an extremely fat-tailed distribution. A single severe earnings shock can negate years of small gains.</div>
-    <div class="callout callout-yellow"><strong>Transaction Costs</strong>All P&L figures use mid-prices. In practice, selling a straddle requires crossing the bid-ask spread on both legs at entry and exit. For a liquid name like AAPL this could be $40–$100 per contract round trip. The true edge, net of transaction costs, will be meaningfully lower than reported here.</div>
-    <div class="callout callout-yellow"><strong>Regime Dependency</strong>The strategy's profitability is demonstrably non-stationary. 2022 was destructive across multiple tickers. TSLA's edge has reversed since 2022. Any live deployment must monitor whether the fundamental conditions for IV overpricing still hold before each earnings event.</div>
-    <div class="callout callout-blue"><strong>Margin &amp; Liquidity</strong>Short naked straddles require significant margin. AMZN at $32,466 per contract ties up meaningful capital. In volatile markets, brokers can increase margin requirements intraday, potentially forcing unwanted position closure. Size positions so that margin represents no more than 2–5% of total account equity per trade.</div>
-    <div class="callout callout-blue"><strong>EOD Data Approximation</strong>This study uses end-of-day options prices as a proxy for entry at 3:45pm. IV may drift during the final 15 minutes. Results should be treated as directionally accurate rather than precisely replicable.</div>
-  </div>
-
-  <!-- Conclusion -->
-  <div class="section">
-    <div class="section-title">8. Conclusion &amp; Trader Verdict</div>
-    <p>The combined P&amp;L across 189 events and seven years is $682 — essentially flat. That headline conceals a wide dispersion: TSLA accounts for $21,827 of gains and AMZN accounts for $22,304 of losses. Remove those two outliers and the remaining five tickers sum to +$1,159, or roughly $166 per ticker per year. This is not a general edge; it is a narrow, stock-specific trade that requires careful selection.</p>
-    <div class="verdict-grid">
-      <div class="verdict-box vg"><div class="verdict-title">Trade</div><div class="verdict-tickers">NVDA · AAPL · MSFT</div><div class="verdict-desc">Positive edge, manageable risk, consistent positive Sharpe</div></div>
-      <div class="verdict-box vy"><div class="verdict-title">Selective</div><div class="verdict-tickers">TSLA</div><div class="verdict-desc">High total P&amp;L driven by 2020&#8211;2021 regime — edge deteriorating post-2022</div></div>
-      <div class="verdict-box vr"><div class="verdict-title">Avoid</div><div class="verdict-tickers">AMZN · META · GOOGL</div><div class="verdict-desc">Negative expected value or catastrophic tail risk</div></div>
-    </div>
-    <p>If forced to pick one ticker, <strong>AAPL is the most defensible choice</strong>: the highest Sharpe (1.93), the shallowest max drawdown in the study (&#8722;$2,655), and seven years of consistently positive aggregate results. The fat tail (kurtosis 9.93) demands that position sizing treat this as a rare-blowout strategy rather than a steady income stream. NVDA is the higher-conviction pick for traders comfortable with a 0.48 payoff ratio contingent on maintaining a 74%+ win rate.</p>
-    <p>For live deployment: run pre-trade screens comparing the current ATM straddle price against the historical distribution of realised earnings moves for that specific ticker. Any event where the current implied move falls below the 40th percentile of historical realised moves should be skipped. Do not run the strategy indiscriminately across all seven tickers — the portfolio-level result is near zero and AMZN and GOOGL drag materially.</p>
-  </div>
-
 </div>
+</section>
 
-<!-- FOOTER -->
+<!-- 02 Methodology -->
+<section class="section" id="s2" style="background:var(--bg2)">
+<div class="container">
+  <div class="section-label"><span class="section-counter">02</span><span>Methodology</span></div>
+  <h2>Data Sources and <em>P&amp;L Construction</em></h2>
+  <p>Options data was sourced from OptionMetrics IvyDB via WRDS (<code>optionm.opprcd{year}</code>). End-of-day closing bid and ask quotes were used to compute the mid-price straddle cost, serving as a proxy for the 3:45&#8211;4:00pm entry price. Earnings announcement dates were obtained from the IBES Actuals database (<code>ibes.act_epsus</code>), with ticker corrections applied for Alphabet (GOOG) and Meta (FB).</p>
+  <div class="table-wrap">
+    <table class="method-table">
+      <thead><tr><th>Dimension</th><th>Detail</th></tr></thead>
+      <tbody>
+        <tr><td>Universe</td><td>AAPL, MSFT, NVDA, AMZN, GOOGL, META, TSLA</td></tr>
+        <tr><td>Period</td><td>Q1 2019 to Q3 2025 (27 events per ticker, 189 total)</td></tr>
+        <tr><td>Instrument</td><td>ATM short straddle on nearest weekly expiry covering the earnings date</td></tr>
+        <tr><td>Entry</td><td>Approximately 30 minutes before market close on earnings day (end-of-day OM quote used as proxy)</td></tr>
+        <tr><td>Exit</td><td>Following afternoon, valued at intrinsic value (absolute stock move)</td></tr>
+        <tr><td>P&amp;L</td><td>Gross, excluding bid-ask spread and commissions. Slightly overstates profitability on wins</td></tr>
+        <tr><td>Margin</td><td>20% of notional (spot &times; 100) per contract, per standard broker requirements</td></tr>
+        <tr><td>Data</td><td>OptionMetrics IvyDB and IBES Actuals via WRDS</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout amber">
+    <div class="callout-body"><strong>Exit approximation.</strong> Valuing the exit at intrinsic value slightly overstates profitability on winning trades, since the straddle retains some time value and crossing the bid-ask spread on exit reduces realised P&amp;L further. Results should be treated as directionally accurate rather than precisely replicable.</div>
+  </div>
+</div>
+</section>
+
+<!-- 03 Cross-Ticker Results -->
+<section class="section" id="s3">
+<div class="container">
+  <div class="section-label"><span class="section-counter">03</span><span>Cross-Ticker Results</span></div>
+  <h2>Summary Results <em>by Ticker</em></h2>
+  <p>Across 189 earnings events from Q1 2019 through Q3 2025, the strategy produced a combined total P&amp;L of <strong>$682</strong> trading one contract per event, essentially break-even. The aggregate result masks extreme cross-sectional dispersion: four of seven stocks generated positive total P&amp;L, while AMZN, GOOGL, and META were net destroyers of capital, with AMZN alone accounting for a $22,304 loss driven by a catastrophic 2022 drawdown.</p>
+  <div class="ticker-grid">
+    <div class="ticker-card">
+      <div class="tc-ticker">AAPL</div>
+      <span class="tc-badge badge-moderate">Moderate</span>
+      <div class="tc-pnl pos">+$3,884</div>
+      <div class="tc-sub">Sharpe 1.93</div>
+    </div>
+    <div class="ticker-card">
+      <div class="tc-ticker">MSFT</div>
+      <span class="tc-badge badge-moderate">Moderate</span>
+      <div class="tc-pnl pos">+$3,436</div>
+      <div class="tc-sub">Sharpe 1.46</div>
+    </div>
+    <div class="ticker-card">
+      <div class="tc-ticker">NVDA</div>
+      <span class="tc-badge badge-strong">&#9733; Strong</span>
+      <div class="tc-pnl pos">+$5,340</div>
+      <div class="tc-sub">Win rate 74.1%</div>
+    </div>
+    <div class="ticker-card">
+      <div class="tc-ticker">AMZN</div>
+      <span class="tc-badge badge-avoid">Avoid</span>
+      <div class="tc-pnl neg">&#8722;$22,304</div>
+      <div class="tc-sub">Calmar &#8722;0.07</div>
+    </div>
+    <div class="ticker-card">
+      <div class="tc-ticker">GOOGL</div>
+      <span class="tc-badge badge-avoid">Avoid</span>
+      <div class="tc-pnl neg">&#8722;$4,583</div>
+      <div class="tc-sub">Sharpe 0.05</div>
+    </div>
+    <div class="ticker-card">
+      <div class="tc-ticker">META</div>
+      <span class="tc-badge badge-avoid">Avoid</span>
+      <div class="tc-pnl neg">&#8722;$6,918</div>
+      <div class="tc-sub">Sharpe &#8722;1.17</div>
+    </div>
+    <div class="ticker-card">
+      <div class="tc-ticker">TSLA</div>
+      <span class="tc-badge badge-selective">Selective</span>
+      <div class="tc-pnl pos">+$21,827</div>
+      <div class="tc-sub">Regime-dependent</div>
+    </div>
+  </div>
+  <div class="chart-box">
+    <div class="chart-title">Figure 1: Total P&amp;L per Ticker (1 contract per earnings event)</div>
+    <canvas id="c1" height="90"></canvas>
+  </div>
+  <div class="chart-box">
+    <div class="chart-title">Figure 2: Average Implied Move vs Average Realised Move (%)</div>
+    <canvas id="c2" height="90"></canvas>
+    <p class="chart-note">Stocks where implied exceeds realised exhibit systematic IV overpricing, the precondition for a profitable short straddle. META is the only stock where realised moves consistently exceeded implied.</p>
+  </div>
+  <div class="chart-box">
+    <div class="chart-title">Figure 3: Risk-Adjusted Return Metrics per Ticker</div>
+    <canvas id="c3" height="90"></canvas>
+  </div>
+  <div class="chart-box">
+    <div class="chart-title">Figure 4: Win Rate (%) vs Payoff Ratio</div>
+    <canvas id="c4" height="90"></canvas>
+    <p class="chart-note">No stock combines a win rate above 70% with a payoff ratio above 1.0. NVDA leads on win rate (74.1%) but its payoff ratio of 0.48x means each loss averages 2x the average win. TSLA has the highest payoff (2.17x) but only a 51.9% win rate, driven by outsized winners in 2020&#8211;2021.</p>
+  </div>
+  <div class="callout green">
+    <div class="callout-body"><strong>Headline finding.</strong> This strategy is stock-specific, not a general edge. TSLA accounts for $21,827 of the combined total, masking losses elsewhere. Remove TSLA and AMZN and the remaining five tickers sum to +$1,159 total over seven years, roughly $166 per ticker per year.</div>
+  </div>
+</div>
+</section>
+
+<!-- 04 Regime Analysis -->
+<section class="section" id="s4" style="background:var(--bg2)">
+<div class="container">
+  <div class="section-label"><span class="section-counter">04</span><span>Regime Analysis</span></div>
+  <h2>Year-by-Year Breakdown: <em>Regime Dependency</em></h2>
+  <p>The strategy&#8217;s profitability is demonstrably non-stationary. Results vary dramatically by year and by ticker, driven by shifts in realised volatility, macro regimes, and company-specific fundamentals. Select a ticker below to view its annual P&amp;L.</p>
+  <div class="tabs" id="tabs"></div>
+  <div class="chart-box">
+    <div class="chart-title" id="yearly-label">Annual P&amp;L</div>
+    <canvas id="c5" height="90"></canvas>
+  </div>
+  <div class="callout blue">
+    <div class="callout-body">
+      <strong>Key regime observations.</strong><br><br>
+      <strong>2020 (COVID volatility):</strong> Mixed results. TSLA surged to +$19,822. AMZN lost $9,194 on violent moves. MSFT and NVDA remained profitable.<br><br>
+      <strong>2022 (rate shock):</strong> Most destructive year in the study. AMZN lost $36,920. META lost $7,673. NVDA was the exception at +$2,358.<br><br>
+      <strong>2021:</strong> Best year broadly. Low realised vol and elevated premiums. TSLA generated +$8,339.<br><br>
+      <strong>2023&#8211;2024:</strong> TSLA deteriorated to 0% win rate in both years (combined &#8722;$7,381). MSFT and AAPL remained constructive.<br><br>
+      <strong>2025:</strong> Partial recovery across most tickers. AAPL (+$1,451), TSLA (+$2,670), META (+$1,472). MSFT was the notable miss at &#8722;$2,411.
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- 05 Risk Metrics -->
+<section class="section" id="s5">
+<div class="container">
+  <div class="section-label"><span class="section-counter">05</span><span>Risk Metrics</span></div>
+  <h2>Comprehensive Risk Metrics <em>by Ticker</em></h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Ticker</th>
+          <th style="text-align:right">Win%</th>
+          <th style="text-align:right">Avg Edge%</th>
+          <th style="text-align:right">Payoff</th>
+          <th style="text-align:right">Sharpe</th>
+          <th style="text-align:right">Sortino</th>
+          <th style="text-align:right">Calmar</th>
+          <th style="text-align:right">Max DD</th>
+          <th style="text-align:right">Skew</th>
+          <th style="text-align:right">Kurt</th>
+          <th style="text-align:right">ROM%</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="top-row">
+          <td>AAPL</td>
+          <td class="n-right ty">66.7%</td>
+          <td class="n-right tg">0.99%</td>
+          <td class="n-right ty">0.970</td>
+          <td class="n-right tg">1.925</td>
+          <td class="n-right tg">2.237</td>
+          <td class="n-right ty">0.217</td>
+          <td class="n-right ty">&#8722;$2,655</td>
+          <td class="n-right tr">&#8722;2.848</td>
+          <td class="n-right tr">9.926</td>
+          <td class="n-right tg">4.30%</td>
+        </tr>
+        <tr>
+          <td>MSFT</td>
+          <td class="n-right ty">63.0%</td>
+          <td class="n-right tg">1.05%</td>
+          <td class="n-right ty">0.941</td>
+          <td class="n-right tg">1.463</td>
+          <td class="n-right tg">2.730</td>
+          <td class="n-right ty">0.173</td>
+          <td class="n-right ty">&#8722;$2,948</td>
+          <td class="n-right">&#8722;0.078</td>
+          <td class="n-right">&#8722;0.394</td>
+          <td class="n-right tg">3.05%</td>
+        </tr>
+        <tr>
+          <td>NVDA</td>
+          <td class="n-right tg">74.1%</td>
+          <td class="n-right tg">1.79%</td>
+          <td class="n-right tr">0.476</td>
+          <td class="n-right tg">1.309</td>
+          <td class="n-right tg">1.152</td>
+          <td class="n-right ty">0.111</td>
+          <td class="n-right tr">&#8722;$7,130</td>
+          <td class="n-right tr">&#8722;1.498</td>
+          <td class="n-right ty">2.723</td>
+          <td class="n-right tg">6.60%</td>
+        </tr>
+        <tr>
+          <td>AMZN</td>
+          <td class="n-right ty">59.3%</td>
+          <td class="n-right">0.19%</td>
+          <td class="n-right tr">0.466</td>
+          <td class="n-right ty">0.200</td>
+          <td class="n-right ty">0.316</td>
+          <td class="n-right tr">&#8722;0.068</td>
+          <td class="n-right tr">&#8722;$48,819</td>
+          <td class="n-right tr">&#8722;1.253</td>
+          <td class="n-right ty">2.065</td>
+          <td class="n-right">0.65%</td>
+        </tr>
+        <tr>
+          <td>GOOGL</td>
+          <td class="n-right">51.9%</td>
+          <td class="n-right">0.37%</td>
+          <td class="n-right ty">0.801</td>
+          <td class="n-right">0.050</td>
+          <td class="n-right">0.098</td>
+          <td class="n-right tr">&#8722;0.040</td>
+          <td class="n-right tr">&#8722;$17,078</td>
+          <td class="n-right">0.008</td>
+          <td class="n-right">0.644</td>
+          <td class="n-right">0.15%</td>
+        </tr>
+        <tr>
+          <td>META</td>
+          <td class="n-right">55.6%</td>
+          <td class="n-right tr">&#8722;1.34%</td>
+          <td class="n-right tr">0.566</td>
+          <td class="n-right tr">&#8722;1.172</td>
+          <td class="n-right tr">&#8722;1.263</td>
+          <td class="n-right tr">&#8722;0.071</td>
+          <td class="n-right tr">&#8722;$14,434</td>
+          <td class="n-right tr">&#8722;1.079</td>
+          <td class="n-right ty">1.348</td>
+          <td class="n-right tr">&#8722;7.44%</td>
+        </tr>
+        <tr>
+          <td>TSLA</td>
+          <td class="n-right">51.9%</td>
+          <td class="n-right">0.50%</td>
+          <td class="n-right tg">2.170</td>
+          <td class="n-right tr">&#8722;0.079</td>
+          <td class="n-right tr">&#8722;0.109</td>
+          <td class="n-right ty">0.327</td>
+          <td class="n-right tr">&#8722;$9,882</td>
+          <td class="n-right tg">1.945</td>
+          <td class="n-right tr">5.153</td>
+          <td class="n-right tr">&#8722;0.41%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:.78rem;color:var(--hint);margin-top:.5rem">ROM = Return on Margin per trade. Sharpe, Sortino, Calmar computed on a per-trade basis. Skewness below &minus;1 and kurtosis above 3 indicate meaningful tail risk.</p>
+</div>
+</section>
+
+<!-- 06 Individual Verdicts -->
+<section class="section" id="s6" style="background:var(--bg2)">
+<div class="container">
+  <div class="section-label"><span class="section-counter">06</span><span>Individual Verdicts</span></div>
+  <h2>Stock-by-Stock <em>Assessment</em></h2>
+
+  <div class="stock-verdict sv-green">
+    <div class="sv-head"><span class="sv-ticker">NVDA</span><span class="sv-rating">&#9733; Strong Edge: Highest Win Rate in the Study</span></div>
+    <p>NVDA leads on win rate (74.1%), avg edge (1.79%), and return on margin (6.60%), the strongest combination of any ticker in this study. The Sharpe of 1.31 reflects a genuine, persistent edge. The caveat is the payoff ratio of 0.48x: each losing trade is on average 2x the size of a winning trade, so the win rate must stay high for the strategy to remain profitable. The 2024 drawdown (&#8722;$4,314) and kurtosis of 2.72 reflect this tail risk. NVDA is best deployed when current implied moves appear elevated relative to historical realisation rates.</p>
+  </div>
+
+  <div class="stock-verdict sv-blue">
+    <div class="sv-head"><span class="sv-ticker">AAPL</span><span class="sv-rating">Positive Edge: Best Sharpe in the Study</span></div>
+    <p>AAPL delivers the highest Sharpe ratio in the study (1.93) with the shallowest max drawdown (&#8722;$2,655). A 66.7% win rate and avg edge of 0.99% are modest but consistent across all seven years. The 2025 result (+$1,451) confirms the pattern has held into the extended sample. The critical warning: skewness of &#8722;2.85 and kurtosis of 9.93 are the most extreme in the study. Rare but severe outlier losses can negate multiple years of gains. Strict position sizing is required.</p>
+  </div>
+
+  <div class="stock-verdict sv-blue">
+    <div class="sv-head"><span class="sv-ticker">MSFT</span><span class="sv-rating">Positive Edge: Reliable but Edge Has Compressed</span></div>
+    <p>MSFT still shows a real edge: Sharpe 1.46, Sortino 2.73, and the shallowest max drawdown of any ticker (&#8722;$2,948). However, the 2025 data changed the story materially. Win rate dropped from a prior 75% to 63.0%, and 2025 was MSFT&#8217;s first losing year in this study (&#8722;$2,411). Total P&amp;L of $3,436 over seven years is thin relative to the capital commitment. The old characterisation of MSFT as the single best expression of this strategy no longer holds. It remains a reasonable trade with tight risk control, but not the dominant pick.</p>
+  </div>
+
+  <div class="stock-verdict sv-amber">
+    <div class="sv-head"><span class="sv-ticker">TSLA</span><span class="sv-rating">Positive Total P&amp;L: Highly Regime-Dependent</span></div>
+    <p>TSLA accounts for $21,827 of the combined $682 total, making it the single driver of the study&#8217;s headline result. A payoff ratio of 2.17x with a 51.9% win rate produced a net profit, but the distribution is extreme: nearly all gains came from 2020&#8211;2021. From 2022 through 2024, TSLA went 6 for 16 (37.5% win rate) and lost $7,689 across those three years. 2025 recovered slightly (+$2,670). A trader running this strategy on TSLA since 2022 would be net negative. The edge existed in a specific macro regime and has not consistently re-emerged.</p>
+  </div>
+
+  <div class="stock-verdict sv-red">
+    <div class="sv-head"><span class="sv-ticker">GOOGL</span><span class="sv-rating">Avoid: Negative Outcome Across Full Sample</span></div>
+    <p>GOOGL produced a total loss of &#8722;$4,583 across 27 events (Sharpe 0.05, Calmar &#8722;0.04). The market prices GOOGL earnings moves fairly on average: implied (5.52%) and realised (5.14%) are close, leaving minimal edge. Large single-year losses in 2019 (&#8722;$4,317) and 2021 (&#8722;$5,778) dominate the outcome. A win rate of 51.9% with a payoff ratio of 0.80x confirms the structural difficulty. There is no statistical basis for running this strategy on GOOGL.</p>
+  </div>
+
+  <div class="stock-verdict sv-red">
+    <div class="sv-head"><span class="sv-ticker">META</span><span class="sv-rating">Avoid: Negative Edge</span></div>
+    <p>META is a clear avoid. The avg realised move (8.90%) exceeded the avg implied move (7.56%), meaning options systematically underpriced earnings moves. The avg edge is &#8722;1.34%, second worst in the sample. The 2022 destruction (&#8722;$7,673 in one year) reflects META&#8217;s extraordinary fundamental repricing. Sharpe of &#8722;1.17 and ROM of &#8722;7.44% per trade are among the worst in the study. 2025 showed a partial recovery (+$1,472) but not enough to offset the structural negative edge.</p>
+  </div>
+
+  <div class="stock-verdict sv-red">
+    <div class="sv-head"><span class="sv-ticker">AMZN</span><span class="sv-rating">Avoid: Catastrophic Tail Risk</span></div>
+    <p>AMZN is the most structurally dangerous ticker in this study. Despite a 59.3% win rate, AMZN produced a total loss of &#8722;$22,304 driven by 2022 (&#8722;$36,920 in a single year). The payoff ratio of 0.47x means losses are on average 2x larger than wins. The max drawdown of &#8722;$48,819 would require roughly 15 average winning trades to recover. 2019 (+$12,066) and 2021 (+$9,747) were large positive years, but the 2022 destruction wiped out both and then some. Do not run this strategy on AMZN.</p>
+  </div>
+</div>
+</section>
+
+<!-- 07 Risk Factors -->
+<section class="section" id="s7">
+<div class="container">
+  <div class="section-label"><span class="section-counter">07</span><span>Risk Factors</span></div>
+  <h2>Strategy-Level <em>Risk Considerations</em></h2>
+  <div class="callout red">
+    <div class="callout-body"><strong>Tail risk and short vol asymmetry.</strong> Short straddles have theoretically unlimited loss potential. Five of seven tickers exhibit negative P&amp;L skewness. AAPL&#8217;s kurtosis of 9.93 indicates an extremely fat-tailed distribution. A single severe earnings shock can negate years of small gains.</div>
+  </div>
+  <div class="callout amber">
+    <div class="callout-body"><strong>Transaction costs.</strong> All P&amp;L figures use mid-prices. In practice, selling a straddle requires crossing the bid-ask spread on both legs at entry and exit. For a liquid name like AAPL this could be $40&#8211;$100 per contract round trip. The true edge, net of transaction costs, will be meaningfully lower than reported here.</div>
+  </div>
+  <div class="callout amber">
+    <div class="callout-body"><strong>Regime dependency.</strong> The strategy&#8217;s profitability is demonstrably non-stationary. 2022 was destructive across multiple tickers. TSLA&#8217;s edge has reversed since 2022. Any live deployment must monitor whether the fundamental conditions for IV overpricing still hold before each earnings event.</div>
+  </div>
+  <div class="callout blue">
+    <div class="callout-body"><strong>Margin and liquidity.</strong> Short naked straddles require significant margin. AMZN at $32,466 per contract ties up meaningful capital. In volatile markets, brokers can increase margin requirements intraday, potentially forcing unwanted position closure. Size positions so that margin represents no more than 2&#8211;5% of total account equity per trade.</div>
+  </div>
+  <div class="callout blue">
+    <div class="callout-body"><strong>EOD data approximation.</strong> This study uses end-of-day options prices as a proxy for entry at 3:45pm. IV may drift during the final 15 minutes. Results should be treated as directionally accurate rather than precisely replicable.</div>
+  </div>
+</div>
+</section>
+
+<!-- 08 Conclusions -->
+<section class="section" id="s8" style="background:var(--bg2)">
+<div class="container">
+  <div class="section-label"><span class="section-counter">08</span><span>Conclusions</span></div>
+  <h2>Trader Verdict: <em>Stock-Specific, Not a General Edge</em></h2>
+  <p>The combined P&amp;L across 189 events and seven years is $682, essentially flat. That headline conceals wide dispersion: TSLA accounts for $21,827 of gains and AMZN accounts for $22,304 of losses. Remove those two outliers and the remaining five tickers sum to +$1,159, or roughly $166 per ticker per year. This is not a general edge; it is a narrow, stock-specific trade that requires careful selection.</p>
+  <div class="verdict-grid">
+    <div class="verdict-box vg">
+      <div class="verdict-title">Trade</div>
+      <div class="verdict-tickers">NVDA &middot; AAPL &middot; MSFT</div>
+      <div class="verdict-desc">Positive edge, manageable risk, consistent positive Sharpe across the full sample</div>
+    </div>
+    <div class="verdict-box vy">
+      <div class="verdict-title">Selective</div>
+      <div class="verdict-tickers">TSLA</div>
+      <div class="verdict-desc">High total P&amp;L driven by 2020&#8211;2021 regime. Edge has deteriorated materially post-2022</div>
+    </div>
+    <div class="verdict-box vr">
+      <div class="verdict-title">Avoid</div>
+      <div class="verdict-tickers">AMZN &middot; META &middot; GOOGL</div>
+      <div class="verdict-desc">Negative expected value or catastrophic tail risk. Do not run this strategy on these tickers</div>
+    </div>
+  </div>
+  <p>If forced to pick one ticker, <strong>AAPL is the most defensible choice</strong>: the highest Sharpe (1.93), the shallowest max drawdown in the study (&#8722;$2,655), and seven years of consistently positive aggregate results. The fat tail (kurtosis 9.93) demands that position sizing treat this as a rare-blowout strategy rather than a steady income stream. NVDA is the higher-conviction pick for traders comfortable with a 0.48 payoff ratio contingent on maintaining a 74% or higher win rate.</p>
+  <p>For live deployment: run pre-trade screens comparing the current ATM straddle price against the historical distribution of realised earnings moves for that specific ticker. Any event where the current implied move falls below the 40th percentile of historical realised moves should be skipped. Do not run the strategy indiscriminately across all seven tickers: the portfolio-level result is near zero and AMZN and GOOGL drag materially.</p>
+  <div class="callout red">
+    <div class="callout-body"><strong>Disclaimer.</strong> Past performance does not guarantee future results. This research is for informational purposes only and does not constitute investment advice. Short options positions carry significant risk of loss, including loss exceeding initial margin.</div>
+  </div>
+</div>
+</section>
+
 <footer>
   <div class="footer-inner">
-    <div class="footer-logo">The Intrinsic Investor</div>
-    <div class="footer-copy">Data: OptionMetrics IvyDB &amp; IBES Actuals via WRDS · 189 earnings events · 2019&#8211;2025 · Published by Brian Liew, BSc Accounting and Finance, London School of Economics</div>
-    <div style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.4);margin-top:.75rem;padding-top:.75rem;border-top:1px solid rgba(255,255,255,.08)">Past performance does not guarantee future results. This research is for informational purposes only and does not constitute investment advice.</div>
+    <div class="footer-name">The Intrinsic Investor</div>
+    <div class="footer-right">
+      <span style="color:rgba(255,255,255,.35)">&copy; 2026 Brian Liew</span>
+      <a href="https://www.linkedin.com/in/brian-liew" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/TheIntrinsicInvestor" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:brianliew99@gmail.com">Email</a>
+    </div>
   </div>
 </footer>
 
 <script>
-const T=["AAPL","MSFT","NVDA","AMZN","GOOGL","META","TSLA"];
-const WIN="#059669",LOSS="#dc2626",BLUE="#2563eb",ORG="#d97706",PUR="#7c3aed";
-const totalPnl=[3883.5,3435.5,5340,-22304,-4582.5,-6918,21827];
-const avgImp=[4.39,4.53,7.35,5.98,5.52,7.56,8.40];
-const avgRlz=[3.40,3.48,5.56,5.79,5.14,8.90,7.90];
-const sharpe=[1.925,1.463,1.309,0.200,0.050,-1.172,-0.079];
-const sortino=[2.237,2.730,1.152,0.316,0.098,-1.263,-0.109];
-const calmar=[0.217,0.173,0.111,-0.068,-0.040,-0.071,0.327];
-const winRate=[66.7,63.0,74.1,59.3,51.9,55.6,51.9];
-const payoff=[0.970,0.941,0.476,0.466,0.801,0.566,2.170];
-const yearly={
-  AAPL:{labels:[2019,2020,2021,2022,2023,2024,2025],data:[724.5,-1267,1209,-149,532.5,1383,1450.5]},
-  MSFT:{labels:[2019,2020,2021,2022,2023,2024,2025],data:[939.5,377.5,411.5,157,805.5,3155,-2410.5]},
-  NVDA:{labels:[2019,2020,2021,2022,2023,2024,2025],data:[2532,5136,-423,2358,-1361,-4313.5,1411.5]},
-  AMZN:{labels:[2019,2020,2021,2022,2023,2024,2025],data:[12065.5,-9193.5,9746.5,-36920,383,709,905.5]},
-  GOOGL:{labels:[2019,2020,2021,2022,2023,2024,2025],data:[-4317,2826.5,-5777.5,1626.5,158,-273.5,1174.5]},
-  META:{labels:[2019,2020,2021,2022,2023,2024,2025],data:[898.5,-462.5,1243.5,-7672.5,-518.5,-1878,1471.5]},
-  TSLA:{labels:[2019,2020,2021,2022,2023,2024,2025],data:[-1314.5,19821.5,8339,-308,-2208,-5173,2670]},
-};
-const cfg=(type,labels,datasets,opts={})=>({type,data:{labels,datasets},options:{responsive:true,plugins:{legend:{labels:{font:{family:'Inter',size:11}}}},scales:{x:{ticks:{font:{family:'Inter',size:11}}},y:{ticks:{font:{family:'Inter',size:11}}},...opts}}});
-
-new Chart(document.getElementById("c1"),{type:"bar",data:{labels:T,datasets:[{label:"Total P&L ($)",data:totalPnl,backgroundColor:totalPnl.map(v=>v>=0?WIN:LOSS),borderRadius:4}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>`$${(v/1000).toFixed(0)}k`,font:{family:'Inter',size:11}}},x:{ticks:{font:{family:'Inter',size:11}}}}}});
-new Chart(document.getElementById("c2"),{type:"bar",data:{labels:T,datasets:[{label:"Avg Implied Move %",data:avgImp,backgroundColor:BLUE,borderRadius:4},{label:"Avg Realised Move %",data:avgRlz,backgroundColor:ORG,borderRadius:4}]},options:{responsive:true,plugins:{legend:{labels:{font:{family:'Inter',size:11}}}},scales:{y:{ticks:{callback:v=>`${v}%`,font:{family:'Inter',size:11}}},x:{ticks:{font:{family:'Inter',size:11}}}}}});
-new Chart(document.getElementById("c3"),{type:"bar",data:{labels:T,datasets:[{label:"Sharpe",data:sharpe,backgroundColor:BLUE,borderRadius:4},{label:"Sortino",data:sortino.map(v=>Math.min(v,2)),backgroundColor:WIN,borderRadius:4},{label:"Calmar",data:calmar.map(v=>Math.min(Math.max(v,-1),8)),backgroundColor:PUR,borderRadius:4}]},options:{responsive:true,plugins:{legend:{labels:{font:{family:'Inter',size:11}}}},scales:{y:{ticks:{font:{family:'Inter',size:11}}},x:{ticks:{font:{family:'Inter',size:11}}}}}});
-new Chart(document.getElementById("c4"),{type:"bar",data:{labels:T,datasets:[{label:"Win Rate %",data:winRate,backgroundColor:BLUE,borderRadius:4,yAxisID:"y"},{label:"Payoff Ratio",data:payoff,backgroundColor:ORG,borderRadius:4,yAxisID:"y2"}]},options:{responsive:true,plugins:{legend:{labels:{font:{family:'Inter',size:11}}}},scales:{x:{ticks:{font:{family:'Inter',size:11}}},y:{ticks:{callback:v=>`${v}%`,font:{family:'Inter',size:11}},position:"left"},y2:{ticks:{font:{family:'Inter',size:11}},position:"right",grid:{drawOnChartArea:false}}}}});
-
-let yearlyChart=null;
-function buildYearly(ticker){
-  const d=yearly[ticker];
-  if(yearlyChart)yearlyChart.destroy();
-  document.getElementById("yearly-label").textContent=`${ticker}: Annual P&L ($)`;
-  yearlyChart=new Chart(document.getElementById("c5"),{type:"bar",data:{labels:d.labels.map(String),datasets:[{label:"Annual P&L",data:d.data,backgroundColor:d.data.map(v=>v>=0?WIN:LOSS),borderRadius:4}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>`$${(v/1000).toFixed(0)}k`,font:{family:'Inter',size:11}}},x:{ticks:{font:{family:'Inter',size:11}}}}}});
-}
-const tabsEl=document.getElementById("tabs");
-T.forEach(t=>{
-  const btn=document.createElement("button");
-  btn.className="tab"+(t==="MSFT"?" active":"");
-  btn.textContent=t;
-  btn.onclick=()=>{document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));btn.classList.add("active");buildYearly(t);};
-  tabsEl.appendChild(btn);
-});
-buildYearly("MSFT");
-</script>
-<div id="progress-bar"></div>
-<div id="dot-nav"></div>
-<script>
-const pb = document.getElementById('progress-bar');
+// Progress bar + nav shadow
+const _nav = document.querySelector('nav');
 window.addEventListener('scroll', () => {
-  const max = document.documentElement.scrollHeight - window.innerHeight;
-  pb.style.width = (window.scrollY / max * 100) + '%';
+  const el = document.getElementById('progress-bar');
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  el.style.width = Math.min(pct, 100) + '%';
+  _nav.classList.toggle('scrolled', window.scrollY > 40);
 }, { passive: true });
 
-const navEl = document.querySelector('nav');
-window.addEventListener('scroll', () => { navEl.classList.toggle('scrolled', window.scrollY > 10); }, { passive: true });
+// Scroll reveal
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.07 });
+document.querySelectorAll('.section').forEach(s => io.observe(s));
 
-const sections = document.querySelectorAll('.section');
-const dotNav = document.getElementById('dot-nav');
-if (dotNav && sections.length) {
-  sections.forEach((s, i) => {
-    if (!s.id) s.id = 'sec-' + i;
-    const a = document.createElement('a');
-    a.href = '#' + s.id;
-    a.title = s.querySelector('h2,.section-title') ? (s.querySelector('h2,.section-title').textContent.trim()) : '';
-    dotNav.appendChild(a);
+// Side nav
+const NAV_LABELS = ['Study Design','Methodology','Cross-Ticker Results','Regime Analysis','Risk Metrics','Individual Verdicts','Risk Factors','Conclusions'];
+const sideNav = document.getElementById('side-nav');
+const sections = document.querySelectorAll('.section[id]');
+sections.forEach((s, i) => {
+  const a = document.createElement('a');
+  a.href = '#' + s.id;
+  a.innerHTML = '<span class="sn-label">' + (NAV_LABELS[i] || '') + '</span><span class="sn-dot"></span>';
+  sideNav.appendChild(a);
+});
+const navItems = sideNav.querySelectorAll('a');
+const navIo = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navItems.forEach(n => n.classList.remove('active'));
+      const idx = Array.from(sections).indexOf(e.target);
+      if (navItems[idx]) navItems[idx].classList.add('active');
+    }
+  });
+}, { threshold: 0.4 });
+sections.forEach(s => navIo.observe(s));
+
+// Chart defaults
+Chart.defaults.font.family = 'Inter, sans-serif';
+Chart.defaults.color = '#4a6460';
+const GRID = { color: 'rgba(15,34,32,.05)', drawBorder: false };
+const TICK = { color: '#8aaba6', font: { size: 10 } };
+
+// Chart data
+const T = ['AAPL','MSFT','NVDA','AMZN','GOOGL','META','TSLA'];
+const WIN = '#059669', LOSS = '#dc2626', BLUE = '#2563eb', ORG = '#d97706', PUR = '#7c3aed';
+const totalPnl  = [3883.5, 3435.5, 5340, -22304, -4582.5, -6918, 21827];
+const avgImp    = [4.39, 4.53, 7.35, 5.98, 5.52, 7.56, 8.40];
+const avgRlz    = [3.40, 3.48, 5.56, 5.79, 5.14, 8.90, 7.90];
+const sharpe    = [1.925, 1.463, 1.309, 0.200, 0.050, -1.172, -0.079];
+const sortino   = [2.237, 2.730, 1.152, 0.316, 0.098, -1.263, -0.109];
+const calmar    = [0.217, 0.173, 0.111, -0.068, -0.040, -0.071, 0.327];
+const winRate   = [66.7, 63.0, 74.1, 59.3, 51.9, 55.6, 51.9];
+const payoff    = [0.970, 0.941, 0.476, 0.466, 0.801, 0.566, 2.170];
+const yearly = {
+  AAPL: { labels:[2019,2020,2021,2022,2023,2024,2025], data:[724.5,-1267,1209,-149,532.5,1383,1450.5] },
+  MSFT: { labels:[2019,2020,2021,2022,2023,2024,2025], data:[939.5,377.5,411.5,157,805.5,3155,-2410.5] },
+  NVDA: { labels:[2019,2020,2021,2022,2023,2024,2025], data:[2532,5136,-423,2358,-1361,-4313.5,1411.5] },
+  AMZN: { labels:[2019,2020,2021,2022,2023,2024,2025], data:[12065.5,-9193.5,9746.5,-36920,383,709,905.5] },
+  GOOGL:{ labels:[2019,2020,2021,2022,2023,2024,2025], data:[-4317,2826.5,-5777.5,1626.5,158,-273.5,1174.5] },
+  META: { labels:[2019,2020,2021,2022,2023,2024,2025], data:[898.5,-462.5,1243.5,-7672.5,-518.5,-1878,1471.5] },
+  TSLA: { labels:[2019,2020,2021,2022,2023,2024,2025], data:[-1314.5,19821.5,8339,-308,-2208,-5173,2670] },
+};
+
+new Chart(document.getElementById('c1'), {
+  type: 'bar',
+  data: { labels: T, datasets: [{ label: 'Total P&L ($)', data: totalPnl,
+    backgroundColor: totalPnl.map(v => v >= 0 ? WIN : LOSS), borderRadius: 4 }] },
+  options: { responsive: true, plugins: { legend: { display: false } },
+    scales: { y: { grid: GRID, ticks: { ...TICK, callback: v => '$' + (v/1000).toFixed(0) + 'k' } },
+      x: { grid: GRID, ticks: TICK } } }
+});
+
+new Chart(document.getElementById('c2'), {
+  type: 'bar',
+  data: { labels: T, datasets: [
+    { label: 'Avg Implied Move %', data: avgImp, backgroundColor: BLUE, borderRadius: 4 },
+    { label: 'Avg Realised Move %', data: avgRlz, backgroundColor: ORG, borderRadius: 4 }
+  ]},
+  options: { responsive: true, plugins: { legend: { labels: { font: { family: 'Inter', size: 11 } } } },
+    scales: { y: { grid: GRID, ticks: { ...TICK, callback: v => v + '%' } }, x: { grid: GRID, ticks: TICK } } }
+});
+
+new Chart(document.getElementById('c3'), {
+  type: 'bar',
+  data: { labels: T, datasets: [
+    { label: 'Sharpe', data: sharpe, backgroundColor: BLUE, borderRadius: 4 },
+    { label: 'Sortino (capped)', data: sortino.map(v => Math.min(v, 2)), backgroundColor: WIN, borderRadius: 4 },
+    { label: 'Calmar (capped)', data: calmar.map(v => Math.min(Math.max(v, -1), 8)), backgroundColor: PUR, borderRadius: 4 }
+  ]},
+  options: { responsive: true, plugins: { legend: { labels: { font: { family: 'Inter', size: 11 } } } },
+    scales: { y: { grid: GRID, ticks: TICK }, x: { grid: GRID, ticks: TICK } } }
+});
+
+new Chart(document.getElementById('c4'), {
+  type: 'bar',
+  data: { labels: T, datasets: [
+    { label: 'Win Rate %', data: winRate, backgroundColor: BLUE, borderRadius: 4, yAxisID: 'y' },
+    { label: 'Payoff Ratio', data: payoff, backgroundColor: ORG, borderRadius: 4, yAxisID: 'y2' }
+  ]},
+  options: { responsive: true,
+    plugins: { legend: { labels: { font: { family: 'Inter', size: 11 } } } },
+    scales: {
+      x: { grid: GRID, ticks: TICK },
+      y: { grid: GRID, ticks: { ...TICK, callback: v => v + '%' }, position: 'left' },
+      y2: { ticks: TICK, position: 'right', grid: { drawOnChartArea: false } }
+    } }
+});
+
+let yearlyChart = null;
+function buildYearly(ticker) {
+  const d = yearly[ticker];
+  if (yearlyChart) yearlyChart.destroy();
+  document.getElementById('yearly-label').textContent = ticker + ': Annual P&L ($)';
+  yearlyChart = new Chart(document.getElementById('c5'), {
+    type: 'bar',
+    data: { labels: d.labels.map(String), datasets: [{ label: 'Annual P&L',
+      data: d.data, backgroundColor: d.data.map(v => v >= 0 ? WIN : LOSS), borderRadius: 4 }] },
+    options: { responsive: true, plugins: { legend: { display: false } },
+      scales: { y: { grid: GRID, ticks: { ...TICK, callback: v => '$' + (v/1000).toFixed(0) + 'k' } },
+        x: { grid: GRID, ticks: TICK } } }
   });
 }
 
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('visible');
-      e.target.querySelectorAll('tbody tr').forEach((tr, i) => {
-        setTimeout(() => tr.classList.add('visible'), i * 40);
-      });
-      e.target.querySelectorAll('.callout,.callout-red,.callout-yellow,.callout-blue,.callout-info').forEach((c, i) => {
-        setTimeout(() => c.classList.add('visible'), i * 80);
-      });
-    }
-  });
-}, { threshold: 0.08 });
-sections.forEach(s => io.observe(s));
-
-const dotLinks = dotNav ? dotNav.querySelectorAll('a') : [];
-const ioNav = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    const idx = Array.from(sections).indexOf(e.target);
-    if (idx >= 0 && dotLinks[idx]) dotLinks[idx].classList.toggle('active', e.isIntersecting);
-  });
-}, { threshold: 0.3 });
-sections.forEach(s => ioNav.observe(s));
+const tabsEl = document.getElementById('tabs');
+T.forEach(t => {
+  const btn = document.createElement('button');
+  btn.className = 'tab' + (t === 'AAPL' ? ' active' : '');
+  btn.textContent = t;
+  btn.onclick = () => {
+    document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    buildYearly(t);
+  };
+  tabsEl.appendChild(btn);
+});
+buildYearly('AAPL');
 </script>
 </body>
 </html>
