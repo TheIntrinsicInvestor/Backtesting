@@ -4,7 +4,7 @@
 Pull CBOE VIX daily close from FRED (series: VIXCLS) via pandas_datareader.
 No WRDS connection required.
 
-Covers 2017-01-01 to 2024-12-31 (2017 for T-20 buffer).
+Covers 2017-01-01 to 2025-12-31 (2017 for T-20 buffer).
 
 Output: data/vix_raw.parquet
 Columns: date, vix
@@ -24,7 +24,7 @@ if os.path.exists(CACHE):
     df = pd.read_parquet(CACHE)
 else:
     print("Pulling VIXCLS from FRED...")
-    raw = web.DataReader("VIXCLS", "fred", start="2017-01-01", end="2024-12-31")
+    raw = web.DataReader("VIXCLS", "fred", start="2017-01-01", end="2025-12-31")
     df = raw.reset_index().rename(columns={"DATE": "date", "VIXCLS": "vix"})
     df["date"] = pd.to_datetime(df["date"])
     df = df.dropna(subset=["vix"]).sort_values("date").reset_index(drop=True)

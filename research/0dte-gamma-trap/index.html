@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@sgratzl/chartjs-chart-boxplot@4/build/index.umd.min.js"></script>
   <style>
     :root {
       --bg:#f7f4ec; --bg2:#f0ece2; --bg3:#e8e3d8; --card:#fff;
@@ -373,12 +374,12 @@
 
     <div class="chart-box">
       <div class="chart-title">Chart 2: Intraday Realised Vol Distribution by GEX Regime</div>
-      <canvas id="regimeChart" height="70"></canvas>
+      <canvas id="regimeChart" height="90"></canvas>
       <div class="chart-legend">
         <div class="legend-item"><span class="legend-dot" style="background:#dc2626"></span>Negative GEX (n=421)</div>
         <div class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>Low GEX (n=233)</div>
         <div class="legend-item"><span class="legend-dot" style="background:#059669"></span>High GEX (n=233)</div>
-        <div class="legend-item" style="margin-left:8px;color:var(--hint)">Bars show median; error bars show p25&#8202;&#8211;&#8202;p75</div>
+        <div class="legend-item" style="margin-left:8px;color:var(--hint)">Boxes show IQR (p25&#8202;&#8211;&#8202;p75), whiskers extend 1.5&#215;IQR, dots are outliers. One Low GEX day (101.8%) lies above the axis.</div>
       </div>
     </div>
 
@@ -697,52 +698,30 @@ const COLORS = {
   });
 })();
 
-// ── Chart 2: Regime distribution (bar + error) ────────────────────────────────
+// ── Chart 2: Regime distribution (box plot) ───────────────────────────────────
 (function() {
-  const labels  = ["Negative GEX", "Low GEX", "High GEX"];
-  const medians = [11.56, 10.77, 7.17];
-  const p25     = [7.99, 7.19, 5.64];
-  const p75     = [17.3, 15.47, 10.22];
-  const p10     = [6.11, 5.28, 4.3];
-  const p90     = [23.64, 21.45, 12.31];
-  const barColors = [COLORS.neg, COLORS.low, COLORS.high];
-
   new Chart(document.getElementById('regimeChart'), {
-    type: 'bar',
+    type: 'boxplot',
     data: {
-      labels,
-      datasets: [
-        {
-          // p10–p90 whisker range (background)
-          data: p10.map((v, i) => [v, p90[i]]),
-          backgroundColor: barColors.map(c => c + '18'),
-          borderColor: 'transparent',
-          borderWidth: 0,
-          barPercentage: 0.45,
-          categoryPercentage: 0.7,
-          order: 3,
-        },
-        {
-          // IQR box (p25–p75)
-          data: p25.map((v, i) => [v, p75[i]]),
-          backgroundColor: barColors.map(c => c + '44'),
-          borderColor: barColors,
-          borderWidth: 1.5,
-          barPercentage: 0.45,
-          categoryPercentage: 0.7,
-          order: 2,
-        },
-        {
-          // Median marker (thin floating bar)
-          data: medians.map(m => [m - 0.35, m + 0.35]),
-          backgroundColor: barColors,
-          borderColor: 'transparent',
-          borderWidth: 0,
-          barPercentage: 0.45,
-          categoryPercentage: 0.7,
-          order: 1,
-        },
-      ]
+      labels: ['Negative GEX', 'Low GEX', 'High GEX'],
+      datasets: [{
+        data: [
+          { min: 2.46, q1: 7.98, median: 11.56, q3: 17.38, max: 31.13,
+            outliers: [31.71,31.81,32.08,32.81,33.16,33.4,33.99,34.65,34.88,38.49,40.44,43.45,44.21,67.37,78.54] },
+          { min: 2.78, q1: 7.07, median: 10.77, q3: 15.54, max: 28.13,
+            outliers: [29.28,33.8,36.06,51.7,101.81] },
+          { min: 1.61, q1: 5.63, median: 7.17,  q3: 10.23, max: 16.54,
+            outliers: [18.5,19.43,20.64,21.09,21.09,23.56,24.8] },
+        ],
+        backgroundColor: ['rgba(220,38,38,0.18)','rgba(245,158,11,0.18)','rgba(5,150,105,0.18)'],
+        borderColor:      ['#dc2626','#f59e0b','#059669'],
+        borderWidth: 1.5,
+        outlierBackgroundColor: ['#dc2626','#f59e0b','#059669'],
+        outlierBorderColor:     ['#dc2626','#f59e0b','#059669'],
+        outlierRadius: 3,
+        medianColor:  ['#dc2626','#f59e0b','#059669'],
+        whiskerColor: ['#dc2626','#f59e0b','#059669'],
+      }]
     },
     options: {
       responsive: true,
@@ -750,13 +729,14 @@ const COLORS = {
         legend: { display: false },
         tooltip: {
           callbacks: {
-            title: ctx => labels[ctx[0].dataIndex],
-            label: (ctx) => {
-              const i = ctx.dataIndex;
+            title: ctx => ctx[0].label,
+            label: ctx => {
+              const d = ctx.raw;
               return [
-                `Median: ${medians[i].toFixed(1)}%`,
-                `IQR (p25–p75): ${p25[i].toFixed(1)}% – ${p75[i].toFixed(1)}%`,
-                `Range (p10–p90): ${p10[i].toFixed(1)}% – ${p90[i].toFixed(1)}%`,
+                `Median: ${d.median.toFixed(1)}%`,
+                `IQR: ${d.q1.toFixed(1)}% – ${d.q3.toFixed(1)}%`,
+                `Whiskers: ${d.min.toFixed(1)}% – ${d.max.toFixed(1)}%`,
+                `Outliers: ${d.outliers.length}`,
               ];
             }
           }
@@ -770,6 +750,8 @@ const COLORS = {
         },
         y: {
           title: { display: true, text: 'Annualised Intraday RVol', font: { size: 11 } },
+          min: 0,
+          max: 85,
           grid: { color: 'rgba(0,0,0,0.05)', lineWidth: 0.75 },
           border: { color: 'transparent' },
           ticks: {

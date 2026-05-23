@@ -665,21 +665,6 @@ for dtype in ["Hike", "Hold", "Cut"]:
 
 html += f"""      </tbody>
     </table>
-    <h3>Per-meeting results</h3>
-    <div style="overflow-x:auto">
-    <table class="data-table">
-      <thead><tr>
-        <th>FOMC Date</th><th>Decision</th><th>Comm</th>
-        <th style="text-align:right">Entry Straddle</th>
-        <th style="text-align:right">Exit Straddle</th>
-        <th style="text-align:right">P&amp;L / Contract</th>
-        <th style="text-align:right">Cumulative</th>
-      </tr></thead>
-      <tbody>
-        {pre_table_rows}
-      </tbody>
-    </table>
-    </div>
     <h3>What these results mean</h3>
     <p style="text-align:justify;hyphens:none">
       Aggregate results do not support Strategy A as a systematic trade. The {pre_win:.0%} win rate
