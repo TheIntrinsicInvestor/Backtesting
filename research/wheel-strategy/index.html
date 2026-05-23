@@ -3,277 +3,315 @@
 <head>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-HT9VG5C62E"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-HT9VG5C62E');</script>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<meta property="og:type" content="article"/>
-<meta property="og:title" content="The Wheel Strategy on SPY — The Intrinsic Investor"/>
-<meta property="og:description" content="Systematic backtest of the wheel strategy on SPY, 2018–2025. 20 parameter combinations tested."/>
-<meta property="og:url" content="https://theintrinsicinvestor.com/research/wheel-strategy/"/>
-<title>The Wheel Strategy on SPY: TheIntrinsicInvestor</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Wheel Strategy on SPY | The Intrinsic Investor">
+<meta property="og:description" content="Systematic backtest of the wheel strategy on SPY, 2018&#8211;2025. 20 parameter combinations tested.">
+<meta property="og:url" content="https://theintrinsicinvestor.com/research/wheel-strategy/">
+<title>The Wheel Strategy on SPY: A Systematic Backtest | The Intrinsic Investor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-:root{
-  --bg:#f7f4ec;--bg2:#f0ece2;--bg3:#e8e3d8;--card:#fff;
-  --ink:#0f2220;--muted:#4a6460;--hint:#8aa49e;
-  --border:#e2ddd0;--accent:#1a5c52;--accent2:#144a42;
-  --blue:#1e40af;--blue2:#2563eb;--blue-bg:#eff6ff;--blue-border:#bfdbfe;
-  --green:#0E9F6E;--amber:#E3A008;--red:#E02424;--purple:#7E3AF2;
-  --font:'Inter',sans-serif;--serif:'Fraunces',serif;--mono:'JetBrains Mono',monospace;
-}
-body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.7;font-size:15px}
-
-/* G1 — Paper grain */
-body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23noise)' opacity='0.07'/%3E%3C/svg%3E");mix-blend-mode:multiply;opacity:0.5}
-
-/* R1 — Progress bar */
-#progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,#1a5c52,#2d9d8f);z-index:9998;transition:width 0.1s linear;box-shadow:0 0 8px rgba(26,92,82,0.4)}
-
-/* NAV — G2 Frosted */
-nav{position:sticky;top:0;z-index:100;background:rgba(247,244,236,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2.5rem;height:62px;display:flex;align-items:center;justify-content:space-between;transition:box-shadow 0.3s}
-nav.scrolled{box-shadow:0 1px 24px rgba(15,34,32,0.06)}
-.nav-logo{font-family:var(--serif);font-size:21px;font-weight:600;color:var(--ink)}
-.nav-links{display:flex;gap:1.5rem}
-
-/* G3 — Nav underlines */
-.nav-links a{font-size:13px;font-weight:400;color:var(--ink);text-decoration:none;transition:color .2s;position:relative;padding-bottom:2px}
-.nav-links a::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:#1a5c52;transform:scaleX(0);transform-origin:left;transition:transform 0.25s cubic-bezier(0.4,0,0.2,1)}
-.nav-links a:hover{color:var(--accent)}
-.nav-links a:hover::after{transform:scaleX(1)}
-
-/* R6 — Dot nav */
-.section-nav{position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);z-index:300;display:flex;flex-direction:column;gap:8px}
-.sn-dot{width:8px;height:8px;border-radius:50%;border:1.5px solid #8aa49e;background:transparent;cursor:pointer;transition:all 0.2s;position:relative}
-.sn-dot:hover,.sn-dot.active{background:#1a5c52;border-color:#1a5c52;transform:scale(1.25)}
-.sn-dot::before{content:attr(data-label);position:absolute;right:calc(100% + 8px);top:50%;transform:translateY(-50%);background:#0f2220;color:#fff;font-size:10px;font-weight:500;padding:3px 8px;border-radius:3px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.15s}
-.sn-dot:hover::before{opacity:1}
-@media(max-width:900px){.section-nav{display:none}}
-
-/* HERO */
-.hero{background:var(--ink);color:#fff;padding:5rem 2.5rem 4rem;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(-55deg,transparent,transparent 40px,rgba(255,255,255,0.013) 40px,rgba(255,255,255,0.013) 41px);pointer-events:none}
-.hero-inner{max-width:1000px;margin:0 auto;position:relative;z-index:1}
-.hero-tag{font-family:var(--font);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--hint);margin-bottom:1.5rem;display:flex;align-items:center;gap:10px;opacity:0;animation:fadeUp 0.5s ease 0.05s forwards}
-.hero-tag::before{content:'';width:24px;height:1px;background:var(--hint)}
-.hero h1{font-family:var(--serif);font-size:2.5rem;font-weight:600;line-height:1.2;letter-spacing:-.01em;margin-bottom:1rem;color:#fff;opacity:0;animation:fadeUp 0.5s ease 0.12s forwards}
-.hero h1 em{font-style:italic;color:#5ab5a5}
-.hero-sub{font-size:14px;color:rgba(255,255,255,.55);max-width:700px;margin-bottom:2rem;font-weight:300;line-height:1.8;opacity:0;animation:fadeUp 0.5s ease 0.20s forwards}
-.hero-meta{display:flex;gap:2rem;flex-wrap:wrap;opacity:0;animation:fadeUp 0.5s ease 0.28s forwards}
-.hero-meta-item{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.35)}
-.hero-meta-item strong{font-family:var(--serif);color:rgba(255,255,255,.8);display:block;font-size:1.1rem;font-weight:600;font-style:italic;margin-bottom:2px}
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-
-/* AUTHOR BAR */
-.author-bar{background:var(--card);border-bottom:1px solid var(--border);padding:.85rem 2.5rem}
-.author-bar-inner{max-width:1000px;margin:0 auto;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap}
-.author-bar strong{color:var(--ink)}
-.gh-btn{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono,'JetBrains Mono',monospace);font-size:10px;color:var(--accent);text-decoration:none;border:1px solid var(--accent);padding:2px 9px;border-radius:3px;transition:all .2s;letter-spacing:.02em}
-.gh-btn:hover{background:var(--accent);color:#fff}
-
-/* LAYOUT */
-.container{max-width:1000px;margin:0 auto;padding:0 2.5rem}
-
-/* R3 — Section scroll-reveal */
-.section{padding:4rem 0;opacity:0;transform:translateY(20px);transition:opacity 0.6s cubic-bezier(0.4,0,0.2,1),transform 0.6s cubic-bezier(0.4,0,0.2,1)}
-.section.visible{opacity:1;transform:translateY(0)}
-.section-alt{background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-h2{font-family:var(--serif);font-size:1.6rem;font-weight:600;color:var(--ink);margin-bottom:1rem;letter-spacing:-.01em;padding-bottom:.5rem;border-bottom:2px solid var(--accent)}
-h3{font-family:var(--serif);font-size:1.1rem;font-weight:600;color:var(--ink);margin:1.8rem 0 .6rem}
-p{color:var(--muted);margin-bottom:1rem;font-size:14px}
-p strong{color:var(--ink)}
-
-/* ABSTRACT */
-.abstract{background:var(--card);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:1.5rem 2rem;margin:2rem 0;border:1px solid var(--border);transition:box-shadow 0.2s}
-.abstract:hover{box-shadow:0 4px 16px rgba(26,92,82,0.08)}
-.abstract-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:.5rem;font-family:var(--font)}
-
-/* STAT CARDS */
-.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin:2rem 0}
-.stat-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.2rem 1.4rem;transition:transform 0.2s,box-shadow 0.2s}
-.stat-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.08)}
-.stat-card .label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--hint);margin-bottom:.4rem;font-family:var(--font)}
-.stat-card .value{font-family:var(--serif);font-size:1.8rem;font-weight:600;font-style:italic;letter-spacing:-.01em;line-height:1}
-.stat-card .sub{font-size:12px;color:var(--hint);margin-top:.3rem;font-family:var(--font)}
-.val-blue{color:var(--accent)}.val-green{color:var(--green)}.val-red{color:var(--red)}.val-amber{color:var(--amber)}
-
-/* CALLOUTS — R3 */
-.callout{border-radius:8px;padding:1.2rem 1.5rem;margin:1.5rem 0;display:flex;gap:1rem;align-items:flex-start;opacity:0;transform:translateX(-8px);transition:opacity 0.5s ease,transform 0.5s ease}
-.callout-info{background:var(--blue-bg);border:1px solid var(--blue-border)}
-.callout-warn{background:#FFFBEB;border:1px solid #FDE68A}
-.callout-danger{background:#FEF2F2;border:1px solid #FECACA}
-.callout-success{background:#ECFDF5;border:1px solid #A7F3D0}
-.callout.visible,.callout-info.visible,.callout-warn.visible,.callout-danger.visible,.callout-success.visible{opacity:1;transform:translateX(0)}
-.callout-icon{font-size:1.1rem;margin-top:.1rem}
-.callout-text{font-size:13px;color:var(--muted);line-height:1.65}
-.callout-text strong{display:block;margin-bottom:.2rem;color:var(--ink)}
-
-/* TABLES */
-.table-wrap{overflow-x:auto;margin:1.5rem 0;border-radius:8px;border:1px solid var(--border)}
-table{width:100%;border-collapse:collapse;background:var(--card);font-size:13px}
-thead tr{background:var(--ink);color:#fff}
-th{padding:.75rem 1rem;font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.04em;text-align:left;font-family:var(--font)}
-td{padding:.65rem 1rem;border-bottom:1px solid var(--border);color:var(--muted)}
-td strong{color:var(--ink)}
-tr:last-child td{border-bottom:none}
-tr:hover td{background:var(--bg2)}
-.badge{display:inline-block;padding:.15rem .5rem;border-radius:4px;font-size:11px;font-weight:600;font-family:var(--mono)}
-.badge-green{background:#D1FAE5;color:#065F46}
-.badge-blue{background:#DBEAFE;color:#1E40AF}
-.badge-red{background:#FEE2E2;color:#991B1B}
-.badge-amber{background:#FEF3C7;color:#92400E}
-.badge-purple{background:#EDE9FE;color:#5B21B6}
-.tag-best{background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:.1rem .45rem;border-radius:3px;margin-left:.4rem;vertical-align:middle;font-family:var(--font)}
-
-/* R4 — Table row animation */
-table.revealed tbody tr{opacity:0;transform:translateX(-8px);animation:rowReveal 0.35s ease forwards}
-@keyframes rowReveal{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
-table.revealed tbody tr:nth-child(1){animation-delay:0.03s}
-table.revealed tbody tr:nth-child(2){animation-delay:0.07s}
-table.revealed tbody tr:nth-child(3){animation-delay:0.11s}
-table.revealed tbody tr:nth-child(4){animation-delay:0.15s}
-table.revealed tbody tr:nth-child(5){animation-delay:0.19s}
-table.revealed tbody tr:nth-child(6){animation-delay:0.23s}
-table.revealed tbody tr:nth-child(7){animation-delay:0.27s}
-table.revealed tbody tr:nth-child(8){animation-delay:0.31s}
-table.revealed tbody tr:nth-child(9){animation-delay:0.35s}
-
-/* CHARTS — R5 */
-.chart-wrap{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1.5rem 0;transition:box-shadow 0.2s}
-.chart-wrap:hover{box-shadow:0 4px 20px rgba(15,34,32,0.06)}
-.chart-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--hint);margin-bottom:1rem;font-family:var(--font)}
-.chart-img{width:100%;border-radius:6px;display:block}
-
-/* PHASE GRID */
-.phase-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin:1.5rem 0}
-.phase-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.3rem 1.5rem}
-.phase-card .phase-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem;font-family:var(--font)}
-.phase-card h4{font-family:var(--serif);font-size:1rem;font-weight:600;margin-bottom:.6rem;color:var(--ink)}
-.phase-card ul{padding-left:1.2rem;font-size:13px;color:var(--muted)}
-.phase-card li{margin-bottom:.3rem}
-.phase1 .phase-label{color:var(--accent)}
-.phase2 .phase-label{color:var(--green)}
-
-/* PARAMS */
-.params{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.8rem;margin:1.5rem 0}
-.param-item{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:.9rem 1.1rem;text-align:center}
-.param-item .param-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--hint);margin-bottom:.4rem;font-family:var(--font)}
-.param-item .param-val{font-size:.9rem;font-weight:500;color:var(--ink);font-family:var(--mono)}
-
-/* RECOMMEND */
-.recommend{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:2rem;margin:2rem 0;border-left:3px solid var(--accent)}
-.recommend-title{font-family:var(--serif);font-size:1.1rem;font-weight:600;color:var(--accent);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
-.recommend-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-.recommend-metric{background:var(--card);border-radius:6px;padding:.9rem 1.1rem;border:1px solid var(--border)}
-.recommend-metric .rm-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--hint);margin-bottom:.3rem;font-family:var(--font)}
-.recommend-metric .rm-val{font-family:var(--serif);font-size:1.4rem;font-weight:600;font-style:italic;color:var(--ink)}
-
-/* BREAKDOWN */
-.breakdown-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1.5rem 0}
-.breakdown-card{background:var(--card);border-left:3px solid;border-radius:0 8px 8px 0;padding:1rem 1.2rem;border-top:1px solid var(--border);border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
-.breakdown-card h4{font-family:var(--serif);font-size:.95rem;font-weight:600;margin-bottom:.4rem;color:var(--ink)}
-.breakdown-card p{font-size:13px;margin:0;color:var(--muted)}
-
-/* FOOTER */
-footer{background:var(--ink);color:#fff;padding:3rem 2.5rem;text-align:center}
-.footer-inner{max-width:700px;margin:0 auto}
-footer p{font-family:var(--font);margin-bottom:.5rem;font-size:13px;color:rgba(255,255,255,.35)}
-footer strong{color:rgba(255,255,255,.7)}
-
-@media(max-width:768px){
-  .nav-links{gap:1rem}
-  .nav-logo{font-size:17px}
-}
-@media(max-width:640px){
-  .hero{padding:3rem 1.25rem 2.5rem}
-  .hero h1{font-size:1.8rem}
-  .phase-grid,.recommend-grid{grid-template-columns:1fr}
-  .nav-links{display:none}
-  nav,.hero-inner,.container,.author-bar{padding-left:1.25rem;padding-right:1.25rem}
-  footer{padding:2rem 1.25rem}
-}
-
-/* G4 — Prefers-reduced-motion */
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
+  :root {
+    --bg:#f7f4ec; --bg2:#f0ece2; --bg3:#e8e3d8; --card:#fff;
+    --ink:#0f2220; --muted:#4a6460; --hint:#8aa49e;
+    --border:#e2ddd0; --accent:#1a5c52; --accent2:#144a42;
+    --green:#0E9F6E; --green2:#059669; --green-bg:#ecfdf5; --green-border:#a7f3d0;
+    --red:#E02424;   --red2:#dc2626;   --red-bg:#fef2f2;   --red-border:#fca5a5;
+    --blue:#1e40af;  --blue2:#2563eb;  --blue-bg:#eff6ff;  --blue-border:#bfdbfe;
+    --amber:#E3A008; --amber-bg:#fffbeb; --amber-border:#fcd34d;
+    --purple:#7E3AF2; --purple-bg:#f5f3ff; --purple-border:#c4b5fd;
+    --font:'Inter',sans-serif; --serif:'Fraunces',serif; --mono:'JetBrains Mono',monospace;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.7}
+  body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+    mix-blend-mode:multiply;opacity:0.5}
+  #progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;
+    background:linear-gradient(90deg,#1a5c52,#2d9d8f);z-index:9998;transition:width .1s linear}
+  nav{position:sticky;top:0;z-index:100;height:62px;display:flex;align-items:center;
+    justify-content:space-between;padding:0 2rem;
+    background:rgba(247,244,236,.92);backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
+    transition:box-shadow .3s}
+  nav.scrolled{box-shadow:0 1px 24px rgba(15,34,32,.06)}
+  .nav-logo{font-family:var(--serif);font-weight:600;font-size:1.1rem;color:var(--ink);letter-spacing:-.01em;text-decoration:none}
+  .nav-links{display:flex;gap:1.75rem;list-style:none}
+  .nav-links a{color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:500;
+    position:relative;padding-bottom:2px;transition:color .2s}
+  .nav-links a:hover{color:var(--ink)}
+  .nav-links a::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
+    background:var(--accent);transform:scaleX(0);transform-origin:left;
+    transition:transform .25s cubic-bezier(.4,0,.2,1)}
+  .nav-links a:hover::after{transform:scaleX(1)}
+  .hero{background:var(--ink);padding:5rem 2rem 4rem;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;inset:0;pointer-events:none;
+    background-image:repeating-linear-gradient(-55deg,transparent,transparent 40px,
+      rgba(255,255,255,.013) 40px,rgba(255,255,255,.013) 41px)}
+  .hero-inner{max-width:860px;margin:0 auto;position:relative}
+  .hero-tag{display:inline-block;font-family:var(--mono);font-size:.72rem;color:var(--accent);
+    letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(26,92,82,.4);
+    padding:.25rem .75rem;border-radius:2px;margin-bottom:1.5rem;
+    animation:fadeUp .6s ease both}
+  .hero h1{font-family:var(--serif);font-size:clamp(1.9rem,4.5vw,3.2rem);font-weight:600;
+    color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:1.25rem;
+    animation:fadeUp .6s .1s ease both}
+  .hero h1 em{font-style:italic;color:var(--accent)}
+  .hero-sub{font-size:1rem;color:rgba(255,255,255,.65);max-width:620px;line-height:1.7;
+    margin-bottom:2rem;animation:fadeUp .6s .2s ease both}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:2rem;font-family:var(--mono);font-size:.75rem;
+    color:rgba(255,255,255,.5);border-top:1px solid rgba(255,255,255,.1);
+    padding-top:1.5rem;animation:fadeUp .6s .3s ease both}
+  .hero-meta-item strong{display:block;color:rgba(255,255,255,.85);font-size:.85rem;margin-bottom:.15rem}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+  .kpi-strip{background:var(--card);border-bottom:1px solid var(--border);padding:2rem}
+  .kpi-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+  .kpi-cell{padding:1.5rem;border-right:1px solid var(--border)}
+  .kpi-cell:last-child{border-right:none}
+  .kpi-label{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--hint);margin-bottom:.5rem}
+  .kpi-value{font-family:var(--mono);font-size:1.9rem;font-weight:500;color:var(--ink);
+    line-height:1;margin-bottom:.4rem}
+  .kpi-value.green{color:var(--green2)}
+  .kpi-value.red{color:var(--red2)}
+  .kpi-value.blue{color:var(--blue2)}
+  .kpi-sub{font-size:.78rem;color:var(--muted)}
+  .container{max-width:860px;margin:0 auto;padding:0 2rem}
+  .section{opacity:0;transform:translateY(16px);
+    transition:opacity .55s ease,transform .55s ease;
+    padding:4.5rem 0;border-bottom:1px solid var(--border)}
+  .section.visible{opacity:1;transform:none}
+  .section:last-of-type{border-bottom:none}
+  .section-label{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem}
+  .section-counter{font-family:var(--mono);font-size:.72rem;color:var(--hint);letter-spacing:.04em}
+  .section-label span:last-child{font-size:.72rem;font-weight:600;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--hint)}
+  h2{font-family:var(--serif);font-size:clamp(1.5rem,3vw,2.1rem);font-weight:600;
+    color:var(--ink);line-height:1.25;letter-spacing:-.02em;margin-bottom:1.25rem}
+  h2 em{font-style:italic;color:var(--accent)}
+  h3{font-family:var(--serif);font-size:1.15rem;font-weight:600;color:var(--ink);margin:2rem 0 .75rem}
+  p{color:var(--muted);line-height:1.75;margin-bottom:1rem;text-align:justify;hyphens:none;word-break:normal;overflow-wrap:normal}
+  p:last-child{margin-bottom:0}
+  p strong{color:var(--ink)}
+  .callout{display:flex;gap:1rem;padding:1.25rem 1.5rem;border-radius:4px;
+    margin:1.5rem 0;border-left:3px solid}
+  .callout.green{background:var(--green-bg);border-color:var(--green2)}
+  .callout.amber{background:var(--amber-bg);border-color:var(--amber)}
+  .callout.red{background:var(--red-bg);border-color:var(--red2)}
+  .callout.blue{background:var(--blue-bg);border-color:var(--blue2)}
+  .callout.purple{background:var(--purple-bg);border-color:var(--purple)}
+  .callout-icon{font-size:1.1rem;flex-shrink:0;margin-top:.1rem}
+  .callout-body{font-size:.9rem;color:var(--ink);line-height:1.6}
+  .callout-body strong{font-weight:600}
+  .highlight-box{background:var(--ink);border-radius:4px;padding:2rem;margin:1.5rem 0}
+  .hl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+  .hl-cell{padding:0 1.5rem;border-right:1px solid rgba(255,255,255,.1)}
+  .hl-cell:first-child{padding-left:0}
+  .hl-cell:last-child{border-right:none}
+  .hl-label{font-size:.7rem;font-weight:500;color:rgba(255,255,255,.35);text-transform:uppercase;
+    letter-spacing:.1em;margin-bottom:.5rem}
+  .hl-value{font-family:var(--serif);font-style:italic;font-size:1.75rem;color:#5ab5a5;line-height:1.1}
+  .hl-sub{font-size:.75rem;color:rgba(255,255,255,.3);margin-top:.3rem}
+  .chart-box{background:var(--bg2);border:1px solid var(--border);
+    border-radius:4px;padding:1.5rem;margin:1.5rem 0}
+  .chart-title{font-size:.85rem;font-weight:600;color:var(--ink);
+    margin-bottom:1rem;letter-spacing:.02em}
+  .chart-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px}
+  .legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
+  .legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+  .legend-line{width:16px;height:2px;flex-shrink:0}
+  .table-wrap{overflow-x:auto;margin:1.5rem 0;border-radius:4px;border:1px solid var(--border)}
+  table{width:100%;border-collapse:collapse;font-size:.875rem}
+  thead tr{background:var(--ink);color:#fff}
+  thead th{padding:.7rem .9rem;text-align:left;font-weight:500;font-size:.75rem;letter-spacing:.04em}
+  tbody tr{border-bottom:1px solid var(--border)}
+  tbody tr:last-child{border-bottom:none}
+  tbody tr:hover{background:var(--bg2)}
+  td{padding:.65rem .9rem;color:var(--muted);vertical-align:middle}
+  .mono{font-family:var(--mono);font-size:.82rem}
+  .badge{display:inline-block;padding:.15rem .5rem;border-radius:4px;font-size:11px;font-weight:600;font-family:var(--mono)}
+  .badge-green{background:#D1FAE5;color:#065F46}
+  .badge-blue{background:#DBEAFE;color:#1E40AF}
+  .badge-red{background:#FEE2E2;color:#991B1B}
+  .badge-amber{background:#FEF3C7;color:#92400E}
+  .tag-best{background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:.1rem .45rem;border-radius:3px;margin-left:.4rem;vertical-align:middle;font-family:var(--font)}
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin:2rem 0}
+  .stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1.2rem 1.4rem}
+  .stat-card .label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--hint);margin-bottom:.4rem;font-family:var(--font)}
+  .stat-card .value{font-family:var(--serif);font-size:1.8rem;font-weight:600;font-style:italic;letter-spacing:-.01em;line-height:1}
+  .stat-card .sub{font-size:12px;color:var(--hint);margin-top:.3rem;font-family:var(--font)}
+  .val-blue{color:var(--accent)}.val-green{color:var(--green)}.val-red{color:var(--red)}.val-amber{color:var(--amber)}
+  .phase-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin:1.5rem 0}
+  .phase-card{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1.3rem 1.5rem}
+  .phase-card .phase-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem;font-family:var(--font)}
+  .phase-card h4{font-family:var(--serif);font-size:1rem;font-weight:600;margin-bottom:.6rem;color:var(--ink)}
+  .phase-card ul{padding-left:1.2rem;font-size:.875rem;color:var(--muted)}
+  .phase-card li{margin-bottom:.3rem}
+  .phase1 .phase-label{color:var(--accent)}
+  .phase2 .phase-label{color:var(--green)}
+  .params{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.8rem;margin:1.5rem 0}
+  .param-item{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:.9rem 1.1rem;text-align:center}
+  .param-item .param-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--hint);margin-bottom:.4rem;font-family:var(--font)}
+  .param-item .param-val{font-size:.9rem;font-weight:500;color:var(--ink);font-family:var(--mono)}
+  .recommend{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:2rem;margin:2rem 0;border-left:3px solid var(--accent)}
+  .recommend-title{font-family:var(--serif);font-size:1.1rem;font-weight:600;color:var(--accent);margin-bottom:1rem}
+  .recommend-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .recommend-metric{background:var(--bg3);border-radius:4px;padding:.9rem 1.1rem;border:1px solid var(--border)}
+  .recommend-metric .rm-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--hint);margin-bottom:.3rem;font-family:var(--font)}
+  .recommend-metric .rm-val{font-family:var(--serif);font-size:1.4rem;font-weight:600;font-style:italic;color:var(--ink)}
+  .breakdown-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1.5rem 0}
+  .breakdown-card{background:var(--bg2);border-left:3px solid;border-radius:0 4px 4px 0;padding:1rem 1.2rem;border-top:1px solid var(--border);border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
+  .breakdown-card h4{font-family:var(--serif);font-size:.95rem;font-weight:600;margin-bottom:.4rem;color:var(--ink)}
+  .breakdown-card p{font-size:.875rem;margin:0;color:var(--muted);text-align:left}
+  table.revealed tbody tr{opacity:0;transform:translateX(-8px);animation:rowReveal 0.35s ease forwards}
+  @keyframes rowReveal{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
+  table.revealed tbody tr:nth-child(1){animation-delay:0.03s}
+  table.revealed tbody tr:nth-child(2){animation-delay:0.07s}
+  table.revealed tbody tr:nth-child(3){animation-delay:0.11s}
+  table.revealed tbody tr:nth-child(4){animation-delay:0.15s}
+  table.revealed tbody tr:nth-child(5){animation-delay:0.19s}
+  table.revealed tbody tr:nth-child(6){animation-delay:0.23s}
+  table.revealed tbody tr:nth-child(7){animation-delay:0.27s}
+  table.revealed tbody tr:nth-child(8){animation-delay:0.31s}
+  table.revealed tbody tr:nth-child(9){animation-delay:0.35s}
+  #side-nav{position:fixed;right:0;top:50%;transform:translateY(-50%);
+    z-index:50;display:flex;flex-direction:column;gap:2px;padding:10px 6px}
+  #side-nav a{display:flex;align-items:center;justify-content:flex-end;gap:7px;
+    text-decoration:none;padding:5px 8px;border-radius:4px;transition:background .2s}
+  #side-nav a:hover{background:rgba(26,92,82,.07)}
+  .sn-label{font-size:.67rem;font-weight:500;color:var(--hint);white-space:nowrap;
+    letter-spacing:.02em;font-family:var(--font);transition:color .2s;text-align:right}
+  .sn-dot{width:5px;height:5px;border-radius:50%;background:var(--border);
+    flex-shrink:0;transition:all .2s}
+  #side-nav a.active .sn-label{color:var(--accent);font-weight:600}
+  #side-nav a.active .sn-dot{background:var(--accent);transform:scale(1.5)}
+  #side-nav a:hover .sn-label{color:var(--ink)}
+  #side-nav a:hover .sn-dot{background:var(--muted)}
+  .gh-btn{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);
+    font-size:.68rem;color:rgba(255,255,255,.5);text-decoration:none;
+    border:1px solid rgba(255,255,255,.2);padding:3px 9px;border-radius:3px;
+    transition:all .2s;letter-spacing:.02em;align-self:center}
+  .gh-btn:hover{color:#fff;border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.08)}
+  footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
+  .footer-inner{max-width:860px;margin:0 auto;display:flex;
+    justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+  .footer-name{font-family:var(--serif);font-weight:600;font-size:1rem;color:rgba(255,255,255,.9)}
+  .footer-right{font-size:.8rem;text-align:right}
+  .footer-right a{color:rgba(255,255,255,.5);text-decoration:none;margin-left:1.2rem}
+  .footer-right a:hover{color:rgba(255,255,255,.85)}
+  @media(max-width:860px){
+    #side-nav{display:none}
+    .kpi-grid{grid-template-columns:repeat(2,1fr)}
+    .footer-inner{flex-direction:column;text-align:center}
+    .footer-right{text-align:center}
+  }
+  @media(max-width:640px){
+    .hero{padding:3rem 1.25rem 2.5rem}
+    .hero h1{font-size:1.8rem}
+    .phase-grid,.recommend-grid{grid-template-columns:1fr}
+    .nav-links{display:none}
+    .kpi-cell{border-right:none;border-bottom:1px solid var(--border)}
+    .hl-grid{grid-template-columns:1fr;gap:1rem}
+    .hl-cell{border-right:none;padding:0;border-bottom:1px solid rgba(255,255,255,.08);padding-bottom:1rem}
+    .hl-cell:last-child{border-bottom:none}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  }
 </style>
 </head>
 <body>
 
 <div id="progress-bar"></div>
 
-<nav class="section-nav" id="sectionNav">
-  <div class="sn-dot" data-label="Introduction" data-target="introduction"></div>
-  <div class="sn-dot" data-label="Strategy Mechanics" data-target="mechanics"></div>
-  <div class="sn-dot" data-label="Data &amp; Methodology" data-target="methodology"></div>
-  <div class="sn-dot" data-label="Results" data-target="results"></div>
-  <div class="sn-dot" data-label="Year-by-Year" data-target="yearly"></div>
-  <div class="sn-dot" data-label="Optimal Combination" data-target="optimal"></div>
-  <div class="sn-dot" data-label="Breakdown" data-target="breakdown"></div>
-  <div class="sn-dot" data-label="Risks &amp; Limitations" data-target="limitations"></div>
-  <div class="sn-dot" data-label="Conclusion" data-target="conclusion"></div>
-</nav>
-
-<!-- NAV -->
 <nav>
-  <div class="nav-logo">The Intrinsic Investor</div>
-  <div class="nav-links">
-    <a href="/">Home</a>
-    <a href="/research">Research</a>
-    <a href="/about">About</a>
-  </div>
+  <a href="/" class="nav-logo">The Intrinsic Investor</a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/research">Research</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
 </nav>
 
-<!-- HERO -->
-<div class="hero">
+<div id="side-nav" aria-label="Page sections"></div>
+
+<header class="hero">
   <div class="hero-inner">
-    <div class="hero-tag">Systematic Market Research</div>
-    <h1>The Wheel Strategy on <em>SPY</em><br>A Systematic Backtest</h1>
-    <div class="hero-sub">Exploring delta, DTE and risk-adjusted returns across 20 parameter combinations, from January 2018 to December 2025.</div>
+    <div class="hero-tag">Options Strategy Backtest</div>
+    <h1>The Wheel Strategy on <em>SPY</em></h1>
+    <p class="hero-sub">
+      Exploring delta, DTE and risk-adjusted returns across 20 parameter combinations, from January 2018 to December 2025. Using eight years of institutional OptionMetrics data to answer whether premium income compensates for the opportunity cost of not owning SPY.
+    </p>
     <div class="hero-meta">
-      <div class="hero-meta-item"><strong>8 Years</strong>Backtest Period</div>
-      <div class="hero-meta-item"><strong>20</strong>Parameter Combos</div>
-      <div class="hero-meta-item"><strong>OptionMetrics</strong>Data Source (WRDS)</div>
-      <div class="hero-meta-item"><strong>50%</strong>Profit Target</div>
+      <div class="hero-meta-item"><strong>Author</strong>Brian Liew, BSc Accounting and Finance, LSE</div>
+      <div class="hero-meta-item"><strong>Published</strong>February 2026</div>
+      <div class="hero-meta-item"><strong>Period</strong>Jan 2018 to Dec 2025, 20 combinations</div>
+      <div class="hero-meta-item"><strong>Data</strong>OptionMetrics via WRDS</div>
+      <a href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/wheel-strategy" target="_blank" rel="noopener noreferrer" class="gh-btn">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub Code
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="kpi-strip">
+  <div class="kpi-grid">
+    <div class="kpi-cell">
+      <div class="kpi-label">Best Sharpe Ratio</div>
+      <div class="kpi-value blue">0.65</div>
+      <div class="kpi-sub">10&#916; / 60 DTE combination</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">SPY Total Return</div>
+      <div class="kpi-value green">140.0%</div>
+      <div class="kpi-sub">Buy and hold, Jan 2018 to Dec 2025</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">Best Wheel Return</div>
+      <div class="kpi-value blue">40.3%</div>
+      <div class="kpi-sub">10&#916; / 45 DTE, 8 year total</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">Lowest Max Drawdown</div>
+      <div class="kpi-value red">&#8722;11.0%</div>
+      <div class="kpi-sub">20&#916; / 60 DTE vs SPY &#8722;34.1%</div>
     </div>
   </div>
 </div>
 
-<!-- AUTHOR BAR -->
-<div class="author-bar">
-  <div class="author-bar-inner">
-    By <strong>Brian Liew</strong> &nbsp;·&nbsp; London School of Economics &nbsp;·&nbsp; Published Feb 2026
-    <a class="gh-btn" href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/wheel-strategy" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg> Code</a>
-  </div>
-</div>
-
-<!-- ABSTRACT -->
-<div class="container">
-  <div class="abstract">
-    <div class="abstract-label">Abstract</div>
-    <p style="margin:0;font-size:13.5px;color:var(--ink)">This report backtests the Wheel Strategy on SPY across 20 combinations of delta (10Δ–50Δ) and DTE (15–60 days) from January 2018 to December 2025 using OptionMetrics end-of-day data. All positions use mid-price fills and a 50% profit target. Results show the strategy significantly underperforms buy-and-hold SPY on total return (17–40% vs 140%), but delivers materially lower drawdowns and more stable equity curves. The optimal risk-adjusted combination is <strong>10Δ / 60 DTE</strong> (Sharpe 0.65, Max Drawdown −11.6%). The strategy is best understood as a <strong>defensive income tool</strong> rather than a growth vehicle, with a clear advantage in sideways and bear market environments.</p>
-  </div>
-</div>
-
-<!-- SECTION 1 -->
-<div class="section" id="introduction">
+<section class="section" id="s1">
   <div class="container">
-    <h2>1. Introduction</h2>
+    <div class="section-label"><span class="section-counter">01</span><span>Introduction</span></div>
+    <h2>Does Premium Income Justify the Opportunity Cost?</h2>
+    <div class="callout blue">
+      <div class="callout-icon">&#128203;</div>
+      <div class="callout-body">
+        <strong>Summary.</strong> This report backtests the Wheel Strategy on SPY across 20 combinations of delta (10&#916;&#8211;50&#916;) and DTE (15&#8211;60 days) from January 2018 to December 2025 using OptionMetrics end-of-day data. All positions use mid-price fills and a 50% profit target. Results show the strategy significantly underperforms buy-and-hold SPY on total return (17&#8211;40% vs 140%), but delivers materially lower drawdowns and more stable equity curves. The optimal risk-adjusted combination is <strong>10&#916; / 60 DTE</strong> (Sharpe 0.65, Max Drawdown &#8722;11.6%). The strategy is best understood as a <strong>defensive income tool</strong> rather than a growth vehicle, with a clear advantage in sideways and bear market environments.
+      </div>
+    </div>
     <p>The Wheel Strategy is one of the most popular systematic options strategies among retail traders, and for good reason. The concept is intuitive: sell a cash-secured put, collect premium, get assigned if the stock falls, then sell covered calls until the shares get called away. Repeat indefinitely.</p>
     <p>The appeal is obvious. High win rates, consistent premium income, and a mechanical process that removes emotional decision-making. But the real question (the one most traders never rigorously answer) is <strong>whether the premium income actually compensates for the opportunity cost of not simply owning the underlying.</strong></p>
     <p>This report attempts to answer that question systematically. Using eight years of professional options data on SPY, I built a full backtest engine simulating both phases of the wheel cycle across every major delta and DTE combination, comparing each result against a passive buy-and-hold SPY baseline.</p>
-    <div class="callout callout-info">
-      <div class="callout-icon">📌</div>
-      <div class="callout-text"><strong>Why SPY?</strong> SPY is the most liquid ETF in the world, with deep options markets across all strikes and expirations. This minimises the impact of illiquidity on our backtest and makes the results the most directly actionable for any retail trader.</div>
+    <div class="callout blue">
+      <div class="callout-icon">&#128204;</div>
+      <div class="callout-body">
+        <strong>Why SPY?</strong> SPY is the most liquid ETF in the world, with deep options markets across all strikes and expirations. This minimises the impact of illiquidity on our backtest and makes the results the most directly actionable for any retail trader.
+      </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- SECTION 2 -->
-<div class="section section-alt" id="mechanics">
+<section class="section" id="s2" style="background:var(--bg2)">
   <div class="container">
-    <h2>2. Strategy Mechanics</h2>
+    <div class="section-label"><span class="section-counter">02</span><span>Strategy Mechanics</span></div>
+    <h2>Two Phases, <em>One Cycle</em></h2>
     <p>The Wheel operates in two distinct phases. Understanding the precise logic of each phase is critical for interpreting the backtest results.</p>
     <div class="phase-grid">
       <div class="phase-card phase1">
@@ -283,9 +321,9 @@ footer strong{color:rgba(255,255,255,.7)}
           <li>Sell a put at target delta &amp; DTE</li>
           <li>Collect premium upfront</li>
           <li>Monitor daily for 50% profit target</li>
-          <li>If 50% hit → close early, repeat Phase 1</li>
-          <li>If expires OTM → keep full premium, repeat Phase 1</li>
-          <li>If expires ITM → <strong>assigned 100 shares, enter Phase 2</strong></li>
+          <li>If 50% hit: close early, repeat Phase 1</li>
+          <li>If expires OTM: keep full premium, repeat Phase 1</li>
+          <li>If expires ITM: <strong>assigned 100 shares, enter Phase 2</strong></li>
         </ul>
       </div>
       <div class="phase-card phase2">
@@ -295,61 +333,65 @@ footer strong{color:rgba(255,255,255,.7)}
           <li>Hold 100 SPY shares at cost basis (put strike)</li>
           <li>Sell a call at same target delta &amp; DTE</li>
           <li>Monitor daily for 50% profit target</li>
-          <li>If 50% hit → close, sell new call (stay Phase 2)</li>
-          <li>If expires OTM → keep premium, sell new call</li>
-          <li>If expires ITM → <strong>shares called away, return to Phase 1</strong></li>
+          <li>If 50% hit: close, sell new call (stay Phase 2)</li>
+          <li>If expires OTM: keep premium, sell new call</li>
+          <li>If expires ITM: <strong>shares called away, return to Phase 1</strong></li>
         </ul>
       </div>
     </div>
     <h3>Parameter Space Tested</h3>
     <div class="params">
-      <div class="param-item"><div class="param-label">Delta Targets</div><div class="param-val">10Δ · 20Δ · 30Δ · 40Δ · 50Δ</div></div>
-      <div class="param-item"><div class="param-label">DTE Windows</div><div class="param-val">15 · 30 · 45 · 60 days</div></div>
+      <div class="param-item"><div class="param-label">Delta Targets</div><div class="param-val">10&#916; &middot; 20&#916; &middot; 30&#916; &middot; 40&#916; &middot; 50&#916;</div></div>
+      <div class="param-item"><div class="param-label">DTE Windows</div><div class="param-val">15 &middot; 30 &middot; 45 &middot; 60 days</div></div>
       <div class="param-item"><div class="param-label">Total Combinations</div><div class="param-val">20</div></div>
       <div class="param-item"><div class="param-label">Exit Rule</div><div class="param-val">50% Profit Target</div></div>
-      <div class="param-item"><div class="param-label">Period</div><div class="param-val">Jan 2018 – Dec 2025</div></div>
+      <div class="param-item"><div class="param-label">Period</div><div class="param-val">Jan 2018 &#8211; Dec 2025</div></div>
       <div class="param-item"><div class="param-label">Starting Capital</div><div class="param-val">$50,000</div></div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- SECTION 3 -->
-<div class="section" id="methodology">
+<section class="section" id="s3">
   <div class="container">
-    <h2>3. Data &amp; Methodology</h2>
+    <div class="section-label"><span class="section-counter">03</span><span>Data &amp; Methodology</span></div>
+    <h2>Institutional Data, <em>Transparent Assumptions</em></h2>
     <p>All options data is sourced from <strong>OptionMetrics (Ivy DB US)</strong> accessed via the WRDS research platform, the same institutional-grade data used by academic researchers and professional quants. Daily option price records are drawn from the <code style="background:var(--bg3);padding:.1rem .35rem;border-radius:3px;font-family:var(--mono);font-size:.85rem;color:var(--accent)">opprcd{year}</code> tables, with underlying SPY closing prices from <code style="background:var(--bg3);padding:.1rem .35rem;border-radius:3px;font-family:var(--mono);font-size:.85rem;color:var(--accent)">secprd{year}</code>.</p>
-    <p>Options are priced at the <strong>bid-ask midpoint</strong> on each trading day. On entry days, the engine selects the option with the closest signed delta to the target within a ±10 DTE window, with a minimum mid-price of $0.05 to filter illiquid deep OTM contracts.</p>
-    <div class="callout callout-warn">
-      <div class="callout-icon">⚠️</div>
-      <div class="callout-text"><strong>Key Assumptions</strong> Mid-price execution (no spread cost), no commissions or slippage, no early assignment (expiration only), no dividends captured during share holding, one contract throughout, and cash earns no interest between trades. These assumptions favour the strategy (see Section 8 for a full discussion).</div>
+    <p>Options are priced at the <strong>bid-ask midpoint</strong> on each trading day. On entry days, the engine selects the option with the closest signed delta to the target within a &#177;10 DTE window, with a minimum mid-price of $0.05 to filter illiquid deep OTM contracts.</p>
+    <div class="callout amber">
+      <div class="callout-icon">&#9888;</div>
+      <div class="callout-body">
+        <strong>Key assumptions.</strong> Mid-price execution (no spread cost), no commissions or slippage, no early assignment (expiration only), no dividends captured during share holding, one contract throughout, and cash earns no interest between trades. These assumptions favour the strategy (see Section 8 for a full discussion).
+      </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- SECTION 4 -->
-<div class="section section-alt" id="results">
+<section class="section" id="s4" style="background:var(--bg2)">
   <div class="container">
-    <h2>4. Results</h2>
-    <h3>4.1 Headline Performance vs Buy &amp; Hold SPY</h3>
+    <div class="section-label"><span class="section-counter">04</span><span>Results</span></div>
+    <h2>A 100-Point Gap vs <em>Buy and Hold</em></h2>
+    <h3>Headline Performance vs Buy &amp; Hold SPY</h3>
     <p>The most striking finding is the magnitude of the total return gap against passive SPY ownership.</p>
     <div class="stat-grid">
-      <div class="stat-card"><div class="label">SPY Total Return</div><div class="value val-green">140.0%</div><div class="sub">Jan 2018 – Dec 2025</div></div>
+      <div class="stat-card"><div class="label">SPY Total Return</div><div class="value val-green">140.0%</div><div class="sub">Jan 2018 &#8211; Dec 2025</div></div>
       <div class="stat-card"><div class="label">SPY Ann. Return</div><div class="value val-green">11.56%</div><div class="sub">Annualised</div></div>
-      <div class="stat-card"><div class="label">SPY Max Drawdown</div><div class="value val-red">−34.1%</div><div class="sub">COVID crash 2020</div></div>
-      <div class="stat-card"><div class="label">Best Wheel Return</div><div class="value val-blue">40.3%</div><div class="sub">10Δ / 45 DTE</div></div>
-      <div class="stat-card"><div class="label">Best Sharpe</div><div class="value val-blue">0.65</div><div class="sub">10Δ / 60 DTE</div></div>
-      <div class="stat-card"><div class="label">Lowest Drawdown</div><div class="value val-amber">−11.0%</div><div class="sub">20Δ / 60 DTE</div></div>
+      <div class="stat-card"><div class="label">SPY Max Drawdown</div><div class="value val-red">&#8722;34.1%</div><div class="sub">COVID crash 2020</div></div>
+      <div class="stat-card"><div class="label">Best Wheel Return</div><div class="value val-blue">40.3%</div><div class="sub">10&#916; / 45 DTE</div></div>
+      <div class="stat-card"><div class="label">Best Sharpe</div><div class="value val-blue">0.65</div><div class="sub">10&#916; / 60 DTE</div></div>
+      <div class="stat-card"><div class="label">Lowest Drawdown</div><div class="value val-amber">&#8722;11.0%</div><div class="sub">20&#916; / 60 DTE</div></div>
     </div>
-    <div class="callout callout-info">
-      <div class="callout-icon">💡</div>
-      <div class="callout-text"><strong>Why does a 100% win rate still underperform buy-and-hold?</strong> Win rate measures frequency, not magnitude. The 10Δ / 60 DTE combination wins every single trade, but each win is a small premium credit, typically $1–3 per share. Meanwhile SPY gains $40+ per share in a strong bull year. You win often but leave the large directional move entirely on the table. This is the structural trade-off of all short premium strategies.</div>
+    <div class="callout blue">
+      <div class="callout-icon">&#128161;</div>
+      <div class="callout-body">
+        <strong>Why does a 100% win rate still underperform buy-and-hold?</strong> Win rate measures frequency, not magnitude. The 10&#916; / 60 DTE combination wins every single trade, but each win is a small premium credit, typically $1&#8211;3 per share. Meanwhile SPY gains $40+ per share in a strong bull year. You win often but leave the large directional move entirely on the table. This is the structural trade-off of all short premium strategies.
+      </div>
     </div>
-    <h3>4.2 Full Parameter Grid: Total PnL (%)</h3>
-    <div class="chart-wrap">
-      <div class="chart-title">Total PnL (%): All 20 Combinations Ranked (2018–2025) vs SPY 140%</div>
+    <h3>Full Parameter Grid: Total PnL (%)</h3>
+    <div class="chart-box">
+      <div class="chart-title">Total PnL (%): All 20 Combinations Ranked (2018&#8211;2025) vs SPY 140%</div>
       <canvas id="barChart" height="100"></canvas>
     </div>
-    <h3>4.3 Complete Performance Table</h3>
+    <h3>Complete Performance Table</h3>
     <div class="table-wrap">
       <table>
         <thead>
@@ -358,61 +400,65 @@ footer strong{color:rgba(255,255,255,.7)}
         <tbody id="perfTableBody"></tbody>
       </table>
     </div>
-    <h3>4.4 Key Patterns from the Grid</h3>
-    <p><strong>Lower delta consistently outperforms higher delta on a total return basis.</strong> The 10Δ combinations dominate the top of the rankings. Higher delta options collect more premium per trade, but also carry greater assignment probability. Once assigned, covered call cycles can trap capital in depreciating shares for extended periods, compounding losses.</p>
+    <h3>Key Patterns from the Grid</h3>
+    <p><strong>Lower delta consistently outperforms higher delta on a total return basis.</strong> The 10&#916; combinations dominate the top of the rankings. Higher delta options collect more premium per trade, but also carry greater assignment probability. Once assigned, covered call cycles can trap capital in depreciating shares for extended periods, compounding losses.</p>
     <p><strong>30 DTE is the weakest DTE across almost every delta level.</strong> 30 DTE appears to sit in a difficult middle ground: long enough to collect meaningful premium, but not long enough for the 50% profit target to trigger efficiently before adverse moves develop.</p>
     <p><strong>60 DTE dominates on risk-adjusted metrics.</strong> Longer-dated options give theta decay more time to work in your favour, allow the 50% target to trigger more reliably, and reduce the frequency of assignments in volatile periods.</p>
-    <h3>4.5 The Dashboard Charts</h3>
-    <div class="chart-wrap">
-      <div class="chart-title">Figure 1: Parameter Optimisation Grid: Equity Curves, Sharpe, Drawdown &amp; Win Rate Heatmaps</div>
-      <img src="wheel_dashboard.png" class="chart-img" alt="Wheel Strategy Dashboard: Equity Curves and Heatmaps"/>
-      <p style="font-size:12px;color:var(--hint);margin-top:.75rem;margin-bottom:0">Panels A–D show cumulative return curves by DTE with buy-and-hold SPY (dashed grey). Panels E–H show heatmaps for annualised return, Sharpe ratio, max drawdown, and win rate across the full 5×4 parameter grid.</p>
+    <h3>Parameter Optimisation Dashboard</h3>
+    <div class="chart-box">
+      <div class="chart-title">Figure 1: Parameter Optimisation Grid (Equity Curves, Sharpe, Drawdown &amp; Win Rate)</div>
+      <div class="callout amber" style="margin:0">
+        <div class="callout-icon">&#128202;</div>
+        <div class="callout-body">
+          <strong>Static dashboard not reproduced inline.</strong> The full parameter grid dashboard (panels A&#8211;D: cumulative return curves by DTE with buy-and-hold SPY dashed grey, panels E&#8211;H: heatmaps for annualised return, Sharpe ratio, max drawdown, and win rate across the full 5&#215;4 parameter grid) was generated as a matplotlib figure. All underlying data is available in the GitHub repository. The interactive 3D surface below provides a full view of the return landscape.
+        </div>
+      </div>
     </div>
-    <div class="chart-wrap">
-      <div class="chart-title">Figure 2: 3D PnL Surface: Total Return across Delta × DTE Parameter Space</div>
+    <div class="chart-box">
+      <div class="chart-title">Figure 2: 3D PnL Surface: Total Return across Delta &times; DTE Parameter Space</div>
       <div id="surface3d" style="width:100%;height:520px"></div>
-      <p style="font-size:12px;color:var(--hint);margin-top:.75rem;margin-bottom:0">Interactive: click and drag to rotate, scroll to zoom. Surface interpolated across 20 observations. Green = higher return · Red = lower return.</p>
+      <p style="font-size:.78rem;color:var(--hint);margin-top:.75rem;margin-bottom:0;text-align:left">Interactive: click and drag to rotate, scroll to zoom. Surface interpolated across 20 observations. Green = higher return &middot; Red = lower return.</p>
     </div>
   </div>
-</div>
+</section>
 
-<!-- SECTION 5 -->
-<div class="section" id="yearly">
+<section class="section" id="s5">
   <div class="container">
-    <h2>5. Year-by-Year Performance</h2>
-    <p>The annual breakdown is the most analytically rich part of this report, showing precisely <em>when</em> the Wheel works and when it doesn't.</p>
-    <div class="chart-wrap">
-      <div class="chart-title">Annual Return (%): Best Sharpe Wheel (10Δ / 60 DTE) vs SPY Buy &amp; Hold</div>
+    <div class="section-label"><span class="section-counter">05</span><span>Year-by-Year</span></div>
+    <h2>When the Wheel Works <em>and When It Doesn&#8217;t</em></h2>
+    <p>The annual breakdown is the most analytically rich part of this report, showing precisely <em>when</em> the Wheel works and when it does not.</p>
+    <div class="chart-box">
+      <div class="chart-title">Annual Return (%): Best Sharpe Wheel (10&#916; / 60 DTE) vs SPY Buy &amp; Hold</div>
       <canvas id="yearlyChart" height="80"></canvas>
     </div>
     <h3>Where the Wheel Held Up</h3>
     <div class="breakdown-grid">
       <div class="breakdown-card" style="border-color:var(--green)">
-        <h4>2018: Volatile, range-bound ↓</h4>
-        <p>SPY ended down ~−4.6% after a brutal Q4 sell-off. Most wheel puts expired worthless, delivering positive premium income while passive holders suffered losses. The strategy's structural advantage in choppy markets on full display.</p>
+        <h4>2018: Volatile, range-bound</h4>
+        <p>SPY ended down ~&#8722;4.6% after a brutal Q4 sell-off. Most wheel puts expired worthless, delivering positive premium income while passive holders suffered losses. The strategy&#8217;s structural advantage in choppy markets on full display.</p>
       </div>
       <div class="breakdown-card" style="border-color:var(--green)">
-        <h4>2022: Bear market ↓</h4>
-        <p>SPY fell ~−18.2%. Low-delta puts (10Δ, 20Δ) required SPY to fall 8–12% before going ITM, meaning most expired worthless even as the market declined. The wheel's cushion significantly outperformed passive holding on a relative basis.</p>
+        <h4>2022: Bear market</h4>
+        <p>SPY fell ~&#8722;18.2%. Low-delta puts (10&#916;, 20&#916;) required SPY to fall 8&#8211;12% before going ITM, meaning most expired worthless even as the market declined. The wheel&#8217;s cushion significantly outperformed passive holding on a relative basis.</p>
       </div>
     </div>
     <h3>Where the Wheel Underperformed</h3>
     <div class="breakdown-grid">
       <div class="breakdown-card" style="border-color:var(--red)">
-        <h4>2019: Strong bull +31.5% ↑</h4>
+        <h4>2019: Strong bull +31.5%</h4>
         <p>SPY surged throughout the year. All puts expired worthless at high rates, which sounds good, but means premium collected was a fraction of the directional gain available from just owning shares. The opportunity cost is glaring.</p>
       </div>
       <div class="breakdown-card" style="border-color:var(--red)">
-        <h4>2023: Recovery rally +26.3% ↑</h4>
+        <h4>2023: Recovery rally +26.3%</h4>
         <p>Post-bear market recovery saw SPY surge. The equity curves show the buy-and-hold gap widening sharply through 2023. 100% win rates with single-digit wheel returns versus 26%+ for passive holders tells the full story.</p>
       </div>
       <div class="breakdown-card" style="border-color:var(--red)">
-        <h4>2024–2025: AI bull market ↑↑</h4>
+        <h4>2024&#8211;2025: AI bull market</h4>
         <p>The strongest sustained period of the backtest for SPY. Wheel strategies continued grinding small premiums while SPY compounded aggressively, extending the cumulative return gap to its maximum.</p>
       </div>
       <div class="breakdown-card" style="border-color:var(--amber)">
-        <h4>2020: COVID crash ↓↑</h4>
-        <p>A swift −34% crash followed by a V-shaped recovery. The speed of the crash forced some assignments near market lows, but the subsequent recovery helped recover covered call losses. The drawdown was far smaller than buy-and-hold.</p>
+        <h4>2020: COVID crash</h4>
+        <p>A swift &#8722;34% crash followed by a V-shaped recovery. The speed of the crash forced some assignments near market lows, but the subsequent recovery helped recover covered call losses. The drawdown was far smaller than buy-and-hold.</p>
       </div>
     </div>
     <h3>Market Regime Summary</h3>
@@ -424,109 +470,143 @@ footer strong{color:rgba(255,255,255,.7)}
           <tr><td>Moderate bull</td><td>Solid gains</td><td>Underperforms but positive</td><td><span class="badge badge-green">SPY</span></td></tr>
           <tr><td>Sideways / choppy (2018)</td><td>Flat / negative</td><td>Positive premium income</td><td><span class="badge badge-blue">Wheel</span></td></tr>
           <tr><td>Bear market (2022)</td><td>Large losses</td><td>Smaller losses</td><td><span class="badge badge-blue">Wheel</span></td></tr>
-          <tr><td>Sharp crash (2020 COVID)</td><td>−34% drawdown</td><td>Significantly smaller drawdown</td><td><span class="badge badge-blue">Wheel</span></td></tr>
+          <tr><td>Sharp crash (2020 COVID)</td><td>&#8722;34% drawdown</td><td>Significantly smaller drawdown</td><td><span class="badge badge-blue">Wheel</span></td></tr>
         </tbody>
       </table>
     </div>
   </div>
-</div>
+</section>
 
-<!-- SECTION 6 -->
-<div class="section section-alt" id="optimal">
+<section class="section" id="s6" style="background:var(--bg2)">
   <div class="container">
-    <h2>6. The Optimal Combination</h2>
+    <div class="section-label"><span class="section-counter">06</span><span>Optimal Combination</span></div>
+    <h2>The Dominant Parameters: <em>10&#916; / 60 DTE</em></h2>
     <p>Two combinations emerge as clear leaders depending on what you prioritise.</p>
     <div class="recommend">
-      <div class="recommend-title">🏆 Best Risk-Adjusted: 10Δ / 60 DTE</div>
+      <div class="recommend-title">Best Risk-Adjusted: 10&#916; / 60 DTE</div>
       <div class="recommend-grid">
         <div class="recommend-metric"><div class="rm-label">Sharpe Ratio</div><div class="rm-val">0.65</div></div>
         <div class="recommend-metric"><div class="rm-label">Total Return</div><div class="rm-val">38.9%</div></div>
         <div class="recommend-metric"><div class="rm-label">Ann. Return</div><div class="rm-val">4.38%</div></div>
-        <div class="recommend-metric"><div class="rm-label">Max Drawdown</div><div class="rm-val" style="color:var(--green)">−11.6%</div></div>
+        <div class="recommend-metric"><div class="rm-label">Max Drawdown</div><div class="rm-val" style="color:var(--green)">&#8722;11.6%</div></div>
         <div class="recommend-metric"><div class="rm-label">Win Rate</div><div class="rm-val">100%</div></div>
         <div class="recommend-metric"><div class="rm-label">vs SPY Drawdown</div><div class="rm-val">+22.5pp better</div></div>
       </div>
-      <p style="margin-top:1rem;font-size:13px;color:var(--muted);margin-bottom:0">A 10-delta put requires SPY to fall 8–12% before the position is in trouble. At 60 DTE, there is sufficient time premium to collect a meaningful credit while giving the 50% profit target time to trigger well before expiration. The result is a strategy that almost never gets assigned, generates consistent small wins, and barely flinches during downturns. The trade-off: 4.38% annualised will lag SPY significantly in any strong bull year.</p>
+      <p style="margin-top:1rem;font-size:.875rem;color:var(--muted);margin-bottom:0">A 10-delta put requires SPY to fall 8&#8211;12% before the position is in trouble. At 60 DTE, there is sufficient time premium to collect a meaningful credit while giving the 50% profit target time to trigger well before expiration. The result is a strategy that almost never gets assigned, generates consistent small wins, and barely flinches during downturns. The trade-off: 4.38% annualised will lag SPY significantly in any strong bull year.</p>
     </div>
-    <div class="callout callout-success">
-      <div class="callout-icon">📊</div>
-      <div class="callout-text"><strong>Best Total Return: 10Δ / 45 DTE</strong> (40.3% total, 4.52% annualised, Sharpe 0.53, Max DD −16.9%). A marginal improvement in absolute return over the 60 DTE variant at the cost of a slightly higher drawdown. For those focused purely on maximising income, this is the narrow winner on raw numbers.</div>
+    <div class="callout green">
+      <div class="callout-icon">&#128202;</div>
+      <div class="callout-body">
+        <strong>Best Total Return: 10&#916; / 45 DTE.</strong> 40.3% total, 4.52% annualised, Sharpe 0.53, Max DD &#8722;16.9%. A marginal improvement in absolute return over the 60 DTE variant at the cost of a slightly higher drawdown. For those focused purely on maximising income, this is the narrow winner on raw numbers.
+      </div>
     </div>
     <h3>What to Avoid</h3>
-    <div class="callout callout-danger">
-      <div class="callout-icon">🚫</div>
-      <div class="callout-text"><strong>50Δ / 30 DTE: Worst Combination</strong> (17.2% total return over 8 years, 2.1% annualised, Sharpe 0.21). Selling at-the-money options with 30 days to expiry creates frequent assignment risk, traps capital in depreciating shares through covered call cycles, and compounds losses in trending markets. The higher per-trade premium does not compensate for the increased adverse assignment frequency.</div>
+    <div class="callout red">
+      <div class="callout-icon">&#128683;</div>
+      <div class="callout-body">
+        <strong>50&#916; / 30 DTE: Worst Combination.</strong> 17.2% total return over 8 years, 2.1% annualised, Sharpe 0.21. Selling at-the-money options with 30 days to expiry creates frequent assignment risk, traps capital in depreciating shares through covered call cycles, and compounds losses in trending markets. The higher per-trade premium does not compensate for the increased adverse assignment frequency.
+      </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- SECTION 7 -->
-<div class="section" id="breakdown">
+<section class="section" id="s7">
   <div class="container">
-    <h2>7. When the Strategy Breaks Down</h2>
+    <div class="section-label"><span class="section-counter">07</span><span>Failure Modes</span></div>
+    <h2>When the Strategy <em>Breaks Down</em></h2>
     <p>Win rates are flattering. The failure modes are not. A wheel strategy that earns 4% annualised in quiet markets can blow up badly in the right circumstances, and it is worth being specific about what those look like.</p>
     <div class="breakdown-grid">
-      <div class="breakdown-card" style="border-color:var(--red)"><h4>🐂 Sustained Bull Markets</h4><p>The Wheel is structurally capped on the upside. In multi-year bull markets (2019–2021, 2023–2025), premium income compounds slowly while SPY compounds aggressively. The opportunity cost is not just one year, it accumulates. After 8 years, the gap in this backtest is ~100 percentage points.</p></div>
-      <div class="breakdown-card" style="border-color:var(--red)"><h4>⚡ Sharp, Fast Crashes</h4><p>A gap-down crash (2020 COVID, −34% in ~5 weeks) assigns shares immediately at a strike that is underwater. Covered calls then cap your recovery. The faster and deeper the crash, the longer the recovery cycle takes. Higher delta combinations suffered most severely in this scenario.</p></div>
-      <div class="breakdown-card" style="border-color:var(--amber)"><h4>📈 Volatility Spikes at Entry</h4><p>A VIX spike creates an illusion of attractiveness, as higher IV means more premium. But entering short puts into a vol spike means entering into a fast-moving, potentially directional market. If the trend continues after the spike, assignment follows immediately into the worst possible conditions.</p></div>
-      <div class="breakdown-card" style="border-color:var(--amber)"><h4>📉 Prolonged Bear Markets</h4><p>A slow grinding bear (2022 is the closest example here) forces repeated assignments. Each put assignment means buying shares that continue falling. Each covered call caps the recovery. Capital becomes trapped cycling through assignments and call sales while the underlying trends lower.</p></div>
+      <div class="breakdown-card" style="border-color:var(--red)"><h4>Sustained Bull Markets</h4><p>The Wheel is structurally capped on the upside. In multi-year bull markets (2019&#8211;2021, 2023&#8211;2025), premium income compounds slowly while SPY compounds aggressively. The opportunity cost is not just one year, it accumulates. After 8 years, the gap in this backtest is ~100 percentage points.</p></div>
+      <div class="breakdown-card" style="border-color:var(--red)"><h4>Sharp, Fast Crashes</h4><p>A gap-down crash (2020 COVID, &#8722;34% in ~5 weeks) assigns shares immediately at a strike that is underwater. Covered calls then cap your recovery. The faster and deeper the crash, the longer the recovery cycle takes. Higher delta combinations suffered most severely in this scenario.</p></div>
+      <div class="breakdown-card" style="border-color:var(--amber)"><h4>Volatility Spikes at Entry</h4><p>A VIX spike creates an illusion of attractiveness, as higher IV means more premium. But entering short puts into a vol spike means entering into a fast-moving, potentially directional market. If the trend continues after the spike, assignment follows immediately into the worst possible conditions.</p></div>
+      <div class="breakdown-card" style="border-color:var(--amber)"><h4>Prolonged Bear Markets</h4><p>A slow grinding bear (2022 is the closest example here) forces repeated assignments. Each put assignment means buying shares that continue falling. Each covered call caps the recovery. Capital becomes trapped cycling through assignments and call sales while the underlying trends lower.</p></div>
     </div>
-    <div class="callout callout-warn">
-      <div class="callout-icon">⚠️</div>
-      <div class="callout-text"><strong>The 2020 lesson for the Wheel:</strong> This backtest uses a 10Δ put which requires roughly a 10% SPY decline to go ITM. In February–March 2020, SPY fell 34% peak-to-trough in under 5 weeks. Even a 10Δ put was assigned deep ITM. This is the tail risk that win rates don't capture, but it is rare and severe.</div>
+    <div class="callout amber">
+      <div class="callout-icon">&#9888;</div>
+      <div class="callout-body">
+        <strong>The 2020 lesson for the Wheel.</strong> This backtest uses a 10&#916; put which requires roughly a 10% SPY decline to go ITM. In February&#8211;March 2020, SPY fell 34% peak-to-trough in under 5 weeks. Even a 10&#916; put was assigned deep ITM. This is the tail risk that win rates do not capture, but it is rare and severe.
+      </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- SECTION 8 -->
-<div class="section section-alt" id="limitations">
+<section class="section" id="s8" style="background:var(--bg2)">
   <div class="container">
-    <h2>8. Risks &amp; Limitations</h2>
+    <div class="section-label"><span class="section-counter">08</span><span>Risks &amp; Limitations</span></div>
+    <h2>All Backtests Make Assumptions: <em>Ours Are Here</em></h2>
     <p>All backtests make assumptions. The more transparent those assumptions, the more useful the results. Here are the key limitations of this study.</p>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Assumption</th><th>Impact on Results</th><th>Direction</th></tr></thead>
         <tbody>
-          <tr><td><strong>Mid-price execution</strong></td><td>Real fills are at the bid (selling options). Actual premiums collected will be lower than modelled by the bid-ask spread, which on SPY options is typically $0.05–$0.25.</td><td><span class="badge badge-red">Favours strategy</span></td></tr>
-          <tr><td><strong>No commissions</strong></td><td>With 94–161 trades per year across some combinations, commission costs of $0.65–$1.00 per contract leg meaningfully erode returns, particularly on low-delta small-premium trades.</td><td><span class="badge badge-red">Favours strategy</span></td></tr>
+          <tr><td><strong>Mid-price execution</strong></td><td>Real fills are at the bid (selling options). Actual premiums collected will be lower than modelled by the bid-ask spread, which on SPY options is typically $0.05&#8211;$0.25.</td><td><span class="badge badge-red">Favours strategy</span></td></tr>
+          <tr><td><strong>No commissions</strong></td><td>With 94&#8211;161 trades per year across some combinations, commission costs of $0.65&#8211;$1.00 per contract leg meaningfully erode returns, particularly on low-delta small-premium trades.</td><td><span class="badge badge-red">Favours strategy</span></td></tr>
           <tr><td><strong>No early assignment</strong></td><td>In practice, deep ITM puts or calls can be exercised early, particularly around ex-dividend dates. This is rare on SPY (cash-settled ETF, no dividends on options), but possible.</td><td><span class="badge badge-amber">Minor impact</span></td></tr>
-          <tr><td><strong>No dividends</strong></td><td>SPY pays quarterly dividends (~1.3% annually). During Phase 2 (share holding), dividends are not captured in this model. This understates the wheel's Phase 2 income slightly.</td><td><span class="badge badge-green">Slightly conservative</span></td></tr>
-          <tr><td><strong>No interest on cash</strong></td><td>Idle cash earns nothing in this model. In reality, a cash-secured put requires collateral which could earn Treasury bill rates (~4–5% in 2023–2025). This meaningfully understates the strategy's total return in a high-rate environment.</td><td><span class="badge badge-green">Conservative</span></td></tr>
+          <tr><td><strong>No dividends</strong></td><td>SPY pays quarterly dividends (~1.3% annually). During Phase 2 (share holding), dividends are not captured in this model. This understates the wheel&#8217;s Phase 2 income slightly.</td><td><span class="badge badge-green">Slightly conservative</span></td></tr>
+          <tr><td><strong>No interest on cash</strong></td><td>Idle cash earns nothing in this model. In reality, a cash-secured put requires collateral which could earn Treasury bill rates (~4&#8211;5% in 2023&#8211;2025). This meaningfully understates the strategy&#8217;s total return in a high-rate environment.</td><td><span class="badge badge-green">Conservative</span></td></tr>
           <tr><td><strong>Single contract</strong></td><td>No position sizing, scaling, or compounding. Real-world implementation would need to account for margin requirements, portfolio allocation, and trade sizing.</td><td><span class="badge badge-amber">Neutral</span></td></tr>
           <tr><td><strong>No stop losses</strong></td><td>The strategy uses only a 50% profit target, no stop loss. Adding stops would reduce the severity of the worst losing trades.</td><td><span class="badge badge-amber">Mixed impact</span></td></tr>
         </tbody>
       </table>
     </div>
-    <div class="callout callout-warn">
-      <div class="callout-icon">⚠️</div>
-      <div class="callout-text"><strong>Net effect of assumptions:</strong> The combination of mid-price fills and no commissions likely overstates real-world returns by 15–30% in absolute terms, depending on trade frequency and broker costs. The 10Δ / 60 DTE combination (fewest trades per year) would be least affected. High-frequency short-dated combinations (10Δ / 15 DTE) would see the most meaningful erosion.</div>
+    <div class="callout amber">
+      <div class="callout-icon">&#9888;</div>
+      <div class="callout-body">
+        <strong>Net effect of assumptions.</strong> The combination of mid-price fills and no commissions likely overstates real-world returns by 15&#8211;30% in absolute terms, depending on trade frequency and broker costs. The 10&#916; / 60 DTE combination (fewest trades per year) would be least affected. High-frequency short-dated combinations (10&#916; / 15 DTE) would see the most meaningful erosion.
+      </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- SECTION 9 -->
-<div class="section" id="conclusion">
+<section class="section" id="s9">
   <div class="container">
-    <h2>9. Conclusion</h2>
-    <p>The Wheel Strategy on SPY is not a way to beat the market. This backtest makes that clear: across 8 years and 20 parameter combinations, no version of the wheel came close to matching buy-and-hold SPY's 140% total return.</p>
+    <div class="section-label"><span class="section-counter">09</span><span>Conclusion</span></div>
+    <h2>A Defensive Income Tool, <em>Not a Growth Vehicle</em></h2>
+    <p>The Wheel Strategy on SPY is not a way to beat the market. This backtest makes that clear: across 8 years and 20 parameter combinations, no version of the wheel came close to matching buy-and-hold SPY&#8217;s 140% total return.</p>
     <p>But that framing misses what the strategy is actually for. The Wheel is a <strong>volatility harvesting income strategy</strong> that trades away upside participation for premium income and downside protection. The 2018 and 2022 results (both years where SPY was negative) show the strategy doing exactly what it is designed to do.</p>
-    <div class="callout callout-info"><div class="callout-icon">1️⃣</div><div class="callout-text"><strong>Lower delta, longer DTE is the dominant strategy.</strong> The 10Δ / 60 DTE combination produced the best Sharpe ratio (0.65), second-lowest drawdown (−11.6%), and 100% win rate. Selling deep OTM with plenty of time to decay is the optimal parameter region across almost every risk-adjusted metric.</div></div>
-    <div class="callout callout-info"><div class="callout-icon">2️⃣</div><div class="callout-text"><strong>Win rate is a misleading metric.</strong> The average win rate across all 20 combinations was 96.0%. The worst total return combination (50Δ / 30 DTE) had an 89% win rate. High win rate is a structural feature of short premium strategies, not evidence of a superior strategy.</div></div>
-    <div class="callout callout-info"><div class="callout-icon">3️⃣</div><div class="callout-text"><strong>The strategy shines when markets don't.</strong> The Wheel's relative advantage is most pronounced in bear markets and high-volatility sideways environments. In sustained bull markets (which characterised most of 2018–2025), the opportunity cost of not owning SPY compounds relentlessly.</div></div>
+    <div class="callout green">
+      <div class="callout-icon">&#10003;</div>
+      <div class="callout-body">
+        <strong>Lower delta, longer DTE is the dominant strategy.</strong> The 10&#916; / 60 DTE combination produced the best Sharpe ratio (0.65), second-lowest drawdown (&#8722;11.6%), and 100% win rate. Selling deep OTM with plenty of time to decay is the optimal parameter region across almost every risk-adjusted metric.
+      </div>
+    </div>
+    <div class="callout amber">
+      <div class="callout-icon">&#9888;</div>
+      <div class="callout-body">
+        <strong>Win rate is a misleading metric.</strong> The average win rate across all 20 combinations was 96.0%. The worst total return combination (50&#916; / 30 DTE) had an 89% win rate. High win rate is a structural feature of short premium strategies, not evidence of a superior strategy.
+      </div>
+    </div>
+    <div class="callout blue">
+      <div class="callout-icon">&#128202;</div>
+      <div class="callout-body">
+        <strong>The strategy shines when markets do not.</strong> The Wheel&#8217;s relative advantage is most pronounced in bear markets and high-volatility sideways environments. In sustained bull markets (which characterised most of 2018&#8211;2025), the opportunity cost of not owning SPY compounds relentlessly.
+      </div>
+    </div>
     <p>For someone who wants lower volatility, smaller drawdowns, and consistent premium income, and who accepts a significantly lower ceiling on returns, the Wheel Strategy on SPY is a legitimate, systematic approach. For someone trying to grow wealth aggressively over a long time horizon in a bull market, it is not the right tool.</p>
+    <div class="callout red">
+      <div class="callout-icon">&#9888;</div>
+      <div class="callout-body">
+        <strong>Disclaimer.</strong> This report is for informational and educational purposes only. Nothing here constitutes financial advice. Options trading involves significant risk of loss.
+      </div>
+    </div>
   </div>
-</div>
+</section>
 
-<!-- FOOTER -->
 <footer>
   <div class="footer-inner">
-    <p><strong>The Wheel Strategy on SPY: A Systematic Backtest (2018–2025)</strong></p>
-    <p>Personal research. Data: OptionMetrics via WRDS. All results based on simulated backtest using mid-price execution with no commissions or slippage.</p>
-    <p style="margin-top:1rem;font-size:12px;opacity:.6">This report is for informational and educational purposes only. Nothing here constitutes financial advice. Options trading involves significant risk of loss.</p>
+    <div class="footer-name">The Intrinsic Investor</div>
+    <div class="footer-right">
+      <span style="color:rgba(255,255,255,.35)">&copy; 2026 Brian Liew</span>
+      <a href="https://www.linkedin.com/in/brian-liew" target="_blank">LinkedIn</a>
+      <a href="https://github.com/TheIntrinsicInvestor" target="_blank">GitHub</a>
+      <a href="mailto:brianliew99@gmail.com">Email</a>
+      <div style="margin-top:.5rem;color:rgba(255,255,255,.25);font-size:.75rem">Personal research. Data: OptionMetrics via WRDS. All results based on simulated backtest using mid-price execution with no commissions or slippage.</div>
+    </div>
   </div>
 </footer>
 
 <script>
+// ---- Data ----
 const combos=[
   {label:'10Δ / 45 DTE',pnl:40.3,ann:4.52,sharpe:0.53,dd:-16.9,wr:100,delta:10,dte:45},
   {label:'20Δ / 60 DTE',pnl:39.2,ann:4.41,sharpe:0.52,dd:-11.0,wr:100,delta:20,dte:60},
@@ -551,6 +631,11 @@ const combos=[
 ];
 const deltaColors={10:'#1a5c52',20:'#0E9F6E',30:'#E3A008',40:'#E02424',50:'#7E3AF2'};
 
+// ---- Bar chart ----
+Chart.defaults.font.family = 'Inter, sans-serif';
+Chart.defaults.color = '#4a6460';
+const GRID = { color: 'rgba(15,34,32,.05)', drawBorder: false };
+
 new Chart(document.getElementById('barChart'),{
   type:'bar',
   data:{
@@ -563,6 +648,7 @@ new Chart(document.getElementById('barChart'),{
   options:{responsive:true,plugins:{legend:{display:true,position:'top',labels:{font:{size:11}}},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}%`}}},scales:{x:{ticks:{font:{size:9},maxRotation:0},grid:{display:false}},y:{ticks:{callback:v=>v+'%',font:{size:10}},grid:{color:'rgba(0,0,0,.05)'},title:{display:true,text:'Total PnL (%)',font:{size:10}}}}}
 });
 
+// ---- Performance table ----
 const tbody=document.getElementById('perfTableBody');
 const bestSharpe=combos.reduce((a,b)=>a.sharpe>b.sharpe?a:b);
 const bestReturn=combos.reduce((a,b)=>a.pnl>b.pnl?a:b);
@@ -574,56 +660,61 @@ combos.forEach(c=>{
   tbody.innerHTML+=`<tr><td><strong style="color:${deltaColors[c.delta]}">${c.label}</strong>${tag}</td><td><span class="badge badge-blue">${c.pnl.toFixed(1)}%</span></td><td>${c.ann.toFixed(2)}%</td><td><span class="badge ${srClass}">${c.sharpe.toFixed(2)}</span></td><td><span class="badge ${ddClass}">${c.dd.toFixed(1)}%</span></td><td>${c.wr.toFixed(0)}%</td></tr>`;
 });
 
+// ---- 3D surface (Plotly) ----
 const deltas=[10,20,30,40,50],dtes=[15,30,45,60];
 const Z3d=[[32.8,19.1,40.3,38.9],[28.0,26.6,30.1,39.2],[29.9,23.1,31.0,26.2],[33.5,21.6,21.0,32.2],[37.1,17.2,31.8,35.9]];
 const surface={type:'surface',x:dtes,y:deltas,z:Z3d,colorscale:[[0,'#E02424'],[0.25,'#F59E0B'],[0.5,'#FEF3C7'],[0.75,'#6EE7B7'],[1,'#065F46']],cmin:17,cmax:41,colorbar:{title:{text:'Total PnL (%)',font:{size:11,color:'#4A5568'},side:'right'},tickfont:{size:10,color:'#4A5568'},thickness:14,len:0.6},contours:{z:{show:true,usecolormap:true,highlightcolor:'#fff',project:{z:false}}},opacity:0.92,hovertemplate:'<b>%{y}Δ / %{x}d DTE</b><br>Total PnL: %{z:.1f}%<extra></extra>'};
 const scatterDots={type:'scatter3d',mode:'markers',x:[],y:[],z:[],text:[],marker:{size:5,color:'#1C2B3A',line:{color:'white',width:1}},hovertemplate:'<b>%{text}</b><br>Total PnL: %{z:.1f}%<extra></extra>'};
 deltas.forEach((d,di)=>{dtes.forEach((dte,ti)=>{scatterDots.x.push(dte);scatterDots.y.push(d);scatterDots.z.push(Z3d[di][ti]);scatterDots.text.push(`${d}Δ / ${dte} DTE`);});});
-Plotly.newPlot('surface3d',[surface,scatterDots],{margin:{l:0,r:0,t:10,b:0},paper_bgcolor:'#ffffff',scene:{xaxis:{title:{text:'DTE',font:{size:11,color:'#4A5568'}},tickvals:dtes,ticktext:dtes.map(d=>d+'d'),tickfont:{size:10,color:'#4A5568'},gridcolor:'#E4E8EF',linecolor:'#E4E8EF'},yaxis:{title:{text:'Delta',font:{size:11,color:'#4A5568'}},tickvals:deltas,ticktext:deltas.map(d=>d+'Δ'),tickfont:{size:10,color:'#4A5568'},gridcolor:'#E4E8EF',linecolor:'#E4E8EF'},zaxis:{title:{text:'Total PnL (%)',font:{size:11,color:'#4A5568'}},tickfont:{size:10,color:'#4A5568'},gridcolor:'#E4E8EF',linecolor:'#E4E8EF',range:[14,44]},camera:{eye:{x:1.6,y:-1.6,z:0.9}},bgcolor:'#f7f4ec',aspectratio:{x:1.1,y:1.1,z:0.75}},showlegend:false},{responsive:true,displayModeBar:false});
+Plotly.newPlot('surface3d',[surface,scatterDots],{margin:{l:0,r:0,t:10,b:0},paper_bgcolor:'#f0ece2',scene:{xaxis:{title:{text:'DTE',font:{size:11,color:'#4A5568'}},tickvals:dtes,ticktext:dtes.map(d=>d+'d'),tickfont:{size:10,color:'#4A5568'},gridcolor:'#E4E8EF',linecolor:'#E4E8EF'},yaxis:{title:{text:'Delta',font:{size:11,color:'#4A5568'}},tickvals:deltas,ticktext:deltas.map(d=>d+'Δ'),tickfont:{size:10,color:'#4A5568'},gridcolor:'#E4E8EF',linecolor:'#E4E8EF'},zaxis:{title:{text:'Total PnL (%)',font:{size:11,color:'#4A5568'}},tickfont:{size:10,color:'#4A5568'},gridcolor:'#E4E8EF',linecolor:'#E4E8EF',range:[14,44]},camera:{eye:{x:1.6,y:-1.6,z:0.9}},bgcolor:'#f0ece2',aspectratio:{x:1.1,y:1.1,z:0.75}},showlegend:false},{responsive:true,displayModeBar:false});
 
+// ---- Annual bar chart ----
 const years=[2018,2019,2020,2021,2022,2023,2024,2025];
 const spyRet=[-4.6,31.5,18.4,28.7,-18.2,26.3,23.3,8.1];
 const wheelRet=[3.2,4.1,2.8,5.6,3.4,6.2,7.1,6.4];
 new Chart(document.getElementById('yearlyChart'),{type:'bar',data:{labels:years,datasets:[{label:'SPY Buy & Hold',data:spyRet,backgroundColor:spyRet.map(v=>v>=0?'rgba(14,159,110,.75)':'rgba(224,36,36,.75)'),borderRadius:4,order:2},{label:'Wheel 10Δ / 60 DTE',data:wheelRet,type:'line',borderColor:'#1a5c52',backgroundColor:'rgba(26,92,82,.1)',borderWidth:2.5,pointBackgroundColor:'#1a5c52',pointRadius:5,fill:true,tension:0.3,order:1}]},options:{responsive:true,plugins:{legend:{display:true,position:'top',labels:{font:{size:11}}},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}%`}}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{ticks:{callback:v=>v+'%',font:{size:10}},grid:{color:'rgba(0,0,0,.05)'},title:{display:true,text:'Annual Return (%)',font:{size:10}}}}}});
 
-/* R7 — Interactive JS */
-const mainNav = document.querySelector('nav:not(.section-nav)');
-window.addEventListener('scroll', () => { mainNav.classList.toggle('scrolled', window.scrollY > 10); }, { passive: true });
-
-const progressBar = document.getElementById('progress-bar');
+// ---- Progress bar + nav shadow ----
+const _nav = document.querySelector('nav');
 window.addEventListener('scroll', () => {
-  const d = document.documentElement.scrollHeight - window.innerHeight;
-  progressBar.style.width = (d > 0 ? (window.scrollY / d) * 100 : 0) + '%';
+  const el = document.getElementById('progress-bar');
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  el.style.width = Math.min(pct, 100) + '%';
+  _nav.classList.toggle('scrolled', window.scrollY > 40);
 }, { passive: true });
 
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      entry.target.querySelectorAll('table').forEach(t => t.classList.add('revealed'));
-      revealObserver.unobserve(entry.target);
+// ---- Scroll reveal ----
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      e.target.querySelectorAll('table').forEach(t => t.classList.add('revealed'));
     }
   });
-}, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
-document.querySelectorAll('.section, .callout, .callout-info, .callout-warn, .callout-danger, .callout-success').forEach(el => revealObserver.observe(el));
+}, { threshold: 0.07 });
+document.querySelectorAll('.section').forEach(s => io.observe(s));
 
-const dots = document.querySelectorAll('.sn-dot');
-dots.forEach(dot => {
-  dot.addEventListener('click', () => {
-    const target = document.getElementById(dot.dataset.target);
-    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
+// ---- Side nav ----
+const NAV_LABELS = ['Introduction', 'Strategy Mechanics', 'Data & Methodology', 'Results', 'Year-by-Year', 'Optimal Combination', 'Failure Modes', 'Risks & Limitations', 'Conclusion'];
+const sideNav = document.getElementById('side-nav');
+const sections = document.querySelectorAll('.section[id]');
+sections.forEach((s, i) => {
+  const a = document.createElement('a');
+  a.href = '#' + s.id;
+  a.innerHTML = '<span class="sn-label">' + (NAV_LABELS[i] || '') + '</span><span class="sn-dot"></span>';
+  sideNav.appendChild(a);
 });
-const sectionObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      dots.forEach(d => d.classList.remove('active'));
-      const activeDot = document.querySelector(`.sn-dot[data-target="${entry.target.id}"]`);
-      if (activeDot) activeDot.classList.add('active');
+const navItems = sideNav.querySelectorAll('a');
+const navIo = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navItems.forEach(n => n.classList.remove('active'));
+      const idx = Array.from(sections).indexOf(e.target);
+      if (navItems[idx]) navItems[idx].classList.add('active');
     }
   });
-}, { threshold: 0.3 });
-document.querySelectorAll('.section[id]').forEach(el => sectionObserver.observe(el));
+}, { threshold: 0.4 });
+sections.forEach(s => navIo.observe(s));
 </script>
 </body>
 </html>
