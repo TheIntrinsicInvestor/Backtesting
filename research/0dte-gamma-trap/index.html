@@ -708,11 +708,11 @@ const COLORS = {
       labels: ['Negative GEX', 'Low GEX', 'High GEX'],
       datasets: [{
         data: [
-          { min: 2.46, q1: 7.98, median: 11.56, q3: 17.38, max: 31.13,
+          { min: 2.46, q1: 7.98, median: 11.56, mean: 13.72, q3: 17.38, max: 31.13,
             outliers: [31.71,31.81,32.08,32.81,33.16,33.4,33.99,34.65,34.88,38.49,40.44,43.45,44.21,67.37,78.54] },
-          { min: 2.78, q1: 7.07, median: 10.77, q3: 15.54, max: 28.13,
+          { min: 2.78, q1: 7.07, median: 10.77, mean: 12.51, q3: 15.54, max: 28.13,
             outliers: [29.28,33.8,36.06,51.7,101.81] },
-          { min: 1.61, q1: 5.63, median: 7.17,  q3: 10.23, max: 16.54,
+          { min: 1.61, q1: 5.63, median: 7.17,  mean: 8.06,  q3: 10.23, max: 16.54,
             outliers: [18.5,19.43,20.64,21.09,21.09,23.56,24.8] },
         ],
         backgroundColor: ['rgba(220,38,38,0.18)','rgba(245,158,11,0.18)','rgba(5,150,105,0.18)'],
@@ -735,6 +735,7 @@ const COLORS = {
             label: ctx => {
               const d = ctx.raw;
               return [
+                `Mean: ${d.mean.toFixed(1)}%`,
                 `Median: ${d.median.toFixed(1)}%`,
                 `IQR: ${d.q1.toFixed(1)}% – ${d.q3.toFixed(1)}%`,
                 `Whiskers: ${d.min.toFixed(1)}% – ${d.max.toFixed(1)}%`,
