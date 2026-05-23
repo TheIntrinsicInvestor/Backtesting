@@ -535,7 +535,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
 
 <header class="hero">
   <div class="hero-inner">
-    <div class="hero-tag">Congressional Trading Critique</div>
+
     <h1>The Disclosure-Lag Trap: <em>Why Following Congress Doesn't Work</em></h1>
     <p class="hero-sub">
       The Stop Trading on Congressional Knowledge Act gives politicians up to 45 days to disclose their trades. Across 29,071 STOCK Act filings, the median disclosure lag is 27 days. By the time the signal becomes visible, the trade information has been stale for nearly a month. This report shows that the disclosure-following industry, including the NANC and KRUZ ETFs, is selling beta dressed as alpha.
