@@ -1,50 +1,56 @@
 [
   {
     "sector": "Information Technology",
-    "n_events": 118,
-    "win_rate_60d": 0.5254,
-    "mean_excess_60d": 0.0262
+    "n_events": 131,
+    "win_rate_10d": 0.5115,
+    "mean_excess_10d": 0.0035
   },
   {
     "sector": "Consumer Discretionary",
-    "n_events": 88,
-    "win_rate_60d": 0.3864,
-    "mean_excess_60d": -0.0138
+    "n_events": 98,
+    "win_rate_10d": 0.4388,
+    "mean_excess_10d": 0.0027
   },
   {
     "sector": "Financials",
-    "n_events": 62,
-    "win_rate_60d": 0.6129,
-    "mean_excess_60d": -0.0012
+    "n_events": 67,
+    "win_rate_10d": 0.6119,
+    "mean_excess_10d": 0.0124
   },
   {
     "sector": "Health Care",
-    "n_events": 21,
-    "win_rate_60d": 0.4762,
-    "mean_excess_60d": -0.0284
+    "n_events": 22,
+    "win_rate_10d": 0.5455,
+    "mean_excess_10d": 0.0091
   },
   {
     "sector": "Industrials",
-    "n_events": 21,
-    "win_rate_60d": 0.619,
-    "mean_excess_60d": 0.0147
+    "n_events": 22,
+    "win_rate_10d": 0.2727,
+    "mean_excess_10d": -0.023
   },
   {
     "sector": "Consumer Staples",
-    "n_events": 12,
-    "win_rate_60d": 0.1667,
-    "mean_excess_60d": -0.0579
+    "n_events": 14,
+    "win_rate_10d": 0.5714,
+    "mean_excess_10d": 0.0112
   },
   {
     "sector": "Communication Services",
     "n_events": 7,
-    "win_rate_60d": 0.4286,
-    "mean_excess_60d": -0.026
+    "win_rate_10d": 0.4286,
+    "mean_excess_10d": 0.0098
   },
   {
     "sector": "Materials",
     "n_events": 7,
-    "win_rate_60d": 0.1429,
-    "mean_excess_60d": -0.0708
+    "win_rate_10d": 0.4286,
+    "mean_excess_10d": -0.0171
+  },
+  {
+    "sector": "Utilities",
+    "n_events": 5,
+    "win_rate_10d": 0.6,
+    "mean_excess_10d": 0.0094
   }
 ]

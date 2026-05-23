@@ -1,10 +1,10 @@
 {
   "kpi": {
-    "n_events": 404,
-    "win_rate_60d": 0.4455,
-    "mean_excess_60d": -0.0055,
-    "sharpe_60d": -0.0661,
-    "t_stat_60d": -0.6482
+    "n_events": 447,
+    "win_rate_10d": 0.4899,
+    "mean_excess_10d": 0.0009,
+    "sharpe_10d": 0.0886,
+    "t_stat_10d": 0.3733
   },
   "curve": {
     "horizons": [
@@ -33,70 +33,70 @@
     ]
   },
   "trade_vs_disc": {
-    "n_paired": 404,
-    "disc_mean_60d": -0.0055,
-    "trade_mean_60d": -0.0091
+    "n_paired": 447,
+    "disc_mean_10d": 0.0009,
+    "trade_mean_10d": -0.0013
   },
   "top_sold_tickers": [
     {
       "ticker": "MSFT",
       "event_count": 19,
-      "mean_excess_60d": 0.0028,
-      "n_with_returns": 18
+      "mean_excess_10d": -0.0105,
+      "n_with_returns": 19
     },
     {
       "ticker": "GOOGL",
       "event_count": 14,
-      "mean_excess_60d": 0.0489,
-      "n_with_returns": 12
+      "mean_excess_10d": 0.0023,
+      "n_with_returns": 14
     },
     {
       "ticker": "NVDA",
       "event_count": 13,
-      "mean_excess_60d": -0.1562,
-      "n_with_returns": 11
+      "mean_excess_10d": 0.019,
+      "n_with_returns": 13
     },
     {
       "ticker": "AAPL",
       "event_count": 12,
-      "mean_excess_60d": 0.005,
-      "n_with_returns": 11
+      "mean_excess_10d": 0.0103,
+      "n_with_returns": 12
     },
     {
       "ticker": "JPM",
       "event_count": 9,
-      "mean_excess_60d": 0.0294,
+      "mean_excess_10d": 0.0103,
       "n_with_returns": 9
     },
     {
       "ticker": "UNH",
       "event_count": 8,
-      "mean_excess_60d": -0.0894,
-      "n_with_returns": 7
+      "mean_excess_10d": 0.033,
+      "n_with_returns": 8
     },
     {
       "ticker": "META",
       "event_count": 8,
-      "mean_excess_60d": 0.1119,
-      "n_with_returns": 7
+      "mean_excess_10d": 0.0225,
+      "n_with_returns": 8
     },
     {
       "ticker": "TSLA",
       "event_count": 8,
-      "mean_excess_60d": 0.1223,
+      "mean_excess_10d": 0.0188,
       "n_with_returns": 8
     },
     {
       "ticker": "CMCSA",
       "event_count": 8,
-      "mean_excess_60d": -0.0796,
-      "n_with_returns": 6
+      "mean_excess_10d": 0.0038,
+      "n_with_returns": 8
     },
     {
       "ticker": "JNJ",
       "event_count": 7,
-      "mean_excess_60d": 0.0184,
-      "n_with_returns": 6
+      "mean_excess_10d": 0.0208,
+      "n_with_returns": 7
     }
   ]
 }

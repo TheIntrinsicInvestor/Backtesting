@@ -67,7 +67,7 @@ def round_or_none(v, decimals=4):
     return None if s is None else round(s, decimals)
 
 
-def compute_stats(series, horizon_days=60):
+def compute_stats(series, horizon_days=10):
     er = series.dropna()
     n = len(er)
     if n < 5:
@@ -134,14 +134,14 @@ def build_largest_herds(buy_returns):
         preview = ", ".join(pols[:4])
         if len(pols) > 4:
             preview += f", and {len(pols) - 4} more"
-        excess = row.get("ret_60d_disc_excess")
-        censored = row.get("censored_60d_disc", False)
+        excess = row.get("ret_10d_disc_excess")
+        censored = row.get("censored_10d_disc", False)
         rows.append({
             "ticker": str(row["ticker"]),
             "window_start": pd.to_datetime(row["window_start"]).strftime("%Y-%m-%d"),
             "politician_count": int(row["politician_count"]),
             "politicians_preview": preview,
-            "excess_60d": None if censored else round_or_none(excess),
+            "excess_10d": None if censored else round_or_none(excess),
         })
     return rows
 
@@ -153,12 +153,12 @@ def build_top_herded_tickers(buy_returns):
     rows = []
     for ticker, count in top.items():
         sub = primary[primary["ticker"] == ticker]
-        # average disc-date 60d excess across all events for this ticker (non-censored only)
-        excess_series = sub.loc[sub["censored_60d_disc"] == False, "ret_60d_disc_excess"].dropna()
+        # average disc-date 10d excess across all events for this ticker (non-censored only)
+        excess_series = sub.loc[sub["censored_10d_disc"] == False, "ret_10d_disc_excess"].dropna()
         rows.append({
             "ticker": str(ticker),
             "event_count": int(count),
-            "mean_excess_60d": round_or_none(excess_series.mean()) if len(excess_series) else None,
+            "mean_excess_10d": round_or_none(excess_series.mean()) if len(excess_series) else None,
             "n_with_returns": int(len(excess_series)),
         })
     return rows
@@ -166,18 +166,18 @@ def build_top_herded_tickers(buy_returns):
 
 def build_sector_breakdown(buy_returns):
     primary = buy_returns[(buy_returns["threshold"] == 3) & (buy_returns["window_days"] == 30)]
-    p60 = primary[primary["censored_60d_disc"] == False].copy()
+    p10 = primary[primary["censored_10d_disc"] == False].copy()
     rows = []
-    for sec, grp in p60.groupby("sector"):
-        sub = grp["ret_60d_disc_excess"].dropna()
+    for sec, grp in p10.groupby("sector"):
+        sub = grp["ret_10d_disc_excess"].dropna()
         n = len(sub)
         if n < 5:
             continue
         rows.append({
             "sector": str(sec),
             "n_events": int(n),
-            "win_rate_60d": round_or_none(float((sub > 0).mean())),
-            "mean_excess_60d": round_or_none(float(sub.mean())),
+            "win_rate_10d": round_or_none(float((sub > 0).mean())),
+            "mean_excess_10d": round_or_none(float(sub.mean())),
         })
     rows.sort(key=lambda x: x["n_events"], reverse=True)
     return rows
@@ -185,19 +185,19 @@ def build_sector_breakdown(buy_returns):
 
 def build_party_chamber(buy_returns):
     primary = buy_returns[(buy_returns["threshold"] == 3) & (buy_returns["window_days"] == 30)]
-    p60 = primary[primary["censored_60d_disc"] == False].copy()
-    bip = p60[p60["is_bipartisan"] == True]["ret_60d_disc_excess"]
-    par = p60[p60["is_bipartisan"] == False]["ret_60d_disc_excess"]
+    p10 = primary[primary["censored_10d_disc"] == False].copy()
+    bip = p10[p10["is_bipartisan"] == True]["ret_10d_disc_excess"]
+    par = p10[p10["is_bipartisan"] == False]["ret_10d_disc_excess"]
     return {
         "bipartisan": {
             "n": int(len(bip.dropna())),
-            "share_of_total": round_or_none(len(p60[p60["is_bipartisan"] == True]) / max(1, len(p60))),
+            "share_of_total": round_or_none(len(p10[p10["is_bipartisan"] == True]) / max(1, len(p10))),
             "mean_excess": round_or_none(bip.mean()),
             "win_rate": round_or_none(float((bip.dropna() > 0).mean()) if len(bip.dropna()) else None),
         },
         "partisan": {
             "n": int(len(par.dropna())),
-            "share_of_total": round_or_none(len(p60[p60["is_bipartisan"] == False]) / max(1, len(p60))),
+            "share_of_total": round_or_none(len(p10[p10["is_bipartisan"] == False]) / max(1, len(p10))),
             "mean_excess": round_or_none(par.mean()),
             "win_rate": round_or_none(float((par.dropna() > 0).mean()) if len(par.dropna()) else None),
         },
@@ -208,13 +208,10 @@ def build_party_chamber(buy_returns):
 
 def build_trade_vs_disc(buy_returns):
     """
-    KEY SECTION: quantify what the disclosure-follower misses.
-    Headline metric is excess_during_lag: stock return minus SPY return DURING the lag period.
-    That gap is captured by the politician and fully missed by the follower.
+    KEY SECTION: exact holding periods and lag.
     """
     primary = buy_returns[(buy_returns["threshold"] == 3) & (buy_returns["window_days"] == 30)]
 
-    # Lag-period stats: what happens during the avg 28-day delay
     lag_series = primary[["ret_during_lag", "spy_ret_during_lag", "excess_during_lag", "disc_trade_lag_days"]].dropna()
     lag_n = len(lag_series)
     lag_mean = float(lag_series["ret_during_lag"].mean()) if lag_n else None
@@ -223,20 +220,31 @@ def build_trade_vs_disc(buy_returns):
     lag_excess_winrate = float((lag_series["excess_during_lag"] > 0).mean()) if lag_n else None
     lag_days_median = float(lag_series["disc_trade_lag_days"].median()) if lag_n else None
 
-    # Horizon-by-horizon: forward returns from each entry point
+    # Realized returns
+    real_df = primary.dropna(subset=["realized_trade_excess", "realized_disc_excess", "realized_hold_days"])
+    real_n = len(real_df)
+    
     out = {
         "horizons": HORIZONS,
-        "disc_mean": [],     # mean excess return when entering on disc_date, holding N days
-        "trade_mean": [],    # mean excess return when entering on trade_date, holding N days
+        "disc_mean": [],
+        "trade_mean": [],
         "n_events": [],
-        # During-lag headline
+        
         "lag_n": int(lag_n),
         "lag_days_median": round_or_none(lag_days_median),
         "lag_period_mean_return": round_or_none(lag_mean),
         "lag_period_mean_excess": round_or_none(lag_excess_mean),
         "lag_period_median_excess": round_or_none(lag_excess_median),
         "lag_period_win_rate": round_or_none(lag_excess_winrate),
+        
+        "realized_n": int(real_n),
+        "realized_trade_mean": round_or_none(float(real_df["realized_trade_excess"].mean())) if real_n else None,
+        "realized_trade_winrate": round_or_none(float((real_df["realized_trade_excess"] > 0).mean())) if real_n else None,
+        "realized_disc_mean": round_or_none(float(real_df["realized_disc_excess"].mean())) if real_n else None,
+        "realized_disc_winrate": round_or_none(float((real_df["realized_disc_excess"] > 0).mean())) if real_n else None,
+        "realized_hold_days": round_or_none(float(real_df["realized_hold_days"].mean())) if real_n else None,
     }
+    
     for h in HORIZONS:
         disc_col = f"ret_{h}d_disc_excess"
         trade_col = f"ret_{h}d_trade_excess"
@@ -252,7 +260,7 @@ def build_trade_vs_disc(buy_returns):
         out["disc_mean"].append(round_or_none(paired[disc_col].mean()))
         out["trade_mean"].append(round_or_none(paired[trade_col].mean()))
         out["n_events"].append(int(n))
-
+        
     return out
 
 
@@ -275,7 +283,7 @@ def build_committee_jurisdiction(buy_returns):
         name_to_cats[row["name"]] = set(cats)
 
     primary = buy_returns[(buy_returns["threshold"] == 3) & (buy_returns["window_days"] == 30)].copy()
-    primary = primary[primary["censored_60d_disc"] == False]
+    primary = primary[primary["censored_10d_disc"] == False]
 
     # For each event, get the set of categories represented by any herd member
     def event_cats(politicians):
@@ -307,7 +315,7 @@ def build_committee_jurisdiction(buy_returns):
         random_other = primary[~ticker_match]
 
         def _agg(sub):
-            s = sub["ret_60d_disc_excess"].dropna()
+            s = sub["ret_10d_disc_excess"].dropna()
             if len(s) < 3:
                 return {"n": int(len(s)), "mean_excess": None, "win_rate": None}
             return {
@@ -384,14 +392,14 @@ def build_etf_performance():
 
 def build_kpi_strip(buy_returns):
     primary = buy_returns[(buy_returns["threshold"] == 3) & (buy_returns["window_days"] == 30)]
-    p60 = primary[primary["censored_60d_disc"] == False]
-    stats = compute_stats(p60["ret_60d_disc_excess"], 60)
+    p10 = primary[primary["censored_10d_disc"] == False]
+    stats = compute_stats(p10["ret_10d_disc_excess"], 10)
     return {
         "n_events": stats["n"],
-        "win_rate_60d": round_or_none(stats["win_rate"]),
-        "mean_excess_60d": round_or_none(stats["mean"]),
-        "sharpe_60d": round_or_none(stats["sharpe"]),
-        "t_stat_60d": round_or_none(stats["t_stat"]),
+        "win_rate_10d": round_or_none(stats["win_rate"]),
+        "mean_excess_10d": round_or_none(stats["mean"]),
+        "sharpe_10d": round_or_none(stats["sharpe"]),
+        "t_stat_10d": round_or_none(stats["t_stat"]),
     }
 
 
@@ -420,10 +428,10 @@ def build_sensitivity(buy_returns):
         row_wr, row_me, row_n = [], [], []
         for win in windows:
             sub = buy_returns[(buy_returns["threshold"] == thr) & (buy_returns["window_days"] == win)]
-            sub60 = sub[sub["censored_60d_disc"] == False]["ret_60d_disc_excess"].dropna()
-            n = len(sub60)
-            row_wr.append(round_or_none(float((sub60 > 0).mean())) if n >= 5 else None)
-            row_me.append(round_or_none(float(sub60.mean())) if n >= 5 else None)
+            sub10 = sub[sub["censored_10d_disc"] == False]["ret_10d_disc_excess"].dropna()
+            n = len(sub10)
+            row_wr.append(round_or_none(float((sub10 > 0).mean())) if n >= 5 else None)
+            row_me.append(round_or_none(float(sub10.mean())) if n >= 5 else None)
             row_n.append(int(n))
         win_rates.append(row_wr)
         mean_excess.append(row_me)
@@ -441,7 +449,7 @@ def build_sensitivity(buy_returns):
 
 def build_sell_herd_returns(sell_returns):
     primary = sell_returns[(sell_returns["threshold"] == 3) & (sell_returns["window_days"] == 30)]
-    p60 = primary[primary["censored_60d_disc"] == False]
+    p10 = primary[primary["censored_10d_disc"] == False]
 
     # forward returns curve for sells
     curve = {"horizons": HORIZONS, "mean_excess": [], "n_events": []}
@@ -450,42 +458,42 @@ def build_sell_herd_returns(sell_returns):
         curve["mean_excess"].append(round_or_none(sub.mean()) if len(sub) >= 5 else None)
         curve["n_events"].append(int(len(sub)))
 
-    stats60 = compute_stats(p60["ret_60d_disc_excess"], 60)
+    stats10 = compute_stats(p10["ret_10d_disc_excess"], 10)
 
     # Trade-date vs disclosure-date for sells too
     paired = primary[
-        (primary["censored_60d_disc"] == False) &
-        (primary["censored_60d_trade"] == False)
-    ].dropna(subset=["ret_60d_disc_excess", "ret_60d_trade_excess"])
-    disc_mean = float(paired["ret_60d_disc_excess"].mean()) if len(paired) else None
-    trade_mean = float(paired["ret_60d_trade_excess"].mean()) if len(paired) else None
+        (primary["censored_10d_disc"] == False) &
+        (primary["censored_10d_trade"] == False)
+    ].dropna(subset=["ret_10d_disc_excess", "ret_10d_trade_excess"])
+    disc_mean = float(paired["ret_10d_disc_excess"].mean()) if len(paired) else None
+    trade_mean = float(paired["ret_10d_trade_excess"].mean()) if len(paired) else None
 
     # Top sold tickers (sell herds)
     top_sold = primary.groupby("ticker").size().sort_values(ascending=False).head(10)
     top_rows = []
     for ticker, count in top_sold.items():
         sub = primary[primary["ticker"] == ticker]
-        excess_series = sub.loc[sub["censored_60d_disc"] == False, "ret_60d_disc_excess"].dropna()
+        excess_series = sub.loc[sub["censored_10d_disc"] == False, "ret_10d_disc_excess"].dropna()
         top_rows.append({
             "ticker": str(ticker),
             "event_count": int(count),
-            "mean_excess_60d": round_or_none(excess_series.mean()) if len(excess_series) else None,
+            "mean_excess_10d": round_or_none(excess_series.mean()) if len(excess_series) else None,
             "n_with_returns": int(len(excess_series)),
         })
 
     return {
         "kpi": {
-            "n_events": stats60["n"],
-            "win_rate_60d": round_or_none(stats60["win_rate"]),
-            "mean_excess_60d": round_or_none(stats60["mean"]),
-            "sharpe_60d": round_or_none(stats60["sharpe"]),
-            "t_stat_60d": round_or_none(stats60["t_stat"]),
+            "n_events": stats10["n"],
+            "win_rate_10d": round_or_none(stats10["win_rate"]),
+            "mean_excess_10d": round_or_none(stats10["mean"]),
+            "sharpe_10d": round_or_none(stats10["sharpe"]),
+            "t_stat_10d": round_or_none(stats10["t_stat"]),
         },
         "curve": curve,
         "trade_vs_disc": {
             "n_paired": int(len(paired)),
-            "disc_mean_60d": round_or_none(disc_mean),
-            "trade_mean_60d": round_or_none(trade_mean),
+            "disc_mean_10d": round_or_none(disc_mean),
+            "trade_mean_10d": round_or_none(trade_mean),
         },
         "top_sold_tickers": top_rows,
     }
@@ -516,9 +524,9 @@ def main():
           f"mean stock ret {tvd['lag_period_mean_return']:+.4f}  "
           f"mean excess vs SPY {tvd['lag_period_mean_excess']:+.4f}  "
           f"win rate {tvd['lag_period_win_rate']:.1%}  n={tvd['lag_n']}")
-    for i, h in enumerate(HORIZONS):
-        if tvd["disc_mean"][i] is not None:
-            print(f"  {h}d:   disc-entry={tvd['disc_mean'][i]:+.4f}  trade-entry={tvd['trade_mean'][i]:+.4f}  n={tvd['n_events'][i]}")
+    print(f"  REALIZED: n={tvd['realized_n']}, hold={tvd['realized_hold_days']:.0f}d")
+    print(f"    Politician: mean={tvd['realized_trade_mean']:+.4f}, winrate={tvd['realized_trade_winrate']:.1%}")
+    print(f"    Follower:   mean={tvd['realized_disc_mean']:+.4f}, winrate={tvd['realized_disc_winrate']:.1%}")
 
     print("\n--- Section 05: committee jurisdiction ---")
     cmt = build_committee_jurisdiction(buy)
@@ -543,13 +551,13 @@ def main():
     write("kpi_strip.json", kpi)
     write("forward_returns_curve.json", build_forward_returns_curve(buy))
     write("sensitivity_heatmap.json", build_sensitivity(buy))
-    print(f"  KPI: n={kpi['n_events']}, win_rate={kpi['win_rate_60d']:.1%}, mean_excess={kpi['mean_excess_60d']:+.2%}, sharpe={kpi['sharpe_60d']:+.2f}, t={kpi['t_stat_60d']:+.2f}")
+    print(f"  KPI: n={kpi['n_events']}, win_rate={kpi['win_rate_10d']:.1%}, mean_excess={kpi['mean_excess_10d']:+.2%}, sharpe={kpi['sharpe_10d']:+.2f}, t={kpi['t_stat_10d']:+.2f}")
 
     print("\n--- Section 08: sells ---")
     sells = build_sell_herd_returns(sell)
     write("sell_herd_returns.json", sells)
     skpi = sells["kpi"]
-    print(f"  Sell KPI: n={skpi['n_events']}, win_rate={skpi['win_rate_60d']:.1%}, mean_excess={skpi['mean_excess_60d']:+.2%}, sharpe={skpi['sharpe_60d']:+.2f}, t={skpi['t_stat_60d']:+.2f}")
+    print(f"  Sell KPI: n={skpi['n_events']}, win_rate={skpi['win_rate_10d']:.1%}, mean_excess={skpi['mean_excess_10d']:+.2%}, sharpe={skpi['sharpe_10d']:+.2f}, t={skpi['t_stat_10d']:+.2f}")
 
     print("\nAll chart JSONs written.")
 

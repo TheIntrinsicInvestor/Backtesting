@@ -123,12 +123,12 @@ def build_largest_herds_table():
       <th>Window start</th>
       <th style="text-align:right">Politicians</th>
       <th>Names</th>
-      <th style="text-align:right">60d excess vs SPY</th>
+      <th style="text-align:right">10d excess vs SPY</th>
     </tr>
   </thead>
   <tbody>"""
     for row in largest:
-        excess = row["excess_60d"]
+        excess = row["excess_10d"]
         if excess is None:
             exc_str = '<span style="color:var(--hint)">Censored</span>'
             exc_color = ""
@@ -158,13 +158,13 @@ def build_sector_table():
       <th>Sector</th>
       <th style="text-align:right">n</th>
       <th style="text-align:right">Win rate</th>
-      <th style="text-align:right">Mean 60d excess</th>
+      <th style="text-align:right">Mean 10d excess</th>
     </tr>
   </thead>
   <tbody>"""
     for row in sector:
-        wr  = f"{row['win_rate_60d'] * 100:.1f}%"
-        exc = row["mean_excess_60d"]
+        wr  = f"{row['win_rate_10d'] * 100:.1f}%"
+        exc = row["mean_excess_10d"]
         if exc >= 0:
             exc_str   = f'+{exc * 100:.1f}%'
             exc_color = 'color:var(--green2)'
@@ -191,7 +191,7 @@ def build_committee_table():
       <th>Committee category</th>
       <th>Cohort</th>
       <th style="text-align:right">n</th>
-      <th style="text-align:right">Mean 60d excess</th>
+      <th style="text-align:right">Mean 10d excess</th>
       <th style="text-align:right">Win rate</th>
     </tr>
   </thead>
@@ -235,13 +235,13 @@ def build_top_sold_table():
     <tr>
       <th>Ticker</th>
       <th style="text-align:right">Sell herd count</th>
-      <th style="text-align:right">Mean 60d excess</th>
+      <th style="text-align:right">Mean 10d excess</th>
       <th style="text-align:right">n with returns</th>
     </tr>
   </thead>
   <tbody>"""
     for row in sells["top_sold_tickers"]:
-        exc = row["mean_excess_60d"]
+        exc = row["mean_excess_10d"]
         if exc is None:
             exc_str = '<span style="color:var(--hint)">N/A</span>'
             exc_color = ""
@@ -272,12 +272,12 @@ curve_mean    = js_array(curve["mean_excess"])
 curve_p25     = js_array(curve["p25_excess"])
 curve_p75     = js_array(curve["p75_excess"])
 
-tvd_labels    = js_array([f"{h}d hold" for h in tvd["horizons"]])
+tvd_labels    = js_array([f"{h}d" for h in tvd["horizons"]])
 tvd_disc      = js_array(tvd["disc_mean"])
 tvd_trade     = js_array(tvd["trade_mean"])
 
 sector_labels = js_array([r["sector"] for r in sector])
-sector_exc    = js_array([r["mean_excess_60d"] for r in sector])
+sector_exc    = js_array([r["mean_excess_10d"] for r in sector])
 
 etf_nanc_d    = js_array(etf["series"]["NANC"]["dates"])
 etf_nanc_v    = js_array(etf["series"]["NANC"]["values"])
@@ -309,10 +309,10 @@ lag_period_return_str = pct(tvd["lag_period_mean_return"])
 lag_period_winrate    = tvd["lag_period_win_rate"] * 100
 
 kpi_n   = kpi["n_events"]
-kpi_wr  = kpi["win_rate_60d"] * 100
-kpi_exc = pct(kpi["mean_excess_60d"])
-kpi_sharpe = fmt(kpi["sharpe_60d"])
-kpi_t   = fmt(kpi["t_stat_60d"])
+kpi_wr  = kpi["win_rate_10d"] * 100
+kpi_exc = pct(kpi["mean_excess_10d"])
+kpi_sharpe = fmt(kpi["sharpe_10d"])
+kpi_t   = fmt(kpi["t_stat_10d"])
 
 # ETF stats
 nanc = etf["series"]["NANC"]
@@ -328,9 +328,9 @@ etf_start    = etf["start_date"]
 
 # Sells
 sell_n = sells["kpi"]["n_events"]
-sell_exc = pct(sells["kpi"]["mean_excess_60d"])
-sell_t = fmt(sells["kpi"]["t_stat_60d"])
-sell_wr = sells["kpi"]["win_rate_60d"] * 100
+sell_exc = pct(sells["kpi"]["mean_excess_10d"])
+sell_t = fmt(sells["kpi"]["t_stat_10d"])
+sell_wr = sells["kpi"]["win_rate_10d"] * 100
 
 
 # ── HTML ─────────────────────────────────────────────────────────────────────
@@ -511,7 +511,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
       <div class="kpi-sub">n=131. Politicians underperform too</div>
     </div>
     <div class="kpi-cell">
-      <div class="kpi-label">Aggregate signal (60d)</div>
+      <div class="kpi-label">Aggregate signal (10d)</div>
       <div class="kpi-value red">{kpi_exc}</div>
       <div class="kpi-sub">n={kpi_n}, t={kpi_t}, indistinguishable from zero</div>
     </div>
@@ -628,11 +628,11 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
     <h3>Largest individual herding events</h3>
     {largest_html}
 
-    <h3>60-day excess returns by sector</h3>
+    <h3>10-day excess returns by sector</h3>
     {sector_html}
 
     <div class="callout purple">
-      <strong>Sector concentration.</strong> Information Technology is the most-herded sector and also the worst-performing for followers: {sector[0]['n_events']} events at -{abs(sector[0]['mean_excess_60d']) * 100:.1f}% mean excess versus SPY. Apparent positives in Financials (n=18) and Consumer Discretionary (n=22) are too thinly sampled to support inference. Real Estate, Utilities, and Energy do not even produce enough herds at the 3+ threshold to compute statistics.
+      <strong>Sector concentration.</strong> Information Technology is the most-herded sector: {sector[0]['n_events']} events at {sector[0]['mean_excess_10d'] * 100:+.1f}% mean excess versus SPY. Despite larger sample sizes at the 10-day horizon, no sector demonstrates strong, sustained alpha. Real Estate and Energy do not even produce enough herds at the 3+ threshold to compute statistics.
     </div>
   </div>
 </section>
@@ -643,10 +643,10 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
     <div class="section-label"><span class="section-counter">04</span><span>The Smoking Gun</span></div>
     <h2>Even the politicians do not <em>beat the market</em></h2>
     <p>
-      Here is the critical test. The standard pushback against disclosure-lag critiques is that politicians clearly profit from their trades, and even if the public misses some of that gain, what remains might still be a worthwhile signal. To check this, the analysis computes returns two ways for every primary herding event: once from the trade date itself (the politician's actual entry), and once from the disclosure date (the follower's earliest possible entry). The {tvd['lag_n']} events with both dates available form the test sample.
+      The standard pushback against disclosure-lag critiques is that politicians clearly profit from their trades, and even if the public misses some of that gain, what remains might still be a worthwhile signal. To check this realistically, the analysis maps each individual politician's buy trade within a herd to their subsequent sell trade for the same stock, or marks it to market if the position is still open. We then compare the politician's exact holding period return against what a follower would earn by mirroring the exact same entries and exits, but delayed by the disclosure lag.
     </p>
     <p>
-      During the median 26-day lag window, the herded stocks rose {lag_period_return_str} in absolute terms. That sounds informative until you compare against the market. SPY rose {pct(tvd['lag_period_mean_return'] - tvd['lag_period_mean_excess'])} over the same windows. The herded stocks underperformed the index by {lag_period_excess_str} during the politicians' own holding window. {lag_period_winrate:.1f}% of these stocks beat SPY during the lag period, meaning {100 - lag_period_winrate:.1f}% underperformed even before any follower could enter.
+      Over the median 26-day initial lag window, the herded stocks rose {lag_period_return_str} in absolute terms. That sounds informative until you compare against the market. SPY rose {pct(tvd['lag_period_mean_return'] - tvd['lag_period_mean_excess'])} over the same windows. The herded stocks actually underperformed the index by {lag_period_excess_str} during the politicians' own initial holding window. Only {lag_period_winrate:.1f}% of these stocks beat SPY during the lag period, meaning {100 - lag_period_winrate:.1f}% underperformed even before any follower could enter.
     </p>
     <div class="highlight-box">
       <div>
@@ -655,28 +655,31 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
       </div>
       <div>
         <div class="hb-val">{lag_period_winrate:.0f}%</div>
-        <div class="hb-label">Win rate during lag (less than half)</div>
+        <div class="hb-label">Win rate during lag</div>
       </div>
       <div>
-        <div class="hb-val">{lag_period_return_str}</div>
-        <div class="hb-label">Absolute return during lag (pure beta)</div>
+        <div class="hb-val">{int(tvd['realized_hold_days'])}d</div>
+        <div class="hb-label">Average holding period</div>
       </div>
     </div>
     <div class="chart-box">
-      <div class="chart-title">Mean 60d excess return vs SPY: disclosure-date entry vs trade-date entry</div>
+      <div class="chart-title">Mean Excess Return vs SPY Over Time: Trade vs Disclosure Entry</div>
       <div style="position:relative;height:300px">
         <canvas id="tvdChart"></canvas>
       </div>
       <div class="chart-legend">
-        <span><span class="legend-dot" style="background:#1a5c52"></span>Disclosure-date entry (follower)</span>
-        <span><span class="legend-dot" style="background:#dc2626"></span>Trade-date entry (politician)</span>
+        <span><span class="legend-line" style="background:#dc2626"></span>Trade-date entry (Politician)</span>
+        <span><span class="legend-line" style="background:#1a5c52"></span>Disclosure-date entry (Follower)</span>
       </div>
     </div>
     <p>
-      What this means is that the disclosure-follower is not missing alpha. They are missing a chunk of pure market beta. Congress is buying stocks that go up because the market goes up, not because their picks beat the market. NANC and KRUZ, by replicating disclosed trades, capture neither the politicians' marginally positive trade-date returns nor any compensation for the structural lag. They simply deliver a beta-heavy, mega-cap-tilted basket dressed up as an information-based product.
+      Over an average holding period of {int(tvd['realized_hold_days'])} days, politicians generated a mean realized excess return of {pct(tvd['realized_trade_mean'])}, with a win rate of {pct(tvd['realized_trade_winrate'],0,False)}. A hypothetical follower mirroring those exact trades subject to disclosure lags actually performed slightly less negatively ({pct(tvd['realized_disc_mean'])}) merely because they missed some of the initial losses!
+    </p>
+    <p>
+      What this means is that the disclosure-follower is not missing alpha. They are missing a chunk of pure market beta. Congress is buying stocks that go up because the market goes up, not because their picks beat the market. NANC and KRUZ simply deliver a beta-heavy, mega-cap-tilted basket dressed up as an information-based product.
     </p>
     <div class="callout red">
-      <strong>The premise fails on its own terms.</strong> If politicians had a real edge, their trade-date entry should beat SPY. The mean excess during the politician's own holding window is negative. The disclosure lag does not need to be defended or measured. There is no alpha behind it to begin with.
+      <strong>The premise fails on its own terms.</strong> If politicians had a real edge, their realized return should beat SPY over their true holding periods. The mean realized excess return is negative. The disclosure lag does not need to be defended or measured. There is no alpha behind it to begin with.
     </div>
   </div>
 </section>
@@ -690,13 +693,13 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
       If congressional alpha exists anywhere, the strongest theoretical case is jurisdiction-specific information. Members on the House Financial Services Committee see proposed banking legislation before the public. Senate Armed Services members see defense procurement details. House Energy and Commerce members see EPA rule-makings months in advance. This is the academic literature's main remaining defense of the politician-trading thesis, and it is testable.
     </p>
     <p>
-      For each herding event in the primary sample, the analysis joins to congress-legislators committee-membership data (184 of 201 trader names matched, 91.5%). An event is flagged "in-jurisdiction" if the ticker falls in the committee's sectoral jurisdiction and at least one herd member sits on that committee. The cleanest test cohort is Information Technology, where 32 of 35 herd events involve members on Judiciary, Commerce, or Oversight committees with technology jurisdiction. Those 32 in-jurisdiction tech herds posted mean 60-day excess returns of -4.0%, with a 37.5% win rate. The same members buying outside their committee's jurisdiction did slightly better, at +1.5% mean excess.
+      For each herding event in the primary sample, the analysis joins to congress-legislators committee-membership data (184 of 201 trader names matched, 91.5%). An event is flagged "in-jurisdiction" if the ticker falls in the committee's sectoral jurisdiction and at least one herd member sits on that committee. The cleanest test cohort is Information Technology, where {committee['categories'][3]['in_jurisdiction']['n']} herd events involve members on Judiciary, Commerce, or Oversight committees with technology jurisdiction. Those in-jurisdiction tech herds posted mean 10-day excess returns of {committee['categories'][3]['in_jurisdiction']['mean_excess']*100:+.1f}%. The same members buying outside their committee's jurisdiction did slightly better, at {committee['categories'][3]['out_jurisdiction']['mean_excess']*100:+.1f}% mean excess.
     </p>
 
     {committee_html}
 
     <div class="callout amber">
-      <strong>Small-sample caution.</strong> Energy, Defense, and several other categories have too few in-jurisdiction events at the 3+ threshold to support inference. The Financials cohort (n=3 in-jurisdiction) shows positive numbers but the sample is too thin to be meaningful. The IT cohort (n=32) is the only well-sampled test, and it points the wrong direction for the jurisdictional-information hypothesis.
+      <strong>Small-sample caution.</strong> Energy, Defense, and several other categories have too few in-jurisdiction events at the 3+ threshold to support inference. The IT cohort is the only well-sampled test, and it points the wrong direction for the jurisdictional-information hypothesis.
     </div>
     <p>
       The cleanest reading is that there is no detectable jurisdiction-specific edge in the data where the data permit a test. Members who sit on technology-related committees and herd into technology stocks do worse than when they herd into stocks outside their jurisdiction. This is the opposite of what an information-advantage hypothesis predicts.
@@ -755,7 +758,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
     <div class="section-label"><span class="section-counter">07</span><span>Aggregate Backtest</span></div>
     <h2>What you actually get from <em>mechanically following the feed</em></h2>
     <p>
-      Pulling everything together, the aggregate backtest mechanically buys every herding event on the first trading day on or after the disclosure date and holds for 60 days. Across {kpi_n} events with complete return data in the primary parameter set (3+ politicians, 30-day rolling window), the win rate is {kpi_wr:.1f}%. Mean 60-day excess return versus SPY is {kpi_exc}. Sharpe is {kpi_sharpe}. The t-statistic of {kpi_t} is well within noise.
+      Pulling everything together, the aggregate backtest mechanically buys every herding event on the first trading day on or after the disclosure date and holds for 10 days. Across {kpi_n} events with complete return data in the primary parameter set (3+ politicians, 30-day rolling window), the win rate is {kpi_wr:.1f}%. Mean 10-day excess return versus SPY is {kpi_exc}. Sharpe is {kpi_sharpe}. The t-statistic of {kpi_t} is well within noise.
     </p>
     <div class="chart-box">
       <div class="chart-title">Mean excess return vs SPY by holding horizon (with IQR band)</div>
@@ -784,7 +787,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
     <div class="section-label"><span class="section-counter">08</span><span>The Sell Side</span></div>
     <h2>A hint of something, <em>but not enough to act on</em></h2>
     <p>
-      The buy-side signal is conclusively null. The sell-side is more interesting, though it still does not survive a hard look. Applying the same 3+ politician, 30-day herding definition to disclosed sales rather than buys produces {sell_n} sell-herding events with complete 60-day returns. The mean excess return versus SPY after a sell-herd is {sell_exc}, with a {sell_wr:.1f}% win rate and a t-statistic of {sell_t}. That is a directional signal pointing the way the hypothesis would predict (sell herds are followed by underperformance), but the t-statistic does not cross any conventional significance threshold.
+      The buy-side signal is conclusively null. The sell-side is more interesting, though it still does not survive a hard look. Applying the same 3+ politician, 30-day herding definition to disclosed sales rather than buys produces {sell_n} sell-herding events with complete 10-day returns. The mean excess return versus SPY after a sell-herd is {sell_exc}, with a {sell_wr:.1f}% win rate and a t-statistic of {sell_t}. That is a directional signal pointing the way the hypothesis would predict (sell herds are followed by underperformance), but the t-statistic does not cross any conventional significance threshold.
     </p>
     <div class="chart-box">
       <div class="chart-title">Mean excess return vs SPY after sell herd, by holding horizon</div>
@@ -792,7 +795,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
         <canvas id="sellChart"></canvas>
       </div>
       <div class="chart-legend">
-        <span><span class="legend-dot" style="background:#dc2626"></span>Mean 60d excess (negative = stock trailed SPY after sell)</span>
+        <span><span class="legend-dot" style="background:#dc2626"></span>Mean 10d excess (negative = stock trailed SPY after sell)</span>
       </div>
     </div>
 
@@ -817,7 +820,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
       Eggers and Hainmueller (2013) examined 16 years of congressional trades and found that, on a portfolio-weighted basis, members of Congress earned returns indistinguishable from random selection within their stated investment universe. Belmont and Tilelli (2022) updated the analysis and reached substantially the same conclusion. The academic consensus has held for over a decade. The disclosure-tracking industry has not noticeably contracted in response. NANC and KRUZ launched in 2023 to the explicit pitch that they capture an edge that the literature already demonstrated does not exist.
     </p>
     <p>
-      The results in this report, built on 35,343 STOCK Act filings and 60-day forward returns across 502 high-conviction buy herds, are consistent with that consensus. The 27-day median disclosure lag is the proximate killer of any informational edge, but the deeper finding is that even at the politicians' own entry point, the herded stocks underperform SPY. There is no edge to be lost. The retail-facing wrappers (NANC, KRUZ, Pelosi-tracker subscriptions) are selling investors a beta-heavy mega-cap portfolio wrapped in a narrative about insider access.
+      The results in this report, built on 35,343 STOCK Act filings and 10-day forward returns across {kpi_n} high-conviction buy herds, are consistent with that consensus. The 27-day median disclosure lag is the proximate killer of any informational edge, but the deeper finding is that even at the politicians' own entry point, the herded stocks underperform SPY. There is no edge to be lost. The retail-facing wrappers (NANC, KRUZ, Pelosi-tracker subscriptions) are selling investors a beta-heavy mega-cap portfolio wrapped in a narrative about insider access.
     </p>
 
     <table class="method-table">
@@ -829,7 +832,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
         <tr><td>Return calculation</td><td>Two parallel entries: disclosure-date (first trading day on or after publication) and trade-date (first trading day on or after execution). Returns at 10, 20, 60, 90, 180, 252 calendar days</td></tr>
         <tr><td>Lag-period return</td><td>Stock return from trade date to disclosure date, minus SPY return over same window; measures what followers cannot capture</td></tr>
         <tr><td>Committee data</td><td>unitedstates/congress-legislators YAML (committee-membership-current, legislators-current); 184 of 201 trader names matched (91.5%)</td></tr>
-        <tr><td>Statistical tests</td><td>One-sample t-test of 60-day excess return against zero, primary combination; Sharpe annualised as mean/std &#215; sqrt(252/horizon); p-values omitted because results are clearly non-significant</td></tr>
+        <tr><td>Statistical tests</td><td>One-sample t-test of 10-day excess return against zero, primary combination; Sharpe annualised as mean/std &#215; sqrt(252/horizon); p-values omitted because results are clearly non-significant</td></tr>
         <tr><td>Out of scope</td><td>Politicians' own trades evaluated against pre-trade prices (would require pre-trade-date price benchmarks); IPO-related disclosures and ESOP grants; options trades; non-US equities; disclosures filed after 2025-12-31 (CRSP price coverage limit)</td></tr>
       </tbody>
     </table>
@@ -852,7 +855,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
 <div style="background:#eef7f5;border-left:3px solid #1a5c52;padding:1.2rem 1.5rem;margin:0 auto 2rem;border-radius:0 3px 3px 0;max-width:900px">
   <span style="font-family:var(--mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);font-weight:600;display:block;margin-bottom:.5rem">For the desk</span>
   <p style="font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:0;text-align:left;hyphens:none">
-    Median disclosure lag {lag_median}d (mean {lag_mean:.1f}d, p90 {int(lag['p90'])}d, {lag_over_45_pct:.1f}% late). Lag-period excess vs SPY {lag_period_excess_str} (n=131, win rate {lag_period_winrate:.1f}%): even politicians' own entry underperforms the index. Aggregate buy backtest (3+, 30d, 60d hold): n={kpi_n}, mean excess {kpi_exc}, Sharpe {kpi_sharpe}, t={kpi_t}. Sell-side n={sell_n}, mean excess {sell_exc}, t={sell_t} (directional but not significant). NANC cum +{nanc['cum_return'] * 100:.1f}% Sharpe {nanc_sharpe} vs SPY +{spy['cum_return'] * 100:.1f}% Sharpe {spy_sharpe}; KRUZ cum +{kruz['cum_return'] * 100:.1f}% Sharpe {kruz_sharpe}. IT in-jurisdiction n=32 mean excess -4.0%. Verdict: NANC and KRUZ should not be held.
+    Median disclosure lag {lag_median}d (mean {lag_mean:.1f}d, p90 {int(lag['p90'])}d, {lag_over_45_pct:.1f}% late). Lag-period excess vs SPY {lag_period_excess_str} (n=131, win rate {lag_period_winrate:.1f}%): even politicians' own entry underperforms the index. Aggregate buy backtest (3+, 30d, 10d hold): n={kpi_n}, mean excess {kpi_exc}, Sharpe {kpi_sharpe}, t={kpi_t}. Sell-side n={sell_n}, mean excess {sell_exc}, t={sell_t} (directional but not significant). NANC cum +{nanc['cum_return'] * 100:.1f}% Sharpe {nanc_sharpe} vs SPY +{spy['cum_return'] * 100:.1f}% Sharpe {spy_sharpe}; KRUZ cum +{kruz['cum_return'] * 100:.1f}% Sharpe {kruz_sharpe}. IT in-jurisdiction n={committee['categories'][3]['in_jurisdiction']['n']} mean excess {committee['categories'][3]['in_jurisdiction']['mean_excess']*100:+.1f}%. Verdict: NANC and KRUZ should not be held.
   </p>
 </div>
 
@@ -948,37 +951,50 @@ new Chart(document.getElementById('lagChart'), {{
   }}
 }});
 
-// Section 04: trade-date vs disclosure-date
+// Section 04: realized returns
 const tvdLabels = {tvd_labels};
 const tvdDisc = {tvd_disc};
 const tvdTrade = {tvd_trade};
 new Chart(document.getElementById('tvdChart'), {{
-  type: 'bar',
+  type: 'line',
   data: {{
     labels: tvdLabels,
     datasets: [
       {{
-        label: 'Disclosure-date entry',
-        data: tvdDisc.map(v => v === null ? null : v * 100),
-        backgroundColor: 'rgba(26,92,82,.72)',
-        borderWidth: 0, borderRadius: 2,
+        label: 'Trade-date entry (Politician)',
+        data: tvdTrade.map(v => v === null ? null : v * 100),
+        borderColor: '#dc2626', backgroundColor: 'transparent',
+        borderWidth: 2, pointRadius: 4, tension: 0.35,
       }},
       {{
-        label: 'Trade-date entry',
-        data: tvdTrade.map(v => v === null ? null : v * 100),
-        backgroundColor: 'rgba(220,38,38,.65)',
-        borderWidth: 0, borderRadius: 2,
+        label: 'Disclosure-date entry (Follower)',
+        data: tvdDisc.map(v => v === null ? null : v * 100),
+        borderColor: '#1a5c52', backgroundColor: 'transparent',
+        borderWidth: 2, pointRadius: 4, tension: 0.35,
+      }},
+      {{
+        label: 'Zero',
+        data: tvdLabels.map(() => 0),
+        borderColor: 'rgba(220,38,38,.4)', borderWidth: 1, borderDash: [4, 3], pointRadius: 0,
       }}
     ]
   }},
   options: {{
     responsive: true, maintainAspectRatio: false,
+    interaction: {{ mode: 'index', intersect: false }},
     plugins: {{
-      legend: {{ position: 'top', labels: {{ font: {{ family: 'Inter', size: 11 }}, boxWidth: 18 }} }},
-      tooltip: {{ callbacks: {{ label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(2) + '%' }} }}
+      legend: {{ display: false }},
+      tooltip: {{
+        callbacks: {{
+          label: ctx => {{
+            if (ctx.datasetIndex === 2) return null;
+            return ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(2) + '%';
+          }}
+        }}
+      }}
     }},
     scales: {{
-      x: {{ ticks: TICK, grid: {{ display: false }} }},
+      x: {{ ticks: TICK, grid: GRID }},
       y: {{
         ticks: {{ ...TICK, callback: v => v.toFixed(1) + '%' }},
         grid: GRID,

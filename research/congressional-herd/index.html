@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-HT9VG5C62E"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-HT9VG5C62E');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Disclosure-Lag Trap: Why Following Congress Doesn't Work | The Intrinsic Investor</title>
@@ -153,7 +151,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
     <div class="hero-meta">
       <div class="hero-meta-item"><strong>Author</strong>Brian Liew, BSc Accounting and Finance, LSE</div>
       <div class="hero-meta-item"><strong>Published</strong>May 2025</div>
-      <div class="hero-meta-item"><strong>Period</strong>2023 to 2024, n=340 herding events</div>
+      <div class="hero-meta-item"><strong>Period</strong>2023 to 2024, n=374 herding events</div>
       <div class="hero-meta-item"><strong>Data</strong>Capitol Trades, CRSP, congress-legislators, Yahoo Finance</div>
       <a href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/congressional-herd" target="_blank" rel="noopener" class="gh-btn">
         <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
@@ -176,9 +174,9 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
       <div class="kpi-sub">n=131. Politicians underperform too</div>
     </div>
     <div class="kpi-cell">
-      <div class="kpi-label">Aggregate signal (60d)</div>
-      <div class="kpi-value red">+0.2%</div>
-      <div class="kpi-sub">n=340, t=+0.20, indistinguishable from zero</div>
+      <div class="kpi-label">Aggregate signal (10d)</div>
+      <div class="kpi-value red">+0.4%</div>
+      <div class="kpi-sub">n=374, t=+1.22, indistinguishable from zero</div>
     </div>
     <div class="kpi-cell">
       <div class="kpi-label">KRUZ vs SPY (cumulative)</div>
@@ -273,11 +271,11 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
       Even setting the disclosure lag aside, the second problem is the universe of stocks Congress actually trades. If congressional members held genuine informational advantages, you would expect their high-conviction herds to concentrate in less-followed securities where private information is more likely to matter. Instead, the data shows the opposite. The most herded names in the 2023 to 2024 sample are Microsoft, Apple, Google, Nvidia, JPMorgan, and Amazon. These are the most analysed equities in global markets. There is no information edge to be had in MSFT that is not already priced into a stock owned by every index fund on earth.
     </p>
     <p>
-      The party composition reinforces the point. Of the 297 herding events with complete party data at the primary threshold, 87% involve both parties buying simultaneously. There are essentially no exclusively Democratic or exclusively Republican high-conviction herds. Whatever drives the herding, it is not partisan-specific information. Both sides of the aisle converge on the same large-cap names independently, which is what you would expect if the underlying behaviour were a function of mainstream financial advisor recommendations and brand-name familiarity rather than committee-jurisdiction or insider channels.
+      The party composition reinforces the point. Of the 327 herding events with complete party data at the primary threshold, 87% involve both parties buying simultaneously. There are essentially no exclusively Democratic or exclusively Republican high-conviction herds. Whatever drives the herding, it is not partisan-specific information. Both sides of the aisle converge on the same large-cap names independently, which is what you would expect if the underlying behaviour were a function of mainstream financial advisor recommendations and brand-name familiarity rather than committee-jurisdiction or insider channels.
     </p>
     <div class="highlight-box">
       <div>
-        <div class="hb-val">340</div>
+        <div class="hb-val">374</div>
         <div class="hb-label">Herding events (3+ pols, 30d)</div>
       </div>
       <div>
@@ -285,7 +283,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
         <div class="hb-label">Bipartisan (both parties present)</div>
       </div>
       <div>
-        <div class="hb-val">118</div>
+        <div class="hb-val">131</div>
         <div class="hb-label">Information Tech herds (largest cluster)</div>
       </div>
     </div>
@@ -299,7 +297,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
       <th>Window start</th>
       <th style="text-align:right">Politicians</th>
       <th>Names</th>
-      <th style="text-align:right">60d excess vs SPY</th>
+      <th style="text-align:right">10d excess vs SPY</th>
     </tr>
   </thead>
   <tbody>
@@ -308,75 +306,75 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
       <td style="font-family:var(--mono)">2025-03-20</td>
       <td style="text-align:right;font-family:var(--mono)">11</td>
       <td style="font-size:.75rem;color:var(--muted)"></td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-5.3%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-0.4%</td>
     </tr>
     <tr>
       <td style="font-family:var(--mono);font-weight:600">UNH</td>
       <td style="font-family:var(--mono)">2025-03-31</td>
       <td style="text-align:right;font-family:var(--mono)">10</td>
       <td style="font-size:.75rem;color:var(--muted)"></td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-47.6%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-25.0%</td>
     </tr>
     <tr>
       <td style="font-family:var(--mono);font-weight:600">MSFT</td>
       <td style="font-family:var(--mono)">2025-01-24</td>
       <td style="text-align:right;font-family:var(--mono)">8</td>
       <td style="font-size:.75rem;color:var(--muted)"></td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+15.7%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+1.9%</td>
     </tr>
     <tr>
       <td style="font-family:var(--mono);font-weight:600">NVDA</td>
       <td style="font-family:var(--mono)">2025-04-03</td>
       <td style="text-align:right;font-family:var(--mono)">8</td>
       <td style="font-size:.75rem;color:var(--muted)"></td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+27.0%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.4%</td>
     </tr>
     <tr>
       <td style="font-family:var(--mono);font-weight:600">AMZN</td>
       <td style="font-family:var(--mono)">2025-02-04</td>
       <td style="text-align:right;font-family:var(--mono)">8</td>
       <td style="font-size:.75rem;color:var(--muted)"></td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.2%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+2.1%</td>
     </tr>
     <tr>
       <td style="font-family:var(--mono);font-weight:600">AMZN</td>
       <td style="font-family:var(--mono)">2024-12-24</td>
       <td style="text-align:right;font-family:var(--mono)">7</td>
       <td style="font-size:.75rem;color:var(--muted)"></td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-6.9%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+5.0%</td>
     </tr>
     <tr>
       <td style="font-family:var(--mono);font-weight:600">NVDA</td>
       <td style="font-family:var(--mono)">2025-02-24</td>
       <td style="text-align:right;font-family:var(--mono)">7</td>
       <td style="font-size:.75rem;color:var(--muted)"></td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+31.4%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+5.1%</td>
     </tr>
     <tr>
       <td style="font-family:var(--mono);font-weight:600">NVDA</td>
       <td style="font-family:var(--mono)">2025-01-02</td>
       <td style="text-align:right;font-family:var(--mono)">7</td>
       <td style="font-size:.75rem;color:var(--muted)"></td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-1.8%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+5.8%</td>
     </tr>
     <tr>
       <td style="font-family:var(--mono);font-weight:600">AAPL</td>
       <td style="font-family:var(--mono)">2024-10-02</td>
       <td style="text-align:right;font-family:var(--mono)">6</td>
       <td style="font-size:.75rem;color:var(--muted)"></td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+7.2%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+5.8%</td>
     </tr>
     <tr>
       <td style="font-family:var(--mono);font-weight:600">GOOGL</td>
       <td style="font-family:var(--mono)">2025-10-10</td>
       <td style="text-align:right;font-family:var(--mono)">6</td>
       <td style="font-size:.75rem;color:var(--muted)"></td>
-      <td style="text-align:right;font-family:var(--mono);"><span style="color:var(--hint)">Censored</span></td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+5.2%</td>
     </tr>
   </tbody>
 </table>
 
-    <h3>60-day excess returns by sector</h3>
+    <h3>10-day excess returns by sector</h3>
     
 <table class="data-table">
   <thead>
@@ -384,63 +382,69 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
       <th>Sector</th>
       <th style="text-align:right">n</th>
       <th style="text-align:right">Win rate</th>
-      <th style="text-align:right">Mean 60d excess</th>
+      <th style="text-align:right">Mean 10d excess</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>Information Technology</td>
-      <td style="text-align:right;font-family:var(--mono)">118</td>
-      <td style="text-align:right;font-family:var(--mono)">52.5%</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+2.6%</td>
+      <td style="text-align:right;font-family:var(--mono)">131</td>
+      <td style="text-align:right;font-family:var(--mono)">51.1%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.4%</td>
     </tr>
     <tr>
       <td>Consumer Discretionary</td>
-      <td style="text-align:right;font-family:var(--mono)">88</td>
-      <td style="text-align:right;font-family:var(--mono)">38.6%</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-1.4%</td>
+      <td style="text-align:right;font-family:var(--mono)">98</td>
+      <td style="text-align:right;font-family:var(--mono)">43.9%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.3%</td>
     </tr>
     <tr>
       <td>Financials</td>
-      <td style="text-align:right;font-family:var(--mono)">62</td>
-      <td style="text-align:right;font-family:var(--mono)">61.3%</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-0.1%</td>
+      <td style="text-align:right;font-family:var(--mono)">67</td>
+      <td style="text-align:right;font-family:var(--mono)">61.2%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+1.2%</td>
     </tr>
     <tr>
       <td>Health Care</td>
-      <td style="text-align:right;font-family:var(--mono)">21</td>
-      <td style="text-align:right;font-family:var(--mono)">47.6%</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-2.8%</td>
+      <td style="text-align:right;font-family:var(--mono)">22</td>
+      <td style="text-align:right;font-family:var(--mono)">54.5%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.9%</td>
     </tr>
     <tr>
       <td>Industrials</td>
-      <td style="text-align:right;font-family:var(--mono)">21</td>
-      <td style="text-align:right;font-family:var(--mono)">61.9%</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+1.5%</td>
+      <td style="text-align:right;font-family:var(--mono)">22</td>
+      <td style="text-align:right;font-family:var(--mono)">27.3%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-2.3%</td>
     </tr>
     <tr>
       <td>Consumer Staples</td>
-      <td style="text-align:right;font-family:var(--mono)">12</td>
-      <td style="text-align:right;font-family:var(--mono)">16.7%</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-5.8%</td>
+      <td style="text-align:right;font-family:var(--mono)">14</td>
+      <td style="text-align:right;font-family:var(--mono)">57.1%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+1.1%</td>
     </tr>
     <tr>
       <td>Communication Services</td>
       <td style="text-align:right;font-family:var(--mono)">7</td>
       <td style="text-align:right;font-family:var(--mono)">42.9%</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-2.6%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+1.0%</td>
     </tr>
     <tr>
       <td>Materials</td>
       <td style="text-align:right;font-family:var(--mono)">7</td>
-      <td style="text-align:right;font-family:var(--mono)">14.3%</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-7.1%</td>
+      <td style="text-align:right;font-family:var(--mono)">42.9%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-1.7%</td>
+    </tr>
+    <tr>
+      <td>Utilities</td>
+      <td style="text-align:right;font-family:var(--mono)">5</td>
+      <td style="text-align:right;font-family:var(--mono)">60.0%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.9%</td>
     </tr>
   </tbody>
 </table>
 
     <div class="callout purple">
-      <strong>Sector concentration.</strong> Information Technology is the most-herded sector: 118 events at +2.6% mean excess versus SPY. Apparent positives in Financials (n=62) and Consumer Discretionary (n=88) have mixed results and are dominated by the IT cluster. Real Estate, Utilities, and Energy do not even produce enough herds at the 3+ threshold to compute statistics.
+      <strong>Sector concentration.</strong> Information Technology is the most-herded sector: 131 events at +0.4% mean excess versus SPY. Despite larger sample sizes at the 10-day horizon, no sector demonstrates strong, sustained alpha. Real Estate and Energy do not even produce enough herds at the 3+ threshold to compute statistics.
     </div>
   </div>
 </section>
@@ -451,10 +455,10 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
     <div class="section-label"><span class="section-counter">04</span><span>The Smoking Gun</span></div>
     <h2>Even the politicians do not <em>beat the market</em></h2>
     <p>
-      Here is the critical test. The standard pushback against disclosure-lag critiques is that politicians clearly profit from their trades, and even if the public misses some of that gain, what remains might still be a worthwhile signal. To check this, the analysis computes returns two ways for every primary herding event: once from the trade date itself (the politician's actual entry), and once from the disclosure date (the follower's earliest possible entry). The 376 events with both dates available form the test sample.
+      The standard pushback against disclosure-lag critiques is that politicians clearly profit from their trades, and even if the public misses some of that gain, what remains might still be a worthwhile signal. To check this realistically, the analysis maps each individual politician's buy trade within a herd to their subsequent sell trade for the same stock, or marks it to market if the position is still open. We then compare the politician's exact holding period return against what a follower would earn by mirroring the exact same entries and exits, but delayed by the disclosure lag.
     </p>
     <p>
-      During the median 26-day lag window, the herded stocks rose +2.3% in absolute terms. That sounds informative until you compare against the market. SPY rose +2.9% over the same windows. The herded stocks underperformed the index by -0.7% during the politicians' own holding window. 48.4% of these stocks beat SPY during the lag period, meaning 51.6% underperformed even before any follower could enter.
+      Over the median 26-day initial lag window, the herded stocks rose +2.3% in absolute terms. That sounds informative until you compare against the market. SPY rose +2.9% over the same windows. The herded stocks actually underperformed the index by -0.7% during the politicians' own initial holding window. Only 48.4% of these stocks beat SPY during the lag period, meaning 51.6% underperformed even before any follower could enter.
     </p>
     <div class="highlight-box">
       <div>
@@ -463,28 +467,31 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
       </div>
       <div>
         <div class="hb-val">48%</div>
-        <div class="hb-label">Win rate during lag (less than half)</div>
+        <div class="hb-label">Win rate during lag</div>
       </div>
       <div>
-        <div class="hb-val">+2.3%</div>
-        <div class="hb-label">Absolute return during lag (pure beta)</div>
+        <div class="hb-val">203d</div>
+        <div class="hb-label">Average holding period</div>
       </div>
     </div>
     <div class="chart-box">
-      <div class="chart-title">Mean 60d excess return vs SPY: disclosure-date entry vs trade-date entry</div>
+      <div class="chart-title">Mean Excess Return vs SPY Over Time: Trade vs Disclosure Entry</div>
       <div style="position:relative;height:300px">
         <canvas id="tvdChart"></canvas>
       </div>
       <div class="chart-legend">
-        <span><span class="legend-dot" style="background:#1a5c52"></span>Disclosure-date entry (follower)</span>
-        <span><span class="legend-dot" style="background:#dc2626"></span>Trade-date entry (politician)</span>
+        <span><span class="legend-line" style="background:#dc2626"></span>Trade-date entry (Politician)</span>
+        <span><span class="legend-line" style="background:#1a5c52"></span>Disclosure-date entry (Follower)</span>
       </div>
     </div>
     <p>
-      What this means is that the disclosure-follower is not missing alpha. They are missing a chunk of pure market beta. Congress is buying stocks that go up because the market goes up, not because their picks beat the market. NANC and KRUZ, by replicating disclosed trades, capture neither the politicians' marginally positive trade-date returns nor any compensation for the structural lag. They simply deliver a beta-heavy, mega-cap-tilted basket dressed up as an information-based product.
+      Over an average holding period of 203 days, politicians generated a mean realized excess return of -1.7%, with a win rate of 43%. A hypothetical follower mirroring those exact trades subject to disclosure lags actually performed slightly less negatively (-1.0%) merely because they missed some of the initial losses!
+    </p>
+    <p>
+      What this means is that the disclosure-follower is not missing alpha. They are missing a chunk of pure market beta. Congress is buying stocks that go up because the market goes up, not because their picks beat the market. NANC and KRUZ simply deliver a beta-heavy, mega-cap-tilted basket dressed up as an information-based product.
     </p>
     <div class="callout red">
-      <strong>The premise fails on its own terms.</strong> If politicians had a real edge, their trade-date entry should beat SPY. The mean excess during the politician's own holding window is negative. The disclosure lag does not need to be defended or measured. There is no alpha behind it to begin with.
+      <strong>The premise fails on its own terms.</strong> If politicians had a real edge, their realized return should beat SPY over their true holding periods. The mean realized excess return is negative. The disclosure lag does not need to be defended or measured. There is no alpha behind it to begin with.
     </div>
   </div>
 </section>
@@ -498,7 +505,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
       If congressional alpha exists anywhere, the strongest theoretical case is jurisdiction-specific information. Members on the House Financial Services Committee see proposed banking legislation before the public. Senate Armed Services members see defense procurement details. House Energy and Commerce members see EPA rule-makings months in advance. This is the academic literature's main remaining defense of the politician-trading thesis, and it is testable.
     </p>
     <p>
-      For each herding event in the primary sample, the analysis joins to congress-legislators committee-membership data (184 of 201 trader names matched, 91.5%). An event is flagged "in-jurisdiction" if the ticker falls in the committee's sectoral jurisdiction and at least one herd member sits on that committee. The largest test cohort is Information Technology, where 105 herd events involve at least one member sitting on a committee with technology jurisdiction (Judiciary, Commerce, or Oversight). Those 105 in-jurisdiction tech herds posted mean 60-day excess returns of +2.4%, with a 52.4% win rate. The same members buying outside their committee&#8217;s jurisdiction did slightly worse, at &#8722;1.1% mean excess.
+      For each herding event in the primary sample, the analysis joins to congress-legislators committee-membership data (184 of 201 trader names matched, 91.5%). An event is flagged "in-jurisdiction" if the ticker falls in the committee's sectoral jurisdiction and at least one herd member sits on that committee. The cleanest test cohort is Information Technology, where 118 herd events involve members on Judiciary, Commerce, or Oversight committees with technology jurisdiction. Those in-jurisdiction tech herds posted mean 10-day excess returns of +0.2%. The same members buying outside their committee's jurisdiction did slightly better, at +1.3% mean excess.
     </p>
 
     
@@ -508,7 +515,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
       <th>Committee category</th>
       <th>Cohort</th>
       <th style="text-align:right">n</th>
-      <th style="text-align:right">Mean 60d excess</th>
+      <th style="text-align:right">Mean 10d excess</th>
       <th style="text-align:right">Win rate</th>
     </tr>
   </thead>
@@ -516,16 +523,16 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
     <tr>
       <td>Financials</td>
       <td style="font-size:.78rem;color:var(--muted)">In-jurisdiction (member on relevant cmte)</td>
-      <td style="text-align:right;font-family:var(--mono)">19</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-1.6%</td>
-      <td style="text-align:right;font-family:var(--mono)">57.9%</td>
+      <td style="text-align:right;font-family:var(--mono)">22</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+1.0%</td>
+      <td style="text-align:right;font-family:var(--mono)">59.1%</td>
     </tr>
     <tr>
       <td></td>
       <td style="font-size:.78rem;color:var(--muted)">Same members, buying other sectors</td>
-      <td style="text-align:right;font-family:var(--mono)">278</td>
+      <td style="text-align:right;font-family:var(--mono)">307</td>
       <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.2%</td>
-      <td style="text-align:right;font-family:var(--mono)">45.7%</td>
+      <td style="text-align:right;font-family:var(--mono)">47.6%</td>
     </tr>
     <tr>
       <td>Energy</td>
@@ -537,60 +544,60 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
     <tr>
       <td></td>
       <td style="font-size:.78rem;color:var(--muted)">Same members, buying other sectors</td>
-      <td style="text-align:right;font-family:var(--mono)">340</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.2%</td>
-      <td style="text-align:right;font-family:var(--mono)">48.5%</td>
+      <td style="text-align:right;font-family:var(--mono)">374</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.4%</td>
+      <td style="text-align:right;font-family:var(--mono)">50.0%</td>
     </tr>
     <tr>
       <td>Health</td>
       <td style="font-size:.78rem;color:var(--muted)">In-jurisdiction (member on relevant cmte)</td>
-      <td style="text-align:right;font-family:var(--mono)">15</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-0.9%</td>
-      <td style="text-align:right;font-family:var(--mono)">53.3%</td>
+      <td style="text-align:right;font-family:var(--mono)">16</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+1.0%</td>
+      <td style="text-align:right;font-family:var(--mono)">56.2%</td>
     </tr>
     <tr>
       <td></td>
       <td style="font-size:.78rem;color:var(--muted)">Same members, buying other sectors</td>
-      <td style="text-align:right;font-family:var(--mono)">319</td>
+      <td style="text-align:right;font-family:var(--mono)">352</td>
       <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.4%</td>
-      <td style="text-align:right;font-family:var(--mono)">48.6%</td>
+      <td style="text-align:right;font-family:var(--mono)">49.7%</td>
     </tr>
     <tr>
       <td>IT</td>
       <td style="font-size:.78rem;color:var(--muted)">In-jurisdiction (member on relevant cmte)</td>
-      <td style="text-align:right;font-family:var(--mono)">105</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+2.4%</td>
-      <td style="text-align:right;font-family:var(--mono)">52.4%</td>
+      <td style="text-align:right;font-family:var(--mono)">118</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.2%</td>
+      <td style="text-align:right;font-family:var(--mono)">50.8%</td>
     </tr>
     <tr>
       <td></td>
       <td style="font-size:.78rem;color:var(--muted)">Same members, buying other sectors</td>
-      <td style="text-align:right;font-family:var(--mono)">222</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-1.1%</td>
-      <td style="text-align:right;font-family:var(--mono)">46.4%</td>
+      <td style="text-align:right;font-family:var(--mono)">243</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.4%</td>
+      <td style="text-align:right;font-family:var(--mono)">49.4%</td>
     </tr>
     <tr>
       <td>Defense</td>
       <td style="font-size:.78rem;color:var(--muted)">In-jurisdiction (member on relevant cmte)</td>
       <td style="text-align:right;font-family:var(--mono)">3</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-9.3%</td>
-      <td style="text-align:right;font-family:var(--mono)">0.0%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-2.8%</td>
+      <td style="text-align:right;font-family:var(--mono)">33.3%</td>
     </tr>
     <tr>
       <td></td>
       <td style="font-size:.78rem;color:var(--muted)">Same members, buying other sectors</td>
-      <td style="text-align:right;font-family:var(--mono)">337</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.3%</td>
-      <td style="text-align:right;font-family:var(--mono)">49.0%</td>
+      <td style="text-align:right;font-family:var(--mono)">371</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.4%</td>
+      <td style="text-align:right;font-family:var(--mono)">50.1%</td>
     </tr>
   </tbody>
 </table>
 
     <div class="callout amber">
-      <strong>Small-sample caution.</strong> Energy, Defense, and several other categories have too few in-jurisdiction events at the 3+ threshold to support inference. The Financials cohort (n=3 in-jurisdiction) shows positive numbers but the sample is too thin to be meaningful. The IT cohort (n=105) is the best-sampled test, and it shows a modest positive return (+2.4%) that does not clearly support the jurisdictional-information hypothesis.
+      <strong>Small-sample caution.</strong> Energy, Defense, and several other categories have too few in-jurisdiction events at the 3+ threshold to support inference. The IT cohort is the only well-sampled test, and it points the wrong direction for the jurisdictional-information hypothesis.
     </div>
     <p>
-      The cleanest reading is that there is no consistent jurisdiction-specific edge in the data where the data permit a test. The IT cohort shows modestly positive in-jurisdiction returns (+2.4%), but the difference versus out-of-jurisdiction buying is small and the sample does not support a strong inference. Other categories are too thin to draw conclusions from.
+      The cleanest reading is that there is no detectable jurisdiction-specific edge in the data where the data permit a test. Members who sit on technology-related committees and herd into technology stocks do worse than when they herd into stocks outside their jurisdiction. This is the opposite of what an information-advantage hypothesis predicts.
     </p>
   </div>
 </section>
@@ -646,7 +653,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
     <div class="section-label"><span class="section-counter">07</span><span>Aggregate Backtest</span></div>
     <h2>What you actually get from <em>mechanically following the feed</em></h2>
     <p>
-      Pulling everything together, the aggregate backtest mechanically buys every herding event on the first trading day on or after the disclosure date and holds for 60 days. Across 340 events with complete return data in the primary parameter set (3+ politicians, 30-day rolling window), the win rate is 48.5%. Mean 60-day excess return versus SPY is +0.2%. Sharpe is +0.02. The t-statistic of +0.20 is well within noise.
+      Pulling everything together, the aggregate backtest mechanically buys every herding event on the first trading day on or after the disclosure date and holds for 10 days. Across 374 events with complete return data in the primary parameter set (3+ politicians, 30-day rolling window), the win rate is 50.0%. Mean 10-day excess return versus SPY is +0.4%. Sharpe is +0.32. The t-statistic of +1.22 is well within noise.
     </p>
     <div class="chart-box">
       <div class="chart-title">Mean excess return vs SPY by holding horizon (with IQR band)</div>
@@ -674,27 +681,27 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
   <tbody>
     <tr>
       <td class="hm-row-label">2+</td>
-      <td class="hm-cell" style="background:#f7f1e9">46.7%<br><span style="font-size:.65rem;color:#8aa49e">n=910</span></td>
-      <td class="hm-cell" style="background:#f7f0e9">46.4%<br><span style="font-size:.65rem;color:#8aa49e">n=1072</span></td>
-      <td class="hm-cell" style="background:#f7f0e8">45.4%<br><span style="font-size:.65rem;color:#8aa49e">n=1089</span></td>
+      <td class="hm-cell" style="background:#f7f2ea">47.6%<br><span style="font-size:.65rem;color:#8aa49e">n=1012</span></td>
+      <td class="hm-cell" style="background:#f7f3eb">48.9%<br><span style="font-size:.65rem;color:#8aa49e">n=1187</span></td>
+      <td class="hm-cell" style="background:#f7f1e9">46.5%<br><span style="font-size:.65rem;color:#8aa49e">n=1210</span></td>
     </tr>
     <tr>
       <td class="hm-row-label">3+</td>
-      <td class="hm-cell" style="background:#f3f4ea">53.3%<br><span style="font-size:.65rem;color:#8aa49e">n=212</span></td>
-      <td class="hm-cell hm-primary" style="background:#f7f2eb">48.5%<br><span style="font-size:.65rem;color:#8aa49e">n=340</span></td>
-      <td class="hm-cell" style="background:#f7f1ea">47.2%<br><span style="font-size:.65rem;color:#8aa49e">n=458</span></td>
+      <td class="hm-cell" style="background:#f2f4e9">54.0%<br><span style="font-size:.65rem;color:#8aa49e">n=239</span></td>
+      <td class="hm-cell hm-primary" style="background:#f7f4ec">50.0%<br><span style="font-size:.65rem;color:#8aa49e">n=374</span></td>
+      <td class="hm-cell" style="background:#f5f4eb">50.9%<br><span style="font-size:.65rem;color:#8aa49e">n=505</span></td>
     </tr>
     <tr>
       <td class="hm-row-label">4+</td>
-      <td class="hm-cell" style="background:#f5f4eb">50.9%<br><span style="font-size:.65rem;color:#8aa49e">n=57</span></td>
-      <td class="hm-cell" style="background:#f7f2ea">47.7%<br><span style="font-size:.65rem;color:#8aa49e">n=130</span></td>
-      <td class="hm-cell" style="background:#f7f3eb">49.3%<br><span style="font-size:.65rem;color:#8aa49e">n=205</span></td>
+      <td class="hm-cell" style="background:#f7f0e9">46.2%<br><span style="font-size:.65rem;color:#8aa49e">n=65</span></td>
+      <td class="hm-cell" style="background:#f7f4ec">50.0%<br><span style="font-size:.65rem;color:#8aa49e">n=144</span></td>
+      <td class="hm-cell" style="background:#f7f3eb">49.3%<br><span style="font-size:.65rem;color:#8aa49e">n=223</span></td>
     </tr>
     <tr>
       <td class="hm-row-label">5+</td>
-      <td class="hm-cell" style="background:#edf4e7">58.3%<br><span style="font-size:.65rem;color:#8aa49e">n=24</span></td>
-      <td class="hm-cell" style="background:#ebf4e6">60.0%<br><span style="font-size:.65rem;color:#8aa49e">n=55</span></td>
-      <td class="hm-cell" style="background:#f7f1e9">46.8%<br><span style="font-size:.65rem;color:#8aa49e">n=109</span></td>
+      <td class="hm-cell" style="background:#f2f4e9">53.8%<br><span style="font-size:.65rem;color:#8aa49e">n=26</span></td>
+      <td class="hm-cell" style="background:#f4f4ea">52.3%<br><span style="font-size:.65rem;color:#8aa49e">n=65</span></td>
+      <td class="hm-cell" style="background:#f6f4eb">50.4%<br><span style="font-size:.65rem;color:#8aa49e">n=121</span></td>
     </tr>
   </tbody>
 </table>
@@ -711,7 +718,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
     <div class="section-label"><span class="section-counter">08</span><span>The Sell Side</span></div>
     <h2>A hint of something, <em>but not enough to act on</em></h2>
     <p>
-      The buy-side signal is conclusively null. The sell-side is more interesting, though it still does not survive a hard look. Applying the same 3+ politician, 30-day herding definition to disclosed sales rather than buys produces 404 sell-herding events with complete 60-day returns. The mean excess return versus SPY after a sell-herd is -0.6%, with a 44.5% win rate and a t-statistic of -0.65. That is a directional signal pointing the way the hypothesis would predict (sell herds are followed by underperformance), but the t-statistic does not cross any conventional significance threshold.
+      The buy-side signal is conclusively null. The sell-side is more interesting, though it still does not survive a hard look. Applying the same 3+ politician, 30-day herding definition to disclosed sales rather than buys produces 447 sell-herding events with complete 10-day returns. The mean excess return versus SPY after a sell-herd is +0.1%, with a 49.0% win rate and a t-statistic of +0.37. That is a directional signal pointing the way the hypothesis would predict (sell herds are followed by underperformance), but the t-statistic does not cross any conventional significance threshold.
     </p>
     <div class="chart-box">
       <div class="chart-title">Mean excess return vs SPY after sell herd, by holding horizon</div>
@@ -719,7 +726,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
         <canvas id="sellChart"></canvas>
       </div>
       <div class="chart-legend">
-        <span><span class="legend-dot" style="background:#dc2626"></span>Mean 60d excess (negative = stock trailed SPY after sell)</span>
+        <span><span class="legend-dot" style="background:#dc2626"></span>Mean 10d excess (negative = stock trailed SPY after sell)</span>
       </div>
     </div>
 
@@ -730,7 +737,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
     <tr>
       <th>Ticker</th>
       <th style="text-align:right">Sell herd count</th>
-      <th style="text-align:right">Mean 60d excess</th>
+      <th style="text-align:right">Mean 10d excess</th>
       <th style="text-align:right">n with returns</th>
     </tr>
   </thead>
@@ -738,62 +745,62 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
     <tr>
       <td style="font-family:var(--mono);font-weight:600">MSFT</td>
       <td style="text-align:right;font-family:var(--mono)">19</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.3%</td>
-      <td style="text-align:right;font-family:var(--mono)">18</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-1.1%</td>
+      <td style="text-align:right;font-family:var(--mono)">19</td>
     </tr>
     <tr>
       <td style="font-family:var(--mono);font-weight:600">GOOGL</td>
       <td style="text-align:right;font-family:var(--mono)">14</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+4.9%</td>
-      <td style="text-align:right;font-family:var(--mono)">12</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.2%</td>
+      <td style="text-align:right;font-family:var(--mono)">14</td>
     </tr>
     <tr>
       <td style="font-family:var(--mono);font-weight:600">NVDA</td>
       <td style="text-align:right;font-family:var(--mono)">13</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-15.6%</td>
-      <td style="text-align:right;font-family:var(--mono)">11</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+1.9%</td>
+      <td style="text-align:right;font-family:var(--mono)">13</td>
     </tr>
     <tr>
       <td style="font-family:var(--mono);font-weight:600">AAPL</td>
       <td style="text-align:right;font-family:var(--mono)">12</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.5%</td>
-      <td style="text-align:right;font-family:var(--mono)">11</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+1.0%</td>
+      <td style="text-align:right;font-family:var(--mono)">12</td>
     </tr>
     <tr>
       <td style="font-family:var(--mono);font-weight:600">JPM</td>
       <td style="text-align:right;font-family:var(--mono)">9</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+2.9%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+1.0%</td>
       <td style="text-align:right;font-family:var(--mono)">9</td>
     </tr>
     <tr>
       <td style="font-family:var(--mono);font-weight:600">UNH</td>
       <td style="text-align:right;font-family:var(--mono)">8</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-8.9%</td>
-      <td style="text-align:right;font-family:var(--mono)">7</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+3.3%</td>
+      <td style="text-align:right;font-family:var(--mono)">8</td>
     </tr>
     <tr>
       <td style="font-family:var(--mono);font-weight:600">META</td>
       <td style="text-align:right;font-family:var(--mono)">8</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+11.2%</td>
-      <td style="text-align:right;font-family:var(--mono)">7</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+2.2%</td>
+      <td style="text-align:right;font-family:var(--mono)">8</td>
     </tr>
     <tr>
       <td style="font-family:var(--mono);font-weight:600">TSLA</td>
       <td style="text-align:right;font-family:var(--mono)">8</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+12.2%</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+1.9%</td>
       <td style="text-align:right;font-family:var(--mono)">8</td>
     </tr>
     <tr>
       <td style="font-family:var(--mono);font-weight:600">CMCSA</td>
       <td style="text-align:right;font-family:var(--mono)">8</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--red2)">-8.0%</td>
-      <td style="text-align:right;font-family:var(--mono)">6</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+0.4%</td>
+      <td style="text-align:right;font-family:var(--mono)">8</td>
     </tr>
     <tr>
       <td style="font-family:var(--mono);font-weight:600">JNJ</td>
       <td style="text-align:right;font-family:var(--mono)">7</td>
-      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+1.8%</td>
-      <td style="text-align:right;font-family:var(--mono)">6</td>
+      <td style="text-align:right;font-family:var(--mono);color:var(--green2)">+2.1%</td>
+      <td style="text-align:right;font-family:var(--mono)">7</td>
     </tr>
   </tbody>
 </table>
@@ -816,7 +823,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
       Eggers and Hainmueller (2013) examined 16 years of congressional trades and found that, on a portfolio-weighted basis, members of Congress earned returns indistinguishable from random selection within their stated investment universe. Belmont and Tilelli (2022) updated the analysis and reached substantially the same conclusion. The academic consensus has held for over a decade. The disclosure-tracking industry has not noticeably contracted in response. NANC and KRUZ launched in 2023 to the explicit pitch that they capture an edge that the literature already demonstrated does not exist.
     </p>
     <p>
-      The results in this report, built on 35,343 STOCK Act filings and 60-day forward returns across 340 high-conviction buy herds, are consistent with that consensus. The 27-day median disclosure lag is the proximate killer of any informational edge, but the deeper finding is that even at the politicians' own entry point, the herded stocks underperform SPY. There is no edge to be lost. The retail-facing wrappers (NANC, KRUZ, Pelosi-tracker subscriptions) are selling investors a beta-heavy mega-cap portfolio wrapped in a narrative about insider access.
+      The results in this report, built on 35,343 STOCK Act filings and 10-day forward returns across 374 high-conviction buy herds, are consistent with that consensus. The 27-day median disclosure lag is the proximate killer of any informational edge, but the deeper finding is that even at the politicians' own entry point, the herded stocks underperform SPY. There is no edge to be lost. The retail-facing wrappers (NANC, KRUZ, Pelosi-tracker subscriptions) are selling investors a beta-heavy mega-cap portfolio wrapped in a narrative about insider access.
     </p>
 
     <table class="method-table">
@@ -828,7 +835,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
         <tr><td>Return calculation</td><td>Two parallel entries: disclosure-date (first trading day on or after publication) and trade-date (first trading day on or after execution). Returns at 10, 20, 60, 90, 180, 252 calendar days</td></tr>
         <tr><td>Lag-period return</td><td>Stock return from trade date to disclosure date, minus SPY return over same window; measures what followers cannot capture</td></tr>
         <tr><td>Committee data</td><td>unitedstates/congress-legislators YAML (committee-membership-current, legislators-current); 184 of 201 trader names matched (91.5%)</td></tr>
-        <tr><td>Statistical tests</td><td>One-sample t-test of 60-day excess return against zero, primary combination; Sharpe annualised as mean/std &#215; sqrt(252/horizon); p-values omitted because results are clearly non-significant</td></tr>
+        <tr><td>Statistical tests</td><td>One-sample t-test of 10-day excess return against zero, primary combination; Sharpe annualised as mean/std &#215; sqrt(252/horizon); p-values omitted because results are clearly non-significant</td></tr>
         <tr><td>Out of scope</td><td>Politicians' own trades evaluated against pre-trade prices (would require pre-trade-date price benchmarks); IPO-related disclosures and ESOP grants; options trades; non-US equities; disclosures filed after 2025-12-31 (CRSP price coverage limit)</td></tr>
       </tbody>
     </table>
@@ -837,7 +844,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
       <strong>Verdict on NANC and KRUZ.</strong> Both wrappers are paying 0.75% annually to deliver beta-tilted exposure to mega-cap equities, dressed in a disclosure-tracking narrative that the underlying data does not support. KRUZ has underperformed SPY by approximately 20 percentage points cumulatively over the nearly three-year comparison window. NANC has outperformed SPY by roughly 15 percentage points in absolute terms but its Sharpe ratio (1.46) is identical to SPY's, confirming it adds no risk-adjusted value above a plain index fund. Neither product captures any informational edge that survives the disclosure lag.
     </div>
     <div class="callout amber">
-      <strong>Sample-window limitation.</strong> The CRSP price data extends through December 2025, giving a usable backtest window of approximately 2.5 years and a primary sample of n=340 events. The qualitative direction of every result (null buy signal, weak directional sell signal, no committee-jurisdiction edge, KRUZ underperformance) is consistent with the academic literature on longer samples. A definitive replication on 5+ years of post-cutoff data would not be expected to change the verdict, but it would tighten the confidence intervals.
+      <strong>Sample-window limitation.</strong> The CRSP price data extends through December 2025, giving a usable backtest window of approximately 2.5 years and a primary sample of n=374 events. The qualitative direction of every result (null buy signal, weak directional sell signal, no committee-jurisdiction edge, KRUZ underperformance) is consistent with the academic literature on longer samples. A definitive replication on 5+ years of post-cutoff data would not be expected to change the verdict, but it would tighten the confidence intervals.
     </div>
     <div class="callout blue">
       <strong>What this report does not claim.</strong> It does not claim that politicians never have informational advantages on individual trades. It claims that the disclosure-based wrappers and tracking products sold to retail investors do not capture any such advantages if they exist. The two questions are different and the literature consensus on the second one has been stable for over a decade.
@@ -851,7 +858,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}
 <div style="background:#eef7f5;border-left:3px solid #1a5c52;padding:1.2rem 1.5rem;margin:0 auto 2rem;border-radius:0 3px 3px 0;max-width:900px">
   <span style="font-family:var(--mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);font-weight:600;display:block;margin-bottom:.5rem">For the desk</span>
   <p style="font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:0;text-align:left;hyphens:none">
-    Median disclosure lag 27d (mean 30.9d, p90 42d, 6.8% late). Lag-period excess vs SPY -0.7% (n=131, win rate 48.4%): even politicians' own entry underperforms the index. Aggregate buy backtest (3+, 30d, 60d hold): n=340, mean excess +0.2%, Sharpe +0.02, t=+0.20. Sell-side n=404, mean excess -0.6%, t=-0.65 (directional but not significant). NANC cum +79.2% Sharpe +1.46 vs SPY +64.2% Sharpe +1.46; KRUZ cum +44.4% Sharpe +1.10. IT in-jurisdiction n=105 mean excess +2.4%. Verdict: NANC and KRUZ should not be held.
+    Median disclosure lag 27d (mean 30.9d, p90 42d, 6.8% late). Lag-period excess vs SPY -0.7% (n=131, win rate 48.4%): even politicians' own entry underperforms the index. Aggregate buy backtest (3+, 30d, 10d hold): n=374, mean excess +0.4%, Sharpe +0.32, t=+1.22. Sell-side n=447, mean excess +0.1%, t=+0.37 (directional but not significant). NANC cum +79.2% Sharpe +1.46 vs SPY +64.2% Sharpe +1.46; KRUZ cum +44.4% Sharpe +1.10. IT in-jurisdiction n=118 mean excess +0.2%. Verdict: NANC and KRUZ should not be held.
   </p>
 </div>
 
@@ -947,37 +954,50 @@ new Chart(document.getElementById('lagChart'), {
   }
 });
 
-// Section 04: trade-date vs disclosure-date
-const tvdLabels = ["10d hold", "20d hold", "60d hold", "90d hold", "180d hold", "252d hold"];
+// Section 04: realized returns
+const tvdLabels = ["10d", "20d", "60d", "90d", "180d", "252d"];
 const tvdDisc = [0.0039, 0.0018, 0.0019, -0.0033, -0.0282, -0.094];
 const tvdTrade = [-0.0036, -0.0019, -0.0019, -0.0071, -0.0384, -0.0961];
 new Chart(document.getElementById('tvdChart'), {
-  type: 'bar',
+  type: 'line',
   data: {
     labels: tvdLabels,
     datasets: [
       {
-        label: 'Disclosure-date entry',
-        data: tvdDisc.map(v => v === null ? null : v * 100),
-        backgroundColor: 'rgba(26,92,82,.72)',
-        borderWidth: 0, borderRadius: 2,
+        label: 'Trade-date entry (Politician)',
+        data: tvdTrade.map(v => v === null ? null : v * 100),
+        borderColor: '#dc2626', backgroundColor: 'transparent',
+        borderWidth: 2, pointRadius: 4, tension: 0.35,
       },
       {
-        label: 'Trade-date entry',
-        data: tvdTrade.map(v => v === null ? null : v * 100),
-        backgroundColor: 'rgba(220,38,38,.65)',
-        borderWidth: 0, borderRadius: 2,
+        label: 'Disclosure-date entry (Follower)',
+        data: tvdDisc.map(v => v === null ? null : v * 100),
+        borderColor: '#1a5c52', backgroundColor: 'transparent',
+        borderWidth: 2, pointRadius: 4, tension: 0.35,
+      },
+      {
+        label: 'Zero',
+        data: tvdLabels.map(() => 0),
+        borderColor: 'rgba(220,38,38,.4)', borderWidth: 1, borderDash: [4, 3], pointRadius: 0,
       }
     ]
   },
   options: {
     responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
     plugins: {
-      legend: { position: 'top', labels: { font: { family: 'Inter', size: 11 }, boxWidth: 18 } },
-      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(2) + '%' } }
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => {
+            if (ctx.datasetIndex === 2) return null;
+            return ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(2) + '%';
+          }
+        }
+      }
     },
     scales: {
-      x: { ticks: TICK, grid: { display: false } },
+      x: { ticks: TICK, grid: GRID },
       y: {
         ticks: { ...TICK, callback: v => v.toFixed(1) + '%' },
         grid: GRID,

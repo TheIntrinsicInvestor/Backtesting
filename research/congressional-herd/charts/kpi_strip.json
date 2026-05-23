@@ -1,7 +1,7 @@
 {
-  "n_events": 340,
-  "win_rate_60d": 0.4853,
-  "mean_excess_60d": 0.0019,
-  "sharpe_60d": 0.0217,
-  "t_stat_60d": 0.1952
+  "n_events": 374,
+  "win_rate_10d": 0.5,
+  "mean_excess_10d": 0.0039,
+  "sharpe_10d": 0.3158,
+  "t_stat_10d": 1.2164
 }

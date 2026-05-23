@@ -36,5 +36,11 @@
   "lag_period_mean_return": 0.0227,
   "lag_period_mean_excess": -0.0067,
   "lag_period_median_excess": -0.0021,
-  "lag_period_win_rate": 0.484
+  "lag_period_win_rate": 0.484,
+  "realized_n": 374,
+  "realized_trade_mean": -0.0173,
+  "realized_trade_winrate": 0.4305,
+  "realized_disc_mean": -0.0097,
+  "realized_disc_winrate": 0.4171,
+  "realized_hold_days": 203.6686
 }
