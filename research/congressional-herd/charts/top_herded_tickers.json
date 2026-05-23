@@ -1,33 +1,57 @@
 [
   {
+    "ticker": "MSFT",
+    "event_count": 21,
+    "mean_excess_10d": -0.0194,
+    "n_with_returns": 20
+  },
+  {
     "ticker": "GOOGL",
-    "event_count": 15,
-    "mean_excess_10d": 0.0012,
-    "n_with_returns": 14
+    "event_count": 17,
+    "mean_excess_10d": -0.001,
+    "n_with_returns": 17
   },
   {
     "ticker": "AAPL",
-    "event_count": 15,
-    "mean_excess_10d": 0.0016,
-    "n_with_returns": 15
-  },
-  {
-    "ticker": "MSFT",
-    "event_count": 15,
-    "mean_excess_10d": -0.0095,
-    "n_with_returns": 14
+    "event_count": 17,
+    "mean_excess_10d": 0.0043,
+    "n_with_returns": 17
   },
   {
     "ticker": "NVDA",
-    "event_count": 13,
-    "mean_excess_10d": 0.0191,
-    "n_with_returns": 13
+    "event_count": 15,
+    "mean_excess_10d": 0.019,
+    "n_with_returns": 15
   },
   {
     "ticker": "JPM",
+    "event_count": 14,
+    "mean_excess_10d": 0.0153,
+    "n_with_returns": 14
+  },
+  {
+    "ticker": "UNH",
     "event_count": 12,
-    "mean_excess_10d": 0.0227,
+    "mean_excess_10d": -0.0145,
+    "n_with_returns": 11
+  },
+  {
+    "ticker": "HD",
+    "event_count": 12,
+    "mean_excess_10d": -0.0108,
     "n_with_returns": 12
+  },
+  {
+    "ticker": "AMZN",
+    "event_count": 12,
+    "mean_excess_10d": 0.0129,
+    "n_with_returns": 11
+  },
+  {
+    "ticker": "META",
+    "event_count": 11,
+    "mean_excess_10d": -0.0282,
+    "n_with_returns": 11
   },
   {
     "ticker": "JNJ",
@@ -36,28 +60,22 @@
     "n_with_returns": 10
   },
   {
-    "ticker": "HD",
-    "event_count": 9,
-    "mean_excess_10d": -0.0095,
-    "n_with_returns": 9
-  },
-  {
-    "ticker": "META",
-    "event_count": 9,
-    "mean_excess_10d": -0.0182,
-    "n_with_returns": 9
-  },
-  {
-    "ticker": "UNH",
-    "event_count": 9,
-    "mean_excess_10d": -0.0289,
-    "n_with_returns": 9
-  },
-  {
-    "ticker": "AMZN",
+    "ticker": "V",
     "event_count": 8,
-    "mean_excess_10d": 0.0185,
+    "mean_excess_10d": 0.0101,
     "n_with_returns": 8
+  },
+  {
+    "ticker": "AVGO",
+    "event_count": 8,
+    "mean_excess_10d": -0.0013,
+    "n_with_returns": 8
+  },
+  {
+    "ticker": "AMD",
+    "event_count": 7,
+    "mean_excess_10d": 0.0217,
+    "n_with_returns": 6
   },
   {
     "ticker": "MRK",
@@ -70,23 +88,5 @@
     "event_count": 6,
     "mean_excess_10d": 0.0888,
     "n_with_returns": 6
-  },
-  {
-    "ticker": "AVGO",
-    "event_count": 6,
-    "mean_excess_10d": 0.0117,
-    "n_with_returns": 6
-  },
-  {
-    "ticker": "AMD",
-    "event_count": 5,
-    "mean_excess_10d": 0.0142,
-    "n_with_returns": 5
-  },
-  {
-    "ticker": "AMAT",
-    "event_count": 5,
-    "mean_excess_10d": -0.047,
-    "n_with_returns": 5
   }
 ]

@@ -9,7 +9,7 @@
 **Key methodological choices locked in via interview:**
 - **Direction:** Buy-side herds only (long entries)
 - **Entry:** Day the N-th politician's trade is *disclosed* (Capitol Trades "Filed" date) — not the trade date itself, to avoid look-ahead bias. Requires re-scraping Capitol Trades to capture disclosure dates.
-- **Holding periods:** 10d, 20d, 60d, 90d, 180d, 252d
+- **Holding periods:** 10d, 20d, 10d, 90d, 180d, 252d
 - **Benchmark:** Absolute return + excess-over-SPY (both reported)
 - **Universe filter:** Drop ETFs and mutual funds; keep N/A-excluded; keep all market caps
 - **Price source:** WRDS CRSP `dsf` (gold-standard, handles delistings)
@@ -73,7 +73,7 @@ Mirrors the `research/earnings-vol-cycle/01_universe.py … 07_build_report.py` 
 **Inputs:** `data/events_buy.parquet`, `data/crsp_prices.parquet`
 **Logic:**
 1. For each event, define entry as **first CRSP trading day on or after `entry_disclosure_date`** (handle weekends/holidays).
-2. Compute prices: `P_entry`, `P_entry+10d`, `P_entry+20d`, `P_entry+60d`, `P_entry+90d`, `P_entry+180d`, `P_entry+252d` (in trading days, not calendar days).
+2. Compute prices: `P_entry`, `P_entry+10d`, `P_entry+20d`, `P_entry+10d`, `P_entry+90d`, `P_entry+180d`, `P_entry+252d` (in trading days, not calendar days).
 3. Compute returns:
    - `ret_{N}d_abs` = (P_exit / P_entry) - 1
    - `ret_{N}d_spy` = SPY return over same window
@@ -89,17 +89,17 @@ Mirrors the `research/earnings-vol-cycle/01_universe.py … 07_build_report.py` 
 
 | File | Content |
 |---|---|
-| `charts/kpi_strip.json` | 4 headline numbers: # events at (3+, 30d), win rate at 60d, mean excess return at 60d, Sharpe of 60d excess returns. |
+| `charts/kpi_strip.json` | 4 headline numbers: # events at (3+, 30d), win rate at 10d, mean excess return at 10d, Sharpe of 10d excess returns. |
 | `charts/forward_returns_curve.json` | Mean + 25th/75th percentile excess return at each horizon (10/20/60/90/180/252). For the mean/percentile band line chart. |
-| `charts/sensitivity_heatmap.json` | Win rate at 60d horizon by (threshold ∈ {2,3,4,5}) × (window ∈ {14d, 30d, 60d}). 4×3 grid for sensitivity heatmap. |
-| `charts/sector_breakdown.json` | Win rate at 60d + mean excess return by GICS sector (11 sectors). For sector bar chart. |
+| `charts/sensitivity_heatmap.json` | Win rate at 10d horizon by (threshold ∈ {2,3,4,5}) × (window ∈ {14d, 30d, 10d}). 4×3 grid for sensitivity heatmap. |
+| `charts/sector_breakdown.json` | Win rate at 10d + mean excess return by GICS sector (11 sectors). For sector bar chart. |
 | `charts/mkt_cap_breakdown.json` | Win rate + mean excess by market cap quintile at entry. |
-| `charts/party_chamber.json` | 4-way split: {Dem-only, Rep-only, Bipartisan, House-only, Senate-only, Both-chambers} × {win_rate, mean_excess, Sharpe, n_events} at 60d. |
+| `charts/party_chamber.json` | 4-way split: {Dem-only, Rep-only, Bipartisan, House-only, Senate-only, Both-chambers} × {win_rate, mean_excess, Sharpe, n_events} at 10d. |
 | `charts/top_politicians.json` | Top 20 politicians by participation count; for each: n_events_participated, win_rate_when_participating, mean_excess_when_participating. (Filter min 10 events to avoid noise.) |
-| `charts/portfolio_eq_weight.json` | Equity curve assuming $10K equal-weight per event, 60d hold, entered chronologically. Includes daily portfolio value vs SPY. |
+| `charts/portfolio_eq_weight.json` | Equity curve assuming $10K equal-weight per event, 10d hold, entered chronologically. Includes daily portfolio value vs SPY. |
 | `charts/portfolio_size_weighted.json` | Same but weight = politician_count / sum(politician_counts in concurrent positions). |
-| `charts/bipartisan_vs_partisan.json` | Bipartisan herd win rate / mean excess / Sharpe at 60d vs single-party. |
-| `charts/largest_herds.json` | Top 10 single events by politician_count: ticker, date, n politicians, 60d excess return. For "largest events" table. |
+| `charts/bipartisan_vs_partisan.json` | Bipartisan herd win rate / mean excess / Sharpe at 10d vs single-party. |
+| `charts/largest_herds.json` | Top 10 single events by politician_count: ticker, date, n politicians, 10d excess return. For "largest events" table. |
 
 **Stats reported per cut, always:**
 - n events
@@ -122,14 +122,14 @@ Mirrors the `research/earnings-vol-cycle/01_universe.py … 07_build_report.py` 
 
 | # | Section | Content |
 |---|---|---|
-| Hero | Title + KPI strip | "The Congressional Herding Signal: Does Politician Co-Trading Predict Forward Returns?" 4 KPIs: events analysed, win rate (60d), mean excess vs SPY, Sharpe. |
+| Hero | Title + KPI strip | "The Congressional Herding Signal: Does Politician Co-Trading Predict Forward Returns?" 4 KPIs: events analysed, win rate (10d), mean excess vs SPY, Sharpe. |
 | 1 | Study Design | Hypothesis, dataset overview (2023-05 → 2026-05, 199 politicians, 1960 tickers), herding definition, entry rule (disclosure date), holding periods, universe filtering rationale, ETF/MF exclusion list. **Disclosure-lag note callout (amber):** explicitly call out the realistic-entry methodology. |
 | 2 | Anatomy of a Herd | Distribution: herd size histogram (politician_count), bipartisan share, party mix bar, chamber mix, time-series of events per quarter. Largest 10 herds table. |
 | 3 | Forward Returns Profile | Mean + 25/75 percentile line chart of excess returns across 10/20/60/90/180/252d horizons. Find the "sweet spot" horizon. |
-| 4 | Sensitivity & Robustness | 4×3 heatmap: threshold × window, cell = win rate at 60d. Confirms (or denies) monotonic signal strength with herd size. |
+| 4 | Sensitivity & Robustness | 4×3 heatmap: threshold × window, cell = win rate at 10d. Confirms (or denies) monotonic signal strength with herd size. |
 | 5 | Cross-Section | Side-by-side bar charts: by sector, by market cap quintile, by party/chamber composition, top-20 politicians table. |
 | 6 | Bipartisan vs Partisan | Highlight box: bipartisan herd stats vs single-party stats. Tests the "consensus = conviction" hypothesis. |
-| 7 | Portfolio Backtest | Equity curve charts: equal-weight $10K-per-event, 60d hold, vs SPY. Position-weighted variant overlaid. Quarterly P&L bar chart. Drawdown chart. Per-year breakdown. |
+| 7 | Portfolio Backtest | Equity curve charts: equal-weight $10K-per-event, 10d hold, vs SPY. Position-weighted variant overlaid. Quarterly P&L bar chart. Drawdown chart. Per-year breakdown. |
 | 8 | Methodology | Compact reference table (not paragraphs) — universe, period, source, herd definition, entry rule, exit rule, benchmark, exclusions, costs assumption (zero — disclose). |
 | 9 | Conclusions & For The Desk | Verdict callout (colour set by build script per the brutality rule). "For the desk" callout (teal box, monospace label, per CLAUDE.md). Limitations: 3-year sample, no transaction costs, no borrow costs, possible Capitol Trades coverage skew. |
 
@@ -139,7 +139,7 @@ Mirrors the `research/earnings-vol-cycle/01_universe.py … 07_build_report.py` 
 
 | Dimension | What to compute |
 |---|---|
-| **Sensitivity** | Win rate at 60d × {threshold ∈ 2/3/4/5} × {window ∈ 14/30/60d} = 12 cells. Confirms herd-strength monotonicity. |
+| **Sensitivity** | Win rate at 10d × {threshold ∈ 2/3/4/5} × {window ∈ 14/30/10d} = 12 cells. Confirms herd-strength monotonicity. |
 | **Bipartisan vs partisan** | At each threshold, split events into {all-Dem, all-Rep, bipartisan}. Compare win rate, mean excess, Sharpe. |
 | **Sector** | Group by GICS sector (CRSP SIC → GICS mapping). Bar chart: win rate by sector. Test the "regulatory exposure" angle (Healthcare, Defense, Financials should over-index if thesis holds). |
 | **Market cap** | Quintile cap at entry. Test whether the signal lives in small/mid caps (less efficient) or works in mega-caps too. |
@@ -147,7 +147,7 @@ Mirrors the `research/earnings-vol-cycle/01_universe.py … 07_build_report.py` 
 | **Chamber** | House-only, Senate-only, both. Senate has fewer members per state and more committee concentration; thesis predicts Senate herds stronger. |
 | **Individual politicians** | Top 20 by participation count. For each: when this person joins a herd, what's the forward return? Identifies "star traders". |
 | **Holding period** | Six horizons: 10/20/60/90/180/252 days. Identify peak signal horizon. |
-| **Portfolio simulation** | Equal-weight $10K, 60d hold. Then position-weighted by herd size. Both compared to SPY buy-and-hold. |
+| **Portfolio simulation** | Equal-weight $10K, 10d hold. Then position-weighted by herd size. Both compared to SPY buy-and-hold. |
 
 ---
 
@@ -194,7 +194,7 @@ Mirrors the `research/earnings-vol-cycle/01_universe.py … 07_build_report.py` 
 1. **Re-scrape sanity check:** After `00_rescrape_disclosure_dates.py`, confirm `disclosure_date` column exists and `(disclosure_date - trade_date).dt.days.median()` is in the 20-45 day range (STOCK Act compliance window).
 2. **Event reconstruction:** After `01_events.py`, confirm event count at (3+, 30d, buy) is roughly 507 (= 540 IDA events minus ~33 N/A) and drops further after ETF/MF exclusion. Print top 25 most-herded tickers; sanity-check they're real stocks (no SPY, QQQ).
 3. **Price coverage:** After `02_price_pull.py`, confirm ≥95% of unique tickers in events have CRSP coverage. Log unmapped tickers explicitly.
-4. **Returns integrity:** After `03_forward_returns.py`, spot-check 3 random events manually — compute the forward return by hand against CRSP and confirm match. Confirm SPY excess at 60d makes sense (sub-5% for typical events).
+4. **Returns integrity:** After `03_forward_returns.py`, spot-check 3 random events manually — compute the forward return by hand against CRSP and confirm match. Confirm SPY excess at 10d makes sense (sub-5% for typical events).
 5. **Analysis sanity:** After `04_analysis.py`, open the JSONs. KPI win rate should be in the 50-65% range — anything above 70% suggests a bug (e.g., look-ahead bias).
 6. **Report rendering:** Run `.\serve.ps1` → open `http://localhost:8000/research/congressional-herd/` → check:
    - All 8 sections render

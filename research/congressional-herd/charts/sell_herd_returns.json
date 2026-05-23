@@ -1,10 +1,10 @@
 {
   "kpi": {
-    "n_events": 447,
-    "win_rate_10d": 0.4899,
-    "mean_excess_10d": 0.0009,
-    "sharpe_10d": 0.0886,
-    "t_stat_10d": 0.3733
+    "n_events": 519,
+    "win_rate_10d": 0.4875,
+    "mean_excess_10d": 0.0011,
+    "sharpe_10d": 0.0991,
+    "t_stat_10d": 0.4497
   },
   "curve": {
     "horizons": [
@@ -16,51 +16,57 @@
       252
     ],
     "mean_excess": [
-      0.0009,
-      -0.0017,
-      -0.0055,
-      -0.0056,
-      0.0012,
-      -0.0608
+      0.0011,
+      -0.0013,
+      -0.0022,
+      -0.0033,
+      0.0079,
+      0.0289
     ],
     "n_events": [
-      447,
-      435,
-      404,
-      399,
-      224,
-      130
+      519,
+      510,
+      471,
+      458,
+      400,
+      326
     ]
   },
   "trade_vs_disc": {
-    "n_paired": 447,
-    "disc_mean_10d": 0.0009,
-    "trade_mean_10d": -0.0013
+    "n_paired": 519,
+    "disc_mean_10d": 0.0011,
+    "trade_mean_10d": 0.0001
   },
   "top_sold_tickers": [
     {
       "ticker": "MSFT",
-      "event_count": 19,
-      "mean_excess_10d": -0.0105,
-      "n_with_returns": 19
-    },
-    {
-      "ticker": "GOOGL",
-      "event_count": 14,
-      "mean_excess_10d": 0.0023,
-      "n_with_returns": 14
-    },
-    {
-      "ticker": "NVDA",
-      "event_count": 13,
-      "mean_excess_10d": 0.019,
-      "n_with_returns": 13
+      "event_count": 22,
+      "mean_excess_10d": -0.0117,
+      "n_with_returns": 22
     },
     {
       "ticker": "AAPL",
-      "event_count": 12,
-      "mean_excess_10d": 0.0103,
-      "n_with_returns": 12
+      "event_count": 16,
+      "mean_excess_10d": 0.0107,
+      "n_with_returns": 16
+    },
+    {
+      "ticker": "GOOGL",
+      "event_count": 16,
+      "mean_excess_10d": 0.0001,
+      "n_with_returns": 16
+    },
+    {
+      "ticker": "NVDA",
+      "event_count": 16,
+      "mean_excess_10d": 0.0184,
+      "n_with_returns": 16
+    },
+    {
+      "ticker": "AMZN",
+      "event_count": 9,
+      "mean_excess_10d": 0.0073,
+      "n_with_returns": 9
     },
     {
       "ticker": "JPM",
@@ -69,9 +75,21 @@
       "n_with_returns": 9
     },
     {
-      "ticker": "UNH",
+      "ticker": "CMCSA",
+      "event_count": 9,
+      "mean_excess_10d": -0.0037,
+      "n_with_returns": 9
+    },
+    {
+      "ticker": "AVGO",
+      "event_count": 9,
+      "mean_excess_10d": 0.0033,
+      "n_with_returns": 9
+    },
+    {
+      "ticker": "LLY",
       "event_count": 8,
-      "mean_excess_10d": 0.033,
+      "mean_excess_10d": -0.0264,
       "n_with_returns": 8
     },
     {
@@ -79,24 +97,6 @@
       "event_count": 8,
       "mean_excess_10d": 0.0225,
       "n_with_returns": 8
-    },
-    {
-      "ticker": "TSLA",
-      "event_count": 8,
-      "mean_excess_10d": 0.0188,
-      "n_with_returns": 8
-    },
-    {
-      "ticker": "CMCSA",
-      "event_count": 8,
-      "mean_excess_10d": 0.0038,
-      "n_with_returns": 8
-    },
-    {
-      "ticker": "JNJ",
-      "event_count": 7,
-      "mean_excess_10d": 0.0208,
-      "n_with_returns": 7
     }
   ]
 }

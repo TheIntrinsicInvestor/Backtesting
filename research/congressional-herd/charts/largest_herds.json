@@ -14,11 +14,11 @@
     "excess_10d": -0.2497
   },
   {
-    "ticker": "MSFT",
-    "window_start": "2025-01-24",
+    "ticker": "AMZN",
+    "window_start": "2025-02-04",
     "politician_count": 8,
     "politicians_preview": "",
-    "excess_10d": 0.0188
+    "excess_10d": 0.0207
   },
   {
     "ticker": "NVDA",
@@ -28,25 +28,11 @@
     "excess_10d": 0.004
   },
   {
-    "ticker": "AMZN",
-    "window_start": "2025-02-04",
+    "ticker": "MSFT",
+    "window_start": "2025-01-24",
     "politician_count": 8,
     "politicians_preview": "",
-    "excess_10d": 0.0207
-  },
-  {
-    "ticker": "AMZN",
-    "window_start": "2024-12-24",
-    "politician_count": 7,
-    "politicians_preview": "",
-    "excess_10d": 0.0503
-  },
-  {
-    "ticker": "NVDA",
-    "window_start": "2025-02-24",
-    "politician_count": 7,
-    "politicians_preview": "",
-    "excess_10d": 0.0506
+    "excess_10d": 0.0188
   },
   {
     "ticker": "NVDA",
@@ -56,17 +42,31 @@
     "excess_10d": 0.0576
   },
   {
-    "ticker": "AAPL",
-    "window_start": "2024-10-02",
-    "politician_count": 6,
+    "ticker": "NVDA",
+    "window_start": "2025-02-24",
+    "politician_count": 7,
     "politicians_preview": "",
-    "excess_10d": 0.058
+    "excess_10d": 0.0506
   },
   {
-    "ticker": "GOOGL",
-    "window_start": "2025-10-10",
+    "ticker": "MSFT",
+    "window_start": "2025-05-05",
+    "politician_count": 7,
+    "politicians_preview": "",
+    "excess_10d": -0.0617
+  },
+  {
+    "ticker": "AMZN",
+    "window_start": "2024-12-24",
+    "politician_count": 7,
+    "politicians_preview": "",
+    "excess_10d": 0.0503
+  },
+  {
+    "ticker": "META",
+    "window_start": "2025-02-25",
     "politician_count": 6,
     "politicians_preview": "",
-    "excess_10d": 0.0519
+    "excess_10d": -0.0137
   }
 ]

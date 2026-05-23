@@ -86,6 +86,65 @@ def main():
     print(f"Pulling CRSP prices for {len(permnos)} permnos, {start_date} to {end_date}...")
     prices = pull_prices(db, permnos, start_date, end_date)
 
+    import concurrent.futures
+    import yfinance as yf
+    
+    max_crsp_date = prices['date'].max() if not prices.empty else pd.to_datetime("2023-01-01")
+    target_end_date = pd.to_datetime(end_date)
+    
+    if max_crsp_date < target_end_date:
+        print(f"CRSP data only goes up to {max_crsp_date.date()}. Falling back to yfinance for the gap up to {target_end_date.date()}...")
+        gap_start = (max_crsp_date + pd.Timedelta(days=1)).strftime("%Y-%m-%d")
+        gap_end = (target_end_date + pd.Timedelta(days=1)).strftime("%Y-%m-%d")
+        
+        permno_to_ticker = dict(zip(ticker_map["permno"], ticker_map["ticker"]))
+        tickers_to_pull = [permno_to_ticker[p] for p in permnos if p in permno_to_ticker]
+        ticker_to_permno = {v: k for k, v in permno_to_ticker.items()}
+        
+        def pull_ticker(t):
+            try:
+                tk = yf.Ticker(t)
+                hist = tk.history(start=gap_start, end=gap_end, auto_adjust=True)
+                return t, hist
+            except Exception:
+                return t, None
+                
+        print(f"Batch pulling {len(tickers_to_pull)} tickers from yfinance...")
+        yf_frames = []
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+            for t, hist in executor.map(pull_ticker, tickers_to_pull):
+                if hist is None or hist.empty: continue
+                permno = ticker_to_permno[t]
+                hist = hist.reset_index()
+                sub_crsp = prices[prices['permno'] == permno]
+                last_known_shrout = np.nan
+                last_prc = np.nan
+                if not sub_crsp.empty:
+                    last_row = sub_crsp.sort_values('date').iloc[-1]
+                    last_known_shrout = last_row['shrout']
+                    last_prc = last_row['prc']
+                
+                s = pd.DataFrame({
+                    "date": pd.to_datetime(hist["Date"]).dt.tz_localize(None),
+                    "permno": permno,
+                    "prc": hist["Close"].values,
+                    "ret": np.nan,
+                    "cfacpr": 1.0,
+                    "vol": hist["Volume"].values,
+                    "shrout": last_known_shrout
+                })
+                s = s.sort_values("date").reset_index(drop=True)
+                s["ret"] = s["prc"].pct_change()
+                if pd.notna(last_prc):
+                    s.loc[0, "ret"] = (s.loc[0, "prc"] - last_prc) / last_prc
+                yf_frames.append(s)
+                
+        if yf_frames:
+            yf_prices = pd.concat(yf_frames, ignore_index=True)
+            prices = pd.concat([prices, yf_prices], ignore_index=True)
+            prices = prices.sort_values(["permno", "date"]).reset_index(drop=True)
+            print(f"Appended {len(yf_prices)} rows from yfinance.")
+
     prices.to_parquet(PRICES_PATH, index=False)
     print(f"Saved {PRICES_PATH.name}")
     print(f"Date range pulled    : {prices['date'].min().date()} to {prices['date'].max().date()}")

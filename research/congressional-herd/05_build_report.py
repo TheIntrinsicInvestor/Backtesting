@@ -4,6 +4,7 @@ A pointed critique of disclosure-based congressional trading strategies,
 built around the disclosure-lag thesis.
 """
 
+import datetime
 import json
 from pathlib import Path
 
@@ -332,6 +333,11 @@ sell_exc = pct(sells["kpi"]["mean_excess_10d"])
 sell_t = fmt(sells["kpi"]["t_stat_10d"])
 sell_wr = sells["kpi"]["win_rate_10d"] * 100
 
+max_date_str = etf["series"]["SPY"]["dates"][-1]
+max_date_obj = datetime.datetime.strptime(max_date_str, "%Y-%m-%d")
+max_year = max_date_obj.strftime("%Y")
+max_month = max_date_obj.strftime("%b")
+
 
 # ── HTML ─────────────────────────────────────────────────────────────────────
 
@@ -488,7 +494,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
     <div class="hero-meta">
       <div class="hero-meta-item"><strong>Author</strong>Brian Liew, BSc Accounting and Finance, LSE</div>
       <div class="hero-meta-item"><strong>Published</strong>May 2025</div>
-      <div class="hero-meta-item"><strong>Period</strong>2023 to 2024, n={kpi_n} herding events</div>
+      <div class="hero-meta-item"><strong>Period</strong>2023 to {max_year}, n={kpi_n} herding events</div>
       <div class="hero-meta-item"><strong>Data</strong>Capitol Trades, CRSP, congress-legislators, Yahoo Finance</div>
       <a href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/congressional-herd" target="_blank" rel="noopener" class="gh-btn">
         <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
@@ -518,7 +524,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
     <div class="kpi-cell">
       <div class="kpi-label">KRUZ vs SPY (cumulative)</div>
       <div class="kpi-value red">{pct(kruz['cum_excess_vs_spy'])}</div>
-      <div class="kpi-sub">Republican-tracking ETF, Feb 2023 to Dec 2024</div>
+      <div class="kpi-sub">Republican-tracking ETF, Feb 2023 to {max_month} {max_year}</div>
     </div>
   </div>
 </div>
@@ -605,7 +611,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
     <div class="section-label"><span class="section-counter">03</span><span>What They Actually Buy</span></div>
     <h2>The same mega-caps <em>everyone else already owns</em></h2>
     <p>
-      Even setting the disclosure lag aside, the second problem is the universe of stocks Congress actually trades. If congressional members held genuine informational advantages, you would expect their high-conviction herds to concentrate in less-followed securities where private information is more likely to matter. Instead, the data shows the opposite. The most herded names in the 2023 to 2024 sample are Microsoft, Apple, Google, Nvidia, JPMorgan, and Amazon. These are the most analysed equities in global markets. There is no information edge to be had in MSFT that is not already priced into a stock owned by every index fund on earth.
+      Even setting the disclosure lag aside, the second problem is the universe of stocks Congress actually trades. If congressional members held genuine informational advantages, you would expect their high-conviction herds to concentrate in less-followed securities where private information is more likely to matter. Instead, the data shows the opposite. The most herded names in the 2023 to {max_year} sample are Microsoft, Apple, Google, Nvidia, JPMorgan, and Amazon. These are the most analysed equities in global markets. There is no information edge to be had in MSFT that is not already priced into a stock owned by every index fund on earth.
     </p>
     <p>
       The party composition reinforces the point. Of the {party_ch['bipartisan']['n']} herding events with complete party data at the primary threshold, {party_ch['bipartisan']['share_of_total'] * 100:.0f}% involve both parties buying simultaneously. There are essentially no exclusively Democratic or exclusively Republican high-conviction herds. Whatever drives the herding, it is not partisan-specific information. Both sides of the aisle converge on the same large-cap names independently, which is what you would expect if the underlying behaviour were a function of mainstream financial advisor recommendations and brand-name familiarity rather than committee-jurisdiction or insider channels.
@@ -741,7 +747,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
       </div>
     </div>
     <p>
-      The headline numbers tell two stories. NANC's {nanc_cum_str} cumulative return narrowly beat SPY's {spy_cum_str} in absolute terms, but its risk-adjusted return (Sharpe {nanc_sharpe}) trailed SPY's {spy_sharpe}. NANC took more risk to deliver a modestly higher return, which is consistent with a portfolio that overweights tech mega-caps. Tech crushed the market in 2023 and 2024. A portfolio that herds into the same names Congress herds into, also herds into the names that drove the bull market. That is sector beta, not informational alpha.
+      The headline numbers tell two stories. NANC's {nanc_cum_str} cumulative return narrowly beat SPY's {spy_cum_str} in absolute terms, but its risk-adjusted return (Sharpe {nanc_sharpe}) trailed SPY's {spy_sharpe}. NANC took more risk to deliver a modestly higher return, which is consistent with a portfolio that overweights tech mega-caps. Tech crushed the market in 2023 and {max_year}. A portfolio that herds into the same names Congress herds into, also herds into the names that drove the bull market. That is sector beta, not informational alpha.
     </p>
     <p>
       KRUZ is the sharper indictment. The Republican-tracking ETF returned {kruz_cum_str} cumulative over the same period, trailing SPY by roughly 20 percentage points. Sharpe of {kruz_sharpe} is significantly below SPY's {spy_sharpe}. If congressional information were valuable, KRUZ should at minimum match the index. It does not. Investors paying 0.75% annually to follow Republican members' trades have underperformed by a margin that swamps the expense ratio many times over.
@@ -828,7 +834,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
       <tbody>
         <tr><td>Trade data</td><td>35,343 individual-equity disclosures from 201 politicians, May 2023 to May 2026, scraped from Capitol Trades (STOCK Act feed)</td></tr>
         <tr><td>Herding events</td><td>Rolling window over disclosure dates; 12 threshold-window combinations; primary = 3 politicians, 30-day window; ETFs and mutual funds excluded</td></tr>
-        <tr><td>Price data</td><td>CRSP daily stock files via WRDS through 2024-12-31; ETF data (NANC, KRUZ, SPY) from Yahoo Finance after CRSP coverage proved insufficient for newer ETFs</td></tr>
+        <tr><td>Price data</td><td>CRSP daily stock files via WRDS through {max_date_str}; ETF data (NANC, KRUZ, SPY) from Yahoo Finance after CRSP coverage proved insufficient for newer ETFs</td></tr>
         <tr><td>Return calculation</td><td>Two parallel entries: disclosure-date (first trading day on or after publication) and trade-date (first trading day on or after execution). Returns at 10, 20, 60, 90, 180, 252 calendar days</td></tr>
         <tr><td>Lag-period return</td><td>Stock return from trade date to disclosure date, minus SPY return over same window; measures what followers cannot capture</td></tr>
         <tr><td>Committee data</td><td>unitedstates/congress-legislators YAML (committee-membership-current, legislators-current); 184 of 201 trader names matched (91.5%)</td></tr>

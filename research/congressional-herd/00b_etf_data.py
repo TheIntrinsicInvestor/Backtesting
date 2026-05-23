@@ -21,7 +21,7 @@ OUT = DATA_DIR / "etf_prices.parquet"
 
 TICKERS = ["NANC", "KRUZ", "SPY"]
 START = "2023-02-01"
-END   = "2025-12-31"
+END   = pd.Timestamp.today().strftime("%Y-%m-%d")
 
 # Expense ratios (annualised), used in the report for fee-drag annotation
 EXPENSE_RATIOS = {"NANC": 0.0075, "KRUZ": 0.0075, "SPY": 0.000945}
@@ -193,6 +193,9 @@ def _sufficient(sub, label):
         return False
     if sub["date"].min() > start_dt + pd.Timedelta(days=30):
         print(f"  {label}: late start {sub['date'].min().date()} for {sub['ticker'].iloc[0]}")
+        return False
+    if pd.to_datetime(sub["date"].max()) < pd.to_datetime(END) - pd.Timedelta(days=14):
+        print(f"  {label}: early end {sub['date'].max().date()} for {sub['ticker'].iloc[0]} (expected ~{END})")
         return False
     return True
 

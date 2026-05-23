@@ -8,39 +8,39 @@
     252
   ],
   "disc_mean": [
-    0.0039,
-    0.0018,
-    0.0019,
-    -0.0033,
-    -0.0282,
-    -0.094
+    0.0015,
+    0.0008,
+    -0.0013,
+    -0.0068,
+    -0.0156,
+    -0.0278
   ],
   "trade_mean": [
-    -0.0036,
-    -0.0019,
-    -0.0019,
-    -0.0071,
-    -0.0384,
-    -0.0961
+    -0.0023,
+    -0.003,
+    -0.0014,
+    -0.0098,
+    -0.0244,
+    -0.0259
   ],
   "n_events": [
-    374,
-    362,
+    442,
+    438,
+    406,
+    383,
     340,
-    338,
-    200,
-    129
+    264
   ],
-  "lag_n": 376,
-  "lag_days_median": 26.5,
-  "lag_period_mean_return": 0.0227,
-  "lag_period_mean_excess": -0.0067,
-  "lag_period_median_excess": -0.0021,
-  "lag_period_win_rate": 0.484,
-  "realized_n": 374,
-  "realized_trade_mean": -0.0173,
-  "realized_trade_winrate": 0.4305,
-  "realized_disc_mean": -0.0097,
-  "realized_disc_winrate": 0.4171,
-  "realized_hold_days": 203.6686
+  "lag_n": 449,
+  "lag_days_median": 26.0,
+  "lag_period_mean_return": 0.0278,
+  "lag_period_mean_excess": -0.0028,
+  "lag_period_median_excess": -0.0018,
+  "lag_period_win_rate": 0.4766,
+  "realized_n": 449,
+  "realized_trade_mean": -0.0106,
+  "realized_trade_winrate": 0.363,
+  "realized_disc_mean": -0.0066,
+  "realized_disc_winrate": 0.3764,
+  "realized_hold_days": 236.6077
 }
