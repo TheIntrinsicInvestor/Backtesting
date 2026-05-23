@@ -300,8 +300,10 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
     <p>
       Each meeting's IV series is normalised so that the mean of T-20 to T-15 equals 100, then averaged
       across all 60 meetings (excluding the three COVID outliers). The pattern is consistent: a
-      gradual build in implied vol over the 5 to 10 days preceding the announcement, followed by a sharp
-      collapse on or immediately after the decision day.
+      gradual build in implied vol over the 5 to 10 days preceding the announcement, followed by a
+      decline around the decision day. On average the net T-1 to T+1 crush is close to zero across
+      all 60 meetings, as large collapses in clear-outcome meetings are offset by vol expansions
+      in surprise meetings.
     </p>
     <p>
       SPX and VIX show the most pronounced pre-meeting premium, consistent with equity market uncertainty
@@ -608,10 +610,12 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
       magnitude varies by rate cycle era.
     </div>
     <div class="callout green">
-      <strong>â‘¡ The IV crush is reliable but not uniform.</strong> Neutral communication meetings
-      produce the most predictable crush. Hawkish guidance surprises can sustain or even increase
-      vol post-announcement as markets reprice the forward path, limiting short-vol profitability
-      in those specific cases.
+      <strong>â’¡ The IV crush is reliable but not uniform.</strong> Neutral hold meetings produce the
+      most predictable crush (75% win rate, Sharpe 1.42 in Strategy A). Hawkish hold meetings sustain
+      elevated vol post-announcement without delivering a crush, yet remain net profitable ($+33 avg,
+      78% win). The genuinely limiting cases are hold/dovish meetings (36% win, $-156 avg) and cut
+      meetings (38% win, $-192 avg), where unexpected policy softness expanded uncertainty instead of
+      resolving it.
     </div>
     <div class="callout green">
       <strong>â‘¢ Communication surprises matter more than rate decisions.</strong> Within hold meetings,

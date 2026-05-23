@@ -414,15 +414,15 @@
 <section class="section" id="s4">
 <div class="container">
   <div class="section-label"><span class="section-counter">04</span><span>Intraday Dynamics</span></div>
-    <h2>The Effect Is Strongest in the Final Hour</h2>
+    <h2>The Effect Peaks at the Open and Early Afternoon</h2>
 
     <p>
-      GEX is not uniform through the trading day. As a 0DTE option approaches expiry,
-      its gamma profile changes dramatically. Near-the-money options develop very high
-      gamma in the final hour; small price moves create large delta swings that
-      dealers must hedge immediately. Simultaneously, the &#8220;charm&#8221; effect
-      (d&#916;/dt) forces dealers to adjust their hedges simply because time is passing,
-      even without price movement.
+      GEX is not uniform through the trading day. The 30-minute bucket data shows two
+      pronounced peaks in the regime divergence: the 10:00 bucket (Negative GEX: 141,
+      High GEX: 52, spread: 89 percentage points) and the 13:00 bucket (Negative GEX:
+      148, High GEX: 60, spread: 89 percentage points). The &#8220;charm&#8221; effect
+      (d&#916;/dt) and intraday gamma acceleration both contribute, but the largest vol
+      separation occurs well before the final hour rather than concentrating at the close.
     </p>
 
     <p>
@@ -462,8 +462,10 @@
       <div class="callout-body">
         <strong>Practical implication:</strong> The regime difference is not spread uniformly
         through the day. If you are trading intraday and GEX is negative, the first 30 minutes
-        and the final 60 minutes carry disproportionate vol risk. Position sizing should account
-        for this asymmetry, not just the overall GEX level.
+        (open) and the early afternoon (around 13:00) carry the largest vol premium relative to
+        high-GEX days. The mid-afternoon (15:00) actually shows the narrowest gap of the session
+        before a partial recovery at 15:30. Position sizing should account for this intraday
+        asymmetry, not just the overall GEX level.
       </div>
     </div>
   </div>
@@ -601,8 +603,11 @@
       experienced mean intraday realised vol of 13.7%, compared with 8.1%
       on high-GEX days. The difference is statistically significant (p&#8202;=&#8202;0.0000), and the
       pattern is persistent through time rather than driven by a handful of outlier sessions.
-      The regime divergence peaks in the final hour of trading, precisely when 0DTE
-      gamma is highest and dealer hedging is most urgent.
+      The regime divergence peaks at the open (10:00 bucket) and in the early afternoon
+      (13:00 bucket), where the Negative-to-High GEX vol spread reaches 89 percentage
+      points in both windows. The mid-afternoon narrows before a partial recovery at the
+      close, confirming that the effect is persistent across the full session rather than
+      concentrated in the final hour.
     </p>
 
     <p>
