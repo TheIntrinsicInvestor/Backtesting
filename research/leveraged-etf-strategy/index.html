@@ -5,260 +5,240 @@
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-HT9VG5C62E');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta property="og:type" content="article"/>
-<meta property="og:title" content="Exploiting Leveraged ETF Decay — The Intrinsic Investor"/>
-<meta property="og:description" content="Systematic carry trade on AVGO/AVL. Honest reporting including anomaly-adjusted results."/>
-<meta property="og:url" content="https://theintrinsicinvestor.com/research/leveraged-etf-strategy/"/>
-<title>Exploiting Leveraged ETF Decay: TheIntrinsicInvestor</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Exploiting Leveraged ETF Decay | The Intrinsic Investor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#f7f4ec;--bg2:#f0ece2;--bg3:#e8e3d8;
-  --ink:#0f2220;--ink2:#2a3c38;--muted:#4a6460;--hint:#8aa49e;
-  --border:#e2ddd0;--card:#fff;
-  --accent:#1a5c52;--accent2:#144a42;
-  --green:#0d6e4e;--green2:#059669;--green-bg:#ecfdf5;--green-border:#a7f3d0;
-  --red:#991b1b;--red2:#dc2626;--red-bg:#fef2f2;--red-border:#fca5a5;
-  --blue:#1e40af;--blue2:#2563eb;--blue-bg:#eff6ff;--blue-border:#bfdbfe;
-  --amber:#92400e;--amber-bg:#fffbeb;--amber-border:#fcd34d;
-  --purple:#5b21b6;--purple-bg:#f5f3ff;--purple-border:#c4b5fd;
-}
-body{font-family:'Inter',sans-serif;color:var(--ink);background:var(--bg);font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased}
-
-/* NAV */
-nav{position:sticky;top:0;z-index:100;background:rgba(247,244,236,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:box-shadow 0.3s;border-bottom:1px solid var(--border);padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between;height:62px}
-nav.scrolled{box-shadow:0 1px 24px rgba(15,34,32,0.06)}
-.nav-logo{font-family:'Fraunces',serif;font-size:21px;font-weight:600;color:var(--ink);text-decoration:none}
-.nav-links{display:flex;gap:2rem}
-.nav-links a{font-size:13px;color:var(--ink);text-decoration:none;font-weight:400;transition:color .2s;position:relative;padding-bottom:2px}
-.nav-links a::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:#1a5c52;transform:scaleX(0);transform-origin:left;transition:transform 0.25s cubic-bezier(0.4,0,0.2,1)}
-.nav-links a:hover::after{transform:scaleX(1)}
-.nav-links a:hover{color:var(--accent)}
-
-/* HERO */
-.hero{background:var(--ink);color:#fff;padding:72px 0 64px;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(-55deg,transparent,transparent 40px,rgba(255,255,255,0.013) 40px,rgba(255,255,255,0.013) 41px);pointer-events:none}
-.hero-inner{max-width:800px;margin:0 auto;padding:0 2.5rem;position:relative;z-index:1}
-.hero-tag{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--hint);margin-bottom:1.5rem;display:flex;align-items:center;gap:10px}
-.hero-tag::before{content:'';width:24px;height:1px;background:var(--hint)}
-.hero h1{font-family:'Fraunces',serif;font-size:2.4rem;font-weight:600;line-height:1.2;letter-spacing:-.01em;margin-bottom:1.25rem;color:#fff}
-.hero h1 em{font-style:italic;color:#5ab5a5}
-.hero-sub{font-size:14px;line-height:1.8;color:rgba(255,255,255,.55);max-width:640px;margin-bottom:2rem;font-weight:300}
-.hero-meta{display:flex;gap:1.5rem;flex-wrap:wrap;align-items:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.3);border-top:1px solid rgba(255,255,255,.08);padding-top:1.25rem}
-.gh-btn{display:inline-flex;align-items:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,.5);text-decoration:none;border:1px solid rgba(255,255,255,.2);padding:2px 8px;border-radius:3px;transition:all .2s;letter-spacing:.02em}
-.gh-btn:hover{color:#fff;border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.08)}
-
-/* KPI STRIP */
-.kpi-strip{max-width:800px;margin:-36px auto 0;padding:0 2.5rem;position:relative;z-index:10}
-.kpi-note{background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:8px 8px 0 0;padding:8px 16px;font-size:11.5px;color:var(--amber);display:flex;align-items:center;gap:8px;font-family:'Inter',sans-serif}
-.kpi-note strong{font-weight:600}
-.kpi-tabs{display:flex;background:var(--bg3);border:1px solid var(--border);border-top:none;overflow:hidden}
-.kpi-tab{flex:1;padding:10px 16px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;cursor:pointer;border:none;background:var(--bg3);color:var(--hint);border-bottom:2px solid transparent;transition:all .15s;font-family:'Inter',sans-serif}
-.kpi-tab.active-full{background:var(--card);color:var(--ink);border-bottom:2px solid var(--ink)}
-.kpi-tab.active-adj{background:var(--card);color:var(--accent);border-bottom:2px solid var(--accent)}
-.kpi-grid{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;overflow:hidden}
-.kpi-panel{display:none;grid-template-columns:repeat(4,1fr)}
-.kpi-panel.active{display:grid}
-.kpi-cell{padding:20px;border-right:1px solid var(--border)}
-.kpi-cell:last-child{border-right:none}
-.kpi-cell .k{font-family:'Inter',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--hint);margin-bottom:6px}
-.kpi-cell .v{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:500;line-height:1}
-.kpi-cell .sub{font-size:11px;color:var(--hint);margin-top:5px;font-family:'Inter',sans-serif}
-.kpi-cell .sub.up{color:var(--green2)}.kpi-cell .sub.dn{color:var(--red2)}.kpi-cell .sub.neu{color:var(--blue2)}
-.pos{color:var(--green2)}.neg{color:var(--red2)}.neu{color:var(--blue2)}
-
-/* LAYOUT */
-.container{max-width:800px;margin:0 auto;padding:0 2.5rem}
-.section{padding:52px 0;border-bottom:1px solid var(--border)}
-.section:last-of-type{border-bottom:none}
-.section-label{display:flex;align-items:center;gap:10px;font-family:'Inter',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin-bottom:1.25rem;position:relative}
-.section-label::before{content:'';display:block;width:24px;height:1px;background:var(--accent)}
-.section h2{font-family:'Fraunces',serif;font-size:1.65rem;font-weight:600;letter-spacing:-.01em;color:var(--ink);margin-bottom:1rem}
-.section h3{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:600;color:var(--ink);margin:2rem 0 .75rem}
-p{color:var(--muted);margin-bottom:1rem;font-size:14px}
-p:last-child{margin-bottom:0}
-strong{font-weight:600;color:var(--ink)}
-
-/* CALLOUTS */
-.callout{border-radius:8px;padding:1rem 1.25rem;margin:1.5rem 0;display:flex;gap:14px}
-.callout-icon{font-size:16px;flex-shrink:0;margin-top:2px}
-.callout p{font-size:13px;margin:0;line-height:1.7}
-.callout.green{background:var(--green-bg);border:1px solid var(--green-border)}
-.callout.red{background:var(--red-bg);border:1px solid var(--red-border)}
-.callout.blue{background:var(--blue-bg);border:1px solid var(--blue-border)}
-.callout.amber{background:var(--amber-bg);border:1px solid var(--amber-border)}
-.callout.purple{background:var(--purple-bg);border:1px solid var(--purple-border)}
-
-/* TABLES */
-.dual-table{width:100%;border-collapse:collapse;font-size:13px;margin:1.5rem 0;border:1px solid var(--border);border-radius:8px;overflow:hidden}
-.dual-table thead{background:var(--bg3)}
-.dual-table th{padding:10px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--hint);border-bottom:1px solid var(--border);text-align:left;font-family:'Inter',sans-serif}
-.dual-table th.adj{color:var(--accent);background:rgba(26,92,82,.06)}
-.dual-table td{padding:11px 14px;border-bottom:1px solid var(--border);color:var(--muted)}
-.dual-table tr:last-child td{border-bottom:none}
-.dual-table td.metric{color:var(--hint);font-size:12px}
-.dual-table td.full{font-weight:600;color:var(--ink)}
-.dual-table td.adj{font-weight:600;background:rgba(26,92,82,.04);color:var(--accent)}
-.dual-table td.weekly{font-weight:500;color:var(--hint)}
-
-/* CHARTS */
-.chart-wrap{margin:1.75rem 0}
-.chart-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.75rem;flex-wrap:wrap;gap:8px}
-.chart-title{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--hint)}
-.legend{display:flex;gap:1rem;flex-wrap:wrap}
-.legend span{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--hint);font-family:'Inter',sans-serif}
-.legend-dot{width:10px;height:3px;border-radius:2px;display:inline-block}
-.chart-box{position:relative;width:100%;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.25rem;transition:box-shadow 0.2s}
-.chart-box:hover{box-shadow:0 4px 20px rgba(15,34,32,0.06)}
-
-/* REGIME TABLE */
-.rtable-wrap{margin:1.25rem 0;border:1px solid var(--border);border-radius:8px;overflow:hidden}
-.rtable{width:100%;border-collapse:collapse;font-size:13px}
-.rtable thead{background:var(--bg3)}
-.rtable th{text-align:left;padding:10px 16px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--hint);border-bottom:1px solid var(--border);font-family:'Inter',sans-serif}
-.rtable td{padding:12px 16px;border-bottom:1px solid var(--border);color:var(--muted)}
-.rtable tr:last-child td{border-bottom:none}
-.rtable tr:hover td{background:var(--bg2)}
-.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;font-family:'Inter',sans-serif}
-.badge.pos{background:var(--green-bg);color:var(--green)}
-.badge.exc{background:#f0fdf4;color:#15803d;border:1px solid #86efac}
-.badge.warn{background:var(--amber-bg);color:var(--amber)}
-
-/* HIGHLIGHT BOX */
-.highlight-box{background:var(--ink);border-radius:8px;padding:2rem;margin:2rem 0;color:#fff}
-.highlight-box .hb-label{font-family:'Inter',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.35);margin-bottom:1.25rem}
-.hb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
-.hb-cell .hb-val{font-family:'Fraunces',serif;font-size:1.75rem;font-style:italic;color:#5ab5a5;margin-bottom:.25rem}
-.hb-cell .hb-key{font-family:'Inter',sans-serif;font-size:11px;color:rgba(255,255,255,.35)}
-
-/* SCENARIO GRID */
-.scenario-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin:1.5rem 0}
-.scenario-card{border-radius:8px;padding:1.25rem;border:1px solid var(--border)}
-.scenario-card.best{border-color:var(--green-border);background:var(--green-bg)}
-.scenario-card.mid{border-color:var(--blue-border);background:var(--blue-bg)}
-.scenario-card.worst{border-color:var(--red-border);background:var(--red-bg)}
-.scenario-card .sc-label{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem}
-.scenario-card.best .sc-label{color:var(--green)}
-.scenario-card.mid .sc-label{color:var(--blue2)}
-.scenario-card.worst .sc-label{color:var(--red2)}
-.scenario-card .sc-cagr{font-family:'Fraunces',serif;font-size:1.75rem;font-style:italic;margin-bottom:.25rem}
-.scenario-card.best .sc-cagr{color:var(--green2)}
-.scenario-card.mid .sc-cagr{color:var(--blue2)}
-.scenario-card.worst .sc-cagr{color:var(--red2)}
-.scenario-card .sc-desc{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);line-height:1.6}
-
-/* FOOTER */
-footer{background:var(--ink);color:#fff;padding:3rem 2.5rem}
-.footer-inner{max-width:800px;margin:0 auto}
-.footer-logo{font-family:'Inter',sans-serif;font-size:14px;font-weight:500;color:rgba(255,255,255,.45);margin-bottom:.5rem}
-.footer-sub{font-family:'Inter',sans-serif;font-size:12px;color:rgba(255,255,255,.25);line-height:1.7}
-.footer-bottom{margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,.08);font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.2);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
-
-/* G1 — Paper grain texture */
-body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23noise)' opacity='0.07'/%3E%3C/svg%3E");mix-blend-mode:multiply;opacity:0.5}
-
-/* G4 — Button lift */
-.b1:hover,.cl-primary:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(26,92,82,0.25)}
-
-/* R1 — Progress bar */
-#progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,#1a5c52,#2d9d8f);z-index:9998;transition:width 0.1s linear;box-shadow:0 0 8px rgba(26,92,82,0.4)}
-
-/* R2 — Hero entrance animation */
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-.nav-logo{opacity:0;animation:fadeUp 0.5s ease 0.05s forwards}
-.hero h1{opacity:0;animation:fadeUp 0.5s ease 0.12s forwards}
-.hero-sub,.hero p{opacity:0;animation:fadeUp 0.5s ease 0.20s forwards}
-.hero-meta,.hero-tag{opacity:0;animation:fadeUp 0.5s ease 0.28s forwards}
-.kpi-strip{opacity:0;animation:fadeUp 0.55s ease 0.35s forwards}
-
-/* R3 — Section scroll-reveal */
-.section{opacity:0;transform:translateY(20px);transition:opacity 0.6s cubic-bezier(0.4,0,0.2,1),transform 0.6s cubic-bezier(0.4,0,0.2,1)}
-.section.visible{opacity:1;transform:translateY(0)}
-.callout{opacity:0;transform:translateX(-8px);transition:opacity 0.5s ease,transform 0.5s ease}
-.callout.visible{opacity:1;transform:translateX(0)}
-
-/* R4 — Table row animation */
-table.revealed tbody tr{opacity:0;transform:translateX(-8px);animation:rowReveal 0.35s ease forwards}
-@keyframes rowReveal{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
-table.revealed tbody tr:nth-child(1){animation-delay:0.03s}
-table.revealed tbody tr:nth-child(2){animation-delay:0.07s}
-table.revealed tbody tr:nth-child(3){animation-delay:0.11s}
-table.revealed tbody tr:nth-child(4){animation-delay:0.15s}
-table.revealed tbody tr:nth-child(5){animation-delay:0.19s}
-table.revealed tbody tr:nth-child(6){animation-delay:0.23s}
-table.revealed tbody tr:nth-child(7){animation-delay:0.27s}
-table.revealed tbody tr:nth-child(8){animation-delay:0.31s}
-
-/* R6 — Highlight box lift */
-.highlight-box,.hb-grid>div{transition:transform 0.2s,box-shadow 0.2s}
-.highlight-box:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(15,34,32,0.15)}
-
-/* R7 — Scenario cards lift */
-.scenario-card{transition:transform 0.2s,box-shadow 0.2s}
-.scenario-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.08)}
-
-/* R8 — Sticky dot navigation */
-.section-nav{position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);z-index:300;display:flex;flex-direction:column;gap:8px}
-.sn-dot{width:8px;height:8px;border-radius:50%;border:1.5px solid #8aa49e;background:transparent;cursor:pointer;transition:all 0.2s;position:relative}
-.sn-dot:hover,.sn-dot.active{background:#1a5c52;border-color:#1a5c52;transform:scale(1.25)}
-.sn-dot::before{content:attr(data-label);position:absolute;right:calc(100% + 8px);top:50%;transform:translateY(-50%);background:#0f2220;color:#fff;font-size:10px;font-weight:500;padding:3px 8px;border-radius:3px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.15s}
-.sn-dot:hover::before{opacity:1}
-
-/* R9 — Ghost section counters */
-.section-counter{position:absolute;left:-3.5rem;top:50%;transform:translateY(-50%);font-family:'Fraunces',serif;font-size:3.5rem;font-weight:600;font-style:italic;color:rgba(26,92,82,0.07);line-height:1;pointer-events:none;user-select:none;letter-spacing:-0.02em}
-
-/* G5 — Prefers-reduced-motion */
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
-
-@media(max-width:900px){.section-nav{display:none}}
-
-@media(max-width:640px){
-  .kpi-panel{grid-template-columns:1fr 1fr}
-  .scenario-grid{grid-template-columns:1fr}
-  .hb-grid{grid-template-columns:1fr 1fr}
-  .hero h1{font-size:1.8rem}
-  nav,.hero-inner,.container,.footer-inner,.kpi-strip{padding-left:1.25rem;padding-right:1.25rem}
-  .nav-links{gap:16px}
-  .table-wrap{overflow-x:auto}
-  .footer-bottom{flex-direction:column;gap:8px}
-  .section-counter{display:none}
-}
+  :root {
+    --bg:#f7f4ec; --bg2:#f0ece2; --bg3:#e8e3d8; --card:#fff;
+    --ink:#0f2220; --muted:#4a6460; --hint:#8aa49e;
+    --border:#e2ddd0; --accent:#1a5c52; --accent2:#144a42;
+    --green:#0E9F6E; --green2:#059669; --green-bg:#ecfdf5; --green-border:#a7f3d0;
+    --red:#E02424;   --red2:#dc2626;   --red-bg:#fef2f2;   --red-border:#fca5a5;
+    --blue:#1e40af;  --blue2:#2563eb;  --blue-bg:#eff6ff;  --blue-border:#bfdbfe;
+    --amber:#E3A008; --amber-bg:#fffbeb; --amber-border:#fcd34d;
+    --purple:#7E3AF2; --purple-bg:#f5f3ff; --purple-border:#c4b5fd;
+    --font:'Inter',sans-serif; --serif:'Fraunces',serif; --mono:'JetBrains Mono',monospace;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.7}
+  body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+    mix-blend-mode:multiply;opacity:0.5}
+  #progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;
+    background:linear-gradient(90deg,#1a5c52,#2d9d8f);z-index:9998;transition:width .1s linear}
+  nav{position:sticky;top:0;z-index:100;height:62px;display:flex;align-items:center;
+    justify-content:space-between;padding:0 2rem;
+    background:rgba(247,244,236,.92);backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
+    transition:box-shadow .3s}
+  nav.scrolled{box-shadow:0 1px 24px rgba(15,34,32,.06)}
+  .nav-logo{font-family:var(--serif);font-weight:600;font-size:1.1rem;color:var(--ink);letter-spacing:-.01em;text-decoration:none}
+  .nav-links{display:flex;gap:1.75rem;list-style:none}
+  .nav-links a{color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:500;
+    position:relative;padding-bottom:2px;transition:color .2s}
+  .nav-links a:hover{color:var(--ink)}
+  .nav-links a::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
+    background:var(--accent);transform:scaleX(0);transform-origin:left;
+    transition:transform .25s cubic-bezier(.4,0,.2,1)}
+  .nav-links a:hover::after{transform:scaleX(1)}
+  .hero{background:var(--ink);padding:5rem 2rem 4rem;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;inset:0;pointer-events:none;
+    background-image:repeating-linear-gradient(-55deg,transparent,transparent 40px,
+      rgba(255,255,255,.013) 40px,rgba(255,255,255,.013) 41px)}
+  .hero-inner{max-width:860px;margin:0 auto;position:relative}
+  .hero-tag{display:inline-block;font-family:var(--mono);font-size:.72rem;color:var(--accent);
+    letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(26,92,82,.4);
+    padding:.25rem .75rem;border-radius:2px;margin-bottom:1.5rem;
+    animation:fadeUp .6s ease both}
+  .hero h1{font-family:var(--serif);font-size:clamp(1.9rem,4.5vw,3.2rem);font-weight:600;
+    color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:1.25rem;
+    animation:fadeUp .6s .1s ease both}
+  .hero h1 em{font-style:italic;color:var(--accent)}
+  .hero-sub{font-size:1rem;color:rgba(255,255,255,.65);max-width:620px;line-height:1.7;
+    margin-bottom:2rem;animation:fadeUp .6s .2s ease both}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:2rem;font-family:var(--mono);font-size:.75rem;
+    color:rgba(255,255,255,.5);border-top:1px solid rgba(255,255,255,.1);
+    padding-top:1.5rem;animation:fadeUp .6s .3s ease both}
+  .hero-meta-item strong{display:block;color:rgba(255,255,255,.85);font-size:.85rem;margin-bottom:.15rem}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+  .kpi-strip{background:var(--card);border-bottom:1px solid var(--border);padding:0}
+  .kpi-note{max-width:900px;margin:0 auto;background:var(--amber-bg);border-bottom:1px solid var(--amber-border);
+    padding:8px 2rem;font-size:.78rem;color:var(--amber);display:flex;align-items:center;gap:8px;font-family:var(--font)}
+  .kpi-note strong{font-weight:600}
+  .kpi-tabs{max-width:900px;margin:0 auto;display:flex;background:var(--bg3);border-bottom:1px solid var(--border)}
+  .kpi-tab{flex:1;padding:10px 16px;font-size:.72rem;font-weight:600;text-transform:uppercase;
+    letter-spacing:.07em;cursor:pointer;border:none;background:var(--bg3);color:var(--hint);
+    border-bottom:2px solid transparent;transition:all .15s;font-family:var(--font)}
+  .kpi-tab.active-full{background:var(--card);color:var(--ink);border-bottom:2px solid var(--ink)}
+  .kpi-tab.active-adj{background:var(--card);color:var(--accent);border-bottom:2px solid var(--accent)}
+  .kpi-panels{max-width:900px;margin:0 auto}
+  .kpi-panel{display:none;grid-template-columns:repeat(4,1fr)}
+  .kpi-panel.active{display:grid}
+  .kpi-cell{padding:1.5rem;border-right:1px solid var(--border)}
+  .kpi-cell:last-child{border-right:none}
+  .kpi-label{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--hint);margin-bottom:.5rem}
+  .kpi-value{font-family:var(--mono);font-size:1.9rem;font-weight:500;color:var(--ink);
+    line-height:1;margin-bottom:.4rem}
+  .kpi-value.green{color:var(--green2)}
+  .kpi-value.red{color:var(--red2)}
+  .kpi-value.blue{color:var(--blue2)}
+  .kpi-sub{font-size:.78rem;color:var(--muted)}
+  .kpi-sub.up{color:var(--green2)}
+  .kpi-sub.dn{color:var(--red2)}
+  .kpi-sub.neu{color:var(--blue2)}
+  .container{max-width:860px;margin:0 auto;padding:0 2rem}
+  .section{opacity:0;transform:translateY(16px);
+    transition:opacity .55s ease,transform .55s ease;
+    padding:4.5rem 0;border-bottom:1px solid var(--border)}
+  .section.visible{opacity:1;transform:none}
+  .section:last-of-type{border-bottom:none}
+  .section-label{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem}
+  .section-counter{font-family:var(--mono);font-size:.72rem;color:var(--hint);letter-spacing:.04em}
+  .section-label span:last-child{font-size:.72rem;font-weight:600;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--hint)}
+  h2{font-family:var(--serif);font-size:clamp(1.5rem,3vw,2.1rem);font-weight:600;
+    color:var(--ink);line-height:1.25;letter-spacing:-.02em;margin-bottom:1.25rem}
+  h2 em{font-style:italic;color:var(--accent)}
+  h3{font-family:var(--serif);font-size:1.15rem;font-weight:600;color:var(--ink);margin:2rem 0 .75rem}
+  p{color:var(--muted);line-height:1.75;margin-bottom:1rem;text-align:justify;hyphens:none;word-break:normal;overflow-wrap:normal}
+  p:last-child{margin-bottom:0}
+  strong{font-weight:600;color:var(--ink)}
+  .callout{display:flex;gap:1rem;padding:1.25rem 1.5rem;border-radius:4px;
+    margin:1.5rem 0;border-left:3px solid}
+  .callout.green{background:var(--green-bg);border-color:var(--green2)}
+  .callout.amber{background:var(--amber-bg);border-color:var(--amber)}
+  .callout.red{background:var(--red-bg);border-color:var(--red2)}
+  .callout.blue{background:var(--blue-bg);border-color:var(--blue2)}
+  .callout.purple{background:var(--purple-bg);border-color:var(--purple)}
+  .callout-icon{font-size:1.1rem;flex-shrink:0;margin-top:.1rem}
+  .callout-body{font-size:.9rem;color:var(--ink);line-height:1.6}
+  .callout-body strong{font-weight:600}
+  .highlight-box{background:var(--ink);border-radius:4px;padding:2rem;margin:1.5rem 0}
+  .hl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+  .hl-cell{padding:0 1.5rem;border-right:1px solid rgba(255,255,255,.1)}
+  .hl-cell:first-child{padding-left:0}
+  .hl-cell:last-child{border-right:none}
+  .hl-label{font-size:.7rem;font-weight:500;color:rgba(255,255,255,.35);text-transform:uppercase;
+    letter-spacing:.1em;margin-bottom:.5rem}
+  .hl-value{font-family:var(--serif);font-style:italic;font-size:1.75rem;color:#5ab5a5;line-height:1.1}
+  .hl-sub{font-size:.75rem;color:rgba(255,255,255,.3);margin-top:.3rem}
+  .chart-box{background:var(--bg2);border:1px solid var(--border);
+    border-radius:4px;padding:1.5rem;margin:1.5rem 0}
+  .chart-title{font-size:.85rem;font-weight:600;color:var(--ink);
+    margin-bottom:1rem;letter-spacing:.02em}
+  .chart-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px}
+  .legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
+  .legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+  .legend-line{width:16px;height:2px;flex-shrink:0}
+  .table-wrap{overflow-x:auto;margin:1.5rem 0;border-radius:4px;border:1px solid var(--border)}
+  table{width:100%;border-collapse:collapse;font-size:.875rem}
+  thead tr{background:var(--ink);color:#fff}
+  thead th{padding:.7rem .9rem;text-align:left;font-weight:500;font-size:.75rem;letter-spacing:.04em}
+  thead th.adj{color:#5ab5a5;background:rgba(26,92,82,.25)}
+  tbody tr{border-bottom:1px solid var(--border)}
+  tbody tr:last-child{border-bottom:none}
+  tbody tr:hover{background:var(--bg2)}
+  td{padding:.65rem .9rem;color:var(--muted);vertical-align:middle}
+  td.metric{color:var(--hint);font-size:.8rem}
+  td.full{font-weight:600;color:var(--ink)}
+  td.adj{font-weight:600;background:rgba(26,92,82,.04);color:var(--accent)}
+  td.weekly{font-weight:500;color:var(--hint)}
+  .mono{font-family:var(--mono);font-size:.82rem}
+  .pos{color:var(--green2)}
+  .neg{color:var(--red2)}
+  .neu{color:var(--blue2)}
+  .badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;
+    font-size:.72rem;font-weight:600;font-family:var(--font)}
+  .badge.pos{background:var(--green-bg);color:var(--green2)}
+  .badge.warn{background:var(--amber-bg);color:var(--amber)}
+  .scenario-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin:1.5rem 0}
+  .scenario-card{border-radius:4px;padding:1.25rem;border:1px solid var(--border)}
+  .scenario-card.best{border-color:var(--green-border);background:var(--green-bg)}
+  .scenario-card.mid{border-color:var(--blue-border);background:var(--blue-bg)}
+  .scenario-card.worst{border-color:var(--red-border);background:var(--red-bg)}
+  .scenario-card .sc-label{font-family:var(--font);font-size:.7rem;font-weight:700;
+    text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem}
+  .scenario-card.best .sc-label{color:var(--green2)}
+  .scenario-card.mid .sc-label{color:var(--blue2)}
+  .scenario-card.worst .sc-label{color:var(--red2)}
+  .scenario-card .sc-cagr{font-family:var(--serif);font-size:1.75rem;font-style:italic;margin-bottom:.25rem}
+  .scenario-card.best .sc-cagr{color:var(--green2)}
+  .scenario-card.mid .sc-cagr{color:var(--blue2)}
+  .scenario-card.worst .sc-cagr{color:var(--red2)}
+  .scenario-card .sc-desc{font-family:var(--font);font-size:.8rem;color:var(--muted);line-height:1.6}
+  #side-nav{position:fixed;right:0;top:50%;transform:translateY(-50%);
+    z-index:50;display:flex;flex-direction:column;gap:2px;padding:10px 6px}
+  #side-nav a{display:flex;align-items:center;justify-content:flex-end;gap:7px;
+    text-decoration:none;padding:5px 8px;border-radius:4px;transition:background .2s}
+  #side-nav a:hover{background:rgba(26,92,82,.07)}
+  .sn-label{font-size:.67rem;font-weight:500;color:var(--hint);white-space:nowrap;
+    letter-spacing:.02em;font-family:var(--font);transition:color .2s;text-align:right}
+  .sn-dot{width:5px;height:5px;border-radius:50%;background:var(--border);
+    flex-shrink:0;transition:all .2s}
+  #side-nav a.active .sn-label{color:var(--accent);font-weight:600}
+  #side-nav a.active .sn-dot{background:var(--accent);transform:scale(1.5)}
+  #side-nav a:hover .sn-label{color:var(--ink)}
+  #side-nav a:hover .sn-dot{background:var(--muted)}
+  footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
+  .footer-inner{max-width:860px;margin:0 auto;display:flex;
+    justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+  .footer-name{font-family:var(--serif);font-weight:600;font-size:1rem;color:rgba(255,255,255,.9)}
+  .footer-right{font-size:.8rem;text-align:right}
+  .footer-right a{color:rgba(255,255,255,.5);text-decoration:none;margin-left:1.2rem}
+  .footer-right a:hover{color:rgba(255,255,255,.85)}
+  .gh-btn{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);
+    font-size:.68rem;color:rgba(255,255,255,.5);text-decoration:none;
+    border:1px solid rgba(255,255,255,.2);padding:3px 9px;border-radius:3px;
+    transition:all .2s;letter-spacing:.02em;align-self:center}
+  .gh-btn:hover{color:#fff;border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.08)}
+  @media(max-width:860px){
+    #side-nav{display:none}
+    .kpi-panel{grid-template-columns:repeat(2,1fr)}
+    .hl-grid{grid-template-columns:1fr}
+    .scenario-grid{grid-template-columns:1fr}
+    .footer-inner{flex-direction:column;text-align:center}
+    .footer-right{text-align:center}
+  }
+  @media(max-width:560px){
+    .kpi-cell{border-right:none;border-bottom:1px solid var(--border)}
+    .hl-cell{border-right:none;padding:0;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:1rem}
+    .hl-cell:last-child{border-bottom:none}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  }
 </style>
 </head>
 <body>
 
 <div id="progress-bar"></div>
 
-<nav class="section-nav">
-  <div class="sn-dot" data-label="The Strategy" data-target="sec-1"></div>
-  <div class="sn-dot" data-label="Methodological Note" data-target="sec-2"></div>
-  <div class="sn-dot" data-label="Backtest Results" data-target="sec-3"></div>
-  <div class="sn-dot" data-label="Regime Analysis" data-target="sec-4"></div>
-  <div class="sn-dot" data-label="Risk Factors" data-target="sec-5"></div>
+<nav>
+  <a href="/" class="nav-logo">The Intrinsic Investor</a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/research">Research</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
 </nav>
 
-<nav id="main-nav">
-  <div class="nav-logo">The Intrinsic Investor</div>
-  <div class="nav-links">
-    <a href="/">Home</a>
-    <a href="/research">Research</a>
-    <a href="/about">About</a>
-  </div>
-</nav>
+<div id="side-nav" aria-label="Page sections"></div>
 
 <div class="hero">
   <div class="hero-inner">
-    <div class="hero-tag">Systematic Market Research</div>
-    <h1>Exploiting <em>Leveraged ETF Decay</em>:<br>A Systematic Carry Trade on AVGO / AVL</h1>
-    <div class="hero-sub">Single-stock leveraged ETFs bleed value daily through swap financing costs. This paper constructs a market-neutral carry trade to capture that bleed, presenting results both with and without a one-off December 2025 volatility event that materially distorts the headline figures.</div>
+    <div class="hero-tag">Systematic Strategy Research</div>
+    <h1>Exploiting <em>Leveraged ETF Decay</em>: A Systematic Carry Trade on AVGO / AVL</h1>
+    <p class="hero-sub">Single-stock leveraged ETFs bleed value daily through swap financing costs. This paper constructs a market-neutral carry trade to capture that bleed, presenting results both with and without a one-off December 2025 volatility event that materially distorts the headline figures.</p>
     <div class="hero-meta">
-      <span>By: Brian Liew (LSE, BSc Accounting and Finance)</span>
-      <span>Oct 2024 – Mar 2026</span>
-      <span>355 trading days</span>
-      <span>Data: Compustat via WRDS</span>
-      <span>Published Mar 2026</span>
+      <div class="hero-meta-item"><strong>Author</strong>Brian Liew, BSc Accounting and Finance, LSE</div>
+      <div class="hero-meta-item"><strong>Period</strong>Oct 2024 to Mar 2026, 355 trading days</div>
+      <div class="hero-meta-item"><strong>Data</strong>Compustat via WRDS</div>
+      <div class="hero-meta-item"><strong>Published</strong>March 2026</div>
       <a class="gh-btn" href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/leveraged-etf-strategy" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg> Code</a>
     </div>
   </div>
@@ -267,75 +247,117 @@ table.revealed tbody tr:nth-child(8){animation-delay:0.31s}
 <div class="kpi-strip">
   <div class="kpi-note">
     <span>&#9888;</span>
-    <strong>Reporting note:</strong>&nbsp;Figures shown on two bases: including and excluding December 2025, a one-off volatility event contributing 68% of total P&amp;L. The adjusted figures are the author's preferred basis.
+    <strong>Reporting note</strong>&nbsp;Figures shown on two bases: including and excluding December 2025, a one-off volatility event contributing 68% of total P&amp;L. The adjusted figures are the author&#8217;s preferred basis.
   </div>
   <div class="kpi-tabs">
     <button class="kpi-tab active-full" onclick="showPanel('full',this)">Full sample (incl. Dec 2025)</button>
     <button class="kpi-tab" onclick="showPanel('adj',this)">Adjusted (excl. Dec windfall)</button>
   </div>
-  <div class="kpi-grid">
+  <div class="kpi-panels">
     <div class="kpi-panel active" id="panel-full">
-      <div class="kpi-cell"><div class="k">CAGR</div><div class="v pos">21.45%</div><div class="sub dn">15.96% adjusted</div></div>
-      <div class="kpi-cell"><div class="k">Sharpe ratio</div><div class="v neu">1.28</div><div class="sub neu">1.33 adjusted</div></div>
-      <div class="kpi-cell"><div class="k">Max drawdown</div><div class="v pos">-0.97%</div><div class="sub neu">Unchanged in both</div></div>
-      <div class="kpi-cell"><div class="k">Beta vs SPY</div><div class="v pos">0.042</div><div class="sub neu">Near market-neutral</div></div>
+      <div class="kpi-cell">
+        <div class="kpi-label">CAGR</div>
+        <div class="kpi-value green">21.45%</div>
+        <div class="kpi-sub dn">15.96% adjusted</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Sharpe Ratio</div>
+        <div class="kpi-value blue">1.28</div>
+        <div class="kpi-sub neu">1.33 adjusted</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Max Drawdown</div>
+        <div class="kpi-value green">-0.97%</div>
+        <div class="kpi-sub">Unchanged in both</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Beta vs SPY</div>
+        <div class="kpi-value green">0.042</div>
+        <div class="kpi-sub">Near market-neutral</div>
+      </div>
     </div>
     <div class="kpi-panel" id="panel-adj">
-      <div class="kpi-cell"><div class="k">CAGR (adjusted)</div><div class="v pos">15.96%</div><div class="sub up">vs SPY 9.93%</div></div>
-      <div class="kpi-cell"><div class="k">Sharpe (adjusted)</div><div class="v neu">1.33</div><div class="sub neu">Structural carry only</div></div>
-      <div class="kpi-cell"><div class="k">Max drawdown</div><div class="v pos">-0.97%</div><div class="sub up">Sub-1% regardless</div></div>
-      <div class="kpi-cell"><div class="k">Beta vs SPY</div><div class="v pos">0.042</div><div class="sub up">Near market-neutral</div></div>
+      <div class="kpi-cell">
+        <div class="kpi-label">CAGR (Adjusted)</div>
+        <div class="kpi-value green">15.96%</div>
+        <div class="kpi-sub up">vs SPY 9.93%</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Sharpe (Adjusted)</div>
+        <div class="kpi-value blue">1.33</div>
+        <div class="kpi-sub">Structural carry only</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Max Drawdown</div>
+        <div class="kpi-value green">-0.97%</div>
+        <div class="kpi-sub up">Sub-1% regardless</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Beta vs SPY</div>
+        <div class="kpi-value green">0.042</div>
+        <div class="kpi-sub up">Near market-neutral</div>
+      </div>
     </div>
   </div>
 </div>
 
-<div style="margin-top:56px">
+<section class="section" id="s1">
 <div class="container">
-
-<div class="section" id="sec-1">
-  <div class="section-label"><span class="section-counter">01</span>The Strategy</div>
-  <h2>How leveraged ETF financing costs create a carry trade</h2>
-  <p>A 2x leveraged ETF promises exactly twice the daily return of its underlying. In practice it consistently delivers less. This gap (the tracking error) is not random noise. It is a structural, predetermined daily deduction built into the product's swap mechanics, and it accrues to the short seller unconditionally regardless of market direction.</p>
-  <p>AVL, the T-Rex 2x Broadcom ETF, achieves its 2x exposure through a total return swap. The counterparty delivers 2x AVGO's daily return but charges a financing rate comprising the risk-free rate plus a spread for the difficulty of hedging a single-stock position. This cost is deducted from NAV every trading day, silently, whether AVGO rises or falls.</p>
+  <div class="section-label"><span class="section-counter">01</span><span>The Strategy</span></div>
+  <h2>How leveraged ETF financing costs create <em>a carry trade</em></h2>
+  <p>A 2x leveraged ETF promises exactly twice the daily return of its underlying. In practice it consistently delivers less. This gap (the tracking error) is not random noise. It is a structural, predetermined daily deduction built into the product&#8217;s swap mechanics, and it accrues to the short seller unconditionally regardless of market direction.</p>
+  <p>AVL, the T-Rex 2x Broadcom ETF, achieves its 2x exposure through a total return swap. The counterparty delivers 2x AVGO&#8217;s daily return but charges a financing rate comprising the risk-free rate plus a spread for the difficulty of hedging a single-stock position. This cost is deducted from NAV every trading day, silently, whether AVGO rises or falls.</p>
   <div class="callout green">
     <div class="callout-icon">&#128161;</div>
-    <p><strong>Daily mechanics:</strong> If AVGO rises 1%, AVL delivers approximately +1.95% not +2.00%. If AVGO falls 1%, AVL delivers approximately -2.05% not -2.00%. The drag operates in both directions. The correlation of daily strategy P&amp;L with AVGO's return in this backtest is <strong>0.002</strong>, statistically indistinguishable from zero.</p>
+    <div class="callout-body">
+      <strong>Daily mechanics</strong> If AVGO rises 1%, AVL delivers approximately +1.95% not +2.00%. If AVGO falls 1%, AVL delivers approximately -2.05% not -2.00%. The drag operates in both directions. The correlation of daily strategy P&amp;L with AVGO&#8217;s return in this backtest is <strong>0.002</strong>, statistically indistinguishable from zero.
+    </div>
   </div>
   <p>The position is structured as <strong>$10,000 long AVGO / $5,000 short AVL</strong>, rebalanced daily to maintain delta neutrality. The gross spread (observed tracking error of 23.12% minus borrow cost of 0.6%) is the return available before friction.</p>
   <div class="highlight-box">
-    <div class="hb-label">Tracking error anatomy: what drives the carry</div>
-    <div class="hb-grid">
-      <div class="hb-cell"><div class="hb-val">~7%</div><div class="hb-key">Risk-free rate passed through</div></div>
-      <div class="hb-cell"><div class="hb-val">~15%</div><div class="hb-key">Bank swap spread (single-stock illiquidity premium)</div></div>
-      <div class="hb-cell"><div class="hb-val">~1%</div><div class="hb-key">ETF expense ratio</div></div>
+    <div class="hl-grid">
+      <div class="hl-cell">
+        <div class="hl-label">Risk-free rate passed through</div>
+        <div class="hl-value">~7%</div>
+      </div>
+      <div class="hl-cell">
+        <div class="hl-label">Bank swap spread (single-stock illiquidity premium)</div>
+        <div class="hl-value">~15%</div>
+      </div>
+      <div class="hl-cell">
+        <div class="hl-label">ETF expense ratio</div>
+        <div class="hl-value">~1%</div>
+      </div>
     </div>
   </div>
 </div>
+</section>
 
-<div class="section" id="sec-2">
-  <div class="section-label"><span class="section-counter">02</span>Methodological Note</div>
-  <h2>The December 2025 problem: why it matters for honest reporting</h2>
-  <p>Before the numbers: one month distorted everything, and presenting results without flagging it first would be dishonest. December 2025 contributed <strong>$2,157 of the strategy's total $3,149 P&amp;L</strong>, representing 68% of all profit from a single month out of 18. Any unqualified presentation of headline returns would be misleading without this disclosure.</p>
+<section class="section" id="s2" style="background:var(--bg2)">
+<div class="container">
+  <div class="section-label"><span class="section-counter">02</span><span>Methodological Note</span></div>
+  <h2>The December 2025 problem: <em>why it matters for honest reporting</em></h2>
+  <p>Before the numbers: one month distorted everything, and presenting results without flagging it first would be dishonest. December 2025 contributed <strong>$2,157 of the strategy&#8217;s total $3,149 P&amp;L</strong>, representing 68% of all profit from a single month out of 18. Any unqualified presentation of headline returns would be misleading without this disclosure.</p>
   <div class="callout amber">
     <div class="callout-icon">&#9888;</div>
-    <p><strong>What caused the December anomaly:</strong> AVGO fell 17.6% in December 2025. The daily compounding mechanic of a 2x leveraged ETF causes losses to compound asymmetrically over sustained directional moves, a form of volatility decay. AVL fell substantially more than 2x over the month, generating outsized tracking error of 17.4% against a typical monthly run-rate of 0.3–1.7%. This P&amp;L was real, but it required a specific confluence of high volatility and directional momentum that cannot be reliably expected to repeat.</p>
-  </div>
-  <div class="chart-wrap">
-    <div class="chart-header">
-      <div class="chart-title">Monthly tracking error (%): December clearly anomalous</div>
-      <div class="legend">
-        <span><span class="legend-dot" style="background:#059669"></span>Structural carry (typical)</span>
-        <span><span class="legend-dot" style="background:#dc2626"></span>Dec 2025 vol event</span>
-      </div>
+    <div class="callout-body">
+      <strong>What caused the December anomaly</strong> AVGO fell 17.6% in December 2025. The daily compounding mechanic of a 2x leveraged ETF causes losses to compound asymmetrically over sustained directional moves, a form of volatility decay. AVL fell substantially more than 2x over the month, generating outsized tracking error of 17.4% against a typical monthly run-rate of 0.3&#8211;1.7%. This P&amp;L was real, but it required a specific confluence of high volatility and directional momentum that cannot be reliably expected to repeat.
     </div>
-    <div class="chart-box" style="height:230px"><canvas id="teChart"></canvas></div>
   </div>
-  <p>All results in this paper are presented on two bases: <strong>full sample</strong> (including December) and <strong>adjusted</strong> (December P&amp;L replaced with a structural-TE-only estimate). The adjusted figures are the author's preferred basis for evaluating forward-looking merit.</p>
+  <div class="chart-box">
+    <div class="chart-title">Monthly tracking error (%): December clearly anomalous</div>
+    <canvas id="teChart" height="80"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#059669"></span>Structural carry (typical)</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#dc2626"></span>Dec 2025 vol event</div>
+    </div>
+  </div>
+  <p>All results in this paper are presented on two bases: <strong>full sample</strong> (including December) and <strong>adjusted</strong> (December P&amp;L replaced with a structural-TE-only estimate). The adjusted figures are the author&#8217;s preferred basis for evaluating forward-looking merit.</p>
   <div class="scenario-grid">
     <div class="scenario-card best">
       <div class="sc-label">Conservative estimate</div>
       <div class="sc-cagr">15.96%</div>
-      <div class="sc-desc">Dec = structural TE only. The repeatable carry. Author's preferred basis.</div>
+      <div class="sc-desc">Dec = structural TE only. The repeatable carry. Author&#8217;s preferred basis.</div>
     </div>
     <div class="scenario-card mid">
       <div class="sc-label">Full sample</div>
@@ -349,68 +371,79 @@ table.revealed tbody tr:nth-child(8){animation-delay:0.31s}
     </div>
   </div>
 </div>
+</section>
 
-<div class="section" id="sec-3">
-  <div class="section-label"><span class="section-counter">03</span>Backtest Results</div>
-  <h2>Full results: daily rebalancing, both bases</h2>
-  <p>The backtest runs from AVL's inception (October 10, 2024) through March 13, 2026 across six distinct market regimes. Position: $10,000 long AVGO, $5,000 short AVL, 0.6% annual borrow, rebalanced daily.</p>
-  <table class="dual-table">
-    <thead>
-      <tr>
-        <th>Metric</th>
-        <th>Full sample</th>
-        <th class="adj">Adjusted (excl. Dec windfall)</th>
-        <th>Weekly rebal (full)</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td class="metric">Total return</td><td class="full pos">+31.49%</td><td class="adj pos">+13.39%</td><td class="weekly">+50.07%</td></tr>
-      <tr><td class="metric">CAGR</td><td class="full pos">+21.45%</td><td class="adj pos">+15.96%</td><td class="weekly">+33.40%</td></tr>
-      <tr><td class="metric">SPY CAGR (same period)</td><td class="full">+9.93%</td><td class="adj">+9.93%</td><td class="weekly">+9.93%</td></tr>
-      <tr><td class="metric">Sharpe ratio</td><td class="full">1.28</td><td class="adj">1.33</td><td class="weekly">1.50</td></tr>
-      <tr><td class="metric">Calmar ratio</td><td class="full pos">22.06</td><td class="adj pos">16.45</td><td class="weekly neg">5.38</td></tr>
-      <tr><td class="metric">Max drawdown</td><td class="full pos">-0.97%</td><td class="adj pos">-0.97%</td><td class="weekly neg">-6.21%</td></tr>
-      <tr><td class="metric">Beta vs SPY</td><td class="full pos">0.042</td><td class="adj pos">0.042</td><td class="weekly neg">0.222</td></tr>
-      <tr><td class="metric">Win rate</td><td class="full">60.3%</td><td class="adj">60.3%</td><td class="weekly">55.5%</td></tr>
-      <tr><td class="metric">Win / loss ratio</td><td class="full">1.95x</td><td class="adj">1.95x</td><td class="weekly">1.33x</td></tr>
-    </tbody>
-  </table>
+<section class="section" id="s3">
+<div class="container">
+  <div class="section-label"><span class="section-counter">03</span><span>Backtest Results</span></div>
+  <h2>Full results: <em>daily rebalancing, both bases</em></h2>
+  <p>The backtest runs from AVL&#8217;s inception (October 10, 2024) through March 13, 2026 across six distinct market regimes. Position: $10,000 long AVGO, $5,000 short AVL, 0.6% annual borrow, rebalanced daily.</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>Full sample</th>
+          <th class="adj">Adjusted (excl. Dec windfall)</th>
+          <th>Weekly rebal (full)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="metric">Total return</td><td class="full pos">+31.49%</td><td class="adj pos">+13.39%</td><td class="weekly">+50.07%</td></tr>
+        <tr><td class="metric">CAGR</td><td class="full pos">+21.45%</td><td class="adj pos">+15.96%</td><td class="weekly">+33.40%</td></tr>
+        <tr><td class="metric">SPY CAGR (same period)</td><td class="full">+9.93%</td><td class="adj">+9.93%</td><td class="weekly">+9.93%</td></tr>
+        <tr><td class="metric">Sharpe ratio</td><td class="full">1.28</td><td class="adj">1.33</td><td class="weekly">1.50</td></tr>
+        <tr><td class="metric">Calmar ratio</td><td class="full pos">22.06</td><td class="adj pos">16.45</td><td class="weekly neg">5.38</td></tr>
+        <tr><td class="metric">Max drawdown</td><td class="full pos">-0.97%</td><td class="adj pos">-0.97%</td><td class="weekly neg">-6.21%</td></tr>
+        <tr><td class="metric">Beta vs SPY</td><td class="full pos">0.042</td><td class="adj pos">0.042</td><td class="weekly neg">0.222</td></tr>
+        <tr><td class="metric">Win rate</td><td class="full">60.3%</td><td class="adj">60.3%</td><td class="weekly">55.5%</td></tr>
+        <tr><td class="metric">Win / loss ratio</td><td class="full">1.95x</td><td class="adj">1.95x</td><td class="weekly">1.33x</td></tr>
+      </tbody>
+    </table>
+  </div>
   <div class="callout purple">
     <div class="callout-icon">&#128204;</div>
-    <p><strong>Why daily rebalancing dominates on a risk-adjusted basis:</strong> Weekly produces a higher headline CAGR (33.4% vs 21.5%), but 87% of that advantage came from a single month. On an adjusted basis both are comparable in CAGR, while daily carries 6x less drawdown and a beta of 0.04 vs 0.22. The weekly strategy's superior headline figures reflect a momentum windfall, not structural edge.</p>
-  </div>
-  <div class="chart-wrap">
-    <div class="chart-header">
-      <div class="chart-title">Cumulative P&amp;L: daily vs weekly rebalancing</div>
-      <div class="legend">
-        <span><span class="legend-dot" style="background:#059669"></span>Daily rebalancing</span>
-        <span><span class="legend-dot" style="background:#93c5fd"></span>Weekly (comparison)</span>
-      </div>
+    <div class="callout-body">
+      <strong>Why daily rebalancing dominates on a risk-adjusted basis</strong> Weekly produces a higher headline CAGR (33.4% vs 21.5%), but 87% of that advantage came from a single month. On an adjusted basis both are comparable in CAGR, while daily carries 6x less drawdown and a beta of 0.04 vs 0.22. The weekly strategy&#8217;s superior headline figures reflect a momentum windfall, not structural edge.
     </div>
-    <div class="chart-box" style="height:280px"><canvas id="cumChart"></canvas></div>
+  </div>
+  <div class="chart-box">
+    <div class="chart-title">Cumulative P&amp;L: daily vs weekly rebalancing</div>
+    <canvas id="cumChart" height="80"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#059669"></span>Daily rebalancing</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#93c5fd"></span>Weekly (comparison)</div>
+    </div>
   </div>
   <h3>Monthly P&amp;L: December highlighted as anomaly</h3>
-  <div class="chart-wrap">
-    <div class="chart-header">
-      <div class="chart-title">Monthly P&amp;L, $10,000 initial capital</div>
-      <div class="legend">
-        <span><span class="legend-dot" style="background:#059669"></span>Normal carry months</span>
-        <span><span class="legend-dot" style="background:#dc2626"></span>Dec 2025 vol event</span>
-      </div>
+  <div class="chart-box">
+    <div class="chart-title">Monthly P&amp;L, $10,000 initial capital</div>
+    <canvas id="monthlyChart" height="80"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#059669"></span>Normal carry months</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#dc2626"></span>Dec 2025 vol event</div>
     </div>
-    <div class="chart-box" style="height:250px"><canvas id="monthlyChart"></canvas></div>
   </div>
 </div>
+</section>
 
-<div class="section" id="sec-4">
-  <div class="section-label"><span class="section-counter">04</span>Regime Analysis</div>
-  <h2>Performance across six distinct market conditions</h2>
-  <p>The strategy was profitable in all six regimes encountered. The daily P&amp;L correlation with AVGO's return was 0.002, confirming that market direction does not determine the sign of returns.</p>
-  <div class="rtable-wrap">
-    <table class="rtable">
-      <thead><tr><th>Event</th><th>AVGO return</th><th>Strategy P&amp;L</th><th>Classification</th></tr></thead>
+<section class="section" id="s4" style="background:var(--bg2)">
+<div class="container">
+  <div class="section-label"><span class="section-counter">04</span><span>Regime Analysis</span></div>
+  <h2>Performance across <em>six distinct market conditions</em></h2>
+  <p>The strategy was profitable in all six regimes encountered. The daily P&amp;L correlation with AVGO&#8217;s return was 0.002, confirming that market direction does not determine the sign of returns.</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Event</th>
+          <th>AVGO return</th>
+          <th>Strategy P&amp;L</th>
+          <th>Classification</th>
+        </tr>
+      </thead>
       <tbody>
-        <tr><td>AVGO bull run (Oct–Dec 2024)</td><td class="pos">+27.7%</td><td class="pos">+$115</td><td><span class="badge pos">Normal carry</span></td></tr>
+        <tr><td>AVGO bull run (Oct&#8211;Dec 2024)</td><td class="pos">+27.7%</td><td class="pos">+$115</td><td><span class="badge pos">Normal carry</span></td></tr>
         <tr><td>DeepSeek crash (Jan 2025)</td><td class="neg">-6.4%</td><td class="pos">+$42</td><td><span class="badge pos">Normal carry</span></td></tr>
         <tr><td>Liberation Day (Apr 2025)</td><td class="pos">+7.6%</td><td class="pos">+$39</td><td><span class="badge pos">Normal carry</span></td></tr>
         <tr><td>AVGO earnings spike (Sep 2025)</td><td class="pos">+22.1%</td><td class="pos">+$48</td><td><span class="badge pos">Normal carry</span></td></tr>
@@ -420,15 +453,19 @@ table.revealed tbody tr:nth-child(8){animation-delay:0.31s}
     </table>
   </div>
 </div>
+</section>
 
-<div class="section" id="sec-5">
-  <div class="section-label"><span class="section-counter">05</span>Risk Factors</div>
-  <h2>Risks, limitations, and what could go wrong</h2>
+<section class="section" id="s5">
+<div class="container">
+  <div class="section-label"><span class="section-counter">05</span><span>Risk Factors</span></div>
+  <h2>Risks, limitations, <em>and what could go wrong</em></h2>
   <h3>Sustained directional momentum</h3>
   <p>The primary risk is a prolonged unidirectional move in AVGO. Between daily rebalances the position drifts out of its 2:1 hedge ratio. Synthetic stress tests show the worst case: a +1.5%/day move over 20 consecutive days produces approximately a -4% loss on capital. This risk is symmetric, as sustained down moves also hurt through the same drift mechanism.</p>
   <div class="callout red">
     <div class="callout-icon">&#9889;</div>
-    <p><strong>Momentum risk is symmetric.</strong> The ideal environment is choppy and mean-reverting, where both structural carry and volatility decay accrue. A trending market in either direction gradually unwinds the hedge. Daily rebalancing substantially reduces but does not eliminate this exposure.</p>
+    <div class="callout-body">
+      <strong>Momentum risk is symmetric</strong> The ideal environment is choppy and mean-reverting, where both structural carry and volatility decay accrue. A trending market in either direction gradually unwinds the hedge. Daily rebalancing substantially reduces but does not eliminate this exposure.
+    </div>
   </div>
   <h3>Borrow cost uncertainty</h3>
   <p>The 0.6% borrow cost estimate reflects current market conditions and is not fixed. Borrow costs for single-stock ETFs can spike when the underlying moves strongly, potentially forcing closure at an inopportune time. This should be monitored daily through your prime broker.</p>
@@ -436,19 +473,18 @@ table.revealed tbody tr:nth-child(8){animation-delay:0.31s}
   <p>AVL launched in October 2024, giving this backtest only 17 months of live data. The sample does not include a prolonged bear market or rising-rate environment. The structural tracking error argument is robust, but its specific magnitude in different regimes remains untested.</p>
   <h3>Conclusion</h3>
   <p>On the adjusted basis (stripping the December volatility windfall), this strategy produced a CAGR of approximately 15.96% at near-zero market beta and a maximum drawdown under 1%. That is a genuinely attractive risk-adjusted profile, and it rests on a structural argument that is observable and persistent across all 17 months of available data.</p>
-  <p>The full-sample CAGR of 21.45% is accurate but misleading as a forward-looking estimate. The author's view is that the honest expected return is in the range of 11–16% annually: the lower bound representing conservative structural carry, the upper bound allowing for occasional volatility decay events. <strong>Investors should base any allocation decision on the adjusted figures presented here, not the headline number.</strong></p>
+  <p>The full-sample CAGR of 21.45% is accurate but misleading as a forward-looking estimate. The author&#8217;s view is that the honest expected return is in the range of 11&#8211;16% annually: the lower bound representing conservative structural carry, the upper bound allowing for occasional volatility decay events. <strong>Investors should base any allocation decision on the adjusted figures presented here, not the headline number.</strong></p>
 </div>
-
-</div>
-</div>
+</section>
 
 <footer>
   <div class="footer-inner">
-    <div class="footer-logo">The Intrinsic Investor</div>
-    <div class="footer-sub">Systematic research at the intersection of quantitative finance and public markets.<br>Published by Brian Liew, BSc Accounting and Finance, London School of Economics.</div>
-    <div class="footer-bottom">
-      <span>Data: Compustat / WRDS · Oct 2024 – Mar 2026 · 355 trading days</span>
-      <span>For informational purposes only. Not investment advice.</span>
+    <div class="footer-name">The Intrinsic Investor</div>
+    <div class="footer-right">
+      <a href="/">Home</a>
+      <a href="/research">Research</a>
+      <a href="/about">About</a>
+      <div style="margin-top:.5rem;color:rgba(255,255,255,.25)">&copy; 2026 Brian Liew. For research purposes only. Not financial advice.</div>
     </div>
   </div>
 </footer>
@@ -496,7 +532,7 @@ new Chart(document.getElementById('cumChart'),{
     {data:D.daily,borderColor:'#059669',backgroundColor:'rgba(5,150,105,.07)',borderWidth:2,pointRadius:0,fill:true,tension:0.4},
     {data:D.weekly,borderColor:'#93c5fd',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false,tension:0.4}
   ]},
-  options:{responsive:true,maintainAspectRatio:false,
+  options:{responsive:true,maintainAspectRatio:true,
     plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:function(c){return ' $'+c.parsed.y.toFixed(0);}}}},
     scales:{
       x:{ticks:{maxTicksLimit:10,font:tf,color:'#9ca3af'},grid:{display:false},border:{display:false}},
@@ -508,7 +544,7 @@ new Chart(document.getElementById('cumChart'),{
 new Chart(document.getElementById('teChart'),{
   type:'bar',
   data:{labels:D.months,datasets:[{data:D.te,backgroundColor:tec,borderRadius:4,borderSkipped:false}]},
-  options:{responsive:true,maintainAspectRatio:false,
+  options:{responsive:true,maintainAspectRatio:true,
     plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return ' '+c.parsed.y.toFixed(2)+'%';}}}},
     scales:{
       x:{ticks:{font:tf10,color:'#9ca3af',maxRotation:45},grid:{display:false},border:{display:false}},
@@ -523,7 +559,7 @@ new Chart(document.getElementById('monthlyChart'),{
     {data:mpN,backgroundColor:'rgba(5,150,105,.7)',borderRadius:4,borderSkipped:false,stack:'a'},
     {data:mpDec,backgroundColor:'rgba(220,38,38,.7)',borderRadius:4,borderSkipped:false,stack:'a'}
   ]},
-  options:{responsive:true,maintainAspectRatio:false,
+  options:{responsive:true,maintainAspectRatio:true,
     plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:function(c){if(c.parsed.y===0)return null;return ' $'+c.parsed.y.toFixed(0);}}}},
     scales:{
       x:{stacked:true,ticks:{font:tf10,color:'#9ca3af',maxRotation:45},grid:{display:false},border:{display:false}},
@@ -531,53 +567,43 @@ new Chart(document.getElementById('monthlyChart'),{
     }
   }
 });
-</script>
 
-<script>
-// Nav scroll
-const nav = document.getElementById('main-nav');
-window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 10); }, { passive: true });
-
-// Progress bar
-const progressBar = document.getElementById('progress-bar');
+// Progress bar + nav scroll shadow
+const _nav = document.querySelector('nav');
 window.addEventListener('scroll', () => {
-  const scrollTop = window.scrollY;
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  progressBar.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
+  const el = document.getElementById('progress-bar');
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  el.style.width = Math.min(pct, 100) + '%';
+  _nav.classList.toggle('scrolled', window.scrollY > 40);
 }, { passive: true });
 
-// Section reveal + table reveal
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      // Also reveal tables inside this section
-      entry.target.querySelectorAll('table').forEach(t => t.classList.add('revealed'));
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
-document.querySelectorAll('.section, .callout').forEach(el => revealObserver.observe(el));
+// Scroll reveal
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.07 });
+document.querySelectorAll('.section').forEach(s => io.observe(s));
 
-// Dot nav
-const sectionEls = document.querySelectorAll('.section[id]');
-const dots = document.querySelectorAll('.sn-dot');
-dots.forEach((dot, i) => {
-  dot.addEventListener('click', () => {
-    const target = document.getElementById(dot.dataset.target);
-    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
+// Side nav
+const NAV_LABELS = ['The Strategy','Methodological Note','Backtest Results','Regime Analysis','Risk Factors'];
+const sideNav = document.getElementById('side-nav');
+const sections = document.querySelectorAll('.section[id]');
+sections.forEach((s, i) => {
+  const a = document.createElement('a');
+  a.href = '#' + s.id;
+  a.innerHTML = '<span class="sn-label">' + (NAV_LABELS[i] || '') + '</span><span class="sn-dot"></span>';
+  sideNav.appendChild(a);
 });
-const sectionObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      dots.forEach(d => d.classList.remove('active'));
-      const activeDot = document.querySelector(`.sn-dot[data-target="${entry.target.id}"]`);
-      if (activeDot) activeDot.classList.add('active');
+const navItems = sideNav.querySelectorAll('a');
+const navIo = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navItems.forEach(n => n.classList.remove('active'));
+      const idx = Array.from(sections).indexOf(e.target);
+      if (navItems[idx]) navItems[idx].classList.add('active');
     }
   });
 }, { threshold: 0.4 });
-sectionEls.forEach(el => sectionObserver.observe(el));
+sections.forEach(s => navIo.observe(s));
 </script>
 </body>
 </html>
