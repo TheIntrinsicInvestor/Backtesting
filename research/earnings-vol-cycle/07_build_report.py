@@ -645,6 +645,8 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
       <a href="mailto:brianliew99@gmail.com">Email</a>
     </div>
   </div>
+
+  <div style="text-align:center;font-size:0.75rem;color:rgba(255,255,255,0.4);margin-top:1.5rem;font-family:var(--font, \'Inter\', sans-serif);width:100%;">For research purposes only. Not financial advice.</div>
 </footer>
 
 <script>

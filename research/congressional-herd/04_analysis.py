@@ -130,7 +130,10 @@ def build_largest_herds(buy_returns):
     top_herds = primary.sort_values("politician_count", ascending=False).head(10)
     rows = []
     for _, row in top_herds.iterrows():
-        pols = row["politicians"] if isinstance(row["politicians"], list) else []
+        try:
+            pols = list(row["politicians"])
+        except Exception:
+            pols = []
         preview = ", ".join(pols[:4])
         if len(pols) > 4:
             preview += f", and {len(pols) - 4} more"
@@ -262,6 +265,138 @@ def build_trade_vs_disc(buy_returns):
         out["n_events"].append(int(n))
         
     return out
+
+
+def build_cumulative_returns(buy_returns):
+    crsp = pd.read_parquet(DATA / "crsp_prices.parquet")
+    crsp["date"] = pd.to_datetime(crsp["date"])
+    spy = pd.read_parquet(DATA / "etf_prices.parquet")
+    spy = spy[spy["ticker"] == "SPY"].copy()
+    spy["date"] = pd.to_datetime(spy["date"])
+    spy = spy.sort_values("date")
+    
+    primary = buy_returns[(buy_returns["threshold"] == 3) & (buy_returns["window_days"] == 30)].copy()
+    primary["hold_days"] = primary["realized_hold_days"].fillna(180)
+    
+    min_date = pd.to_datetime(primary["entry_trade_date"]).min()
+    dates = spy[spy["date"] >= min_date]["date"].sort_values().reset_index(drop=True)
+    
+    spy_prc = spy.set_index("date")["prc"].to_dict()
+    crsp_prc = {}
+    for permno, grp in crsp.groupby("permno"):
+        crsp_prc[permno] = grp.set_index("date")["prc"].to_dict()
+        
+    cum_trade = np.zeros(len(dates))
+    cum_disc = np.zeros(len(dates))
+    cum_spy_trade = np.zeros(len(dates))
+    cum_spy_disc = np.zeros(len(dates))
+    
+    for _, row in primary.iterrows():
+        permno = row["permno"]
+        if pd.isna(permno) or permno not in crsp_prc:
+            continue
+            
+        stock_prc_map = crsp_prc[permno]
+        hold_days = row["hold_days"]
+        
+        # Trade date path
+        t_entry = pd.to_datetime(row["entry_trade_date"])
+        if pd.notna(t_entry):
+            t_exit = t_entry + pd.Timedelta(days=hold_days)
+            entry_p = stock_prc_map.get(t_entry)
+            spy_entry_p = spy_prc.get(t_entry)
+            
+            if entry_p is None:
+                for i in range(1, 6):
+                    entry_p = stock_prc_map.get(t_entry + pd.Timedelta(days=i))
+                    if entry_p is not None: break
+            if spy_entry_p is None:
+                for i in range(1, 6):
+                    spy_entry_p = spy_prc.get(t_entry + pd.Timedelta(days=i))
+                    if spy_entry_p is not None: break
+                        
+            if entry_p and spy_entry_p:
+                realized = 0.0
+                spy_realized = 0.0
+                closed = False
+                for i, d in enumerate(dates):
+                    if d < t_entry:
+                        continue
+                    if d > t_exit:
+                        if not closed:
+                            last_p = stock_prc_map.get(d)
+                            if last_p: realized = (last_p / entry_p) - 1
+                            last_spy = spy_prc.get(d)
+                            if last_spy: spy_realized = (last_spy / spy_entry_p) - 1
+                            closed = True
+                        cum_trade[i] += realized
+                        cum_spy_trade[i] += spy_realized
+                    else:
+                        curr_p = stock_prc_map.get(d)
+                        if curr_p:
+                            realized = (curr_p / entry_p) - 1
+                        cum_trade[i] += realized
+                        
+                        curr_spy = spy_prc.get(d)
+                        if curr_spy:
+                            spy_realized = (curr_spy / spy_entry_p) - 1
+                        cum_spy_trade[i] += spy_realized
+
+        # Disc date path
+        d_entry = pd.to_datetime(row["entry_disclosure_date"])
+        if pd.notna(d_entry):
+            d_exit = d_entry + pd.Timedelta(days=hold_days)
+            entry_p = stock_prc_map.get(d_entry)
+            spy_entry_p = spy_prc.get(d_entry)
+            
+            if entry_p is None:
+                for i in range(1, 6):
+                    entry_p = stock_prc_map.get(d_entry + pd.Timedelta(days=i))
+                    if entry_p is not None: break
+            if spy_entry_p is None:
+                for i in range(1, 6):
+                    spy_entry_p = spy_prc.get(d_entry + pd.Timedelta(days=i))
+                    if spy_entry_p is not None: break
+                        
+            if entry_p and spy_entry_p:
+                realized = 0.0
+                spy_realized = 0.0
+                closed = False
+                for i, d in enumerate(dates):
+                    if d < d_entry:
+                        continue
+                    if d > d_exit:
+                        if not closed:
+                            last_p = stock_prc_map.get(d)
+                            if last_p: realized = (last_p / entry_p) - 1
+                            last_spy = spy_prc.get(d)
+                            if last_spy: spy_realized = (last_spy / spy_entry_p) - 1
+                            closed = True
+                        cum_disc[i] += realized
+                        cum_spy_disc[i] += spy_realized
+                    else:
+                        curr_p = stock_prc_map.get(d)
+                        if curr_p:
+                            realized = (curr_p / entry_p) - 1
+                        cum_disc[i] += realized
+                        
+                        curr_spy = spy_prc.get(d)
+                        if curr_spy:
+                            spy_realized = (curr_spy / spy_entry_p) - 1
+                        cum_spy_disc[i] += spy_realized
+
+    step = max(1, len(dates) // 250)
+    keep = list(range(0, len(dates), step))
+    if keep[-1] != len(dates) - 1:
+        keep.append(len(dates) - 1)
+        
+    return {
+        "dates": [dates[i].strftime("%Y-%m-%d") for i in keep],
+        "cum_trade": [round(float(cum_trade[i]), 3) for i in keep],
+        "cum_disc": [round(float(cum_disc[i]), 3) for i in keep],
+        "cum_spy_trade": [round(float(cum_spy_trade[i]), 3) for i in keep],
+        "cum_spy_disc": [round(float(cum_spy_disc[i]), 3) for i in keep]
+    }
 
 
 # ── Section 05: committee jurisdiction ────────────────────────────────────────
@@ -452,10 +587,17 @@ def build_sell_herd_returns(sell_returns):
     p10 = primary[primary["censored_10d_disc"] == False]
 
     # forward returns curve for sells
-    curve = {"horizons": HORIZONS, "mean_excess": [], "n_events": []}
+    curve = {"horizons": HORIZONS, "mean_excess": [], "p25_excess": [], "p75_excess": [], "n_events": []}
     for h in HORIZONS:
         sub = primary[primary[f"censored_{h}d_disc"] == False][f"ret_{h}d_disc_excess"].dropna()
-        curve["mean_excess"].append(round_or_none(sub.mean()) if len(sub) >= 5 else None)
+        if len(sub) >= 5:
+            curve["mean_excess"].append(round_or_none(sub.mean()))
+            curve["p25_excess"].append(round_or_none(sub.quantile(0.25)))
+            curve["p75_excess"].append(round_or_none(sub.quantile(0.75)))
+        else:
+            curve["mean_excess"].append(None)
+            curve["p25_excess"].append(None)
+            curve["p75_excess"].append(None)
         curve["n_events"].append(int(len(sub)))
 
     stats10 = compute_stats(p10["ret_10d_disc_excess"], 10)
@@ -520,6 +662,11 @@ def main():
     print("\n--- Section 04: trade-date vs disclosure-date ---")
     tvd = build_trade_vs_disc(buy)
     write("trade_vs_disc_returns.json", tvd)
+    
+    print("  Building cumulative time series...")
+    cum = build_cumulative_returns(buy)
+    write("cumulative_returns.json", cum)
+    
     print(f"  DURING LAG (median {tvd['lag_days_median']:.0f}d): "
           f"mean stock ret {tvd['lag_period_mean_return']:+.4f}  "
           f"mean excess vs SPY {tvd['lag_period_mean_excess']:+.4f}  "
@@ -556,6 +703,7 @@ def main():
     print("\n--- Section 08: sells ---")
     sells = build_sell_herd_returns(sell)
     write("sell_herd_returns.json", sells)
+    write("sell_sensitivity_heatmap.json", build_sensitivity(sell))
     skpi = sells["kpi"]
     print(f"  Sell KPI: n={skpi['n_events']}, win_rate={skpi['win_rate_10d']:.1%}, mean_excess={skpi['mean_excess_10d']:+.2%}, sharpe={skpi['sharpe_10d']:+.2f}, t={skpi['t_stat_10d']:+.2f}")
 

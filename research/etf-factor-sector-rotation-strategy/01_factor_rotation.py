@@ -1284,6 +1284,8 @@ footer{{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}}
       <a href="/">Home</a><a href="/research">Research</a><a href="/about">About</a>
     </div>
   </div>
+
+  <div style="text-align:center;font-size:0.75rem;color:rgba(255,255,255,0.4);margin-top:1.5rem;font-family:var(--font, \'Inter\', sans-serif);width:100%;">For research purposes only. Not financial advice.</div>
 </footer>
 
 <div id="side-nav"></div>

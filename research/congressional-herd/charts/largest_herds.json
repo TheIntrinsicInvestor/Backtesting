@@ -3,70 +3,70 @@
     "ticker": "AMZN",
     "window_start": "2025-03-20",
     "politician_count": 11,
-    "politicians_preview": "",
+    "politicians_preview": "Byron Donalds, David Taylor, Dwight Evans, Jared Moskowitz, and 7 more",
     "excess_10d": -0.0038
   },
   {
     "ticker": "UNH",
     "window_start": "2025-03-31",
     "politician_count": 10,
-    "politicians_preview": "",
+    "politicians_preview": "Gil Cisneros, Jefferson Shreve, John Boozman, John McGuire, and 6 more",
     "excess_10d": -0.2497
   },
   {
     "ticker": "AMZN",
     "window_start": "2025-02-04",
     "politician_count": 8,
-    "politicians_preview": "",
+    "politicians_preview": "Bruce Westerman, Greg Landsman, John Boozman, Jonathan Jackson, and 4 more",
     "excess_10d": 0.0207
   },
   {
     "ticker": "NVDA",
     "window_start": "2025-04-03",
     "politician_count": 8,
-    "politicians_preview": "",
+    "politicians_preview": "Dwight Evans, Jared Moskowitz, Katie Britt, Marjorie Taylor Greene, and 4 more",
     "excess_10d": 0.004
   },
   {
     "ticker": "MSFT",
     "window_start": "2025-01-24",
     "politician_count": 8,
-    "politicians_preview": "",
+    "politicians_preview": "Bill Keating, Gil Cisneros, John Boozman, Josh Gottheimer, and 4 more",
     "excess_10d": 0.0188
   },
   {
     "ticker": "NVDA",
     "window_start": "2025-01-02",
     "politician_count": 7,
-    "politicians_preview": "",
+    "politicians_preview": "James Comer, John Boozman, Keith Self, Marjorie Taylor Greene, and 3 more",
     "excess_10d": 0.0576
   },
   {
     "ticker": "NVDA",
     "window_start": "2025-02-24",
     "politician_count": 7,
-    "politicians_preview": "",
+    "politicians_preview": "Ashley Moody, Bruce Westerman, Jared Moskowitz, Jefferson Shreve, and 3 more",
     "excess_10d": 0.0506
   },
   {
     "ticker": "MSFT",
     "window_start": "2025-05-05",
     "politician_count": 7,
-    "politicians_preview": "",
+    "politicians_preview": "Cleo Fields, Jefferson Shreve, Josh Gottheimer, Julia Letlow, and 3 more",
     "excess_10d": -0.0617
   },
   {
     "ticker": "AMZN",
     "window_start": "2024-12-24",
     "politician_count": 7,
-    "politicians_preview": "",
+    "politicians_preview": "Bill Keating, James Comer, Marjorie Taylor Greene, Nancy Pelosi, and 3 more",
     "excess_10d": 0.0503
   },
   {
     "ticker": "META",
     "window_start": "2025-02-25",
     "politician_count": 6,
-    "politicians_preview": "",
+    "politicians_preview": "Bruce Westerman, Jonathan Jackson, Josh Gottheimer, Kelly Morrison, and 2 more",
     "excess_10d": -0.0137
   }
 ]

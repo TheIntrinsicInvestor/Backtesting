@@ -933,6 +933,8 @@ html = f"""<!DOCTYPE html>
       <div class="footer-disclaimer">For informational purposes only. Not investment advice.</div>
     </div>
   </div>
+
+  <div style="text-align:center;font-size:0.75rem;color:rgba(255,255,255,0.4);margin-top:1.5rem;font-family:var(--font, \'Inter\', sans-serif);width:100%;">For research purposes only. Not financial advice.</div>
 </footer>
 
 <script>

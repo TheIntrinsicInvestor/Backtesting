@@ -29,7 +29,10 @@ etf         = load("etf_performance.json")
 kpi         = load("kpi_strip.json")
 curve       = load("forward_returns_curve.json")
 sens        = load("sensitivity_heatmap.json")
+sell_sens   = load("sell_sensitivity_heatmap.json")
 sells       = load("sell_herd_returns.json")
+cum         = load("cumulative_returns.json")
+
 
 
 # ── Formatters ────────────────────────────────────────────────────────────────
@@ -82,13 +85,25 @@ def _cell_color(v):
     return _lerp((t - 0.5) * 2, _C_PARCH, _C_GREEN)
 
 
+def _cell_color_excess(v):
+    if v is None:
+        return "#f7f4ec"
+    # Scale [-0.02, 0.02] to [0.0, 1.0] for the lerp
+    t = (v + 0.02) / 0.04
+    t = max(0.0, min(1.0, t))
+    if t < 0.5:
+        return _lerp(t * 2, _C_RED, _C_PARCH)
+    return _lerp((t - 0.5) * 2, _C_PARCH, _C_GREEN)
+
+
 def build_sens_table():
     thresholds = sens["thresholds"]
     windows    = sens["windows"]
-    rows_wr    = sens["win_rates"]
+    rows_me    = sens["mean_excess"]
     rows_n     = sens["n_events"]
     cols = "".join(f'<th class="hm-col">{w}d</th>' for w in windows)
     html = f"""
+<div class="chart-title" style="margin-top:2rem;text-align:center;">Sensitivity Heatmap (10-day Mean Excess Return vs SPY)</div>
 <div class="hm-wrap">
 <table class="hm-table">
   <thead>
@@ -101,13 +116,43 @@ def build_sens_table():
     for i, thr in enumerate(thresholds):
         html += f'\n    <tr>\n      <td class="hm-row-label">{thr}+</td>'
         for j, win in enumerate(windows):
-            wr  = rows_wr[i][j]
+            me  = rows_me[i][j]
             n   = rows_n[i][j]
-            bg  = _cell_color(wr)
-            txt = (f"{wr * 100:.1f}%" if wr is not None else "&#8212;")
+            bg  = _cell_color_excess(me)
+            txt = (f"{me * 100:+.2f}%" if me is not None else "&#8212;")
             sub = f'<br><span style="font-size:.65rem;color:#8aa49e">n={n}</span>'
-            primary = " hm-primary" if thr == 3 and win == 30 else ""
-            html += f'\n      <td class="hm-cell{primary}" style="background:{bg}">{txt}{sub}</td>'
+            html += f'\n      <td class="hm-cell" style="background:{bg}">{txt}{sub}</td>'
+        html += "\n    </tr>"
+    html += "\n  </tbody>\n</table>\n</div>"
+    return html
+
+
+def build_sell_sens_table():
+    thresholds = sell_sens["thresholds"]
+    windows    = sell_sens["windows"]
+    rows_me    = sell_sens["mean_excess"]
+    rows_n     = sell_sens["n_events"]
+    cols = "".join(f'<th class="hm-col">{w}d</th>' for w in windows)
+    html = f"""
+<div class="chart-title" style="margin-top:2rem;text-align:center;">Sell Sensitivity Heatmap (10-day Mean Excess Return vs SPY)</div>
+<div class="hm-wrap">
+<table class="hm-table">
+  <thead>
+    <tr>
+      <th class="hm-corner">Min politicians</th>
+      {cols}
+    </tr>
+  </thead>
+  <tbody>"""
+    for i, thr in enumerate(thresholds):
+        html += f'\n    <tr>\n      <td class="hm-row-label">{thr}+</td>'
+        for j, win in enumerate(windows):
+            me  = rows_me[i][j]
+            n   = rows_n[i][j]
+            bg  = _cell_color_excess(me)
+            txt = (f"{me * 100:+.2f}%" if me is not None else "&#8212;")
+            sub = f'<br><span style="font-size:.65rem;color:#8aa49e">n={n}</span>'
+            html += f'\n      <td class="hm-cell" style="background:{bg}">{txt}{sub}</td>'
         html += "\n    </tr>"
     html += "\n  </tbody>\n</table>\n</div>"
     return html
@@ -273,9 +318,10 @@ curve_mean    = js_array(curve["mean_excess"])
 curve_p25     = js_array(curve["p25_excess"])
 curve_p75     = js_array(curve["p75_excess"])
 
-tvd_labels    = js_array([f"{h}d" for h in tvd["horizons"]])
-tvd_disc      = js_array(tvd["disc_mean"])
-tvd_trade     = js_array(tvd["trade_mean"])
+tvd_labels    = js_array(cum["dates"])
+tvd_disc      = js_array(cum["cum_disc"])
+tvd_trade     = js_array(cum["cum_trade"])
+tvd_spy       = js_array(cum["cum_spy_trade"])
 
 sector_labels = js_array([r["sector"] for r in sector])
 sector_exc    = js_array([r["mean_excess_10d"] for r in sector])
@@ -287,6 +333,8 @@ etf_spy_v     = js_array(etf["series"]["SPY"]["values"])
 
 sells_curve_labels = js_array([f"{h}d" for h in sells["curve"]["horizons"]])
 sells_curve_data   = js_array(sells["curve"]["mean_excess"])
+sells_curve_p25    = js_array(sells["curve"]["p25_excess"])
+sells_curve_p75    = js_array(sells["curve"]["p75_excess"])
 
 
 # ── Pre-rendered HTML pieces ──────────────────────────────────────────────────
@@ -296,6 +344,7 @@ sector_html    = build_sector_table()
 sens_html      = build_sens_table()
 committee_html = build_committee_table()
 top_sold_html  = build_top_sold_table()
+sell_sens_html = build_sell_sens_table()
 
 
 # ── KPI / hero values ─────────────────────────────────────────────────────────
@@ -448,7 +497,7 @@ p{{color:var(--muted);margin-bottom:1rem;text-align:justify;hyphens:none;word-br
 .method-table td:first-child{{width:170px;font-weight:500;color:var(--ink);white-space:nowrap}}
 .method-table tr:last-child td{{border-bottom:none}}
 .hm-wrap{{overflow-x:auto;margin:1rem 0}}
-.hm-table{{border-collapse:collapse;font-family:var(--mono);font-size:.75rem}}
+.hm-table{{border-collapse:collapse;font-family:var(--mono);font-size:.75rem;margin:0 auto}}
 .hm-table thead th,.hm-table tbody td{{border:1px solid var(--border)}}
 .hm-corner{{background:var(--bg2);padding:7px 12px}}
 .hm-col{{background:var(--ink);color:#fff;font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em;padding:7px 16px;text-align:center}}
@@ -669,20 +718,21 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
       </div>
     </div>
     <div class="chart-box">
-      <div class="chart-title">Mean Excess Return vs SPY Over Time: Trade vs Disclosure Entry</div>
+      <div class="chart-title">Cumulative Nominal Return (1 Unit per Trade): Trade vs Disclosure Entry</div>
       <div style="position:relative;height:300px">
         <canvas id="tvdChart"></canvas>
       </div>
       <div class="chart-legend">
-        <span><span class="legend-line" style="background:#dc2626"></span>Trade-date entry (Politician)</span>
-        <span><span class="legend-line" style="background:#1a5c52"></span>Disclosure-date entry (Follower)</span>
+        <span><span class="legend-line" style="background:#dc2626"></span>Trade-date entry</span>
+        <span><span class="legend-line" style="background:#1a5c52"></span>Disclosure-date entry</span>
+        <span><span class="legend-line" style="background:#1e40af"></span>SPY (benchmark)</span>
       </div>
     </div>
     <p>
-      Over an average holding period of {int(tvd['realized_hold_days'])} days, politicians generated a mean realized excess return of {pct(tvd['realized_trade_mean'])}, with a win rate of {pct(tvd['realized_trade_winrate'],0,False)}. A hypothetical follower mirroring those exact trades subject to disclosure lags actually performed slightly less negatively ({pct(tvd['realized_disc_mean'])}) merely because they missed some of the initial losses!
+      The cumulative P&L chart above models the total nominal profit if you had allocated $1,000 into every congressional stock pick over their exact holding periods. Across {tvd['realized_n']} such trades, politicians generated ${cum['cum_trade'][-1] * 1000:,.0f} in aggregate profit. A hypothetical follower mirroring those exact trades but entering on the disclosure date would make ${cum['cum_disc'][-1] * 1000:,.0f}. However, allocating those exact same dollars into the S&P 500 (SPY) over the identical holding periods generated ${cum['cum_spy_trade'][-1] * 1000:,.0f}.
     </p>
     <p>
-      What this means is that the disclosure-follower is not missing alpha. They are missing a chunk of pure market beta. Congress is buying stocks that go up because the market goes up, not because their picks beat the market. NANC and KRUZ simply deliver a beta-heavy, mega-cap-tilted basket dressed up as an information-based product.
+      What this means is that the disclosure-follower is not missing alpha. They are missing a chunk of pure market beta. Congress is buying stocks that go up because the market goes up, not because their picks beat the market. In fact, politicians underperformed SPY in absolute dollars. NANC and KRUZ simply deliver a beta-heavy, mega-cap-tilted basket dressed up as an information-based product.
     </p>
     <div class="callout red">
       <strong>The premise fails on its own terms.</strong> If politicians had a real edge, their realized return should beat SPY over their true holding periods. The mean realized excess return is negative. The disclosure lag does not need to be defended or measured. There is no alpha behind it to begin with.
@@ -778,12 +828,9 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
       </div>
     </div>
     <p>
-      No parameter combination in the 4&#215;3 sensitivity grid produces a meaningfully positive edge. Tightening the threshold to 4 or 5 politicians reduces the sample size to where any apparent signal is dominated by noise. Loosening to 2 politicians produces the largest samples but win rates anchored near 50%. The structural conclusion from Section 04 plays out exactly as expected in the aggregate strategy result.
+      No parameter combination in the 4&#215;3 sensitivity grid produces a meaningfully positive edge. Tightening the threshold to 4 or 5 politicians reduces the sample size to where any apparent signal is dominated by noise. Loosening to 2 politicians produces the largest samples but excess returns remain anchored near zero. Furthermore, even the tiny fractions of a percent of positive excess return seen in some cells would likely be entirely wiped out by bid-ask spreads, slippage, and trading commissions in a real-world retail environment. The structural conclusion from Section 04 plays out exactly as expected in the aggregate strategy result.
     </p>
     {sens_html}
-    <div class="callout blue">
-      <strong>Interpretation.</strong> A backtest that yields a 52.0% win rate with a -0.04 Sharpe and t-statistic of -0.21 is not "a weak signal worth refining." It is what a non-signal looks like when measured at this sample size in this regime. The mean reverts to near zero, the variance overwhelms the mean, and adjusting parameters does not change the qualitative result.
-    </div>
   </div>
 </section>
 
@@ -791,9 +838,12 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
 <section class="section" id="s8" style="background:var(--bg2)">
   <div class="container">
     <div class="section-label"><span class="section-counter">08</span><span>The Sell Side</span></div>
-    <h2>A hint of something, <em>but not enough to act on</em></h2>
+    <h2>Just as noisy as the buys, <em>with no edge to be found</em></h2>
     <p>
-      The buy-side signal is conclusively null. The sell-side is more interesting, though it still does not survive a hard look. Applying the same 3+ politician, 30-day herding definition to disclosed sales rather than buys produces {sell_n} sell-herding events with complete 10-day returns. The mean excess return versus SPY after a sell-herd is {sell_exc}, with a {sell_wr:.1f}% win rate and a t-statistic of {sell_t}. That is a directional signal pointing the way the hypothesis would predict (sell herds are followed by underperformance), but the t-statistic does not cross any conventional significance threshold.
+      The buy-side signal is conclusively null. Applying the exact same primary definition (3+ politicians, 30-day rolling window) to disclosed <em>sales</em> rather than buys produces {sell_n} sell-herding events with complete 10-day returns. If politicians possessed genuine insider edge, we would expect stocks to underperform SPY following a sell herd as negative catalysts materialize. 
+    </p>
+    <p>
+      Instead, the mean 10-day excess return after a sell-herd is {sell_exc}, with a {sell_wr:.1f}% win rate and a t-statistic of {sell_t}. This means the stocks actually slightly <em>outperformed</em> the index after the politicians dumped them. The sell signal is just as noisy and devoid of alpha as the buy signal.
     </p>
     <div class="chart-box">
       <div class="chart-title">Mean excess return vs SPY after sell herd, by holding horizon</div>
@@ -801,18 +851,19 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
         <canvas id="sellChart"></canvas>
       </div>
       <div class="chart-legend">
-        <span><span class="legend-dot" style="background:#dc2626"></span>Mean 10d excess (negative = stock trailed SPY after sell)</span>
+        <span><span class="legend-dot" style="background:#1a5c52"></span>Mean excess return (positive = stock beat SPY after sell)</span>
+        <span><span class="legend-line" style="background:#e2ddd0"></span>IQR (25th to 75th percentile)</span>
+        <span><span class="legend-line" style="background:rgba(220,38,38,.5)"></span>Zero line</span>
       </div>
     </div>
 
-    <h3>Most-sold tickers</h3>
-    {top_sold_html}
+    {sell_sens_html}
 
     <p>
-      Two reasons the sell signal cannot be operationalised even if it is real. First, the same disclosure-lag problem applies. By the time three politicians have disclosed sells of the same name within 30 days, the median 27-day lag means the news is nearly a month old. Second, capitalising on a sell signal requires shorting individual equities, which carries borrow fees, recall risk, and tax inefficiency that easily consume a 2-3% notional edge. The wrappers tracking this space (NANC and KRUZ) are long-only and cannot express it.
+      Even if there were a theoretical edge hidden in the noise, it could not be operationalised. The median 27-day disclosure lag means the news is nearly a month old by the time a follower can act. Furthermore, capitalising on a sell signal requires shorting individual equities, which carries borrow fees, recall risk, and tax inefficiency that would easily consume any marginal alpha. The wrappers tracking this space (NANC and KRUZ) are long-only and cannot even express these trades.
     </p>
-    <div class="callout purple">
-      <strong>What this is, and is not.</strong> The sell-side result is the closest thing to a real signal in any of the analyses here. It is statistically borderline and operationally unimplementable. It deserves mention for completeness, not as a counter to the broader conclusion.
+    <div class="callout red">
+      <strong>The final nail in the coffin.</strong> The sell-side result conclusively mirrors the buy-side result: there is no statistically significant edge. Tracking congressional stock sales is not a viable strategy.
     </div>
   </div>
 </section>
@@ -847,7 +898,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
       <strong>Verdict on NANC and KRUZ.</strong> Both wrappers are paying 0.75% annually to deliver beta-tilted exposure to mega-cap equities, dressed in a disclosure-tracking narrative that the underlying data does not support. KRUZ has underperformed SPY by approximately 20 percentage points cumulatively over the nearly three-year comparison window. NANC has outperformed SPY by roughly 15 percentage points in absolute terms but its Sharpe ratio (1.46) is identical to SPY's, confirming it adds no risk-adjusted value above a plain index fund. Neither product captures any informational edge that survives the disclosure lag.
     </div>
     <div class="callout amber">
-      <strong>Sample-window limitation.</strong> The CRSP price data extends through December 2025, giving a usable backtest window of approximately 2.5 years and a primary sample of n={kpi_n} events. The qualitative direction of every result (null buy signal, weak directional sell signal, no committee-jurisdiction edge, KRUZ underperformance) is consistent with the academic literature on longer samples. A definitive replication on 5+ years of post-cutoff data would not be expected to change the verdict, but it would tighten the confidence intervals.
+      <strong>Sample-window limitation.</strong> The CRSP price data extends through December 2025, giving a usable backtest window of approximately 2.5 years and a primary sample of n={kpi_n} events. The qualitative direction of every result (null buy signal, null sell signal, no committee-jurisdiction edge, KRUZ underperformance) is consistent with the academic literature on longer samples. A definitive replication on 5+ years of post-cutoff data would not be expected to change the verdict, but it would tighten the confidence intervals.
     </div>
     <div class="callout blue">
       <strong>What this report does not claim.</strong> It does not claim that politicians never have informational advantages on individual trades. It claims that the disclosure-based wrappers and tracking products sold to retail investors do not capture any such advantages if they exist. The two questions are different and the literature consensus on the second one has been stable for over a decade.
@@ -861,7 +912,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
 <div style="background:#eef7f5;border-left:3px solid #1a5c52;padding:1.2rem 1.5rem;margin:0 auto 2rem;border-radius:0 3px 3px 0;max-width:900px">
   <span style="font-family:var(--mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);font-weight:600;display:block;margin-bottom:.5rem">For the desk</span>
   <p style="font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:0;text-align:left;hyphens:none">
-    Median disclosure lag {lag_median}d (mean {lag_mean:.1f}d, p90 {int(lag['p90'])}d, {lag_over_45_pct:.1f}% late). Lag-period excess vs SPY {lag_period_excess_str} (n=131, win rate {lag_period_winrate:.1f}%): even politicians' own entry underperforms the index. Aggregate buy backtest (3+, 30d, 10d hold): n={kpi_n}, mean excess {kpi_exc}, Sharpe {kpi_sharpe}, t={kpi_t}. Sell-side n={sell_n}, mean excess {sell_exc}, t={sell_t} (directional but not significant). NANC cum +{nanc['cum_return'] * 100:.1f}% Sharpe {nanc_sharpe} vs SPY +{spy['cum_return'] * 100:.1f}% Sharpe {spy_sharpe}; KRUZ cum +{kruz['cum_return'] * 100:.1f}% Sharpe {kruz_sharpe}. IT in-jurisdiction n={committee['categories'][3]['in_jurisdiction']['n']} mean excess {committee['categories'][3]['in_jurisdiction']['mean_excess']*100:+.1f}%. Verdict: NANC and KRUZ should not be held.
+    Median disclosure lag {lag_median}d (mean {lag_mean:.1f}d, p90 {int(lag['p90'])}d, {lag_over_45_pct:.1f}% late). Lag-period excess vs SPY {lag_period_excess_str} (n=131, win rate {lag_period_winrate:.1f}%): even politicians' own entry underperforms the index. Aggregate buy backtest (3+, 30d, 10d hold): n={kpi_n}, mean excess {kpi_exc}, Sharpe {kpi_sharpe}, t={kpi_t}. Sell-side n={sell_n}, mean excess {sell_exc}, t={sell_t} (completely null). NANC cum +{nanc['cum_return'] * 100:.1f}% Sharpe {nanc_sharpe} vs SPY +{spy['cum_return'] * 100:.1f}% Sharpe {spy_sharpe}; KRUZ cum +{kruz['cum_return'] * 100:.1f}% Sharpe {kruz_sharpe}. IT in-jurisdiction n={committee['categories'][3]['in_jurisdiction']['n']} mean excess {committee['categories'][3]['in_jurisdiction']['mean_excess']*100:+.1f}%. Verdict: NANC and KRUZ should not be held.
   </p>
 </div>
 
@@ -875,6 +926,8 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
       <a href="mailto:brianliew99@gmail.com">Email</a>
     </div>
   </div>
+
+  <div style="text-align:center;font-size:0.75rem;color:rgba(255,255,255,0.4);margin-top:1.5rem;font-family:var(--font, \'Inter\', sans-serif);width:100%;">For research purposes only. Not financial advice.</div>
 </footer>
 
 <script>
@@ -961,22 +1014,29 @@ new Chart(document.getElementById('lagChart'), {{
 const tvdLabels = {tvd_labels};
 const tvdDisc = {tvd_disc};
 const tvdTrade = {tvd_trade};
+const tvdSpy = {tvd_spy};
 new Chart(document.getElementById('tvdChart'), {{
   type: 'line',
   data: {{
     labels: tvdLabels,
     datasets: [
       {{
-        label: 'Trade-date entry (Politician)',
+        label: 'Trade-date entry',
         data: tvdTrade.map(v => v === null ? null : v * 100),
         borderColor: '#dc2626', backgroundColor: 'transparent',
-        borderWidth: 2, pointRadius: 4, tension: 0.35,
+        borderWidth: 2, pointRadius: 0, tension: 0.2,
       }},
       {{
-        label: 'Disclosure-date entry (Follower)',
+        label: 'Disclosure-date entry',
         data: tvdDisc.map(v => v === null ? null : v * 100),
         borderColor: '#1a5c52', backgroundColor: 'transparent',
-        borderWidth: 2, pointRadius: 4, tension: 0.35,
+        borderWidth: 2, pointRadius: 0, tension: 0.2,
+      }},
+      {{
+        label: 'SPY (benchmark)',
+        data: tvdSpy.map(v => v === null ? null : v * 100),
+        borderColor: '#1e40af', backgroundColor: 'transparent',
+        borderWidth: 2, pointRadius: 0, tension: 0.2,
       }},
       {{
         label: 'Zero',
@@ -993,7 +1053,7 @@ new Chart(document.getElementById('tvdChart'), {{
       tooltip: {{
         callbacks: {{
           label: ctx => {{
-            if (ctx.datasetIndex === 2) return null;
+            if (ctx.datasetIndex === 3) return null;
             return ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(2) + '%';
           }}
         }}
@@ -1124,28 +1184,70 @@ new Chart(document.getElementById('curveChart'), {{
 // Section 08: sell-side curve
 const sellLabels = {sells_curve_labels};
 const sellData = {sells_curve_data};
+const sellP25 = {sells_curve_p25};
+const sellP75 = {sells_curve_p75};
+
 new Chart(document.getElementById('sellChart'), {{
-  type: 'bar',
+  type: 'line',
   data: {{
     labels: sellLabels,
-    datasets: [{{
-      label: 'Mean excess vs SPY',
-      data: sellData.map(v => v === null ? null : v * 100),
-      backgroundColor: sellData.map(v => v === null ? '#ccc' : (v >= 0 ? 'rgba(26,92,82,.72)' : 'rgba(220,38,38,.65)')),
-      borderWidth: 0, borderRadius: 2,
-    }}]
+    datasets: [
+      {{
+        label: 'Mean excess return',
+        data: sellData.map(v => v === null ? null : v * 100),
+        borderColor: '#1a5c52', backgroundColor: '#1a5c52',
+        borderWidth: 2, pointRadius: 5, pointHoverRadius: 7,
+        tension: 0.1, z: 10
+      }},
+      {{
+        label: 'P75',
+        data: sellP75.map(v => v === null ? null : v * 100),
+        borderColor: 'transparent', backgroundColor: 'transparent',
+        pointRadius: 0, pointHoverRadius: 0, tension: 0.1
+      }},
+      {{
+        label: 'IQR (25th to 75th percentile)',
+        data: sellP25.map(v => v === null ? null : v * 100),
+        borderColor: 'transparent', backgroundColor: 'rgba(215,210,195,.4)',
+        fill: '-1', pointRadius: 0, pointHoverRadius: 0, tension: 0.1
+      }},
+      {{
+        label: 'Zero',
+        data: Array(sellLabels.length).fill(0),
+        borderColor: 'rgba(220,38,38,.4)', borderWidth: 1, borderDash: [4,4],
+        pointRadius: 0, pointHoverRadius: 0, fill: false
+      }}
+    ]
   }},
   options: {{
     responsive: true, maintainAspectRatio: false,
+    interaction: {{ mode: 'index', intersect: false }},
     plugins: {{
       legend: {{ display: false }},
-      tooltip: {{ callbacks: {{ label: ctx => ctx.parsed.y.toFixed(2) + '%' }} }}
+      tooltip: {{
+        backgroundColor: 'rgba(15,34,32,.95)',
+        titleFont: {{ family: "'Geist Mono', monospace", size: 11 }},
+        bodyFont: {{ family: "'Inter', sans-serif", size: 12 }},
+        padding: 10, cornerRadius: 4,
+        callbacks: {{
+          label: function(ctx) {{
+            if(ctx.dataset.label==='Zero' || ctx.dataset.label==='P75') return null;
+            let val = ctx.parsed.y;
+            if(ctx.dataset.label.includes('IQR')) {{
+              let p75 = ctx.chart.data.datasets[1].data[ctx.dataIndex];
+              return `IQR: ${{(val).toFixed(1)}}% to ${{(p75).toFixed(1)}}%`;
+            }}
+            return `${{ctx.dataset.label}}: ${{val > 0 ? '+' : ''}}${{val.toFixed(2)}}%`;
+          }}
+        }}
+      }}
     }},
     scales: {{
       x: {{ ticks: TICK, grid: {{ display: false }} }},
       y: {{
         ticks: {{ ...TICK, callback: v => v.toFixed(0) + '%' }},
         grid: GRID,
+        title: {{ display: true, text: 'Excess return vs SPY', color: '#4a6460', font: {{ size: 10 }} }}
       }}
     }}
   }}
