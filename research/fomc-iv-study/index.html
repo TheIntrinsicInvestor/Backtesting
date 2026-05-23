@@ -1786,7 +1786,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
     </p>
     <div class="callout blue">
       <strong>Sharpe methodology note.</strong> Per-trade returns are annualised using a sqrt(8) scaling
-      factor (approximately 8 FOMC meetings per year). With n=55 to 58 trades, the 95% confidence interval
+      factor (approximately 8 FOMC meetings per year). With n=60 to 63 trades, the 95% confidence interval
       on the Sharpe estimate is approximately plus or minus 0.55, making point estimates indicative rather
       than definitive.
     </div>
@@ -1807,7 +1807,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
       <thead><tr><th>Dimension</th><th>Detail</th></tr></thead>
       <tbody>
         <tr><td>Universe</td><td>SPX and TLT 30-day ATM IV (delta=50, days=30 from OptionMetrics vsurfd); CBOE VIX from FRED VIXCLS; SPY ATM straddle prices from OptionMetrics opprcd</td></tr>
-        <tr><td>Period</td><td>2018-01-31 to 2024-12-18 (60 meetings including 2 emergency, 3 outliers flagged)</td></tr>
+        <tr><td>Period</td><td>2018-01-31 to 2025-07-30 (60 meetings including 2 emergency, 3 outliers flagged)</td></tr>
         <tr><td>Event window</td><td>T-20 to T+10 trading days relative to FOMC announcement date</td></tr>
         <tr><td>IV baseline</td><td>Mean of T-20 to T-15 (6 trading days) per meeting per instrument, set to 100. Meetings with fewer than 3 valid observations in the baseline window are excluded.</td></tr>
         <tr><td>Decision type</td><td>Hike (actual change greater than 0), Hold (actual change equals 0), Cut (actual change less than 0). Source: Federal Reserve press releases.</td></tr>
@@ -1854,7 +1854,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
     <h3>Limitations and what this study cannot claim</h3>
     <p>
       The total sample of 60 meetings limits statistical precision. Subgroup analyses
-      (e.g., hawkish hold meetings, n=8) have insufficient power for robust inference. The 95%
+      (e.g., hawkish hold meetings, n=9) have insufficient power for robust inference. The 95%
       confidence interval on the Sharpe ratio is approximately plus or minus 0.55 at this sample
       size, meaning the point estimates are directionally informative but not decision-grade.
     </p>
