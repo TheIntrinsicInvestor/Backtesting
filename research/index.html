@@ -77,6 +77,8 @@ h1 em{font-style:italic;color:#1a5c52}
 .ft:hover{color:#1a5c52}
 .ft.active{color:#1a5c52;border-bottom-color:#1a5c52}
 .ft-count{font-weight:400;opacity:.65}
+.tab-desc{font-size:13px;color:#4a6460;line-height:1.75;margin:0;padding:.9rem 0 0;min-height:0;transition:opacity .2s}
+.tab-desc:empty{padding:0}
 
 /* ── SIDEBAR ── */
 .sidebar{padding:2rem 1.75rem}
@@ -162,6 +164,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
       <button class="ft" data-filter="study">Studies</button>
       <button class="ft" data-filter="analysis">Analysis</button>
     </div>
+    <p class="tab-desc"></p>
 
     <a class="report-row" data-cat="analysis" href="/research/congressional-herd/">
       <div class="report-left">
@@ -418,6 +421,13 @@ window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', windo
 // Filter tabs
 const tabs = document.querySelectorAll('.ft');
 const rows = document.querySelectorAll('.report-row');
+const tabDesc = document.querySelector('.tab-desc');
+const tabDescriptions = {
+  all: '',
+  strategy: 'Backtested trading systems evaluated across full parameter sweeps, with P&amp;L, Sharpe ratio, and drawdown as the primary outputs.',
+  study: 'Empirical investigations into market structure and implied volatility dynamics, covering event-driven patterns, vol regimes, and structural pricing behaviour tested on institutional data.',
+  analysis: 'Data-driven critiques of popular market narratives, testing whether conventional wisdom survives rigorous execution constraints.'
+};
 const catCounts = {};
 rows.forEach(r => { const c = r.dataset.cat; catCounts[c] = (catCounts[c] || 0) + 1; });
 tabs.forEach(tab => {
@@ -430,6 +440,7 @@ tabs.forEach(tab => {
     tabs.forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
     const f = tab.dataset.filter;
+    tabDesc.innerHTML = tabDescriptions[f] || '';
     rows.forEach(row => {
       const show = f === 'all' || row.dataset.cat === f;
       row.style.display = show ? '' : 'none';
