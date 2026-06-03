@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-HT9VG5C62E"></script>
@@ -28,18 +28,18 @@ body::after {
 }
 
 /* Change 2: Frosted glass nav */
-.nav{background:rgba(247,244,236,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid #e2ddd0;padding:0 2.5rem;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;transition:box-shadow 0.3s}
-.nav.scrolled{box-shadow:0 1px 24px rgba(15,34,32,0.06)}
+.nav{background:#0f2220;border-bottom:1px solid rgba(255,255,255,.08);padding:0 2.5rem;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;transition:box-shadow 0.3s}
+.nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,0.2)}
 
-.logo{font-family:'Fraunces',serif;font-size:21px;font-weight:600;color:#0f2220}
+.logo{font-family:'Fraunces',serif;font-size:21px;font-weight:600;color:#fff}
 .nl{display:flex;gap:2.25rem;list-style:none}
-.nl a{color:#0f2220;font-size:13px;font-weight:400;text-decoration:none;transition:color .2s}
+.nl a{color:rgba(255,255,255,.7);font-size:13px;font-weight:400;text-decoration:none;transition:color .2s}
 .nl a.on{font-weight:500}
-.nl a:hover{color:#1a5c52}
+.nl a:hover{color:#fff}
 
 /* Change 3: Animated nav underlines */
 .nl a{position:relative;padding-bottom:2px}
-.nl a::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:#1a5c52;transform:scaleX(0);transform-origin:left;transition:transform 0.25s cubic-bezier(0.4,0,0.2,1)}
+.nl a::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:#2d9d8f;transform:scaleX(0);transform-origin:left;transition:transform 0.25s cubic-bezier(0.4,0,0.2,1)}
 .nl a:hover::after,.nl a.on::after{transform:scaleX(1)}
 
 /* Change 8: Ghost decorative number — hero positioning */

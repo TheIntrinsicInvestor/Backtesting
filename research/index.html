@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-HT9VG5C62E"></script>
@@ -16,24 +16,25 @@
 body{background:#f7f4ec;font-family:'Inter',sans-serif;color:#0f2220;min-height:100vh}
 
 /* ── NAV ── */
-nav{background:rgba(247,244,236,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:box-shadow 0.3s;border-bottom:1px solid #e2ddd0;padding:0 2.5rem;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
-nav.scrolled{box-shadow:0 1px 24px rgba(15,34,32,0.06)}
-.nav-logo{font-family:'Fraunces',serif;font-size:21px;font-weight:600;color:#0f2220}
+nav{background:#0f2220;transition:box-shadow 0.3s;border-bottom:1px solid rgba(255,255,255,.08);padding:0 2.5rem;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,0.2)}
+.nav-logo{font-family:'Fraunces',serif;font-size:21px;font-weight:600;color:#fff}
 .nl{display:flex;gap:2.25rem;list-style:none}
-.nl a{font-size:13px;color:#0f2220;text-decoration:none;font-weight:400;transition:color .2s}
-.nl a:hover,.nl a.on{color:#1a5c52}
+.nl a{font-size:13px;color:rgba(255,255,255,.7);text-decoration:none;font-weight:400;transition:color .2s}
+.nl a:hover,.nl a.on{color:#fff}
 .nl a.on{font-weight:500}
 .nl a{position:relative;padding-bottom:2px}
-.nl a::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:#1a5c52;transform:scaleX(0);transform-origin:left;transition:transform 0.25s cubic-bezier(0.4,0,0.2,1)}
+.nl a::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:#2d9d8f;transform:scaleX(0);transform-origin:left;transition:transform 0.25s cubic-bezier(0.4,0,0.2,1)}
 .nl a:hover::after,.nl a.on::after{transform:scaleX(1)}
 
 /* ── PAGE HEADER ── */
-.page-header{padding:3.5rem 2.5rem 3rem;border-bottom:1px solid #e2ddd0;max-width:1200px;margin:0 auto}
-.eyebrow{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:#1a5c52;letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.25rem;display:flex;align-items:center;gap:10px}
-.eyebrow::before{content:'';width:24px;height:1px;background:#1a5c52}
-h1{font-family:'Fraunces',serif;font-size:2.25rem;font-weight:600;color:#0f2220;line-height:1.2;margin-bottom:.75rem}
-h1 em{font-style:italic;color:#1a5c52}
-.page-sub{font-size:13.5px;color:#4a6460;line-height:1.8;max-width:480px}
+.page-header{background:#0f2220;padding:3.5rem 2.5rem 3rem;border-bottom:1px solid rgba(255,255,255,.08)}
+.ph-inner{max-width:1200px;margin:0 auto}
+.eyebrow{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:#2d9d8f;letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.25rem;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:'';width:24px;height:1px;background:#2d9d8f}
+h1{font-family:'Fraunces',serif;font-size:2.25rem;font-weight:600;color:#fff;line-height:1.2;margin-bottom:.75rem}
+h1 em{font-style:italic;color:#2d9d8f}
+.page-sub{font-size:13.5px;color:rgba(255,255,255,.6);line-height:1.8;max-width:480px}
 
 /* ── BODY GRID ── */
 .body-grid{display:grid;grid-template-columns:1fr 240px;gap:0;max-width:1200px;margin:0 auto;align-items:start}
@@ -147,9 +148,11 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
 
 <!-- PAGE HEADER -->
 <div class="page-header">
-  <div class="eyebrow">Published Research</div>
-  <h1>All <em>Reports</em></h1>
-  <p class="page-sub">Systematic backtests built on institutional-grade market data, each study published with full methodology and honest risk disclosure.</p>
+  <div class="ph-inner">
+    <div class="eyebrow">Published Research</div>
+    <h1>All <em>Reports</em></h1>
+    <p class="page-sub">Systematic backtests built on institutional-grade market data, each study published with full methodology and honest risk disclosure.</p>
+  </div>
 </div>
 
 <!-- BODY -->
