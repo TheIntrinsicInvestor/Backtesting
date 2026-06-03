@@ -1,98 +1,142 @@
-# Plan: "The Walk-Down" — Earnings Sandbagging Report
+# Plan: "The Selective Walk-Down" — Earnings Sandbagging Report
+
+> **Supersedes the original quarterly plan.** That version (quarterly EPS, T-90 window,
+> "Anatomy of the Walk-Down", no drift analysis) was abandoned after the data came in.
+> Quarterly estimates show no walk-down (analysts set at T-89 and hold). We pivoted to
+> **annual estimates (`fpi='1'`)** over a T-270 window, which carries a real signal, and
+> the narrative changed to **"The Selective Walk-Down"**. Scripts 01–05 are complete and
+> their data is final. This plan covers the remaining build (returns + analysis + report).
 
 ## Context
 
-New quant research report for theintrinsicinvestor.com exposing **earnings sandbagging**: the practice where S&P 500 companies guide analysts' EPS estimates downward in the weeks before reporting so they can "beat" a lowered bar. The report quantifies (a) the shape of the consensus walk-down curve and (b) what fraction of reported "beats" are *manufactured* (beat the final pre-announcement consensus but would have *missed* the original ~90-day-prior consensus).
+Quant research report for theintrinsicinvestor.com on **earnings sandbagging**: the
+practice where S&P 500 firms let analysts' annual EPS estimates drift down before
+reporting so they can "beat" a lowered bar. Scope settled with Brian:
 
-Settled in the requirements conversation:
-- **Universe:** S&P 500. **Range:** 2015-2025. **EPS:** quarterly only.
-- **No post-earnings drift analysis** — this is a pure critique of the earnings-beat narrative, in the spirit of the congressional-herd piece.
-- **Narrative spine: "Anatomy of the Walk-Down" (analytical)** — lead with the curve shape, then reveal the manufactured-beat statistic.
-- **Walk-down measured via daily point-in-time consensus reconstruction from `ibes.det_epsus`** (individual analyst estimates), not the 3-point monthly `statsum` snapshots. The smooth daily curve is the visual centrepiece.
+- **Universe:** S&P 500. **Range:** 2015–2025. **EPS:** annual (`fpi='1'`).
+- **Narrative:** "The Selective Walk-Down" — lead with the paradox (the *median* event
+  walks UP +0.7%), then reveal the walk-down is deployed *selectively* on the firms that
+  would otherwise miss.
+- **This report has a tradeable section** (unlike the original pure-critique plan). The
+  trade thesis is muted announcement reaction **and** post-print drift fade for
+  manufactured beats. Honesty rule applies: end with a clear viable/not-viable verdict.
 
-Lives in new folder `research/sandbagging/`. Reuses most of the `earnings-vol-cycle` pipeline; the one genuinely new component is the `det_epsus` reconstruction.
+The walk-down is measured via daily point-in-time consensus reconstruction from
+`ibes.det_epsus` (script 04, already built and vectorised — do not revert).
 
-## Approach
+## What is already done (scripts 01–05, data final)
 
-Copy-and-modify the proven `earnings-vol-cycle` scripts for universe, earnings dates, and report-building; write two new scripts for the detail-estimate pull and the walk-down reconstruction. All WRDS scripts use the standard `builtins.input`/`getpass` monkey-patch (see CLAUDE.md) and run with `$env:WRDS_USERNAME="hoovyalert"; $env:PGPASSWORD=...`. `data/*.parquet` is gitignored and regenerated locally; `charts/*.json` is committed so the report is regenerable from JSONs alone. **Deliver one script at a time and wait for Brian to confirm each ran before writing the next.**
+`01_universe.py`, `02_earnings_dates.py`, `02b`/`02d` IBES fallbacks, `03_detail_pull.py`,
+`04_reconstruct_walkdown.py`, `05_mktcap_pull.py`. Outputs in `data/`:
+`sp500_constituents`, `earnings_dates`, `det_epsus_raw`, `walkdown_curve`,
+`walkdown_events`, `mktcap`, and `mktcap_by_year/prices_*.parquet` (daily price panel,
+full universe 2014–2025).
 
-### Script DAG (`research/sandbagging/`)
+**Locked reconstruction params (in script 04):** annual `fpi='1'`, `STALE_DAYS=365`,
+`ORIG_WINDOW=(-280,-260)`, `FINAL_WINDOW=(-7,-2)`, `ANALYST_FLOOR=3`, `SMALL_BASE=$0.10`.
+Note: `ibes.det_epsus` has **no `estdats` column**; `anndats` is the estimate issue date.
 
-| # | File | Source | Output | Key changes |
-|---|---|---|---|---|
-| 01 | `01_universe.py` | copy + modify `earnings-vol-cycle/01_universe.py` | `data/sp500_constituents.parquet` | `START="2014-10-01"` (T-90 buffer before first 2015 event), `END="2025-12-31"` |
-| 02 | `02_earnings_dates.py` | copy + modify | `data/earnings_dates.parquet` | `START="2014-07-01"`, `END="2025-12-31"`; keep `statsum` consensus cols for cross-check |
-| 02b | `02b_ibes_ticker_fallback.py` | copy as-is, adjust dates | appends to `earnings_dates.parquet` | recover unmatched permnos by IBES ticker |
-| 02d | `02d_ibes_ibesid_fallback.py` | copy as-is, adjust dates | appends to `earnings_dates.parquet` | keep hardcoded IBES canonical pairs (TELW, HPLD, SMIC, etc.) |
-| 03 | `03_detail_pull.py` | **NEW** | `data/det_epsus_raw.parquet` | Pull `ibes.det_epsus` `fpi='6'`, `measure='EPS'`, `fpedats` in event quarters, tickers = union of *post-fallback* earnings tickers. **Chunk by year / ticker batches (~150-200)** — table is millions of rows. Cols: `ticker, estimator, analys, fpi, fpedats, value, anndats, estdats, actdats, revdats, pdf`. Cache early-exit. |
-| 04 | `04_reconstruct_walkdown.py` | **NEW (engine)** | `data/walkdown_curve.parquet`, `data/walkdown_events.parquet` | PIT reconstruction, curve build, orig/final snapping, classification + `included` flag. Pure pandas, vectorized. |
-| 05 | `05_mktcap_pull.py` | copy + slim `earnings-vol-cycle/05_price_pull.py` | `data/mktcap.parquet` | One `abs(prc)*shrout` snapshot per event near `anndats` (NOT a daily panel) |
-| 06 | `06_analysis.py` | copy structure (reuse `safe_list`, `qcut`, groupby->JSON), new logic | `data/sandbagging_analysed.parquet` + `charts/data_*.json` | aggregate curve + classifications into chart JSONs + KPIs |
-| 07 | `07_build_report.py` | copy + heavily modify | `index.html` | reuse all CSS/`:root`/nav/hero/kpi-strip/section scaffold/Chart.js defaults/heatmap lerp helpers/scroll+sidenav JS; replace copy, KPIs, sections, canvas inits |
+### Key results (single source of truth = the parquet, then `analysis.json`)
 
-Note: the OptionMetrics `03_secid_mapper.py` / `04_iv_pull.py` slots from the earnings-vol-cycle pipeline are intentionally dropped (no IV in this report); numbers 03/04 are repurposed for det-pull / reconstruct.
+- 6,131 included events. Classes: genuine_beat 4,009, manufactured_beat 849, miss 1,273.
+- **Manufactured beat rate = 849 / 4,858 beats = 17.5%.**
+- Walk bins: down(<−2%) 1,838 (30.0%) · flat 1,864 (30.4%) · up(>+2%) 2,429 (39.6%).
+- Cross-tab (walk bin × class): manufactured = 709 down / 140 flat / **0 up**.
+- Manufactured cohort: median walk −6.4%, mean −10.6%, **median 17 analysts** (well-covered).
+- Genuine cohort: median walk +3.0%, mean +9.8%.
 
-### The novel piece — PIT consensus reconstruction (script 04)
+## Approach for the remaining build
 
-`ibes.det_epsus` key columns: `ticker`, `estimator` (broker), `analys` (analyst), `fpi`, `fpedats` (join key to `pends`), `value` (the EPS estimate), `anndats`/`estdats` (issue date = as-of key), `actdats`/`revdats`, `pdf`, `measure`.
+Three scripts, renumbered DAG **06 → 07 → 08**. WRDS scripts use the standard
+`builtins.input`/`getpass` monkey-patch and run with
+`$env:WRDS_USERNAME="hoovyalert"; $env:PGPASSWORD=...`. `data/*.parquet` gitignored;
+`charts/*.json` (or `analysis.json`) committed so the report regenerates from JSON alone.
+Deliver in DAG-batches (batch delivery approved); do **not** push or publish until Brian
+reviews.
 
-**Activeness rule** — on calendar day `D`, an analyst's estimate is active iff: (1) issued on/before `D` (`anndats <= D`, fall back to `estdats`); (2) it is that `(estimator, analys)`'s most recent estimate for `(ticker, fpedats, fpi)` as of `D`; (3) not stale: `(D - anndats) <= STALE_DAYS` (default **120**; det has no per-row withdraw date, so a staleness window stands in). Then `consensus(D) = mean of latest active estimate per analyst`, `n_analysts(D) = distinct active analysts`.
+### Data gap to close (small)
 
-Align det to existing events on `ticker` AND `fpedats == pends`; `anndats` of the event = T=0. Build consensus on a daily grid T-90..T-2. **Validation check:** reconstructed consensus at `statpers` dates should match `statsum_epsus` — assert closeness as a sanity test.
+The descriptive pipeline never pulled returns. The daily price panel already exists
+locally; the only missing piece is the **benchmark** — SPY (permno 84398) is not in the
+universe files.
 
-**Vectorize:** sort det by analyst + `anndats`, forward-fill each analyst's latest estimate onto the offset grid (avoid per-day triple loops).
+- **Caveat:** returns are price-only (no `dlyret`), so dividends are excluded. Acceptable
+  for a short event study; consistent with the congressional-herd report. Disclose it.
+- **Censoring:** CRSP v2 ends 2025-12-31, so late-2025 announcements lack a full T+60
+  window. Flag and exclude censored events from drift stats.
 
-### Output schemas
+### Script DAG
 
-- `walkdown_curve.parquet` (long): `permno, ticker, anndats, pends, offset (-90..-2), consensus_eps, n_analysts`.
-- `walkdown_events.parquet` (one row/event): `permno, ticker, anndats, pends, year, quarter, sector, mktcap_m, actual_eps, orig_consensus, orig_n_analysts, final_consensus, final_n_analysts, walkdown_abs, walkdown_pct, beat_vs_orig, beat_vs_final, classification, included`.
-  - **Snapping:** `orig` = curve point nearest -90 within `[-95,-85]`; `final` = largest offset <= -2 within `[-7,-2]` (avoids T-1/T-0 leakage). Report drops for missing orig/final.
+| # | File | Source / pattern | Output |
+|---|---|---|---|
+| 06 | `06_event_returns.py` | **NEW** — reuse WRDS auth + `dsf_v2` query from `05_mktcap_pull.py`; reuse `build_price_index` + `compute_one_entry` (SPY-excess) from `congressional-herd/03_forward_returns.py` | `data/spy_prices.parquet`, `data/event_returns.parquet` |
+| 07 | `07_analysis.py` | **NEW** — aggregate `walkdown_events` + `event_returns` into one JSON (single source of truth) | `data/analysis.json` |
+| 08 | `08_build_report.py` | copy structure from `earnings-vol-cycle/07_build_report.py`; follow `.claude/report-template.md` | `index.html` |
 
-### Manufactured-beat classification + exclusions (set once in script 04)
+### Script 06 — per-event market-adjusted returns
 
-- **genuine beat:** `actual > orig_consensus`
-- **manufactured beat:** `actual > final_consensus` AND `actual <= orig_consensus`
-- **miss:** `actual <= final_consensus`
+- Pull **only SPY (84398)**, 2014–2025, cache `data/spy_prices.parquet` (skip if cached).
+- Concatenate `mktcap_by_year/prices_*.parquet` into one daily panel; index
+  `permno -> sorted price frame`.
+- For each included event, locate the trading-day index of `anndats`, then compute
+  market-adjusted vs SPY over the same calendar window:
+  - `car_reaction` = stock(T−1→T+1) − SPY(T−1→T+1)  (muted-reaction test)
+  - `car_drift_60` = stock(T+1→T+60) − SPY(T+1→T+60)  (drift-fade test)
+  - keep raw legs + `censored_drift` flag.
+- Output `data/event_returns.parquet`: permno, anndats, classification, car_reaction,
+  car_drift_60, censored_drift.
 
-**Exclusions** (`included=False`): `orig_consensus<=0` or `final_consensus<=0` or `actual_eps<=0`; sign flip orig->final; small-base `abs(orig_consensus) < $0.05`. **Analyst floor:** `orig_n_analysts >= 5` AND `final_n_analysts >= 5`.
+### Script 07 — aggregate to `analysis.json`
 
-**Headline rate** = `manufactured / (genuine + manufactured)` ("of all reported beats, what fraction are manufactured"); secondary = `manufactured / all included`.
+- **KPIs (4):** 17.5% manufactured beat rate; 849 manufactured beats; −6.4% median walk
+  (mfg cohort); + one strategy KPI chosen after results.
+- **Distribution series** — `walkdown_pct` histogram, three regimes, mfg shaded.
+- **Hero: two-cohort walk curves** — offsets −270…−2, each event's consensus as % deviation
+  from its own T-270 base, averaged by cohort (manufactured declines, genuine rises),
+  indexed to 100 at start.
+- **Cross-tab** — walk bin × classification counts.
+- **Cohort profile** — analyst coverage (mfg median 17 vs others), sector tilt, near-miss
+  concentration, size buckets via `mktcap.parquet`.
+- **Strategy tables** — by cohort: mean/median `car_reaction` and `car_drift_60`, n, t-stat,
+  hit rate; long-genuine/short-manufactured spread + naive Sharpe. Exclude censored from drift.
 
-### Curve normalization (centrepiece chart)
+### Script 08 — `research/sandbagging/index.html`
 
-On the included set only. Index each event's consensus to **100 at T-90** (`consensus(D)/orig*100`); aggregate as **median across events per offset** + mean line + p25-p75 IQR ribbon (clone the IV-profile chart block). Provide `pct_change` arrays as an alt framing. Robustness: also show raw `consensus(D)-orig` in cents among mega-caps to prove the walk-down is real in absolute terms, not a normalization artifact.
+Load `analysis.json`; write figures directly into JS constants (prose cites constants,
+never the reverse). Follow `report-template.md` + `design-system.md`; canonical reference
+`research/0dte-gamma-trap/index.html`. Section order:
 
-### Chart JSONs (committed to `charts/`)
+1. **Study Design** — paradox hook (+0.7% walk-UP), class definitions, data + exclusions.
+2. **The Selective Walk-Down** — distribution (30/30/40), **hero two-cohort curves**,
+   cross-tab callout ("0 manufactured beats came from a firm that walked up").
+3. **Who Gets Walked Down** — analyst-coverage finding (sandbagging at the *most*-covered
+   names), sector tilt, near-miss concentration, size.
+4. **Does It Pay? (Strategy)** — muted-reaction `highlight-box` + CAR(T−1→T+1) chart;
+   drift `highlight-box` + CAR(T+1→T+60) chart + long-short table; "What these results
+   mean"; brutally honest viability verdict (borrow, overlap, costs, censoring);
+   `callout red` disclaimer.
+5. **Methodology** — `method-table`: PIT params, price-only/dividend caveat, SPY benchmark,
+   censoring, `STALE_DAYS` note.
+6. **Conclusions** — 4 callouts + limitations.
 
-1. `data_walkdown_curve.json` — **centrepiece**: `offsets`, `median/mean/p25/p75` (indexed-100), `pct_change`, `n_events`.
-2. `data_manufactured_breakdown.json` — `categories [Genuine, Manufactured, Miss]`, `counts`, `pct_of_all`, `pct_of_beats`, scalar `manufactured_beat_rate`.
-3. `data_sector_walkdown.json` — `sectors`, `walkdown_median_pct`, `manufactured_rate`, `n_events` (heatmap centred at 0, reuse Python lerp renderer).
-4. `data_mktcap_breakdown.json` — `quintiles`, `walkdown_median_pct`, `manufactured_rate`, `median_mktcap_m`, `n_events`.
-5. `data_time_trend.json` — by year: `labels`, `manufactured_rate`, `walkdown_median_pct`, `beat_rate_vs_final`, `beat_rate_vs_orig`, `n_events` (COVID quarter flagged).
-6. `data_kpis.json` — 4 hero KPIs: `n_events`, `manufactured_beat_rate`, `median_walkdown_pct`, `pct_events_walked_down`.
-
-### Report sections (`index.html`)
-
-Hero tag "Earnings Guidance Study". KPI strip from `data_kpis.json`. Side-nav `NAV_LABELS` + section ids synced to 7 entries.
-
-1. **Anatomy of the Walk-Down** — mechanism + centrepiece curve; headline median walk-down.
-2. **The Manufactured Beat** — define classes, chart 2, headline stat in amber callout.
-3. **Who walks down hardest — Sector** (chart 3).
-4. **Coverage and size — Market cap** (chart 4).
-5. **Has it gotten worse? — Time trend** (chart 5).
-6. **Methodology** — CRSP PIT membership, `actu_epsus`/`det_epsus`, PIT reconstruction in prose, orig=T-90/final=T-2 snapping, exclusions, normalization, `statsum` cross-check, `STALE_DAYS` sensitivity note.
-7. **Conclusions** — walk-down systematic; large minority of beats manufactured; concentration by sector/size; caveats (analyst-id stability, staleness-window sensitivity, GICS not PIT, descriptive not causal).
-
-Apply all design rules from CLAUDE.md: GA4 tag after `<head>`, `var(--bg2)` chart boxes (no white cards), HTML-table heatmaps (no PNG), justified text `hyphens:none`, no em dashes/semicolons in visible text, HTML entities for Unicode, GitHub Code button in `hero-meta` pointing at `.../tree/main/research/sandbagging`, "Published Month YYYY". Data-integrity rule: prose cites the JS constants exactly.
+Design rules (CLAUDE.md): GA4 tag after `<head>`, `var(--bg2)` boxes (no white cards),
+HTML-table heatmaps, justified text `hyphens:none`, no em dashes/semicolons, HTML entities
+for Unicode, GitHub Code button → `.../tree/main/research/sandbagging`, "Published Month YYYY".
+Keep **WIP / unlisted** (no homepage or research-listing entry) until Brian reviews.
 
 ## Verification
 
-- After **04**, assert reconstructed consensus at `statpers` dates ~= `statsum_epsus.meanest` (PIT sanity check); print event counts, drop reasons, included/excluded tallies.
-- After **06**, spot-check headline manufactured-beat rate and median walk-down against `walkdown_events.parquet` directly.
-- After **07**, run `.\serve.ps1` and open `http://localhost:8000/research/sandbagging/` locally; verify every charted number matches the prose and KPI strip before any push.
-- Run `STALE_DAYS` at 90/120/150 once to confirm the headline rate is not knife-edge; record the range in methodology.
-- Do **not** add to the homepage / research listing until visual QA passes (status stays WIP, like congressional-herd did).
+1. **06:** `event_returns.parquet` rows ≈ included events minus censored; sanity-check
+   mean `car_reaction` is small and genuine > manufactured.
+2. **07:** `analysis.json` KPIs match the figures above exactly; two-cohort curves move in
+   opposite directions; up-bin manufactured count = 0.
+3. **08:** preview with `.\serve.ps1` (not deploy-to-verify); audit prose vs JS constants
+   (KPI strip, callouts, conclusion, methodology all agree); confirm hero renders and the
+   strategy verdict is explicit.
+4. Do **not** add to homepage / research listing until visual QA passes (status stays WIP).
 
-## Open parameters (sensible defaults, adjustable)
+## Out of scope
 
-`STALE_DAYS=120`, analyst floor `=5`, small-base floor `=$0.05`, orig window `[-95,-85]`, final window `[-7,-2]`. mktcap = single snapshot per event (WRDS-light); coverage-tertile fallback available if the mktcap pull is undesirable.
+- No edits to scripts 01–05 (data final; do not revert 04's vectorised reconstruction).
+- No homepage/research-listing changes until published.
+- Anthropic API-key rotation remains separate housekeeping, not part of this build.
