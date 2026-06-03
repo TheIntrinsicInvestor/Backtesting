@@ -71,6 +71,13 @@ h1 em{font-style:italic;color:#1a5c52}
 .read-link{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#1a5c52;text-decoration:none;display:inline-flex;align-items:center;gap:4px;margin-top:.6rem;transition:gap .2s}
 .read-link:hover{gap:8px}
 
+/* ── FILTER TABS ── */
+.filter-tabs{display:flex;gap:0;padding:0;margin-bottom:-1px}
+.ft{font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:#4a6460;padding:.5rem 1.25rem .65rem;cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;transition:color .2s,border-color .2s}
+.ft:hover{color:#1a5c52}
+.ft.active{color:#1a5c52;border-bottom-color:#1a5c52}
+.ft-count{font-weight:400;opacity:.65}
+
 /* ── SIDEBAR ── */
 .sidebar{padding:2rem 1.75rem}
 .sb-block{margin-bottom:2rem}
@@ -149,7 +156,14 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
   <!-- MAIN LIST -->
   <div class="main-list">
 
-    <a class="report-row" href="/research/congressional-herd/">
+    <div class="filter-tabs">
+      <button class="ft active" data-filter="all">All</button>
+      <button class="ft" data-filter="strategy">Strategies</button>
+      <button class="ft" data-filter="study">Studies</button>
+      <button class="ft" data-filter="analysis">Analysis</button>
+    </div>
+
+    <a class="report-row" data-cat="analysis" href="/research/congressional-herd/">
       <div class="report-left">
         <div class="ctag">NANC / KRUZ &middot; Congressional Trades</div>
         <div class="report-title">The Disclosure-Lag Trap: Why Following Congress Doesn't Work</div>
@@ -168,7 +182,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
       </div>
     </a>
 
-    <a class="report-row" href="/research/earnings-vol-cycle/">
+    <a class="report-row" data-cat="study" href="/research/earnings-vol-cycle/">
       <div class="report-left">
         <div class="ctag">S&amp;P 500 &middot; Earnings Vol Study</div>
         <div class="report-title">The Earnings Vol Premium: IV Dynamics Across the S&amp;P 500</div>
@@ -187,7 +201,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
       </div>
     </a>
 
-    <a class="report-row" href="/research/fomc-iv-study/">
+    <a class="report-row" data-cat="study" href="/research/fomc-iv-study/">
       <div class="report-left">
         <div class="ctag">SPX / TLT / VIX &middot; FOMC Event Study</div>
         <div class="report-title">The FOMC Vol Crush: Implied Volatility Dynamics Around Federal Reserve Decisions</div>
@@ -206,7 +220,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
       </div>
     </a>
 
-    <a class="report-row" href="/research/0dte-gamma-trap/">
+    <a class="report-row" data-cat="study" href="/research/0dte-gamma-trap/">
       <div class="report-left">
         <div class="ctag">SPX 0DTE &middot; Options Microstructure</div>
         <div class="report-title">The Gamma Trap: How 0DTE Options Reshape Intraday SPX Dynamics</div>
@@ -225,7 +239,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
       </div>
     </a>
 
-    <a class="report-row" href="/research/etf-factor-sector-rotation-strategy/">
+    <a class="report-row" data-cat="strategy" href="/research/etf-factor-sector-rotation-strategy/">
       <div class="report-left">
         <div class="ctag">13 ETFs · Factor &amp; Sector Rotation</div>
         <div class="report-title">Factor &amp; Sector Rotation: A Systematic Parameter Optimisation</div>
@@ -244,7 +258,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
       </div>
     </a>
 
-    <a class="report-row" href="/research/iran-iv-study/">
+    <a class="report-row" data-cat="study" href="/research/iran-iv-study/">
       <div class="report-left">
         <div class="ctag">XLE / USO / XOM / CVX · Geopolitical IV</div>
         <div class="report-title">IV Behaviour in Energy Sector Options Around Iran-Related Geopolitical Events</div>
@@ -263,7 +277,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
       </div>
     </a>
 
-    <a class="report-row" href="/research/leveraged-etf-strategy/">
+    <a class="report-row" data-cat="strategy" href="/research/leveraged-etf-strategy/">
       <div class="report-left">
         <div class="ctag">AVGO / AVL · Leveraged ETF</div>
         <div class="report-title">Exploiting Leveraged ETF Decay: A Systematic Carry Trade on AVGO / AVL</div>
@@ -282,7 +296,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
       </div>
     </a>
 
-    <a class="report-row" href="/research/wheel-strategy/">
+    <a class="report-row" data-cat="strategy" href="/research/wheel-strategy/">
       <div class="report-left">
         <div class="ctag">SPY · Options Strategy</div>
         <div class="report-title">The Wheel Strategy on SPY: A Systematic Backtest</div>
@@ -301,7 +315,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
       </div>
     </a>
 
-    <a class="report-row" href="/research/short-straddle/">
+    <a class="report-row" data-cat="strategy" href="/research/short-straddle/">
       <div class="report-left">
         <div class="ctag">Mag 7 · Earnings</div>
         <div class="report-title">Selling Earnings Volatility: A Short Straddle Strategy Across the Magnificent Seven</div>
@@ -400,6 +414,29 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;b
 // Frosted nav
 const nav = document.querySelector('nav');
 window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 10); }, { passive: true });
+
+// Filter tabs
+const tabs = document.querySelectorAll('.ft');
+const rows = document.querySelectorAll('.report-row');
+const catCounts = {};
+rows.forEach(r => { const c = r.dataset.cat; catCounts[c] = (catCounts[c] || 0) + 1; });
+tabs.forEach(tab => {
+  const f = tab.dataset.filter;
+  const n = f === 'all' ? rows.length : (catCounts[f] || 0);
+  tab.innerHTML = tab.textContent.trim() + ' <span class="ft-count">(' + n + ')</span>';
+});
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const f = tab.dataset.filter;
+    rows.forEach(row => {
+      const show = f === 'all' || row.dataset.cat === f;
+      row.style.display = show ? '' : 'none';
+      if (show) row.classList.add('visible');
+    });
+  });
+});
 
 // Scroll-reveal report rows
 const io = new IntersectionObserver((entries) => {
