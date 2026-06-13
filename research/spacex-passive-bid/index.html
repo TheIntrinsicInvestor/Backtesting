@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HT9VG5C62E"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-HT9VG5C62E');</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Float Mirage: Sizing the Passive Bid for SpaceX | The Intrinsic Investor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <style>
+    :root {
+      --bg:#f7f4ec; --bg2:#f0ece2; --bg3:#e8e3d8; --card:#fff;
+      --ink:#0f2220; --muted:#4a6460; --hint:#8aa49e;
+      --border:#e2ddd0; --accent:#1a5c52; --accent2:#144a42;
+      --green:#0E9F6E; --green2:#059669; --green-bg:#ecfdf5; --green-border:#a7f3d0;
+      --red:#E02424; --red2:#dc2626; --red-bg:#fef2f2; --red-border:#fca5a5;
+      --blue:#1e40af; --blue2:#2563eb; --blue-bg:#eff6ff; --blue-border:#bfdbfe;
+      --amber:#E3A008; --amber-bg:#fffbeb; --amber-border:#fcd34d;
+      --purple:#7E3AF2; --purple-bg:#f5f3ff; --purple-border:#c4b5fd;
+      --font:'Inter',sans-serif; --serif:'Fraunces',serif; --mono:'JetBrains Mono',monospace;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.7}
+    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+      mix-blend-mode:multiply;opacity:0.5}
+    #progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;
+      background:linear-gradient(90deg,#1a5c52,#2d9d8f);z-index:9998;transition:width .1s linear}
+    nav{position:sticky;top:0;z-index:100;height:62px;display:flex;align-items:center;
+      justify-content:space-between;padding:0 2rem;
+      background:#0f2220;
+      -webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
+      transition:box-shadow .3s}
+    nav.scrolled{box-shadow:0 1px 24px rgba(15,34,32,.06)}
+    .nav-logo{font-family:var(--serif);font-weight:600;font-size:1.1rem;color:var(--ink);letter-spacing:-.01em}
+    .nav-links{display:flex;gap:1.75rem;list-style:none}
+    .nav-links a{color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:500;
+      position:relative;padding-bottom:2px;transition:color .2s}
+    .nav-links a:hover{color:var(--ink)}
+    .nav-links a::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
+      background:var(--accent);transform:scaleX(0);transform-origin:left;
+      transition:transform .25s cubic-bezier(.4,0,.2,1)}
+    .nav-links a:hover::after{transform:scaleX(1)}
+    .hero{background:var(--ink);padding:5rem 2rem 4rem;position:relative;overflow:hidden}
+    .hero::before{content:'';position:absolute;inset:0;pointer-events:none;
+      background-image:repeating-linear-gradient(-55deg,transparent,transparent 40px,
+        rgba(255,255,255,.013) 40px,rgba(255,255,255,.013) 41px)}
+    .hero-inner{max-width:860px;margin:0 auto;position:relative}
+    .hero-tag{display:inline-block;font-family:var(--mono);font-size:.72rem;color:var(--accent);
+      letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(26,92,82,.4);
+      padding:.25rem .75rem;border-radius:2px;margin-bottom:1.5rem;
+      animation:fadeUp .6s ease both}
+    .hero h1{font-family:var(--serif);font-size:clamp(1.9rem,4.5vw,3.2rem);font-weight:600;
+      color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:1.25rem;
+      animation:fadeUp .6s .1s ease both}
+    .hero h1 em{font-style:italic;color:var(--accent)}
+    .hero-sub{font-size:1rem;color:rgba(255,255,255,.65);max-width:620px;line-height:1.7;
+      margin-bottom:2rem;animation:fadeUp .6s .2s ease both}
+    .hero-meta{display:flex;flex-wrap:wrap;gap:2rem;font-family:var(--mono);font-size:.75rem;
+      color:rgba(255,255,255,.5);border-top:1px solid rgba(255,255,255,.1);
+      padding-top:1.5rem;animation:fadeUp .6s .3s ease both}
+    .hero-meta-item strong{display:block;color:rgba(255,255,255,.85);font-size:.85rem;margin-bottom:.15rem}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+    .kpi-strip{background:var(--card);border-bottom:1px solid var(--border);padding:2rem}
+    .kpi-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+    .kpi-cell{padding:1.5rem;border-right:1px solid var(--border)}
+    .kpi-cell:last-child{border-right:none}
+    .kpi-label{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+      color:var(--hint);margin-bottom:.5rem}
+    .kpi-value{font-family:var(--mono);font-size:1.9rem;font-weight:500;color:var(--ink);
+      line-height:1;margin-bottom:.4rem}
+    .kpi-value.green{color:var(--green2)}
+    .kpi-value.red{color:var(--red2)}
+    .kpi-value.blue{color:var(--blue2)}
+    .kpi-sub{font-size:.78rem;color:var(--muted)}
+    .container{max-width:860px;margin:0 auto;padding:0 2rem}
+    .section{opacity:0;transform:translateY(16px);
+      transition:opacity .55s ease,transform .55s ease;
+      padding:4.5rem 0;border-bottom:1px solid var(--border)}
+    .section.visible{opacity:1;transform:none}
+    .section:last-of-type{border-bottom:none}
+    .section-label{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem}
+    .section-counter{font-family:var(--mono);font-size:.72rem;color:var(--hint);letter-spacing:.04em}
+    .section-label span:last-child{font-size:.72rem;font-weight:600;letter-spacing:.08em;
+      text-transform:uppercase;color:var(--hint)}
+    h2{font-family:var(--serif);font-size:clamp(1.5rem,3vw,2.1rem);font-weight:600;
+      color:var(--ink);line-height:1.25;letter-spacing:-.02em;margin-bottom:1.25rem}
+    h2 em{font-style:italic;color:var(--accent)}
+    h3{font-family:var(--serif);font-size:1.15rem;font-weight:600;color:var(--ink);margin:2rem 0 .75rem}
+    p{color:var(--muted);line-height:1.75;margin-bottom:1rem;text-align:justify;hyphens:none;word-break:normal;overflow-wrap:normal}
+    p:last-child{margin-bottom:0}
+    .callout{display:flex;gap:1rem;padding:1.25rem 1.5rem;border-radius:4px;
+      margin:1.5rem 0;border-left:3px solid}
+    .callout.green{background:var(--green-bg);border-color:var(--green2)}
+    .callout.amber{background:var(--amber-bg);border-color:var(--amber)}
+    .callout.red{background:var(--red-bg);border-color:var(--red2)}
+    .callout.blue{background:var(--blue-bg);border-color:var(--blue2)}
+    .callout.purple{background:var(--purple-bg);border-color:var(--purple)}
+    .callout-icon{font-size:1.1rem;flex-shrink:0;margin-top:.1rem}
+    .callout-body{font-size:.9rem;color:var(--ink);line-height:1.6}
+    .callout-body strong{font-weight:600}
+    .highlight-box{background:var(--ink);border-radius:4px;padding:2rem;margin:1.5rem 0}
+    .hl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+    .hl-cell{padding:0 1.5rem;border-right:1px solid rgba(255,255,255,.1)}
+    .hl-cell:first-child{padding-left:0}
+    .hl-cell:last-child{border-right:none}
+    .hl-label{font-size:.7rem;font-weight:500;color:rgba(255,255,255,.35);text-transform:uppercase;
+      letter-spacing:.1em;margin-bottom:.5rem}
+    .hl-value{font-family:var(--serif);font-style:italic;font-size:1.75rem;color:#5ab5a5;line-height:1.1}
+    .hl-sub{font-size:.75rem;color:rgba(255,255,255,.3);margin-top:.3rem}
+    .chart-box{background:var(--bg2);border:1px solid var(--border);
+      border-radius:4px;padding:1.5rem;margin:1.5rem 0}
+    .chart-title{font-size:.85rem;font-weight:600;color:var(--ink);
+      margin-bottom:1rem;letter-spacing:.02em}
+    .chart-note{font-size:.78rem;color:var(--muted);margin-top:.85rem;line-height:1.55}
+    .chart-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px}
+    .legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
+    .legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+    .legend-line{width:16px;height:2px;flex-shrink:0}
+    .table-wrap{overflow-x:auto;margin:1.5rem 0;border-radius:4px;border:1px solid var(--border)}
+    table{width:100%;border-collapse:collapse;font-size:.875rem}
+    thead tr{background:var(--ink);color:#fff}
+    thead th{padding:.7rem .9rem;text-align:left;font-weight:500;font-size:.75rem;letter-spacing:.04em}
+    tbody tr{border-bottom:1px solid var(--border)}
+    tbody tr:last-child{border-bottom:none}
+    tbody tr:hover{background:var(--bg2)}
+    td{padding:.65rem .9rem;color:var(--muted);vertical-align:middle}
+    .mono{font-family:var(--mono);font-size:.82rem}
+    #side-nav{position:fixed;right:0;top:50%;transform:translateY(-50%);
+      z-index:50;display:flex;flex-direction:column;gap:2px;padding:10px 6px}
+    #side-nav a{display:flex;align-items:center;justify-content:flex-end;gap:7px;
+      text-decoration:none;padding:5px 8px;border-radius:4px;transition:background .2s}
+    #side-nav a:hover{background:rgba(26,92,82,.07)}
+    .sn-label{font-size:.67rem;font-weight:500;color:var(--hint);white-space:nowrap;
+      letter-spacing:.02em;font-family:var(--font);transition:color .2s;text-align:right}
+    .sn-dot{width:5px;height:5px;border-radius:50%;background:var(--border);
+      flex-shrink:0;transition:all .2s}
+    #side-nav a.active .sn-label{color:var(--accent);font-weight:600}
+    #side-nav a.active .sn-dot{background:var(--accent);transform:scale(1.5)}
+    #side-nav a:hover .sn-label{color:var(--ink)}
+    #side-nav a:hover .sn-dot{background:var(--muted)}
+    footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
+    .footer-inner{max-width:860px;margin:0 auto;display:flex;
+      justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+    .footer-name{font-family:var(--serif);font-weight:600;font-size:1rem;color:rgba(255,255,255,.9)}
+    .footer-right{font-size:.8rem;text-align:right}
+    .footer-right a{color:rgba(255,255,255,.5);text-decoration:none;margin-left:1.2rem}
+    .footer-right a:hover{color:rgba(255,255,255,.85)}
+    .gh-btn{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);
+      font-size:.68rem;color:rgba(255,255,255,.5);text-decoration:none;
+      border:1px solid rgba(255,255,255,.2);padding:3px 9px;border-radius:3px;
+      transition:all .2s;letter-spacing:.02em;align-self:center}
+    .gh-btn:hover{color:#fff;border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.08)}
+    @media(max-width:860px){
+      #side-nav{display:none}
+      .kpi-grid{grid-template-columns:repeat(2,1fr)}
+      .footer-inner{flex-direction:column;text-align:center}
+      .footer-right{text-align:center}
+    }
+    @media(max-width:560px){
+      .kpi-cell{border-right:none;border-bottom:1px solid var(--border)}
+      .hl-grid{grid-template-columns:1fr;gap:1rem}
+      .hl-cell{border-right:none;padding:0;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:1rem}
+      .hl-cell:last-child{border-bottom:none}
+    }
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+    }
+    nav{border-bottom-color:rgba(255,255,255,.08)!important}
+    nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
+    .nav-logo{color:#fff!important}
+    .nav-links a{color:rgba(255,255,255,.7)!important}
+    .nav-links a:hover{color:#fff!important}
+    .nav-links a::after{background:#2d9d8f!important}
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<nav>
+  <div class="nav-logo">The Intrinsic Investor</div>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/research">Research</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+</nav>
+
+<div id="side-nav" aria-label="Page sections"></div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Index Flow Study</div>
+    <h1>The Float Mirage: <em>Sizing the Passive Bid for SpaceX</em></h1>
+    <p class="hero-sub">A $1.77 trillion IPO sounds like a tidal wave of forced index buying. It is not. Two opposing errors cloud the question: multiplying the headline valuation by an index weight wildly overstates the bid, while the academic "index effect is dead" consensus understates it. We size the forced flow from the disclosed terms and trace which stocks index funds must sell to fund it. We deliberately stop short of forecasting the price move, which rests on assumptions the IPO terms cannot support.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><strong>Brian Liew</strong>LSE, BSc Accounting and Finance</div>
+      <div class="hero-meta-item"><strong>June 2026</strong>Published</div>
+      <div class="hero-meta-item"><strong>Event-driven flow estimate</strong>Forward-looking</div>
+      <div class="hero-meta-item"><strong>S-1, index methodologies, third-party flow models</strong>Inputs</div>
+      <a class="gh-btn" href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/spacex-passive-bid" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg> Code</a>
+    </div>
+  </div>
+</div>
+
+<div class="kpi-strip">
+  <div class="kpi-grid">
+    <div class="kpi-cell">
+      <div class="kpi-label">IPO Valuation</div>
+      <div class="kpi-value blue">$1.77T</div>
+      <div class="kpi-sub">$135/share, 555.6M shares offered</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">Public Float</div>
+      <div class="kpi-value">~4%</div>
+      <div class="kpi-sub">~$70B notional, ~$45-70B tradable</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">Near-Term Forced Bid</div>
+      <div class="kpi-value green">~$11B</div>
+      <div class="kpi-sub">Nasdaq-100 plus total-market, by early July</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-label">S&amp;P 500 Demand</div>
+      <div class="kpi-value red">Deferred</div>
+      <div class="kpi-sub">$13T pool blocked until 2027 at earliest</div>
+    </div>
+  </div>
+</div>
+
+<section class="section" id="s1">
+  <div class="container">
+    <div class="section-label"><span class="section-counter">01</span><span>The Question</span></div>
+    <h2>A trillion-dollar listing, and a <em>deceptively simple</em> question</h2>
+    <p>On 11 June 2026 SpaceX priced the largest IPO in history. It sold 555,555,555 shares at $135 each, raising roughly $75 billion and carrying a valuation near $1.77 trillion. The stock trades on Nasdaq under the ticker SPCX. By raise size it dwarfs the prior record holder, Saudi Aramco, whose 2019 listing netted $29.4 billion.</p>
+    <p>The intuitive question follows immediately: index funds are forced buyers, so how much will passive demand alone push the price up once SpaceX enters the major benchmarks? The intuition behind the question is that a company this large must command an enormous index weight, and that the mechanical, price-insensitive buying from trillions of dollars in passive vehicles must move the stock materially.</p>
+    <p>That intuition is half right and half badly wrong. The honest answer separates cleanly into two parts. The forced flow, measured in dollars that index funds must buy, is knowable within a tight band from the disclosed terms. The resulting price impact is not deducible to a single number from the IPO price and valuation alone, because it depends on how elastic the residual supply of stock is, and that elasticity is regime-dependent. This study sizes that flow, traces which stocks index funds must sell to fund it, and explains why the price move cannot honestly be reduced to a single figure.</p>
+
+    <div class="callout blue">
+      <span class="callout-icon">&#9432;</span>
+      <div class="callout-body"><strong>The thesis in one line.</strong> Two opposing errors cancel: multiplying $1.77T by an index weight overstates the bid (float caps and S&amp;P 500 exclusion gut the weight), while the "index effect is dead" literature understates it (the ~4% float makes forced demand huge relative to tradable supply). The net is a modest dollar bid hitting a tiny float, a liquidity story rather than an index-weight story.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="s2" style="background:var(--bg2)">
+  <div class="container">
+    <div class="section-label"><span class="section-counter">02</span><span>The Float Mirage</span></div>
+    <h2>Why $1.77 trillion <em>overstates</em> the index weight</h2>
+    <p>The first error is to weight SpaceX at its full market capitalisation. Index weights are not driven by the headline number. They are constrained by two facts that slash the effective figure.</p>
+    <p>First, the float. SpaceX floated only about 4% of the company. Elon Musk retains roughly 42% of the equity and 85% of the voting power, and the bulk of insider stock is locked up. That leaves a tradable float worth roughly $45 to $70 billion against a $1.77 trillion company, an unusually thin slice. A typical IPO floats 10% to 20%.</p>
+    <p>Second, the methodology. The Nasdaq-100, the first major index SpaceX can join, does not simply weight by shares outstanding for thin-float names. Under the methodology effective from 1 May 2026, any company with free float below one third has its share count capped at three times its free-floating shares. For SpaceX that cap binds hard: three times a 4% float is 12% of the company, so the effective index market capitalisation is roughly $212 billion, not $1.77 trillion. The chart below shows the gap.</p>
+
+    <div class="chart-box">
+      <div class="chart-title">Effective index basis: headline cap versus the float-capped reality ($ billions)</div>
+      <canvas id="mirageChart" height="150"></canvas>
+      <div class="chart-note">The Nasdaq-100 caps low-float names at three times free float. SpaceX's effective index basis (~$212B) is roughly an eighth of its headline valuation, and only that capped figure drives its index weight.</div>
+    </div>
+
+    <p>Translated into a weight, $212 billion against a Nasdaq-100 aggregate near $37 trillion is about 0.6%. That figure is corroborated independently: third-party flow desks estimate SpaceX's Nasdaq-100 weight at 0.47% to 0.70%. A naive headline-times-weight calculation would have implied a weight several times larger and a forced bid in the tens of billions for this index alone. The float cap is the difference.</p>
+
+    <div class="callout amber">
+      <span class="callout-icon">&#9888;</span>
+      <div class="callout-body"><strong>The S&amp;P 500 is off the table.</strong> The largest passive pool, roughly $13 trillion tracking the S&amp;P 500, cannot buy SpaceX yet. On 4 June 2026 S&amp;P Dow Jones Indices declined to grant a fast-entry exception, holding to its profitability, seasoning, and investable-weight rules. SpaceX cannot qualify until at least a year after listing, and only if it clears the GAAP profitability test. The biggest bid most people imagine is deferred to mid-2027 at the earliest.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="s3">
+  <div class="container">
+    <div class="section-label"><span class="section-counter">03</span><span>The Forced Flow</span></div>
+    <h2>What index funds <em>must</em> buy, and when</h2>
+    <p>With the float cap and the S&amp;P 500 exclusion applied, the forced flow becomes a tractable sum. Each index contributes its tracking assets multiplied by SpaceX's weight in that index, released on each index's own inclusion calendar. The near-term demand is dominated by two events.</p>
+    <p>The Nasdaq-100 is the headline event. Under the revised May 2026 rule, any newly listed company that ranks in the top 40 by market capitalisation enters after just 15 trading days, with the old minimum-float requirement eliminated. SpaceX easily clears that bar, so inclusion lands around early July. At a 0.6% weight against roughly $1.4 trillion of Nasdaq-100 tracking assets, that is about $8.4 billion of mechanical buying.</p>
+    <p>Total-market funds add the second tranche, and sooner. Vehicles tracking the CRSP US Total Market index (Vanguard's Total Stock Market fund alone holds $2.31 trillion) add new listings within roughly five trading days. These are float-adjusted, so SpaceX enters at roughly a 0.10% weight, contributing about $3 billion. The near-term total, the sum that hits within the first month of trading, is therefore around $11 billion.</p>
+
+    <div class="chart-box">
+      <div class="chart-title">Forced passive buying by index ($ billions, with inclusion timing)</div>
+      <canvas id="flowChart" height="170"></canvas>
+      <div class="chart-legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#1a5c52"></span>Near-term (within ~1 month)</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#E3A008"></span>Deferred (next reconstitution)</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#dc2626"></span>Conditional and deferred to 2027+</span>
+      </div>
+      <div class="chart-note">Russell 1000 enters at the September or December 2026 reconstitution, and MSCI and FTSE global indices at their next quarterly review. The S&amp;P 500 bar is shown at the midpoint of a conditional $15-50B range, contingent on GAAP profitability and the float at that time, and is deferred to mid-2027 at the earliest.</div>
+    </div>
+
+    <p>The deferred tranches are smaller and later. Russell 1000 trackers rebalance at the annual reconstitution in September or December 2026, adding on the order of $1 to $2 billion at a float-adjusted weight. MSCI and FTSE global index funds add SpaceX at their next quarterly review, contributing a further $1 to $2 billion. The S&amp;P 500, if and when SpaceX qualifies, is the largest single event, but its size depends on the float at that future date and is therefore a conditional range rather than a point estimate.</p>
+
+    <div class="highlight-box">
+      <div class="hl-grid">
+        <div class="hl-cell">
+          <div class="hl-label">Nasdaq-100</div>
+          <div class="hl-value">~$8.4B</div>
+          <div class="hl-sub">0.6% weight, ~early July</div>
+        </div>
+        <div class="hl-cell">
+          <div class="hl-label">Total Market</div>
+          <div class="hl-value">~$3.0B</div>
+          <div class="hl-sub">0.10% weight, ~day 5</div>
+        </div>
+        <div class="hl-cell">
+          <div class="hl-label">Near-Term Total</div>
+          <div class="hl-value">~$11B</div>
+          <div class="hl-sub">First month of trading</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="s4" style="background:var(--bg2)">
+  <div class="container">
+    <div class="section-label"><span class="section-counter">04</span><span>The Squeeze</span></div>
+    <h2>A modest bid, but against a <em>tiny</em> float</h2>
+    <p>Eleven billion dollars is not a tidal wave next to a $1.77 trillion company. The second error, the assumption that this implies a negligible price effect, fails because the denominator is not the $1.77 trillion. It is the tradable float of roughly $55 billion.</p>
+    <p>On that base, the near-term passive bid alone represents about 20% of all tradable stock, concentrated into the first month and front-loaded into the 15-day Nasdaq-100 window. Add the retail and active demand chasing the same scarce supply, and flow desks estimate that mechanical plus discretionary buying could absorb 30% to 50% of the entire tradable float in the first month. For a normal large-cap index addition, the comparable figure is a low single-digit percentage of float. SpaceX is an order of magnitude tighter.</p>
+
+    <div class="chart-box">
+      <div class="chart-title">Forced and total demand as a share of tradable float (%)</div>
+      <canvas id="squeezeChart" height="150"></canvas>
+      <div class="chart-note">The passive bid alone is roughly 20% of tradable float. Combined with retail and active demand it reaches 30-50%, shown here at the 40% midpoint. A typical large-cap index addition absorbs only a low single-digit share of float, which is precisely why those additions barely move on inclusion.</div>
+    </div>
+
+    <p>This is the crux. The dollar flow is ordinary. The flow relative to available supply is extraordinary. That ratio, not the headline valuation, is what determines whether the passive bid moves the price.</p>
+  </div>
+</section>
+
+<section class="section" id="s5">
+  <div class="container">
+    <div class="section-label"><span class="section-counter">05</span><span>The Index Effect</span></div>
+    <h2>The inclusion premium is dead, <em>except where float is scarce</em></h2>
+    <p>For two decades the standard playbook was to buy a stock when it was announced for S&amp;P 500 inclusion and capture the pop as index funds piled in. That trade has stopped working. Greenwood and Sammon (2023) document that the median excess return of additions fell from 8.3% in the late 1990s to essentially zero in the 2011 to 2021 window. Strategas finds that companies added between 2015 and 2024 actually underperformed the index by 66 basis points over the following year.</p>
+
+    <div class="chart-box">
+      <div class="chart-title">The disappearing index effect: excess return around S&amp;P 500 inclusion (%)</div>
+      <canvas id="indexEffectChart" height="150"></canvas>
+      <div class="chart-note">Median or average excess return associated with inclusion, by era. The premium has collapsed from roughly 8% to zero, and turned mildly negative for post-2015 additions measured over the following twelve months.</div>
+    </div>
+
+    <p>The reasons the effect disappeared are exactly the reasons it could reappear for SpaceX. The premium died because additions typically had ample float and because arbitrageurs learned to front-run the rebalance, pre-positioning so that by inclusion day the demand was already supplied. Both mitigants depend on supply being available to meet the forced bid.</p>
+    <p>SpaceX breaks that assumption. With only ~4% floated and demand running at 20% to 50% of tradable stock, there is far less supply for arbitrageurs to provide, and front-running cannot manufacture shares that insiders are contractually barred from selling. The disappearing index effect is a statement about elastic-supply additions. SpaceX is the rare inelastic-supply case, which is why the mechanism that neutralised the inclusion premium does not operate here. It is the exception that proves the rule, not a refutation of it.</p>
+  </div>
+</section>
+
+<section class="section" id="s6" style="background:var(--bg2)">
+  <div class="container">
+    <div class="section-label"><span class="section-counter">06</span><span>Forced Rotation</span></div>
+    <h2>Who index funds must <em>sell</em> to make room</h2>
+    <p>The forced buying does not appear from nowhere. An index fund is fully invested by construction, so to open a new position in SpaceX it must raise the cash by trimming everything it already owns. The flow that buys SpaceX is matched, dollar for dollar, by selling elsewhere.</p>
+    <p>Under the Nasdaq fast-entry rule, no existing constituent is removed when SpaceX joins. The index simply holds more than 100 names until the next reconstitution. So the roughly $8.4 billion SpaceX purchase is funded by selling roughly $8.4 billion spread across the incumbent members, each trimmed in proportion to its weight. Because the Nasdaq-100 is heavily top-loaded, that selling lands hardest on the megacaps.</p>
+
+    <div class="chart-box">
+      <div class="chart-title">Forced selling in the largest Nasdaq-100 members to fund SpaceX ($ billions)</div>
+      <canvas id="rotationChart" height="160"></canvas>
+      <div class="chart-note">Each member is trimmed by its index weight multiplied by the ~$8.4B SpaceX purchase. Weights are from the Nasdaq-100 snapshot of 24 September 2025, with Alphabet's two share classes combined. The eight largest names absorb roughly $4.2B, about half the total, while the remaining members and the wider total-market funds spread the balance across thousands of holdings.</div>
+    </div>
+
+    <p>Nvidia, as the largest weight, absorbs the most forced selling at roughly $0.80 billion, followed by Microsoft and Apple, which sit almost level. The Magnificent Seven plus Broadcom shoulder roughly half of the Nasdaq-100 rotation between them. Total-market funds add a further $3 billion of selling, but spread across several thousand holdings, so the per-name effect there is negligible. Russell rotation, when it arrives at reconstitution, is similarly diffuse.</p>
+    <p>The analytical point is that SpaceX's index entry is not net new demand for equities. It is a forced rotation, a mechanical transfer of index weight out of the incumbent megacaps and into a single new name. The dollars are real and the recipients are known, but no fresh money enters the market. Whether that transfer moves any individual price is a separate, supply-dependent question, and one we do not attempt to answer.</p>
+
+    <div class="callout purple">
+      <span class="callout-icon">&#9883;</span>
+      <div class="callout-body"><strong>Net-zero for the index.</strong> Every dollar of forced SpaceX buying is a dollar of forced selling somewhere else in the same funds. Passive inclusion does not add capital to equities, it redistributes existing index weight. The story is a rotation, not an injection.</div>
+    </div>
+
+    <div class="callout blue">
+      <span class="callout-icon">&#9432;</span>
+      <div class="callout-body"><strong>Fresh supply arrives alongside the demand.</strong> SpaceX's lockup is not a clean 180-day cliff. After the quarter ending 30 June, insiders subject to the lockup can sell 20% of their shares, and a 5% friends-and-family tranche carries no lockup at all. New tradable supply therefore reaches the market just as index demand peaks, a fact any price analysis would have to confront before claiming a squeeze.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="s7">
+  <div class="container">
+    <div class="section-label"><span class="section-counter">07</span><span>Methodology</span></div>
+    <h2>Inputs, assumptions, and <em>what is excluded</em></h2>
+    <div class="table-wrap">
+      <table class="method-table">
+        <thead><tr><th>Dimension</th><th>Detail</th></tr></thead>
+        <tbody>
+          <tr><td>IPO terms</td><td>$135/share, 555,555,555 shares, ~$75B raised, ~$1.77T valuation. Priced 11 Jun 2026, trades as SPCX on Nasdaq.</td></tr>
+          <tr><td>Public float</td><td>~4% of shares, ~$70B notional. Tradable float ~$45-70B after sticky retail holders and the friends-and-family carve-out.</td></tr>
+          <tr><td>Nasdaq-100 weight</td><td>Low-float names (&lt;33.3% float) capped at 3x free float. Effective index basis ~$212B, weight ~0.5-0.7% against ~$1.4T tracking. Inclusion ~15 trading days post-IPO.</td></tr>
+          <tr><td>Total-market weight</td><td>CRSP US Total Market, float-adjusted, ~0.10% weight against ~$3T tracking (Vanguard Total Stock Market $2.31T plus peers). Added ~5 trading days post-IPO.</td></tr>
+          <tr><td>S&amp;P 500</td><td>Requires GAAP profitability, seasoning, and float minimums. Fast-entry exception denied 4 Jun 2026. Earliest inclusion mid-2027, size conditional on float at that date.</td></tr>
+          <tr><td>Forced rotation</td><td>Under Nasdaq fast entry no constituent is removed, so the ~$8.4B SpaceX purchase is funded by trimming all existing members pro-rata to weight. Selling per name = index weight x ~$8.4B. Weights from the Nasdaq-100 snapshot of 24 September 2025 (Alphabet combines both share classes).</td></tr>
+          <tr><td>Excluded</td><td>Any price-impact forecast (requires unprovable supply-elasticity assumptions), long-run fundamental valuation, day-one speculative pop, options and implied-vol dynamics.</td></tr>
+          <tr><td>Sources</td><td>Company S-1 and IPO reporting (NPR, CNBC, UPI, NBC), Nasdaq-100 index methodology, S&amp;P DJI eligibility ruling, SpotGamma flow estimates, Greenwood &amp; Sammon (2023), Strategas, Research Affiliates.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="s8" style="background:var(--bg2)">
+  <div class="container">
+    <div class="section-label"><span class="section-counter">08</span><span>The Verdict</span></div>
+    <h2>The flow is knowable. The <em>pop</em> is not.</h2>
+
+    <div class="callout green">
+      <span class="callout-icon">&#10003;</span>
+      <div class="callout-body"><strong>The forced flow is estimable within a tight band.</strong> Near-term passive demand is roughly $10-12 billion, dominated by Nasdaq-100 fast entry around early July plus total-market funds within the first week. That figure follows directly from disclosed float, published index methodologies, and tracking assets.</div>
+    </div>
+
+    <div class="callout purple">
+      <span class="callout-icon">&#9883;</span>
+      <div class="callout-body"><strong>Two errors cancel.</strong> Headline-times-weight overstates the bid because the float cap and S&amp;P 500 exclusion gut the weight. The "index effect is dead" view understates it because the ~4% float makes demand huge relative to supply. The truth is a modest dollar bid hitting a thin float, a liquidity story, not a weight story.</div>
+    </div>
+
+    <div class="callout amber">
+      <span class="callout-icon">&#9888;</span>
+      <div class="callout-body"><strong>We stop at the flow, on purpose.</strong> Converting forced demand into a price move requires an assumption about supply elasticity that the IPO terms do not provide, and that recent history shows is unstable. Rather than dress a guess as a forecast, this study sizes what must be bought and sold, and stops there. Anyone quoting a confident price target is guessing.</div>
+    </div>
+
+    <div class="callout red">
+      <span class="callout-icon">&#9888;</span>
+      <div class="callout-body"><strong>Limitations.</strong> This is a forward-looking estimate, not a backtest. Inputs are drawn from the disclosed terms, third-party flow models, and published methodologies, all of which may revise. The float and the inclusion timing can change, the S&amp;P 500 path is conditional on future profitability, and index weights shift at each reconstitution. Treat the dollar-flow figures as firm to within a band, not as guarantees.</div>
+    </div>
+
+    <p>For a trader, the actionable read is narrow: the only well-grounded edge is the timing of a known, front-loaded bid against a thin float, and that edge is contested by arbitrageurs and undercut by a staged lockup that releases supply at the worst possible moment. For an analyst, the lesson generalises: passive flows are sized by float-adjusted weight, not headline market cap, and the price consequence lives in the ratio of forced demand to tradable supply, never in the size of the company alone.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-name">The Intrinsic Investor</div>
+    <div class="footer-right">
+      <span style="color:rgba(255,255,255,.35)">&copy; 2026 Brian Liew</span>
+      <a href="https://www.linkedin.com/in/brian-liew" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/TheIntrinsicInvestor" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:brianliew99@gmail.com">Email</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Progress bar + nav scroll shadow
+const _nav = document.querySelector('nav');
+window.addEventListener('scroll', () => {
+  const el  = document.getElementById('progress-bar');
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  el.style.width = Math.min(pct, 100) + '%';
+  _nav.classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+// Scroll reveal
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.07 });
+document.querySelectorAll('.section').forEach(s => io.observe(s));
+
+// Side nav
+const NAV_LABELS = ['The Question','Float Mirage','Forced Flow','The Squeeze','Index Effect','Forced Rotation','Methodology','Verdict'];
+const sideNav  = document.getElementById('side-nav');
+const sections = document.querySelectorAll('.section[id]');
+sections.forEach((s, i) => {
+  const a = document.createElement('a');
+  a.href = '#' + s.id;
+  a.innerHTML = '<span class="sn-label">' + (NAV_LABELS[i] || '') + '</span><span class="sn-dot"></span>';
+  sideNav.appendChild(a);
+});
+const navItems = sideNav.querySelectorAll('a');
+const navIo = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navItems.forEach(n => n.classList.remove('active'));
+      const idx = Array.from(sections).indexOf(e.target);
+      if (navItems[idx]) navItems[idx].classList.add('active');
+    }
+  });
+}, { threshold: 0.4 });
+sections.forEach(s => navIo.observe(s));
+
+// Chart defaults
+Chart.defaults.font.family = 'Inter, sans-serif';
+Chart.defaults.color = '#4a6460';
+const GRID = { color: 'rgba(15,34,32,.05)' };
+const TICK = { color: '#8aaba6', font: { size: 10, family: 'JetBrains Mono' } };
+
+// ---- Data constants (single source of truth) ----
+const VALUATION      = 1770;   // $B headline
+const FLOAT_CAP_BASIS = 212;   // $B, 3x float cap effective index basis
+const PURE_FLOAT     = 71;     // $B, 4% of valuation
+const NDX_FLOW       = 8.4;    // $B Nasdaq-100
+const TM_FLOW        = 3.0;    // $B total-market
+const RUSSELL_FLOW   = 1.5;    // $B Russell 1000 (deferred)
+const GLOBAL_FLOW    = 1.5;    // $B MSCI/FTSE (deferred)
+const SP500_FLOW     = 30;     // $B midpoint of conditional $15-50B (deferred 2027+)
+const SQUEEZE_PASSIVE = 20;    // % of tradable float, passive only
+const SQUEEZE_ALL    = 40;     // % of tradable float, passive + retail/active
+const SQUEEZE_NORMAL = 2.5;    // % of float, typical large-cap addition
+const ROT_LABELS  = ['Nvidia','Microsoft','Apple','Alphabet','Broadcom','Amazon','Meta','Tesla'];
+const ROT_WEIGHTS = [9.49, 8.29, 8.26, 6.20, 5.77, 5.15, 3.59, 3.40]; // % of Nasdaq-100, 24 Sep 2025 (Alphabet = GOOGL+GOOG)
+const ROT_SELL    = ROT_WEIGHTS.map(w => +(w / 100 * NDX_FLOW).toFixed(2)); // $B sold per name
+
+// Chart 1: Float mirage
+new Chart(document.getElementById('mirageChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Headline market cap', 'Float-capped index basis (3x)', 'Pure float (~4%)'],
+    datasets: [{
+      data: [VALUATION, FLOAT_CAP_BASIS, PURE_FLOAT],
+      backgroundColor: ['rgba(30,64,175,0.45)', 'rgba(26,92,82,0.80)', 'rgba(138,164,158,0.55)'],
+      borderColor: ['#1e40af', '#1a5c52', '#8aa49e'],
+      borderWidth: 1, borderRadius: 3
+    }]
+  },
+  options: {
+    indexAxis: 'y', responsive: true, maintainAspectRatio: true,
+    plugins: { legend: { display: false },
+      tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.x.toLocaleString() + 'B' } } },
+    scales: {
+      x: { grid: GRID, ticks: { ...TICK, callback: v => '$' + v.toLocaleString() + 'B' } },
+      y: { grid: { display: false }, ticks: { color: '#4a6460', font: { size: 11, family: 'Inter' } } }
+    }
+  }
+});
+
+// Chart 2: Forced flow by index
+new Chart(document.getElementById('flowChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Nasdaq-100', 'Total Market', 'Russell 1000', 'MSCI / FTSE', 'S&P 500'],
+    datasets: [{
+      data: [NDX_FLOW, TM_FLOW, RUSSELL_FLOW, GLOBAL_FLOW, SP500_FLOW],
+      backgroundColor: ['rgba(26,92,82,0.82)', 'rgba(26,92,82,0.82)', 'rgba(227,160,8,0.78)', 'rgba(227,160,8,0.78)', 'rgba(220,38,38,0.45)'],
+      borderColor: ['#1a5c52', '#1a5c52', '#E3A008', '#E3A008', '#dc2626'],
+      borderWidth: 1, borderRadius: 3
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: true,
+    plugins: { legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.label === 'S&P 500'
+        ? '~$15-50B, conditional and deferred to 2027+'
+        : '~$' + ctx.parsed.y + 'B' } } },
+    scales: {
+      x: { grid: { display: false }, ticks: { color: '#4a6460', font: { size: 11, family: 'Inter' } } },
+      y: { grid: GRID, ticks: { ...TICK, callback: v => '$' + v + 'B' },
+           title: { display: true, text: 'Forced buying ($B)', color: '#8aa49e', font: { size: 10 } } }
+    }
+  }
+});
+
+// Chart 3: Squeeze ratio
+new Chart(document.getElementById('squeezeChart'), {
+  type: 'bar',
+  data: {
+    labels: [['SpaceX', 'passive only'], ['SpaceX', 'passive + retail'], ['Normal large-cap', 'addition']],
+    datasets: [{
+      data: [SQUEEZE_PASSIVE, SQUEEZE_ALL, SQUEEZE_NORMAL],
+      backgroundColor: ['rgba(26,92,82,0.80)', 'rgba(220,38,38,0.70)', 'rgba(138,164,158,0.55)'],
+      borderColor: ['#1a5c52', '#dc2626', '#8aa49e'],
+      borderWidth: 1, borderRadius: 3
+    }]
+  },
+  options: {
+    indexAxis: 'y', responsive: true, maintainAspectRatio: true,
+    plugins: { legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.parsed.x + '% of tradable float' } } },
+    scales: {
+      x: { grid: GRID, ticks: { ...TICK, callback: v => v + '%' } },
+      y: { grid: { display: false }, ticks: { color: '#4a6460', font: { size: 11, family: 'Inter' } } }
+    }
+  }
+});
+
+// Chart 4: Disappearing index effect
+new Chart(document.getElementById('indexEffectChart'), {
+  type: 'bar',
+  data: {
+    labels: ['1995-1999', '2011-2021', '2015-2024 (12mo post)'],
+    datasets: [{
+      data: [8.3, 0.0, -0.66],
+      backgroundColor: ['rgba(26,92,82,0.80)', 'rgba(138,164,158,0.55)', 'rgba(220,38,38,0.65)'],
+      borderColor: ['#1a5c52', '#8aa49e', '#dc2626'],
+      borderWidth: 1, borderRadius: 3
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: true,
+    plugins: { legend: { display: false },
+      tooltip: { callbacks: { label: ctx => (ctx.parsed.y >= 0 ? '+' : '') + ctx.parsed.y + '%' } } },
+    scales: {
+      x: { grid: { display: false }, ticks: { color: '#4a6460', font: { size: 11, family: 'Inter' } } },
+      y: { grid: GRID, ticks: { ...TICK, callback: v => (v > 0 ? '+' : '') + v + '%' },
+           title: { display: true, text: 'Excess return (%)', color: '#8aa49e', font: { size: 10 } } }
+    }
+  }
+});
+
+// Chart 5: Forced rotation (who gets sold)
+new Chart(document.getElementById('rotationChart'), {
+  type: 'bar',
+  data: {
+    labels: ROT_LABELS,
+    datasets: [{
+      data: ROT_SELL,
+      backgroundColor: 'rgba(220,38,38,0.62)',
+      borderColor: '#dc2626',
+      borderWidth: 1, borderRadius: 3
+    }]
+  },
+  options: {
+    indexAxis: 'y', responsive: true, maintainAspectRatio: true,
+    plugins: { legend: { display: false },
+      tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.x.toFixed(2) + 'B sold (' + ROT_WEIGHTS[ctx.dataIndex] + '% weight)' } } },
+    scales: {
+      x: { grid: GRID, ticks: { ...TICK, callback: v => '$' + v + 'B' },
+           title: { display: true, text: 'Forced selling ($B)', color: '#8aa49e', font: { size: 10 } } },
+      y: { grid: { display: false }, ticks: { color: '#4a6460', font: { size: 11, family: 'Inter' } } }
+    }
+  }
+});
+</script>
+</body>
+</html>
