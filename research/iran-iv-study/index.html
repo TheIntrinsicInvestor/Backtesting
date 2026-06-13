@@ -173,6 +173,7 @@
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
 
     /* R1: Progress bar */
+    body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;background:#0f2220;z-index:9997}
     #progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,#1a5c52,#2d9d8f);z-index:9998;transition:width 0.1s linear;box-shadow:0 0 8px rgba(26,92,82,0.4)}
 
     /* R2: Hero texture + entrance animation */

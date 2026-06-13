@@ -27,6 +27,7 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:1rem;line-height:1.7;overflow-x:hidden}
 body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23noise)' opacity='0.07'/%3E%3C/svg%3E");mix-blend-mode:multiply;opacity:.5}
+body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;background:#0f2220;z-index:9997}
 #progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,#1a5c52,#2d9d8f);z-index:9998;transition:width .1s linear}
 nav{position:fixed;top:2px;left:0;right:0;z-index:900;display:flex;align-items:center;justify-content:space-between;padding:.85rem 2.5rem;background:#0f2220;transition:box-shadow .3s}
 nav.scrolled{box-shadow:0 1px 24px rgba(15,34,32,.06)}
