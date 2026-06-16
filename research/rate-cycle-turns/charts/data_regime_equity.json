@@ -1,0 +1,76 @@
+{
+  "spx": {
+    "Hiking": {
+      "n_days": 2077,
+      "ann_return": 5.77,
+      "ann_vol": 14.74,
+      "sharpe": 0.39,
+      "max_drawdown": -22.77
+    },
+    "Cutting": {
+      "n_days": 1155,
+      "ann_return": -14.7,
+      "ann_vol": 26.74,
+      "sharpe": -0.55,
+      "max_drawdown": -51.93
+    },
+    "Hold-Elevated": {
+      "n_days": 2296,
+      "ann_return": 19.51,
+      "ann_vol": 14.84,
+      "sharpe": 1.31,
+      "max_drawdown": -19.34
+    },
+    "Hold-ZLB": {
+      "n_days": 2267,
+      "ann_return": 15.65,
+      "ann_vol": 19.27,
+      "sharpe": 0.81,
+      "max_drawdown": -27.62
+    },
+    "Cutting_covid_outlier": {
+      "n_days": 9,
+      "ann_return": -97.44,
+      "ann_vol": 98.54,
+      "sharpe": -0.99,
+      "max_drawdown": -20.75
+    }
+  },
+  "crsp_vw": {
+    "Hiking": {
+      "n_days": 2077,
+      "ann_return": 7.93,
+      "ann_vol": 14.75,
+      "sharpe": 0.54,
+      "max_drawdown": -22.46
+    },
+    "Cutting": {
+      "n_days": 1155,
+      "ann_return": -13.05,
+      "ann_vol": 26.04,
+      "sharpe": -0.5,
+      "max_drawdown": -52.33
+    },
+    "Hold-Elevated": {
+      "n_days": 2296,
+      "ann_return": 20.2,
+      "ann_vol": 14.49,
+      "sharpe": 1.39,
+      "max_drawdown": -22.32
+    },
+    "Hold-ZLB": {
+      "n_days": 2267,
+      "ann_return": 17.31,
+      "ann_vol": 19.45,
+      "sharpe": 0.89,
+      "max_drawdown": -26.87
+    },
+    "Cutting_covid_outlier": {
+      "n_days": 9,
+      "ann_return": -98.43,
+      "ann_vol": 95.28,
+      "sharpe": -1.03,
+      "max_drawdown": -21.52
+    }
+  }
+}

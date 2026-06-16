@@ -1,0 +1,52 @@
+{
+  "Hiking": {
+    "n_days": 2061,
+    "avg_dgs10": 4.02,
+    "avg_dgs2": 3.52,
+    "avg_t10y2y": 0.5,
+    "min_t10y2y": -1.08,
+    "max_t10y2y": 1.94,
+    "avg_vix": 16.42,
+    "max_vix": 37.32
+  },
+  "Cutting": {
+    "n_days": 1143,
+    "avg_dgs10": 4.01,
+    "avg_dgs2": 2.67,
+    "avg_t10y2y": 1.35,
+    "min_t10y2y": -0.04,
+    "max_t10y2y": 2.6,
+    "avg_vix": 25.32,
+    "max_vix": 80.86
+  },
+  "Hold-Elevated": {
+    "n_days": 2281,
+    "avg_dgs10": 5.19,
+    "avg_dgs2": 4.78,
+    "avg_t10y2y": 0.4,
+    "min_t10y2y": -0.91,
+    "max_t10y2y": 2.75,
+    "avg_vix": 18.21,
+    "max_vix": 45.74
+  },
+  "Hold-ZLB": {
+    "n_days": 2249,
+    "avg_dgs10": 2.28,
+    "avg_dgs2": 0.5,
+    "avg_t10y2y": 1.78,
+    "min_t10y2y": 0.23,
+    "max_t10y2y": 2.91,
+    "avg_vix": 21.34,
+    "max_vix": 82.69
+  },
+  "Cutting_covid_outlier": {
+    "n_days": 9,
+    "avg_dgs10": 0.85,
+    "avg_dgs2": 0.54,
+    "avg_t10y2y": 0.31,
+    "min_t10y2y": 0.16,
+    "max_t10y2y": 0.45,
+    "avg_vix": 48.81,
+    "max_vix": 75.47
+  }
+}
