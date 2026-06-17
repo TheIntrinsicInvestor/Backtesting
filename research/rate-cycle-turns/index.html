@@ -373,18 +373,11 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
 <tr><td>Cutting</td><td style="text-align:right">1,155</td><td style="text-align:right">-14.7%</td><td style="text-align:right">26.7%</td><td style="text-align:right">-0.55</td><td style="text-align:right">-51.9%</td></tr>
 <tr><td>Hold (Elevated)</td><td style="text-align:right">2,296</td><td style="text-align:right">+19.5%</td><td style="text-align:right">14.8%</td><td style="text-align:right">+1.31</td><td style="text-align:right">-19.3%</td></tr>
 <tr><td>Hold (Zero Lower Bound)</td><td style="text-align:right">2,267</td><td style="text-align:right">+15.7%</td><td style="text-align:right">19.3%</td><td style="text-align:right">+0.81</td><td style="text-align:right">-27.6%</td></tr>
-<tr style="opacity:.6"><td>COVID outlier (9 days)</td><td style="text-align:right">9</td><td style="text-align:right">n/a*</td><td style="text-align:right">n/a*</td><td style="text-align:right">n/a*</td><td style="text-align:right">-20.8%</td></tr>
       </tbody>
     </table>
     <div class="chart-box">
       <div class="chart-title">SPX annualised return and Sharpe by regime (COVID excluded)</div>
       <canvas id="regimeChart" height="90"></canvas>
-    </div>
-    <div class="callout amber">
-      <strong>Annualising a 9-day window is not meaningful as a rate.</strong> The COVID outlier spell
-      lasted nine trading days. Extrapolated to an annual rate it shows -97.4%,
-      a mathematically valid but practically meaningless number from compounding nine days of extreme
-      moves. It is shown in the table for completeness only and excluded from every chart and average.
     </div>
   </div>
 </section>
@@ -718,15 +711,17 @@ new Chart(document.getElementById('regimeChart'), {
     datasets: [
       { label: 'Ann. return (%)', data: [5.77, -14.7, 19.51, 15.65],
         backgroundColor: ["#1a5c52", "#dc2626", "#1a5c52", "#1a5c52"],
-        borderRadius: 2, yAxisID: 'y' },
+        borderRadius: 2, yAxisID: 'y', order: 2 },
       { type: 'line', label: 'Sharpe', data: [0.39, -0.55, 1.31, 0.81],
-        borderColor: '#2563eb', borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#2563eb',
-        yAxisID: 'y2' }
+        showLine: false, pointRadius: 5, pointHoverRadius: 7,
+        borderColor: '#2563eb',
+        pointBackgroundColor: '#2563eb', pointBorderColor: '#fff', pointBorderWidth: 2,
+        yAxisID: 'y2', order: 1 }
     ]
   },
   options: {
     responsive: true, interaction: { mode: 'index', intersect: false },
-    plugins: { legend: { position: 'top', labels: { boxWidth: 24 } } },
+    plugins: { legend: { position: 'top', labels: { boxWidth: 24, usePointStyle: true } } },
     scales: {
       x: { grid: { display: false }, ticks: TICK },
       y:  { grid: GRID, ticks: { ...TICK, callback: v => v + '%' }, title: { display: true, text: 'Ann. return (%)', font: { size: 10 } } },
