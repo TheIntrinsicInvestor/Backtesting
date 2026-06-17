@@ -8,10 +8,10 @@
       "max_drawdown": -22.88
     },
     "Cutting": {
-      "n_days": 1155,
-      "ann_return": -14.51,
-      "ann_vol": 26.32,
-      "sharpe": -0.55,
+      "n_days": 1405,
+      "ann_return": -10.17,
+      "ann_vol": 25.22,
+      "sharpe": -0.4,
       "max_drawdown": -52.07
     },
     "Hold-Elevated": {
@@ -45,11 +45,11 @@
       "max_drawdown": -25.07
     },
     "Cutting": {
-      "n_days": 1155,
-      "ann_return": 4.28,
-      "ann_vol": 10.84,
-      "sharpe": 0.39,
-      "max_drawdown": -14.5
+      "n_days": 1405,
+      "ann_return": 2.05,
+      "ann_vol": 10.74,
+      "sharpe": 0.19,
+      "max_drawdown": -14.81
     },
     "Hold-Elevated": {
       "n_days": 2296,
@@ -82,10 +82,10 @@
       "max_drawdown": -29.03
     },
     "Cutting": {
-      "n_days": 1155,
-      "ann_return": 0.99,
-      "ann_vol": 13.36,
-      "sharpe": 0.07,
+      "n_days": 1405,
+      "ann_return": 1.88,
+      "ann_vol": 13.02,
+      "sharpe": 0.14,
       "max_drawdown": -18.96
     },
     "Hold-Elevated": {
@@ -119,10 +119,10 @@
       "max_drawdown": -34.85
     },
     "Cutting": {
-      "n_days": 1155,
-      "ann_return": 12.06,
-      "ann_vol": 9.99,
-      "sharpe": 1.21,
+      "n_days": 1405,
+      "ann_return": 7.52,
+      "ann_vol": 9.95,
+      "sharpe": 0.76,
       "max_drawdown": -18.89
     },
     "Hold-Elevated": {
@@ -156,11 +156,11 @@
       "max_drawdown": -15.38
     },
     "Cutting": {
-      "n_days": 1155,
-      "ann_return": 6.14,
-      "ann_vol": 8.36,
-      "sharpe": 0.73,
-      "max_drawdown": -8.31
+      "n_days": 1405,
+      "ann_return": 4.12,
+      "ann_vol": 8.26,
+      "sharpe": 0.5,
+      "max_drawdown": -10.12
     },
     "Hold-Elevated": {
       "n_days": 2296,
@@ -193,10 +193,10 @@
       "max_drawdown": -27.91
     },
     "Cutting": {
-      "n_days": 1155,
-      "ann_return": 11.34,
-      "ann_vol": 20.94,
-      "sharpe": 0.54,
+      "n_days": 1405,
+      "ann_return": 10.03,
+      "ann_vol": 20.09,
+      "sharpe": 0.5,
       "max_drawdown": -29.28
     },
     "Hold-Elevated": {

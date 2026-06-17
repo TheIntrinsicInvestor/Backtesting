@@ -446,7 +446,7 @@ nav.scrolled{{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}}
   <div class="kpi-cell">
     <div class="kpi-label">SPX at T+90, Reactive Cut</div>
     <div class="kpi-value red">{lvl_delta(fc_t90)}</div>
-    <div class="kpi-sub">n=2 avg: 2001, 2007 (2024 truncated)</div>
+    <div class="kpi-sub">n=3 avg: 2001, 2007, 2024</div>
   </div>
   <div class="kpi-cell">
     <div class="kpi-label">SPX at T+90, Insurance/Outlier Cut</div>
@@ -579,10 +579,9 @@ nav.scrolled{{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}}
     <h2>Reactive cuts hurt equities for 90 days. Preemptive cuts and hikes mostly don't</h2>
     <p>
       Each turn is re-indexed to trading days T-30 through T+90 around the announcement, with the SPX
-      level rebased so T0 (the turn date) equals 100. Averaging across the reactive first-cuts, the
-      index is at {lvl_delta(fc_t90)} by T+90. That T+90 average covers 2001 and 2007 only: the 2024
-      cut is tracked through T+72 before the CRSP daily index data ends, so it never reaches the
-      90-day mark. Averaging across the {n_hike} first-hikes, it is roughly flat at {lvl_delta(fh_t90)}.
+      level rebased so T0 (the turn date) equals 100. Averaging across the {n_cut} reactive first-cuts
+      (2001, 2007, 2024), the index is at {lvl_delta(fc_t90)} by T+90. Averaging across the {n_hike}
+      first-hikes, it is roughly flat at {lvl_delta(fh_t90)}.
       The two isolated insurance cuts and the
       COVID emergency cut all finish higher: 1995 at {lvl_delta(ins95_t90)}, 2019 at {lvl_delta(ins19_t90)},
       and the COVID V-shaped recovery at {lvl_delta(covid_t90)}.
@@ -617,9 +616,9 @@ nav.scrolled{{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}}
     <p>
       With {n_turns_total} total turns, hiding behind group averages would understate how much the
       individual cases vary. The 2022 hike, into an inflation shock, is the single worst hike outcome
-      (T+90 {pct(next(r["spx_T+90"] for r in heatmap if r["turn_date"]=="2022-03-16"))}). 2024's reactive
-      cut, by contrast, is positive through T+60, with its T+90 value unavailable because CRSP daily index
-      data ends 2024-12-31, truncating that window.
+      (T+90 {pct(next(r["spx_T+90"] for r in heatmap if r["turn_date"]=="2022-03-16"))}). The
+      per-turn table below shows each episode individually, including the 2024 reactive cut with its
+      full T+90 window now available.
     </p>
     <div style="overflow-x:auto">
     <table class="data-table">
@@ -773,9 +772,10 @@ nav.scrolled{{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}}
     <table class="method-table">
       <thead><tr><th>Dimension</th><th>Detail</th></tr></thead>
       <tbody>
-        <tr><td>Equity index</td><td>CRSP daily index file (crsp.dsi): sprtrn (S&amp;P 500 total return)
-          and vwretd (CRSP value-weighted). Coverage 1994-01-03 to 2024-12-31, one year short of the
-          CRSP v2 daily-file cutoff because crsp.dsi has not yet been extended to 2025.</td></tr>
+        <tr><td>Equity index</td><td>Hybrid CRSP pull: 1994-2024 from crsp.dsi (official CRSP-computed
+          sprtrn and vwretd); 2025 reconstructed from crsp.dsf_v2, with sprtrn as the market-cap-weighted
+          S&amp;P 500 constituent return (crsp.msp500list_v2 membership) and vwretd as the market-cap-weighted
+          return of all US common stocks (shrcd 10/11). Full coverage 1994-01-03 to 2025-12-31.</td></tr>
         <tr><td>Sectors</td><td>Fama-French 12 industry portfolios, daily, Dartmouth data library.
           Not a 1:1 mapping to GICS sectors (see Section 5).</td></tr>
         <tr><td>Style factors</td><td>Fama-French 5 factors (Mkt-RF, SMB, HML, RMW, CMA) plus the

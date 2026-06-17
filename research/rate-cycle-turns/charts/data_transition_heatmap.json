@@ -303,8 +303,8 @@
     "spx_T+60": 7.71,
     "vix_T+60": 13.9,
     "t10y2y_delta_T+60": 0.05,
-    "spx_T+90": null,
-    "vix_T+90": null,
-    "t10y2y_delta_T+90": null
+    "spx_T+90": 8.63,
+    "vix_T+90": 16.6,
+    "t10y2y_delta_T+90": 0.25
   }
 ]

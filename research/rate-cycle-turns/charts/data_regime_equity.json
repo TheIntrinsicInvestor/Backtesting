@@ -8,10 +8,10 @@
       "max_drawdown": -22.77
     },
     "Cutting": {
-      "n_days": 1155,
-      "ann_return": -14.7,
-      "ann_vol": 26.74,
-      "sharpe": -0.55,
+      "n_days": 1405,
+      "ann_return": -8.19,
+      "ann_vol": 25.52,
+      "sharpe": -0.32,
       "max_drawdown": -51.93
     },
     "Hold-Elevated": {
@@ -45,10 +45,10 @@
       "max_drawdown": -22.46
     },
     "Cutting": {
-      "n_days": 1155,
-      "ann_return": -13.05,
-      "ann_vol": 26.04,
-      "sharpe": -0.5,
+      "n_days": 1405,
+      "ann_return": -6.54,
+      "ann_vol": 24.96,
+      "sharpe": -0.26,
       "max_drawdown": -52.33
     },
     "Hold-Elevated": {

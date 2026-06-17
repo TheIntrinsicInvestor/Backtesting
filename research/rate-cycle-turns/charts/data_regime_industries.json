@@ -8,10 +8,10 @@
       "max_drawdown": -24.98
     },
     "Cutting": {
-      "n_days": 1155,
-      "ann_return": -6.6,
-      "ann_vol": 19.33,
-      "sharpe": -0.34,
+      "n_days": 1405,
+      "ann_return": -4.58,
+      "ann_vol": 18.48,
+      "sharpe": -0.25,
       "max_drawdown": -34.75
     },
     "Hold-Elevated": {
@@ -45,10 +45,10 @@
       "max_drawdown": -58.86
     },
     "Cutting": {
-      "n_days": 1155,
-      "ann_return": -9.09,
-      "ann_vol": 36.27,
-      "sharpe": -0.25,
+      "n_days": 1405,
+      "ann_return": -5.35,
+      "ann_vol": 39.32,
+      "sharpe": -0.14,
       "max_drawdown": -73.63
     },
     "Hold-Elevated": {
@@ -82,10 +82,10 @@
       "max_drawdown": -24.42
     },
     "Cutting": {
-      "n_days": 1155,
-      "ann_return": -15.14,
-      "ann_vol": 27.88,
-      "sharpe": -0.54,
+      "n_days": 1405,
+      "ann_return": -8.86,
+      "ann_vol": 26.89,
+      "sharpe": -0.33,
       "max_drawdown": -58.99
     },
     "Hold-Elevated": {
@@ -119,10 +119,10 @@
       "max_drawdown": -26.41
     },
     "Cutting": {
-      "n_days": 1155,
-      "ann_return": -14.0,
-      "ann_vol": 34.76,
-      "sharpe": -0.4,
+      "n_days": 1405,
+      "ann_return": -10.46,
+      "ann_vol": 33.26,
+      "sharpe": -0.31,
       "max_drawdown": -51.2
     },
     "Hold-Elevated": {
@@ -156,10 +156,10 @@
       "max_drawdown": -34.57
     },
     "Cutting": {
-      "n_days": 1155,
-      "ann_return": -8.16,
-      "ann_vol": 23.39,
-      "sharpe": -0.35,
+      "n_days": 1405,
+      "ann_return": -8.36,
+      "ann_vol": 22.34,
+      "sharpe": -0.37,
       "max_drawdown": -39.36
     },
     "Hold-Elevated": {
@@ -193,10 +193,10 @@
       "max_drawdown": -30.48
     },
     "Cutting": {
-      "n_days": 1155,
-      "ann_return": -16.91,
-      "ann_vol": 37.73,
-      "sharpe": -0.45,
+      "n_days": 1405,
+      "ann_return": -10.65,
+      "ann_vol": 36.05,
+      "sharpe": -0.3,
       "max_drawdown": -69.88
     },
     "Hold-Elevated": {
@@ -230,10 +230,10 @@
       "max_drawdown": -27.56
     },
     "Cutting": {
-      "n_days": 1155,
-      "ann_return": -18.63,
-      "ann_vol": 31.51,
-      "sharpe": -0.59,
+      "n_days": 1405,
+      "ann_return": -14.57,
+      "ann_vol": 29.47,
+      "sharpe": -0.49,
       "max_drawdown": -62.68
     },
     "Hold-Elevated": {
@@ -267,10 +267,10 @@
       "max_drawdown": -19.46
     },
     "Cutting": {
-      "n_days": 1155,
-      "ann_return": -8.11,
-      "ann_vol": 26.33,
-      "sharpe": -0.31,
+      "n_days": 1405,
+      "ann_return": -4.49,
+      "ann_vol": 24.78,
+      "sharpe": -0.18,
       "max_drawdown": -44.78
     },
     "Hold-Elevated": {
@@ -304,10 +304,10 @@
       "max_drawdown": -24.53
     },
     "Cutting": {
-      "n_days": 1155,
-      "ann_return": -5.87,
-      "ann_vol": 26.09,
-      "sharpe": -0.22,
+      "n_days": 1405,
+      "ann_return": -3.77,
+      "ann_vol": 24.99,
+      "sharpe": -0.15,
       "max_drawdown": -41.26
     },
     "Hold-Elevated": {
@@ -341,10 +341,10 @@
       "max_drawdown": -17.54
     },
     "Cutting": {
-      "n_days": 1155,
-      "ann_return": -10.24,
-      "ann_vol": 22.85,
-      "sharpe": -0.45,
+      "n_days": 1405,
+      "ann_return": -4.98,
+      "ann_vol": 22.1,
+      "sharpe": -0.23,
       "max_drawdown": -40.72
     },
     "Hold-Elevated": {
@@ -378,10 +378,10 @@
       "max_drawdown": -23.92
     },
     "Cutting": {
-      "n_days": 1155,
-      "ann_return": -16.41,
-      "ann_vol": 35.83,
-      "sharpe": -0.46,
+      "n_days": 1405,
+      "ann_return": -11.5,
+      "ann_vol": 33.59,
+      "sharpe": -0.34,
       "max_drawdown": -67.97
     },
     "Hold-Elevated": {
@@ -415,10 +415,10 @@
       "max_drawdown": -26.43
     },
     "Cutting": {
-      "n_days": 1155,
-      "ann_return": -15.01,
-      "ann_vol": 28.72,
-      "sharpe": -0.52,
+      "n_days": 1405,
+      "ann_return": -11.07,
+      "ann_vol": 27.11,
+      "sharpe": -0.41,
       "max_drawdown": -57.73
     },
     "Hold-Elevated": {

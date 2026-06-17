@@ -10,13 +10,13 @@
     "max_vix": 37.32
   },
   "Cutting": {
-    "n_days": 1143,
-    "avg_dgs10": 4.01,
-    "avg_dgs2": 2.67,
-    "avg_t10y2y": 1.35,
+    "n_days": 1391,
+    "avg_dgs10": 4.06,
+    "avg_dgs2": 2.87,
+    "avg_t10y2y": 1.19,
     "min_t10y2y": -0.04,
     "max_t10y2y": 2.6,
-    "avg_vix": 25.32,
+    "avg_vix": 24.19,
     "max_vix": 80.86
   },
   "Hold-Elevated": {
