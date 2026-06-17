@@ -227,7 +227,7 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
       <div class="hero-meta-item"><strong>Author</strong>Brian Liew, BSc Accounting and Finance, LSE</div>
       <div class="hero-meta-item"><strong>Published</strong>June 2026</div>
       <div class="hero-meta-item"><strong>Period</strong>1994 to 2025, n=11 cycle turns</div>
-      <div class="hero-meta-item"><strong>Data</strong>CRSP, Fama-French, OptionMetrics, FRED</div>
+      <div class="hero-meta-item"><strong>Data</strong>CRSP, Fama-French, FRED</div>
       <a href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/rate-cycle-turns" target="_blank" rel="noopener" class="gh-btn">
         <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
         GitHub Code
@@ -247,7 +247,7 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
   <div class="kpi-cell">
     <div class="kpi-label">SPX at T+90, Reactive Cut</div>
     <div class="kpi-value red">-9.1%</div>
-    <div class="kpi-sub">n=3 avg: 2001, 2007, 2024</div>
+    <div class="kpi-sub">n=2 avg: 2001, 2007 (2024 truncated)</div>
   </div>
   <div class="kpi-cell">
     <div class="kpi-label">SPX at T+90, Insurance/Outlier Cut</div>
@@ -308,7 +308,7 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
       Two cut types are isolated from the main first_hike/first_cut aggregates rather than blended in:
       <strong>insurance cuts</strong> (1995, 2019), made preemptively with no recession that followed, and
       the <strong>2020 COVID emergency cut</strong>, a structural outlier on every dimension (a 9-trading-day
-      regime spell, VIX above 80). All three are shown individually throughout this report, never averaged
+      regime spell, VIX above 75). All three are shown individually throughout this report, never averaged
       into the main reactive-cut statistics.
     </p>
     <table class="data-table">
@@ -376,9 +376,11 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
     <h2>Reactive cuts hurt equities for 90 days. Preemptive cuts and hikes mostly don't</h2>
     <p>
       Each turn is re-indexed to trading days T-30 through T+90 around the announcement, with the SPX
-      level rebased so T0 (the turn date) equals 100. Averaging across the 3 reactive first-cuts
-      (2001, 2007, 2024), the index is at -9.1% by T+90. Averaging across the 5
-      first-hikes, it is roughly flat at -1.7%. The two isolated insurance cuts and the
+      level rebased so T0 (the turn date) equals 100. Averaging across the reactive first-cuts, the
+      index is at -9.1% by T+90. That T+90 average covers 2001 and 2007 only: the 2024
+      cut is tracked through T+72 before the CRSP daily index data ends, so it never reaches the
+      90-day mark. Averaging across the 5 first-hikes, it is roughly flat at -1.7%.
+      The two isolated insurance cuts and the
       COVID emergency cut all finish higher: 1995 at +7.0%, 2019 at +5.5%,
       and the COVID V-shaped recovery at +6.0%.
     </p>
@@ -479,13 +481,13 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
 </tbody></table></div>
     <h3>Around the turn itself</h3>
     <p>
-      In the 3-turn reactive-cut window, <strong>Business Equipment (Tech)</strong> is the
+      In the reactive-cut window, <strong>Business Equipment (Tech)</strong> is the
       worst performer at T+90 (-15.7%), consistent with the dot-com bust
       and the 2008 financial crisis both falling inside this group. Only 2 of 12
       industries are still positive at T+90: <strong>Energy and Utilities</strong>
       (+2.3%, +2.8%). Utilities fits the classic
       defensive story, but Energy holding up is more likely specific to the oil-price backdrop of these
-      three episodes than a structural pattern. Around hikes, sector dispersion is far more muted:
+      episodes than a structural pattern. Around hikes, sector dispersion is far more muted:
       every industry stays within roughly 0 to
       6 percentage points of flat.
     </p>
@@ -494,7 +496,7 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
       <canvas id="sectorTransitionChart" height="100"></canvas>
       <div class="chart-legend">
         <span><span class="legend-dot" style="background:#1a5c52"></span>First hike (n=5)</span>
-        <span><span class="legend-dot" style="background:#dc2626"></span>First cut, reactive (n=3)</span>
+        <span><span class="legend-dot" style="background:#dc2626"></span>First cut, reactive (n=2 at T+90)</span>
       </div>
     </div>
     <div class="callout amber">
@@ -513,7 +515,7 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
     <h2>Quality and value factors rise into reactive cuts, even as the market falls</h2>
     <p>
       Using the Fama-French five factors plus momentum (Mkt-RF, SMB, HML, RMW, CMA, MOM), the clearest
-      pattern in the whole report shows up here. In the 3-turn reactive-cut transition window, the
+      pattern in the whole report shows up here. In the reactive-cut transition window, the
       market factor falls -9.9% by T+90, but Quality (RMW) rises
       +5.2%, Value (HML) rises +5.6%, and Conservative
       Investment (CMA) rises +4.5%. A flight to quality and value, funded out of
@@ -539,7 +541,7 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
       <canvas id="factorTransitionChart" height="90"></canvas>
       <div class="chart-legend">
         <span><span class="legend-dot" style="background:#1a5c52"></span>First hike (n=5)</span>
-        <span><span class="legend-dot" style="background:#dc2626"></span>First cut, reactive (n=3)</span>
+        <span><span class="legend-dot" style="background:#dc2626"></span>First cut, reactive (n=2 at T+90)</span>
       </div>
     </div>
   </div>
@@ -555,8 +557,8 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
       flattens by -0.31 points from T0 to T+90, the textbook tightening response as
       short rates rise faster than long rates. Around reactive first cuts it steepens by
       +0.93 points, as the Fed cuts the front end faster than long yields fall, the
-      classic post-recession-onset steepening. The 10-year level itself falls +0.20 points
-      around hikes and -0.28 points around reactive cuts.
+      classic post-recession-onset steepening. The 10-year level itself rises +0.20 points
+      around hikes and falls 0.28 points around reactive cuts.
     </p>
     <div class="chart-box">
       <div class="chart-title">10Y-2Y spread change from T0, by turn type</div>
@@ -601,8 +603,6 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
           momentum factor, daily, Dartmouth data library.</td></tr>
         <tr><td>Rates &amp; vol</td><td>FRED: VIXCLS, DGS2, DGS10, T10Y2Y, DFEDTARU/L. Fed funds target
           rate pre-corridor (pre-Dec 2008) is hardcoded from FOMC press releases, not FRED-sourced.</td></tr>
-        <tr><td>Implied vol</td><td>OptionMetrics vsurfd, SPX (secid 108105), 30-day ATM (delta 50).
-          Available from 1996 onward. The 1994 turn, and partially the 1999 turn, lacks this overlay.</td></tr>
         <tr><td>Regime definition</td><td>Four buckets (Hiking, Cutting, Hold-Elevated, Hold-ZLB) from
           manually verified FOMC decision spans. A regime label can recur in non-adjacent date ranges,
           and drawdown is computed per contiguous spell, never bridging a regime change.</td></tr>
