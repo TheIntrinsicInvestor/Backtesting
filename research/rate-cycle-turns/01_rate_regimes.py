@@ -9,6 +9,7 @@ This makes the script fully reproducible without network access.
 
 Outputs: data/regimes.parquet, data/turns.parquet
 """
+import json
 import pandas as pd
 from pathlib import Path
 
@@ -231,6 +232,56 @@ main = turns[turns["include_in_main"]]
 print(f"\nMain-aggregate turns: {len(main)} total "
       f"({(main['turn_type']=='first_hike').sum()} hikes, "
       f"{(main['turn_type']=='first_cut').sum()} cuts)")
+
+# ── Chart JSON for the report (rate path + regime bands + turn markers) ────────
+# Emitted here because the rate path, regime spans, and turn dates are all
+# defined in this file. Consumed by 09_build_report.py to draw the s2 chart.
+# X positions are decimal years so the chart needs no Chart.js date adapter.
+CHARTS = Path("charts")
+CHARTS.mkdir(exist_ok=True)
+
+def _decimal_year(d):
+    d  = pd.Timestamp(d)
+    y0 = pd.Timestamp(year=d.year,     month=1, day=1)
+    y1 = pd.Timestamp(year=d.year + 1, month=1, day=1)
+    return round(d.year + (d - y0).days / (y1 - y0).days, 4)
+
+# Staircase: explicit doubled points so the step renders unambiguously, flat
+# from each decision date to the next, then a vertical jump (no Chart.js stepped).
+rate_points = []
+for i, (d, r) in enumerate(FOMC_DECISIONS):
+    rate_points.append({"x": _decimal_year(d), "y": r})
+    nxt = FOMC_DECISIONS[i + 1][0] if i + 1 < len(FOMC_DECISIONS) else END
+    rate_points.append({"x": _decimal_year(nxt), "y": r})
+
+# Regime bands: contiguous, each running to the next span's start (END for last).
+regime_bands = []
+for i, (s, e, reg, out) in enumerate(REGIME_SPANS):
+    x0 = _decimal_year(s)
+    x1 = (_decimal_year(REGIME_SPANS[i + 1][0]) if i + 1 < len(REGIME_SPANS)
+          else _decimal_year(pd.Timestamp(END) + pd.Timedelta(days=1)))
+    regime_bands.append({"x0": x0, "x1": x1, "regime": reg, "outlier": out})
+
+# Turn markers, coloured downstream by aggregation category (matches the s2 table).
+_rate_at = {d: r for d, r in FOMC_DECISIONS}
+turn_markers = []
+for _, t in turns.iterrows():
+    ds  = t["date"].strftime("%Y-%m-%d")
+    cat = "outlier" if t["is_outlier"] else ("insurance" if t["is_insurance"] else "main")
+    turn_markers.append({"x": _decimal_year(t["date"]), "y": _rate_at[ds],
+                         "type": t["turn_type"], "cat": cat, "date": ds})
+
+rate_path = {
+    "rate_points":  rate_points,
+    "regime_bands": regime_bands,
+    "turns":        turn_markers,
+    "x_min":        _decimal_year(START),
+    "x_max":        _decimal_year(pd.Timestamp(END) + pd.Timedelta(days=1)),
+}
+with open(CHARTS / "data_rate_path.json", "w") as f:
+    json.dump(rate_path, f, indent=2)
+print(f"\nSaved {CHARTS / 'data_rate_path.json'} "
+      f"({len(rate_points)} rate points, {len(regime_bands)} bands, {len(turn_markers)} turns)")
 
 # ── Save ────────────────────────────────────────────────────────────────────
 regimes.to_parquet(REGIMES_CACHE, index=False)

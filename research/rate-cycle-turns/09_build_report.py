@@ -26,6 +26,7 @@ tx_curve  = load("data_transition_curve.json")
 tx_sec    = load("data_transition_sectors.json")
 tx_fac    = load("data_transition_factors.json")
 heatmap   = load("data_transition_heatmap.json")
+rate_path = load("data_rate_path.json")
 
 turns = pd.read_parquet("data/turns.parquet")
 turns["date"] = pd.to_datetime(turns["date"])
@@ -81,6 +82,8 @@ IND_NAMES = {"NoDur": "Consumer Non-Durables", "Durbl": "Consumer Durables", "Ma
              "Enrgy": "Energy", "Chems": "Chemicals", "BusEq": "Business Equipment (Tech)",
              "Telcm": "Telecom", "Utils": "Utilities", "Shops": "Wholesale/Retail",
              "Hlth": "Healthcare", "Money": "Finance", "Other": "Other"}
+# Turn-marker colours for the s2 rate-path chart (match the s2 table aggregation colours)
+CAT_COLOR = {"main": "#059669", "insurance": "#2563eb", "outlier": "#dc2626"}
 
 # ── Colour helpers (chart-patterns.md) ───────────────────────────────────────
 _C_RED, _C_PARCH, _C_GREEN = (254, 202, 202), (247, 244, 236), (187, 247, 208)
@@ -319,7 +322,7 @@ p:last-child{{margin-bottom:0}}
   border-radius:4px;padding:1.5rem;margin:1.5rem 0}}
 .chart-title{{font-size:.85rem;font-weight:600;color:var(--ink);
   margin-bottom:1rem;letter-spacing:.02em}}
-.chart-legend{{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px}}
+.chart-legend{{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:.72rem;color:var(--muted)}}
 .legend-item{{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}}
 .legend-dot{{width:10px;height:10px;border-radius:50%;flex-shrink:0;display:inline-block}}
 .legend-line{{width:16px;height:2px;flex-shrink:0;display:inline-block;vertical-align:middle}}
@@ -507,6 +510,26 @@ nav.scrolled{{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}}
       regime spell, VIX above 75). All three are shown individually throughout this report, never averaged
       into the main reactive-cut statistics.
     </p>
+    <p>
+      The chart below traces that policy path in full. Each cycle turn is marked on the rate line and
+      coloured by how it is treated in the analysis (main aggregate, isolated insurance cut, or the COVID
+      outlier), and the four regimes are shaded behind it.
+    </p>
+    <div class="chart-box">
+      <div class="chart-title">Fed funds target rate and policy regimes, 1994 to 2025</div>
+      <canvas id="ratePathChart" height="78"></canvas>
+      <div class="chart-legend">
+        <span><span class="legend-line" style="background:#0f2220"></span>Target rate</span>
+        <span><span class="legend-dot" style="background:#059669"></span>Main aggregate turn</span>
+        <span><span class="legend-dot" style="background:#2563eb"></span>Insurance cut</span>
+        <span><span class="legend-dot" style="background:#dc2626"></span>COVID outlier</span>
+        <span><span style="display:inline-block;width:13px;height:10px;border-radius:2px;background:rgba(26,92,82,.30);border:1px solid rgba(15,34,32,.12);vertical-align:middle"></span> Hiking</span>
+        <span><span style="display:inline-block;width:13px;height:10px;border-radius:2px;background:rgba(220,38,38,.30);border:1px solid rgba(15,34,32,.12);vertical-align:middle"></span> Cutting</span>
+        <span><span style="display:inline-block;width:13px;height:10px;border-radius:2px;background:rgba(37,99,235,.22);border:1px solid rgba(15,34,32,.12);vertical-align:middle"></span> Hold (elevated)</span>
+        <span><span style="display:inline-block;width:13px;height:10px;border-radius:2px;background:rgba(138,164,158,.42);border:1px solid rgba(15,34,32,.12);vertical-align:middle"></span> Hold (ZLB)</span>
+      </div>
+      <div style="font-size:.72rem;color:var(--hint);margin-top:10px;line-height:1.5">The 2020 COVID emergency cut spans only nine trading days, too narrow to shade at this scale, and is shown by its marker only.</div>
+    </div>
     <table class="data-table">
       <thead><tr><th>Date</th><th>Turn type</th><th>Aggregation</th><th>Context</th></tr></thead>
       <tbody>
@@ -972,6 +995,58 @@ new Chart(document.getElementById('curveTransitionChart'), {{
       y: {{ grid: GRID, ticks: TICK, title: {{ display: true, text: '10Y-2Y change from T0 (pts)', font: {{ size: 10 }} }} }}
     }}
   }}
+}});
+
+// Chart: Fed funds rate path + regimes (s2)
+const _ratePts = {json.dumps(rate_path["rate_points"])};
+const _bands = {json.dumps(rate_path["regime_bands"])};
+const _turns = {json.dumps(rate_path["turns"])};
+const _turnColors = {json.dumps([CAT_COLOR[t["cat"]] for t in rate_path["turns"]])};
+const REGIME_FILL = {{ 'Hiking':'rgba(26,92,82,0.10)', 'Cutting':'rgba(220,38,38,0.09)', 'Hold-Elevated':'rgba(37,99,235,0.06)', 'Hold-ZLB':'rgba(138,164,158,0.14)' }};
+const COVID_FILL = 'rgba(220,38,38,0.30)';
+const _typeLabel = {{ 'first_hike':'First hike', 'first_cut':'First cut (reactive)', 'first_cut_insurance':'First cut (insurance)', 'first_cut_emergency':'First cut (emergency)' }};
+const _catLabel = {{ 'main':'main aggregate', 'insurance':'insurance', 'outlier':'COVID outlier' }};
+const rateBands = {{
+  id: 'rateBands',
+  beforeDatasetsDraw(chart) {{
+    const {{ ctx, chartArea, scales }} = chart;
+    if (!chartArea) return;
+    _bands.forEach(b => {{
+      let x0 = scales.x.getPixelForValue(b.x0), x1 = scales.x.getPixelForValue(b.x1);
+      x0 = Math.max(x0, chartArea.left); x1 = Math.min(x1, chartArea.right);
+      if (x1 <= x0) return;
+      ctx.save();
+      ctx.fillStyle = b.outlier ? COVID_FILL : REGIME_FILL[b.regime];
+      ctx.fillRect(x0, chartArea.top, x1 - x0, chartArea.bottom - chartArea.top);
+      ctx.restore();
+    }});
+  }}
+}};
+new Chart(document.getElementById('ratePathChart'), {{
+  data: {{
+    datasets: [
+      {{ type: 'line', label: 'Fed funds target rate', data: _ratePts, borderColor: '#0f2220', borderWidth: 1.8, pointRadius: 0, tension: 0, fill: false, order: 2 }},
+      {{ type: 'scatter', label: 'Cycle turns', data: _turns, pointBackgroundColor: _turnColors, pointBorderColor: '#fff', pointBorderWidth: 1.5, pointRadius: 5, pointHoverRadius: 7, order: 1 }}
+    ]
+  }},
+  options: {{
+    responsive: true,
+    interaction: {{ mode: 'nearest', intersect: true }},
+    plugins: {{
+      legend: {{ display: false }},
+      tooltip: {{
+        callbacks: {{
+          title: (items) => {{ const p = items[0]; return (p.dataset.type === 'scatter') ? _turns[p.dataIndex].date : Math.round(p.parsed.x).toString(); }},
+          label: (item) => {{ if (item.dataset.type === 'scatter') {{ const t = _turns[item.dataIndex]; return _typeLabel[t.type] + ' (' + _catLabel[t.cat] + '): ' + t.y.toFixed(2) + '%'; }} return item.parsed.y.toFixed(2) + '%'; }}
+        }}
+      }}
+    }},
+    scales: {{
+      x: {{ type: 'linear', min: {rate_path["x_min"]}, max: {rate_path["x_max"]}, grid: GRID, ticks: {{ ...TICK, stepSize: 4, maxRotation: 0, callback: v => v }} }},
+      y: {{ min: 0, grid: GRID, ticks: {{ ...TICK, callback: v => v + '%' }}, title: {{ display: true, text: 'Target rate (%)', font: {{ size: 10 }} }} }}
+    }}
+  }},
+  plugins: [rateBands]
 }});
 </script>
 </body>
