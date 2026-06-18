@@ -5,6 +5,7 @@
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-HT9VG5C62E');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A quant event study of 11 Fed cycle turns since 1994: reactive rate cuts drag the S&amp;P 500 to -3.2% over 90 days, while preemptive cuts and hikes do not. Regimes, sectors, style factors, and the yield curve.">
 <title>Rate Cycle Turns | The Intrinsic Investor</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -344,7 +345,7 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
 <tr><td>2019-07-31</td><td>First cut (insurance)</td><td><span style="color:var(--blue2)">Insurance (excl. main)</span></td><td>Insurance cut, not recessionary (2.5% -> 1.75%)</td></tr>
 <tr><td>2020-03-03</td><td>First cut (emergency)</td><td><span style="color:var(--red2)">Outlier, excl. main</span></td><td>COVID emergency cut (outlier: excluded from main aggregates)</td></tr>
 <tr><td>2022-03-16</td><td>First hike</td><td><span style="color:var(--green2)">Main aggregate</span></td><td>Start 2022-23 hiking cycle (0.25% -> 5.5%)</td></tr>
-<tr><td>2024-09-18</td><td>First cut (reactive)</td><td><span style="color:var(--green2)">Main aggregate</span></td><td>Start 2024 cutting cycle (5.5% -> TBD)</td></tr>
+<tr><td>2024-09-18</td><td>First cut (reactive)</td><td><span style="color:var(--green2)">Main aggregate</span></td><td>Start 2024 cutting cycle (5.5% -> 4.5% by end-2025)</td></tr>
       </tbody>
     </table>
   </div>
@@ -610,9 +611,9 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
       <thead><tr><th>Dimension</th><th>Detail</th></tr></thead>
       <tbody>
         <tr><td>Equity index</td><td>Hybrid CRSP pull: 1994-2024 from crsp.dsi (official CRSP-computed
-          sprtrn and vwretd); 2025 reconstructed from crsp.dsf_v2, with sprtrn as the market-cap-weighted
+          sprtrn and vwretd). 2025 reconstructed from crsp.dsf_v2, with sprtrn as the market-cap-weighted
           S&amp;P 500 constituent return (crsp.msp500list_v2 membership) and vwretd as the market-cap-weighted
-          return of all US common stocks (shrcd 10/11). Full coverage 1994-01-03 to 2025-12-31.</td></tr>
+          return of all US common stocks (securitysubtype COM, usincflg Y). Full coverage 1994-01-03 to 2025-12-31.</td></tr>
         <tr><td>Sectors</td><td>Fama-French 12 industry portfolios, daily, Dartmouth data library.
           Not a 1:1 mapping to GICS sectors (see Section 5).</td></tr>
         <tr><td>Style factors</td><td>Fama-French 5 factors (Mkt-RF, SMB, HML, RMW, CMA) plus the
