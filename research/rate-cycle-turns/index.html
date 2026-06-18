@@ -208,10 +208,9 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
   <a href="#s2"><span class="sn-label">Data &amp; Regimes</span><div class="sn-dot"></div></a>
   <a href="#s3"><span class="sn-label">Returns by Regime</span><div class="sn-dot"></div></a>
   <a href="#s4"><span class="sn-label">Transition Window</span><div class="sn-dot"></div></a>
-  <a href="#s5"><span class="sn-label">Sector Rotation</span><div class="sn-dot"></div></a>
-  <a href="#s6"><span class="sn-label">Style Factors</span><div class="sn-dot"></div></a>
-  <a href="#s7"><span class="sn-label">Rates &amp; Curve</span><div class="sn-dot"></div></a>
-  <a href="#s8"><span class="sn-label">Methodology</span><div class="sn-dot"></div></a>
+  <a href="#s5"><span class="sn-label">Style Factors</span><div class="sn-dot"></div></a>
+  <a href="#s6"><span class="sn-label">Rates &amp; Curve</span><div class="sn-dot"></div></a>
+  <a href="#s7"><span class="sn-label">Methodology</span><div class="sn-dot"></div></a>
 </div>
 
 <!-- Hero -->
@@ -306,7 +305,7 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
       multi-year spans), and each occurrence is treated as its own contiguous spell for drawdown purposes.
     </p>
     <p>
-      Two cut types are isolated from the main first_hike/first_cut aggregates rather than blended in:
+      Two cut types are isolated from the main first-hike/first-cut aggregates rather than blended in:
       <strong>insurance cuts</strong> (1995, 2019), made preemptively with no recession that followed, and
       the <strong>2020 COVID emergency cut</strong>, a structural outlier on every dimension (a 9-trading-day
       regime spell, VIX above 75). All three are shown individually throughout this report, never averaged
@@ -328,7 +327,7 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
         <span><span style="display:inline-block;width:13px;height:10px;border-radius:2px;background:rgba(26,92,82,.30);border:1px solid rgba(15,34,32,.12);vertical-align:middle"></span> Hiking</span>
         <span><span style="display:inline-block;width:13px;height:10px;border-radius:2px;background:rgba(220,38,38,.30);border:1px solid rgba(15,34,32,.12);vertical-align:middle"></span> Cutting</span>
         <span><span style="display:inline-block;width:13px;height:10px;border-radius:2px;background:rgba(37,99,235,.22);border:1px solid rgba(15,34,32,.12);vertical-align:middle"></span> Hold (elevated)</span>
-        <span><span style="display:inline-block;width:13px;height:10px;border-radius:2px;background:rgba(138,164,158,.42);border:1px solid rgba(15,34,32,.12);vertical-align:middle"></span> Hold (ZLB)</span>
+        <span><span style="display:inline-block;width:13px;height:10px;border-radius:2px;background:rgba(124,58,237,.38);border:1px solid rgba(15,34,32,.12);vertical-align:middle"></span> Hold (ZLB)</span>
       </div>
       <div style="font-size:.72rem;color:var(--hint);margin-top:10px;line-height:1.5">The 2020 COVID emergency cut spans only nine trading days, too narrow to shade at this scale, and is shown by its marker only.</div>
     </div>
@@ -430,9 +429,7 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
     <p>
       With 11 total turns, hiding behind group averages would understate how much the
       individual cases vary. The 2022 hike, into an inflation shock, is the single worst hike outcome
-      (T+90 -10.0%). The
-      per-turn table below shows each episode individually, including the 2024 reactive cut with its
-      full T+90 window now available.
+      (T+90 -10.0%). The per-turn table below shows each episode individually.
     </p>
     <div style="overflow-x:auto">
     <table class="data-table">
@@ -464,70 +461,10 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
   </div>
 </section>
 
-<!-- Section 5: Sector Rotation -->
+<!-- Section 5: Style Factors -->
 <section class="section" id="s5">
   <div class="container">
-    <div class="section-label"><span class="section-counter">05</span><span>Sector Rotation</span></div>
-    <h2>Defensive sectors hold up through reactive cuts. Cyclicals and tech do not</h2>
-    <p>
-      Sectors are the Fama-French 12 industry portfolios (full daily history to 1994 from the same
-      Dartmouth source as the style factors), not SPDR sector ETFs, since the ETFs only launch in
-      December 1998 and would truncate the 1994-95 and 1999-2000 hiking cycles. The industry labels are
-      not a 1:1 match to the 11 GICS sectors: "BusEq" approximates Technology plus parts of
-      Communication Services, and "Money" approximates Financials plus Real Estate.
-    </p>
-    <h3>By regime, full sample</h3>
-    <p>
-      The heatmap below shows annualised return by regime and industry (COVID excluded). Across every
-      industry, Cutting is red and Hold-Elevated is green: there is no sector that escapes the
-      regime-level pattern from Section 3, only degrees of it.
-    </p>
-    <div class="hm-wrap"><table class="hm-table"><thead><tr><th class="hm-corner"></th><th class="hm-col">Hiking</th><th class="hm-col">Cutting</th><th class="hm-col">Hold (Elevated)</th><th class="hm-col">Hold (Zero Lower Bound)</th></tr></thead><tbody><tr><td class="hm-row-label">Consumer Non-Durables</td><td class="hm-cell" style="background:#f0f4e9">+3.1%</td><td class="hm-cell" style="background:#f8ede6">-4.6%</td><td class="hm-cell" style="background:#d1f5da">+18.6%</td><td class="hm-cell" style="background:#d3f5db">+17.8%</td></tr>
-<tr><td class="hm-row-label">Consumer Durables</td><td class="hm-cell" style="background:#f7eee7">-4.0%</td><td class="hm-cell" style="background:#f8ece5">-5.3%</td><td class="hm-cell" style="background:#daf5de">+14.4%</td><td class="hm-cell" style="background:#bbf7d0">+33.5%</td></tr>
-<tr><td class="hm-row-label">Manufacturing</td><td class="hm-cell" style="background:#e0f5e1">+11.5%</td><td class="hm-cell" style="background:#f9e7e1">-8.9%</td><td class="hm-cell" style="background:#ccf6d8">+21.4%</td><td class="hm-cell" style="background:#cff5d9">+19.8%</td></tr>
-<tr><td class="hm-row-label">Energy</td><td class="hm-cell" style="background:#def5e0">+12.2%</td><td class="hm-cell" style="background:#f9e5e0">-10.5%</td><td class="hm-cell" style="background:#d0f5da">+19.0%</td><td class="hm-cell" style="background:#d7f5dd">+15.5%</td></tr>
-<tr><td class="hm-row-label">Chemicals</td><td class="hm-cell" style="background:#eff4e8">+3.5%</td><td class="hm-cell" style="background:#f8e8e2">-8.4%</td><td class="hm-cell" style="background:#cdf6d8">+20.7%</td><td class="hm-cell" style="background:#d7f5dd">+15.6%</td></tr>
-<tr><td class="hm-row-label">Business Equipment (Tech)</td><td class="hm-cell" style="background:#d9f5de">+14.8%</td><td class="hm-cell" style="background:#f9e5df">-10.7%</td><td class="hm-cell" style="background:#c5f6d4">+24.6%</td><td class="hm-cell" style="background:#caf6d7">+22.1%</td></tr>
-<tr><td class="hm-row-label">Telecom</td><td class="hm-cell" style="background:#f2f4ea">+2.1%</td><td class="hm-cell" style="background:#fadfdb">-14.6%</td><td class="hm-cell" style="background:#d5f5dc">+16.9%</td><td class="hm-cell" style="background:#d7f5dd">+15.7%</td></tr>
-<tr><td class="hm-row-label">Utilities</td><td class="hm-cell" style="background:#e4f4e3">+9.3%</td><td class="hm-cell" style="background:#f8ede6">-4.5%</td><td class="hm-cell" style="background:#d2f5db">+18.1%</td><td class="hm-cell" style="background:#e0f5e1">+11.4%</td></tr>
-<tr><td class="hm-row-label">Wholesale/Retail</td><td class="hm-cell" style="background:#ecf4e7">+5.3%</td><td class="hm-cell" style="background:#f7eee7">-3.8%</td><td class="hm-cell" style="background:#cff5d9">+19.6%</td><td class="hm-cell" style="background:#ccf6d8">+21.2%</td></tr>
-<tr><td class="hm-row-label">Healthcare</td><td class="hm-cell" style="background:#e9f4e5">+6.9%</td><td class="hm-cell" style="background:#f8ede6">-5.0%</td><td class="hm-cell" style="background:#cbf6d7">+21.8%</td><td class="hm-cell" style="background:#d2f5da">+18.4%</td></tr>
-<tr><td class="hm-row-label">Finance</td><td class="hm-cell" style="background:#ebf4e6">+6.0%</td><td class="hm-cell" style="background:#f9e3de">-11.5%</td><td class="hm-cell" style="background:#c3f6d3">+25.9%</td><td class="hm-cell" style="background:#d4f5db">+17.2%</td></tr>
-<tr><td class="hm-row-label">Other</td><td class="hm-cell" style="background:#ebf4e6">+5.5%</td><td class="hm-cell" style="background:#f9e4df">-11.1%</td><td class="hm-cell" style="background:#d9f5de">+14.9%</td><td class="hm-cell" style="background:#d5f5dc">+17.0%</td></tr>
-</tbody></table></div>
-    <h3>Around the turn itself</h3>
-    <p>
-      In the reactive-cut window, <strong>Business Equipment (Tech)</strong> is the
-      worst performer at T+90 (-6.7%), consistent with the dot-com bust
-      and the 2008 financial crisis both falling inside this group. Only 5 of 12
-      industries are still positive at T+90: <strong>Consumer Durables and Energy and Utilities and Wholesale/Retail and Other</strong>
-      (+14.3%, +2.0%, +3.0%, +1.8%, +0.5%). Utilities fits the classic
-      defensive story, but Energy holding up is more likely specific to the oil-price backdrop of these
-      episodes than a structural pattern. Around hikes, sector dispersion is far more muted:
-      every industry stays within roughly 0 to
-      6 percentage points of flat.
-    </p>
-    <div class="chart-box">
-      <div class="chart-title">Sector level at T+90 by turn type (T0 = 100)</div>
-      <canvas id="sectorTransitionChart" height="100"></canvas>
-      <div class="chart-legend">
-        <span><span class="legend-dot" style="background:#1a5c52"></span>First hike (n=5)</span>
-        <span><span class="legend-dot" style="background:#dc2626"></span>First cut, reactive (n=2 at T+90)</span>
-      </div>
-    </div>
-    <div class="callout amber">
-      <strong>Read sector rotation cautiously.</strong> Twelve industries times a handful of turns means
-      each cell in the transition chart is one or a few episodes. The defensive-sector pattern around
-      reactive cuts is intuitive and consistent with the GFC and dot-com episodes specifically, not a
-      law that holds in every future reactive cut.
-    </div>
-  </div>
-</section>
-
-<!-- Section 6: Style Factors -->
-<section class="section" id="s6" style="background:var(--bg2)">
-  <div class="container">
-    <div class="section-label"><span class="section-counter">06</span><span>Style Factors</span></div>
+    <div class="section-label"><span class="section-counter">05</span><span>Style Factors</span></div>
     <h2>Quality and value factors rise into reactive cuts, even as the market falls</h2>
     <p>
       Using the Fama-French five factors plus momentum (Mkt-RF, SMB, HML, RMW, CMA, MOM), the clearest
@@ -552,21 +489,13 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
 <tr><td class="hm-row-label">Conservative Inv. (CMA)</td><td class="hm-cell" style="background:#f7f1ea">-0.9%</td><td class="hm-cell" style="background:#e6f4e4">+4.1%</td><td class="hm-cell" style="background:#eff4e8">+1.8%</td><td class="hm-cell" style="background:#eef4e8">+2.1%</td></tr>
 <tr><td class="hm-row-label">Momentum</td><td class="hm-cell" style="background:#e8f4e5">+3.8%</td><td class="hm-cell" style="background:#cef6d9">+10.0%</td><td class="hm-cell" style="background:#cff5d9">+9.9%</td><td class="hm-cell" style="background:#f9e2dd">-6.3%</td></tr>
 </tbody></table></div>
-    <div class="chart-box">
-      <div class="chart-title">Style factor level at T+90 by turn type (T0 = 100)</div>
-      <canvas id="factorTransitionChart" height="90"></canvas>
-      <div class="chart-legend">
-        <span><span class="legend-dot" style="background:#1a5c52"></span>First hike (n=5)</span>
-        <span><span class="legend-dot" style="background:#dc2626"></span>First cut, reactive (n=2 at T+90)</span>
-      </div>
-    </div>
   </div>
 </section>
 
 <!-- Section 7: Rates & Curve -->
-<section class="section" id="s7">
+<section class="section" id="s6" style="background:var(--bg2)">
   <div class="container">
-    <div class="section-label"><span class="section-counter">07</span><span>Rates &amp; Curve</span></div>
+    <div class="section-label"><span class="section-counter">06</span><span>Rates &amp; Curve</span></div>
     <h2>The 2s10s curve steepens hard after reactive cuts, flattens through hikes</h2>
     <p>
       The 10Y-2Y spread moves in opposite directions around the two turn types. Around first hikes it
@@ -593,19 +522,13 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
 <tr><td>Hiking</td><td style="text-align:right">4.02%</td><td style="text-align:right">3.52%</td><td style="text-align:right">+0.50</td><td style="text-align:right">-1.08 to +1.94</td><td style="text-align:right">16.4</td><td style="text-align:right">37.3</td></tr><tr><td>Cutting</td><td style="text-align:right">4.06%</td><td style="text-align:right">2.87%</td><td style="text-align:right">+1.19</td><td style="text-align:right">-0.04 to +2.60</td><td style="text-align:right">24.2</td><td style="text-align:right">80.9</td></tr><tr><td>Hold (Elevated)</td><td style="text-align:right">5.19%</td><td style="text-align:right">4.78%</td><td style="text-align:right">+0.40</td><td style="text-align:right">-0.91 to +2.75</td><td style="text-align:right">18.2</td><td style="text-align:right">45.7</td></tr><tr><td>Hold (Zero Lower Bound)</td><td style="text-align:right">2.28%</td><td style="text-align:right">0.50%</td><td style="text-align:right">+1.78</td><td style="text-align:right">+0.23 to +2.91</td><td style="text-align:right">21.3</td><td style="text-align:right">82.7</td></tr>
       </tbody>
     </table>
-    <div class="callout blue">
-      <strong>2s10s, not 10Y-3M.</strong> The classic recession-signal spread is 10Y-3M, but DGS2 (2-year)
-      is the more standard cross-cycle slope measure and what is used throughout this report. The curve
-      inverted (min_t10y2y &lt; 0) at points during both Hiking and Hold-Elevated, consistent with
-      inversions preceding the 2001 and 2007 recessions.
-    </div>
   </div>
 </section>
 
 <!-- Section 8: Methodology & Conclusions -->
-<section class="section" id="s8" style="background:var(--bg2)">
+<section class="section" id="s7">
   <div class="container">
-    <div class="section-label"><span class="section-counter">08</span><span>Methodology &amp; Conclusions</span></div>
+    <div class="section-label"><span class="section-counter">07</span><span>Methodology &amp; Conclusions</span></div>
     <h2>What this is, what it isn't, and what to take away</h2>
     <table class="method-table">
       <thead><tr><th>Dimension</th><th>Detail</th></tr></thead>
@@ -614,9 +537,7 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
           sprtrn and vwretd). 2025 reconstructed from crsp.dsf_v2, with sprtrn as the market-cap-weighted
           S&amp;P 500 constituent return (crsp.msp500list_v2 membership) and vwretd as the market-cap-weighted
           return of all US common stocks (securitysubtype COM, usincflg Y). Full coverage 1994-01-03 to 2025-12-31.</td></tr>
-        <tr><td>Sectors</td><td>Fama-French 12 industry portfolios, daily, Dartmouth data library.
-          Not a 1:1 mapping to GICS sectors (see Section 5).</td></tr>
-        <tr><td>Style factors</td><td>Fama-French 5 factors (Mkt-RF, SMB, HML, RMW, CMA) plus the
+<tr><td>Style factors</td><td>Fama-French 5 factors (Mkt-RF, SMB, HML, RMW, CMA) plus the
           momentum factor, daily, Dartmouth data library.</td></tr>
         <tr><td>Rates &amp; vol</td><td>FRED: VIXCLS, DGS2, DGS10, T10Y2Y, DFEDTARU/L. Fed funds target
           rate pre-corridor (pre-Dec 2008) is hardcoded from FOMC press releases, not FRED-sourced.</td></tr>
@@ -625,16 +546,16 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
           and drawdown is computed per contiguous spell, never bridging a regime change.</td></tr>
         <tr><td>Turn definition</td><td>First hike after a sustained hold or cut, first cut after a
           sustained hold or hike. Insurance cuts (1995, 2019) and the 2020 COVID emergency cut are isolated,
-          not blended into the main first_hike/first_cut aggregates.</td></tr>
-        <tr><td>Transition window</td><td>Trading days T-30 to T+90 around each turn date. Equity,
-          sector, and factor series are cumulative-return-normalised so T0 = 100. VIX is the raw level.
+          not blended into the main first-hike/first-cut aggregates.</td></tr>
+        <tr><td>Transition window</td><td>Trading days T-30 to T+90 around each turn date. Equity
+          series are cumulative-return-normalised so T0 = 100. VIX is the raw level.
           Curve series are level changes (percentage points) from T0, not normalised ratios.</td></tr>
       </tbody>
     </table>
     <h3>Conclusions</h3>
     <div class="callout green">
       <strong>Why matters more than what.</strong> The clearest finding across every dimension (equity,
-      sectors, factors, the curve) is that reactive cuts and preemptive cuts are different animals. A
+      factors, the curve) is that reactive cuts and preemptive cuts are different animals. A
       cut made because the economy already broke is bearish for 90 days. A cut made to extend the cycle,
       or a hike made into a healthy economy, is not.
     </div>
@@ -646,7 +567,7 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
     <div class="callout amber">
       <strong>Eleven turns is not enough to trade on alone.</strong> Every average in this report has a
       single-digit sample size. The 2022 hike (into an inflation shock) and the 2024 cut (a clean
-      soft-landing case with a truncated data window) show how much within-group variation a single
+      soft-landing case) show how much within-group variation a single
       macro backdrop can introduce. This report is descriptive, not a backtested strategy: per the
       site's research-first approach, a tradeable signal test was deliberately deferred pending exactly
       this kind of review.
@@ -732,6 +653,24 @@ new Chart(document.getElementById('regimeChart'), {
   }
 });
 
+const t0Line = {
+  id: 't0Line',
+  beforeDatasetsDraw(chart) {
+    const { ctx, chartArea, scales } = chart;
+    if (!chartArea) return;
+    const x = scales.x.getPixelForValue(30);
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(x, chartArea.top);
+    ctx.lineTo(x, chartArea.bottom);
+    ctx.strokeStyle = 'rgba(120,120,120,0.55)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 3]);
+    ctx.stroke();
+    ctx.restore();
+  }
+};
+
 // Chart: Transition index (s4)
 new Chart(document.getElementById('transitionIndexChart'), {
   type: 'line',
@@ -749,10 +688,11 @@ new Chart(document.getElementById('transitionIndexChart'), {
     responsive: true, interaction: { mode: 'index', intersect: false },
     plugins: { legend: { display: false } },
     scales: {
-      x: { grid: GRID, ticks: { ...TICK, callback: (v,i) => { const l = [-30, -29, -28, -27, -26, -25, -24, -23, -22, -21, -20, -19, -18, -17, -16, -15, -14, -13, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90][i]; return l % 10 === 0 ? 'T' + (l>=0?'+':'') + l : ''; } } },
-      y: { grid: GRID, ticks: TICK, title: { display: true, text: 'SPX level (T0=100)', font: { size: 10 } } }
+      x: { grid: { display: false }, ticks: { ...TICK, callback: (v,i) => { const l = [-30, -29, -28, -27, -26, -25, -24, -23, -22, -21, -20, -19, -18, -17, -16, -15, -14, -13, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90][i]; return l % 10 === 0 ? 'T' + (l>=0?'+':'') + l : ''; } } },
+      y: { grid: { display: false }, ticks: TICK, title: { display: true, text: 'SPX level (T0=100)', font: { size: 10 } } }
     }
-  }
+  },
+  plugins: [t0Line]
 });
 
 // Chart: Transition VIX (s4)
@@ -769,53 +709,14 @@ new Chart(document.getElementById('transitionVixChart'), {
     responsive: true, interaction: { mode: 'index', intersect: false },
     plugins: { legend: { display: false } },
     scales: {
-      x: { grid: GRID, ticks: { ...TICK, callback: (v,i) => { const l = [-30, -29, -28, -27, -26, -25, -24, -23, -22, -21, -20, -19, -18, -17, -16, -15, -14, -13, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90][i]; return l % 10 === 0 ? 'T' + (l>=0?'+':'') + l : ''; } } },
-      y: { grid: GRID, ticks: TICK, title: { display: true, text: 'VIX level', font: { size: 10 } } }
+      x: { grid: { display: false }, ticks: { ...TICK, callback: (v,i) => { const l = [-30, -29, -28, -27, -26, -25, -24, -23, -22, -21, -20, -19, -18, -17, -16, -15, -14, -13, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90][i]; return l % 10 === 0 ? 'T' + (l>=0?'+':'') + l : ''; } } },
+      y: { grid: { display: false }, ticks: TICK, title: { display: true, text: 'VIX level', font: { size: 10 } } }
     }
-  }
-});
-
-// Chart: Sector transition T+90 (s5)
-new Chart(document.getElementById('sectorTransitionChart'), {
-  type: 'bar',
-  data: {
-    labels: ["Consumer Non-Durables", "Consumer Durables", "Manufacturing", "Energy", "Chemicals", "Business Equipment (Tech)", "Telecom", "Utilities", "Wholesale/Retail", "Healthcare", "Finance", "Other"],
-    datasets: [
-      { label: 'First hike', data: [98.7, 93.7, 99.7, 105.0, 101.0, 98.8, 101.6, 103.6, 97.0, 98.3, 98.9, 94.8], backgroundColor: 'rgba(26,92,82,.75)', borderRadius: 2 },
-      { label: 'First cut, reactive', data: [97.3, 114.3, 97.7, 102.0, 96.6, 93.3, 94.9, 103.0, 101.8, 93.4, 97.7, 100.5], backgroundColor: 'rgba(220,38,38,.7)', borderRadius: 2 }
-    ]
   },
-  options: {
-    responsive: true, indexAxis: 'y',
-    plugins: { legend: { position: 'top', labels: { boxWidth: 24 } } },
-    scales: {
-      x: { grid: GRID, ticks: { ...TICK, callback: v => v } , title: { display: true, text: 'Level at T+90 (T0=100)', font: { size: 10 } } },
-      y: { grid: { display: false }, ticks: { ...TICK, font: { size: 9 } } }
-    }
-  }
+  plugins: [t0Line]
 });
 
-// Chart: Factor transition T+90 (s6)
-new Chart(document.getElementById('factorTransitionChart'), {
-  type: 'bar',
-  data: {
-    labels: ["Market", "Size (SMB)", "Value (HML)", "Quality (RMW)", "Conservative Inv. (CMA)", "Momentum"],
-    datasets: [
-      { label: 'First hike', data: [98.0, 99.1, 100.8, 102.5, 101.9, 101.2], backgroundColor: 'rgba(26,92,82,.75)', borderRadius: 2 },
-      { label: 'First cut, reactive', data: [95.9, 101.6, 103.3, 102.3, 101.8, 104.3], backgroundColor: 'rgba(220,38,38,.7)', borderRadius: 2 }
-    ]
-  },
-  options: {
-    responsive: true,
-    plugins: { legend: { position: 'top', labels: { boxWidth: 24 } } },
-    scales: {
-      x: { grid: { display: false }, ticks: { ...TICK, font: { size: 9 } } },
-      y: { grid: GRID, ticks: TICK, title: { display: true, text: 'Level at T+90 (T0=100)', font: { size: 10 } } }
-    }
-  }
-});
-
-// Chart: Curve transition (s7)
+// Chart: Curve transition (s6)
 new Chart(document.getElementById('curveTransitionChart'), {
   type: 'line',
   data: {
@@ -829,10 +730,11 @@ new Chart(document.getElementById('curveTransitionChart'), {
     responsive: true, interaction: { mode: 'index', intersect: false },
     plugins: { legend: { position: 'top', labels: { boxWidth: 24 } } },
     scales: {
-      x: { grid: GRID, ticks: { ...TICK, callback: (v,i) => { const l = [-30, -29, -28, -27, -26, -25, -24, -23, -22, -21, -20, -19, -18, -17, -16, -15, -14, -13, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90][i]; return l % 10 === 0 ? 'T' + (l>=0?'+':'') + l : ''; } } },
-      y: { grid: GRID, ticks: TICK, title: { display: true, text: '10Y-2Y change from T0 (pts)', font: { size: 10 } } }
+      x: { grid: { display: false }, ticks: { ...TICK, callback: (v,i) => { const l = [-30, -29, -28, -27, -26, -25, -24, -23, -22, -21, -20, -19, -18, -17, -16, -15, -14, -13, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90][i]; return l % 10 === 0 ? 'T' + (l>=0?'+':'') + l : ''; } } },
+      y: { grid: { display: false }, ticks: TICK, title: { display: true, text: '10Y-2Y change from T0 (pts)', font: { size: 10 } } }
     }
-  }
+  },
+  plugins: [t0Line]
 });
 
 // Chart: Fed funds rate path + regimes (s2)
@@ -840,7 +742,7 @@ const _ratePts = [{"x": 1994.0, "y": 3.0}, {"x": 1994.0932, "y": 3.0}, {"x": 199
 const _bands = [{"x0": 1994.0, "x1": 1994.0932, "regime": "Hold-Elevated", "outlier": false}, {"x0": 1994.0932, "x1": 1995.0877, "regime": "Hiking", "outlier": false}, {"x0": 1995.0877, "x1": 1999.4932, "regime": "Hold-Elevated", "outlier": false}, {"x0": 1999.4932, "x1": 2000.3743, "regime": "Hiking", "outlier": false}, {"x0": 2000.3743, "x1": 2001.0055, "regime": "Hold-Elevated", "outlier": false}, {"x0": 2001.0055, "x1": 2003.4795, "regime": "Cutting", "outlier": false}, {"x0": 2003.4795, "x1": 2004.4945, "regime": "Hold-Elevated", "outlier": false}, {"x0": 2004.4945, "x1": 2006.4932, "regime": "Hiking", "outlier": false}, {"x0": 2006.4932, "x1": 2007.7123, "regime": "Hold-Elevated", "outlier": false}, {"x0": 2007.7123, "x1": 2008.9563, "regime": "Cutting", "outlier": false}, {"x0": 2008.9563, "x1": 2015.9562, "regime": "Hold-ZLB", "outlier": false}, {"x0": 2015.9562, "x1": 2018.9644, "regime": "Hiking", "outlier": false}, {"x0": 2018.9644, "x1": 2019.5781, "regime": "Hold-Elevated", "outlier": false}, {"x0": 2019.5781, "x1": 2020.1694, "regime": "Cutting", "outlier": false}, {"x0": 2020.1694, "x1": 2020.2049, "regime": "Cutting", "outlier": true}, {"x0": 2020.2049, "x1": 2022.2027, "regime": "Hold-ZLB", "outlier": false}, {"x0": 2022.2027, "x1": 2023.5671, "regime": "Hiking", "outlier": false}, {"x0": 2023.5671, "x1": 2024.7131, "regime": "Hold-Elevated", "outlier": false}, {"x0": 2024.7131, "x1": 2026.0, "regime": "Cutting", "outlier": false}];
 const _turns = [{"x": 1994.0932, "y": 3.25, "type": "first_hike", "cat": "main", "date": "1994-02-04"}, {"x": 1995.5096, "y": 5.75, "type": "first_cut_insurance", "cat": "insurance", "date": "1995-07-06"}, {"x": 1999.4932, "y": 5.0, "type": "first_hike", "cat": "main", "date": "1999-06-30"}, {"x": 2001.0055, "y": 6.0, "type": "first_cut", "cat": "main", "date": "2001-01-03"}, {"x": 2004.4945, "y": 1.25, "type": "first_hike", "cat": "main", "date": "2004-06-30"}, {"x": 2007.7123, "y": 4.75, "type": "first_cut", "cat": "main", "date": "2007-09-18"}, {"x": 2015.9562, "y": 0.5, "type": "first_hike", "cat": "main", "date": "2015-12-16"}, {"x": 2019.5781, "y": 2.25, "type": "first_cut_insurance", "cat": "insurance", "date": "2019-07-31"}, {"x": 2020.1694, "y": 1.25, "type": "first_cut_emergency", "cat": "outlier", "date": "2020-03-03"}, {"x": 2022.2027, "y": 0.5, "type": "first_hike", "cat": "main", "date": "2022-03-16"}, {"x": 2024.7131, "y": 5.0, "type": "first_cut", "cat": "main", "date": "2024-09-18"}];
 const _turnColors = ["#059669", "#2563eb", "#059669", "#059669", "#059669", "#059669", "#059669", "#2563eb", "#dc2626", "#059669", "#059669"];
-const REGIME_FILL = { 'Hiking':'rgba(26,92,82,0.10)', 'Cutting':'rgba(220,38,38,0.09)', 'Hold-Elevated':'rgba(37,99,235,0.06)', 'Hold-ZLB':'rgba(138,164,158,0.14)' };
+const REGIME_FILL = { 'Hiking':'rgba(26,92,82,0.10)', 'Cutting':'rgba(220,38,38,0.09)', 'Hold-Elevated':'rgba(37,99,235,0.06)', 'Hold-ZLB':'rgba(124,58,237,0.10)' };
 const COVID_FILL = 'rgba(220,38,38,0.30)';
 const _typeLabel = { 'first_hike':'First hike', 'first_cut':'First cut (reactive)', 'first_cut_insurance':'First cut (insurance)', 'first_cut_emergency':'First cut (emergency)' };
 const _catLabel = { 'main':'main aggregate', 'insurance':'insurance', 'outlier':'COVID outlier' };
