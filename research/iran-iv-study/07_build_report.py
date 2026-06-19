@@ -11,8 +11,6 @@ import numpy as np
 import pandas as pd
 from events import EVENTS
 
-os.makedirs("report", exist_ok=True)
-
 # ── Load data ─────────────────────────────────────────────────────────────────
 with open("charts/data_iv_profile.json") as f:
     profile_data = json.load(f)
@@ -25,6 +23,7 @@ profiles = pd.read_parquet("data/event_iv_profiles.parquet")
 metadata = pd.read_parquet("data/event_metadata.parquet")
 
 # ── Compute T+20 per-event P&L ────────────────────────────────────────────────
+metadata["label"] = metadata["label"].str.replace("—", ",", regex=False)
 ok_meta   = metadata[metadata["status"] == "OK"]
 ok_ids    = ok_meta["event_id"].tolist()
 id_to_label   = dict(zip(metadata["event_id"], metadata["label"]))
@@ -247,8 +246,15 @@ for _, row in strat_df.iterrows():
 html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HT9VG5C62E"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-HT9VG5C62E');</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="Iran Geopolitical IV Study: The Intrinsic Investor"/>
+  <meta property="og:description" content="IV behaviour in energy sector options around Iran-related geopolitical events. 11 events, 23-year study."/>
+  <meta property="og:url" content="https://theintrinsicinvestor.com/research/iran-iv-study/"/>
+  <meta name="description" content="IV behaviour in energy sector options around Iran-related geopolitical events. 11 events, 23-year study."/>
   <title>IV Behaviour in Energy Options Around Iran Geopolitical Events | The Intrinsic Investor</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -271,8 +277,20 @@ html = f"""<!DOCTYPE html>
     html {{ font-size: 16px; }}
     body {{ background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; line-height: 1.6; }}
 
+    #progress-bar{{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,#1a5c52,#2d9d8f);z-index:9998;transition:width .1s linear}}
+    #side-nav{{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:2px;padding:10px 6px}}
+    #side-nav a{{display:flex;align-items:center;justify-content:flex-end;gap:7px;text-decoration:none;padding:5px 8px;border-radius:4px;transition:background .2s}}
+    #side-nav a:hover{{background:rgba(26,92,82,.07)}}
+    .sn-label{{font-size:.67rem;font-weight:500;color:var(--hint);white-space:nowrap;letter-spacing:.02em;font-family:'Inter',sans-serif;transition:color .2s;text-align:right}}
+    .sn-dot{{width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;transition:all .2s}}
+    #side-nav a.active .sn-label{{color:var(--accent);font-weight:600}}
+    #side-nav a.active .sn-dot{{background:var(--accent);transform:scale(1.5)}}
+    #side-nav a:hover .sn-label{{color:var(--ink)}}
+    #side-nav a:hover .sn-dot{{background:var(--muted)}}
+    @media(max-width:860px){{#side-nav{{display:none}}}}
+
     /* Nav */
-    nav {{ background: var(--ink); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 52px; position: sticky; top: 0; z-index: 100; }}
+    nav {{ background: var(--ink); border-bottom: 1px solid rgba(255,255,255,.08); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 52px; position: sticky; top: 0; z-index: 100; }}
     .nav-logo {{ font-family: 'Fraunces', serif; font-style: italic; font-weight: 400; font-size: 15px; color: rgba(255,255,255,0.9); text-decoration: none; }}
     .nav-links {{ display: flex; gap: 28px; list-style: none; }}
     .nav-links a {{ color: rgba(255,255,255,0.5); text-decoration: none; font-size: 13px; font-weight: 400; letter-spacing: 0.01em; transition: color 0.15s; }}
@@ -325,7 +343,7 @@ html = f"""<!DOCTYPE html>
     .section h2 {{ font-family: 'Fraunces', serif; font-style: italic; font-weight: 600; font-size: 1.65rem; color: var(--ink); margin-bottom: 20px; line-height: 1.3; }}
     .section h2 em {{ color: var(--accent); font-style: italic; }}
     .section h3 {{ font-family: 'Fraunces', serif; font-style: italic; font-weight: 600; font-size: 1.15rem; color: var(--ink); margin: 28px 0 10px; }}
-    p {{ font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 14px; }}
+    p {{ font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 14px; text-align: justify; hyphens: none; }}
     p:last-child {{ margin-bottom: 0; }}
     p strong {{ color: var(--ink); }}
 
@@ -351,7 +369,7 @@ html = f"""<!DOCTYPE html>
     tbody tr:last-child td {{ border-bottom: none; }}
 
     /* Charts */
-    .chart-box {{ background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin: 20px 0; }}
+    .chart-box {{ background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin: 20px 0; }}
     .chart-title {{ font-size: 10px; font-weight: 500; color: var(--hint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }}
     .chart-legend {{ display: flex; flex-wrap: wrap; gap: 14px; margin-top: 12px; }}
     .chart-legend-item {{ display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }}
@@ -391,6 +409,8 @@ html = f"""<!DOCTYPE html>
 </head>
 <body>
 
+<div id="progress-bar"></div>
+
 <!-- ── Nav ── -->
 <nav>
   <a href="/" class="nav-logo">The Intrinsic Investor</a>
@@ -412,10 +432,12 @@ html = f"""<!DOCTYPE html>
       a tradeable mean-reversion strategy from the IV patterns the data reveals.
     </p>
     <div class="hero-meta">
-      <span>By: Brian Liew (LSE, BSc Accounting and Finance)</span>
-      <span>Mar 2003 to Feb 2026</span>
-      <span>15 Events Identified</span>
       <span>OptionMetrics via WRDS</span>
+      <span>Mar 2003 to Feb 2026</span>
+      <span>15 Events</span>
+      <span>Published June 2025</span>
+      <span>Brian Liew, LSE</span>
+      <span><a href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/iran-iv-study" target="_blank" style="color:rgba(255,255,255,0.3);text-decoration:none;border:1px solid rgba(255,255,255,0.15);padding:2px 8px;border-radius:4px;font-size:10px">GitHub</a></span>
     </div>
   </div>
 </div>
@@ -487,7 +509,7 @@ html = f"""<!DOCTYPE html>
 </div>
 
 <!-- ── Section 1: Research Design ── -->
-<section class="section">
+<section id="s1" class="section">
   <div class="section-inner">
     <div class="section-label"><span>Study Design</span></div>
     <h2>Why <em>Iran and energy options</em></h2>
@@ -531,7 +553,7 @@ html = f"""<!DOCTYPE html>
 </section>
 
 <!-- ── Section 2: Event Filter Results ── -->
-<section class="section" style="background:var(--bg2)">
+<section id="s2" class="section" style="background:var(--bg2)">
   <div class="section-inner">
     <div class="section-label"><span>Event Filter</span></div>
     <h2>Fifteen events, <em>eleven pass</em> the market reaction test</h2>
@@ -594,7 +616,7 @@ html = f"""<!DOCTYPE html>
 </section>
 
 <!-- ── Section 3: Average IV Profile ── -->
-<section class="section">
+<section id="s3" class="section">
   <div class="section-inner">
     <div class="section-label"><span>Average IV Profile</span></div>
     <h2>The peak arrives at <em>T+2, not T0</em></h2>
@@ -656,7 +678,7 @@ html = f"""<!DOCTYPE html>
 </section>
 
 <!-- ── Section 4: Instrument Divergence ── -->
-<section class="section" style="background:var(--bg2)">
+<section id="s4" class="section" style="background:var(--bg2)">
   <div class="section-inner">
     <div class="section-label"><span>Instrument Divergence</span></div>
     <h2>USO leads; <em>equity names lag and dampen</em></h2>
@@ -730,7 +752,7 @@ html = f"""<!DOCTYPE html>
 </section>
 
 <!-- ── Section 5: Strategy ── -->
-<section class="section">
+<section id="s5" class="section">
   <div class="section-inner">
     <div class="section-label"><span>Strategy</span></div>
     <h2>Short vol at T0 close, <em>exit at T+20</em></h2>
@@ -829,7 +851,7 @@ html = f"""<!DOCTYPE html>
 </section>
 
 <!-- ── Section 6: Conclusions ── -->
-<section class="section" style="background:var(--bg2)">
+<section id="s6" class="section" style="background:var(--bg2)">
   <div class="section-inner">
     <div class="section-label"><span>Conclusions</span></div>
     <h2>Four takeaways from <em>a small but structured dataset</em></h2>
@@ -911,6 +933,8 @@ html = f"""<!DOCTYPE html>
   </div>
 </section>
 
+<div id="side-nav"></div>
+
 <!-- ── Footer ── -->
 <footer>
   <div class="footer-inner">
@@ -945,6 +969,34 @@ function switchTab(id, el) {{
   document.getElementById('panel-' + id).classList.add('active');
   el.classList.add('active');
 }}
+
+// ── Progress bar ──────────────────────────────────────────────────────────────
+const pb = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {{
+  const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100;
+  if (pb) pb.style.width = pct + '%';
+}}, {{passive: true}});
+
+// ── Side nav ──────────────────────────────────────────────────────────────────
+const NAV_LABELS = ['Study Design', 'Event Filter', 'IV Profile', 'Instrument Divergence', 'Strategy', 'Conclusions'];
+const sideNav = document.getElementById('side-nav');
+NAV_LABELS.forEach((label, i) => {{
+  const a = document.createElement('a');
+  a.href = '#s' + (i + 1);
+  a.innerHTML = `<span class="sn-label">${{label}}</span><span class="sn-dot"></span>`;
+  sideNav.appendChild(a);
+}});
+const sideLinks = sideNav.querySelectorAll('a');
+const sectionObserver = new IntersectionObserver(entries => {{
+  entries.forEach(entry => {{
+    if (entry.isIntersecting) {{
+      sideLinks.forEach(l => l.classList.remove('active'));
+      const active = sideNav.querySelector(`a[href="#${{entry.target.id}}"]`);
+      if (active) active.classList.add('active');
+    }}
+  }});
+}}, {{threshold: 0.3}});
+document.querySelectorAll('section[id]').forEach(el => sectionObserver.observe(el));
 
 // ── Chart 1: IV Profile ───────────────────────────────────────────────────────
 const profileCtx = document.getElementById('profileChart').getContext('2d');
@@ -1083,7 +1135,7 @@ new Chart(pnlCtx, {{
 </body>
 </html>"""
 
-out_path = "report/index.html"
+out_path = "index.html"
 with open(out_path, "w", encoding="utf-8") as f:
     f.write(html)
 

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-HT9VG5C62E"></script>
@@ -6,9 +6,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:type" content="article"/>
-  <meta property="og:title" content="Iran Geopolitical IV Study — The Intrinsic Investor"/>
+  <meta property="og:title" content="Iran Geopolitical IV Study: The Intrinsic Investor"/>
   <meta property="og:description" content="IV behaviour in energy sector options around Iran-related geopolitical events. 11 events, 23-year study."/>
   <meta property="og:url" content="https://theintrinsicinvestor.com/research/iran-iv-study/"/>
+  <meta name="description" content="IV behaviour in energy sector options around Iran-related geopolitical events. 11 events, 23-year study."/>
   <title>IV Behaviour in Energy Options Around Iran Geopolitical Events | The Intrinsic Investor</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,13 +32,25 @@
     html { font-size: 16px; }
     body { background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; line-height: 1.6; }
 
+    #progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,#1a5c52,#2d9d8f);z-index:9998;transition:width .1s linear}
+    #side-nav{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:2px;padding:10px 6px}
+    #side-nav a{display:flex;align-items:center;justify-content:flex-end;gap:7px;text-decoration:none;padding:5px 8px;border-radius:4px;transition:background .2s}
+    #side-nav a:hover{background:rgba(26,92,82,.07)}
+    .sn-label{font-size:.67rem;font-weight:500;color:var(--hint);white-space:nowrap;letter-spacing:.02em;font-family:'Inter',sans-serif;transition:color .2s;text-align:right}
+    .sn-dot{width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;transition:all .2s}
+    #side-nav a.active .sn-label{color:var(--accent);font-weight:600}
+    #side-nav a.active .sn-dot{background:var(--accent);transform:scale(1.5)}
+    #side-nav a:hover .sn-label{color:var(--ink)}
+    #side-nav a:hover .sn-dot{background:var(--muted)}
+    @media(max-width:860px){#side-nav{display:none}}
+
     /* Nav */
-    nav { background: #0f2220; border-bottom: 1px solid rgba(255,255,255,.08); transition: box-shadow 0.3s; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 52px; position: sticky; top: 0; z-index: 100; }
-    .nav-logo { font-family: 'Fraunces', serif; font-style: normal; font-weight: 600; font-size: 15px; color: #fff; text-decoration: none; }
+    nav { background: var(--ink); border-bottom: 1px solid rgba(255,255,255,.08); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 52px; position: sticky; top: 0; z-index: 100; }
+    .nav-logo { font-family: 'Fraunces', serif; font-style: italic; font-weight: 400; font-size: 15px; color: rgba(255,255,255,0.9); text-decoration: none; }
     .nav-links { display: flex; gap: 28px; list-style: none; }
-    .nav-links a { color: rgba(255,255,255,.7); text-decoration: none; font-size: 13px; font-weight: 400; letter-spacing: 0.01em; transition: color 0.15s; }
-    .nav-links a:hover { color: #fff; }
-    .nav-links a.active { color: #fff; font-weight: 500; }
+    .nav-links a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 13px; font-weight: 400; letter-spacing: 0.01em; transition: color 0.15s; }
+    .nav-links a:hover { color: rgba(255,255,255,0.85); }
+    .nav-links a.active { color: rgba(255,255,255,0.9); font-weight: 500; }
 
     /* Hero */
     .hero { background: var(--ink); padding: 64px 24px 80px; }
@@ -52,9 +65,6 @@
     .hero-meta span { display: flex; align-items: center; gap: 6px; }
     .hero-meta span::before { content: ''; display: inline-block; width: 1px; height: 10px; background: rgba(255,255,255,0.15); }
     .hero-meta span:first-child::before { display: none; }
-    .gh-btn { display: inline-flex; align-items: center; gap: 5px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.5); text-decoration: none; border: 1px solid rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 3px; transition: all 0.2s; letter-spacing: 0.02em; }
-    .gh-btn::before { display: none; }
-    .gh-btn:hover { color: #fff; border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.08); }
 
     /* KPI Strip */
     .kpi-strip { max-width: 800px; margin: -32px auto 0; padding: 0 24px 24px; position: relative; z-index: 10; }
@@ -88,7 +98,7 @@
     .section h2 { font-family: 'Fraunces', serif; font-style: italic; font-weight: 600; font-size: 1.65rem; color: var(--ink); margin-bottom: 20px; line-height: 1.3; }
     .section h2 em { color: var(--accent); font-style: italic; }
     .section h3 { font-family: 'Fraunces', serif; font-style: italic; font-weight: 600; font-size: 1.15rem; color: var(--ink); margin: 28px 0 10px; }
-    p { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 14px; }
+    p { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 14px; text-align: justify; hyphens: none; }
     p:last-child { margin-bottom: 0; }
     p strong { color: var(--ink); }
 
@@ -114,7 +124,7 @@
     tbody tr:last-child td { border-bottom: none; }
 
     /* Charts */
-    .chart-box { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin: 20px 0; }
+    .chart-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin: 20px 0; }
     .chart-title { font-size: 10px; font-weight: 500; color: var(--hint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
     .chart-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 12px; }
     .chart-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
@@ -144,119 +154,17 @@
     .footer-disclaimer { font-size: 11px; color: rgba(255,255,255,0.2); }
 
     @media (max-width: 640px) {
-      nav { padding: 0 16px; }
-      .nav-links { gap: 16px; }
-      .hero { padding: 40px 16px 60px; }
       .hero h1 { font-size: 1.75rem; }
-      .hero-meta { gap: 8px; }
-      .kpi-strip { padding: 0 16px 24px; }
       .kpi-cells { grid-template-columns: repeat(2, 1fr); }
       .hl-grid { grid-template-columns: 1fr; }
       .footer-top { flex-direction: column; }
       .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
-      .table-wrap { overflow-x: auto; }
-      .section-counter { display: none; }
     }
-
-    /* G1: Paper grain */
-    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23noise)' opacity='0.07'/%3E%3C/svg%3E");mix-blend-mode:multiply;opacity:0.5}
-
-    /* G2: Frosted nav */
-    nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,0.2)}
-
-    /* G3: Nav underlines */
-    .nav-links a{position:relative;padding-bottom:2px}
-    .nav-links a::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:rgba(90,181,165,0.6);transform:scaleX(0);transform-origin:left;transition:transform 0.25s cubic-bezier(0.4,0,0.2,1)}
-    .nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1)}
-
-    /* G4: Prefers-reduced-motion */
-    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
-
-    /* R1: Progress bar */
-    body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;background:#0f2220;z-index:9997}
-    #progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,#1a5c52,#2d9d8f);z-index:9998;transition:width 0.1s linear;box-shadow:0 0 8px rgba(26,92,82,0.4)}
-
-    /* R2: Hero texture + entrance animation */
-    .hero{position:relative;overflow:hidden}
-    .hero::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(-55deg,transparent,transparent 40px,rgba(255,255,255,0.013) 40px,rgba(255,255,255,0.013) 41px);pointer-events:none;z-index:0}
-    .hero-inner{position:relative;z-index:1}
-    .eyebrow{opacity:0;animation:fadeUp 0.5s ease 0.05s forwards}
-    .hero h1{opacity:0;animation:fadeUp 0.5s ease 0.12s forwards}
-    .hero-subtitle{opacity:0;animation:fadeUp 0.5s ease 0.20s forwards}
-    .hero-meta{opacity:0;animation:fadeUp 0.5s ease 0.28s forwards}
-    .kpi-strip{opacity:0;animation:fadeUp 0.55s ease 0.35s forwards}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-
-    /* R3: Section scroll-reveal */
-    .section{opacity:0;transform:translateY(20px);transition:opacity 0.6s cubic-bezier(0.4,0,0.2,1),transform 0.6s cubic-bezier(0.4,0,0.2,1)}
-    .section.visible{opacity:1;transform:translateY(0)}
-    .callout{opacity:0;transform:translateX(-8px);transition:opacity 0.5s ease,transform 0.5s ease}
-    .callout.visible{opacity:1;transform:translateX(0)}
-
-    /* R4: Table row animation */
-    table.revealed tbody tr{opacity:0;transform:translateX(-8px);animation:rowReveal 0.35s ease forwards}
-    @keyframes rowReveal{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
-    table.revealed tbody tr:nth-child(1){animation-delay:0.03s}
-    table.revealed tbody tr:nth-child(2){animation-delay:0.07s}
-    table.revealed tbody tr:nth-child(3){animation-delay:0.11s}
-    table.revealed tbody tr:nth-child(4){animation-delay:0.15s}
-    table.revealed tbody tr:nth-child(5){animation-delay:0.19s}
-    table.revealed tbody tr:nth-child(6){animation-delay:0.23s}
-    table.revealed tbody tr:nth-child(7){animation-delay:0.27s}
-    table.revealed tbody tr:nth-child(8){animation-delay:0.31s}
-    table.revealed tbody tr:nth-child(9){animation-delay:0.35s}
-
-    /* R5: Chart + highlight box hover */
-    .chart-box{transition:box-shadow 0.2s}
-    .chart-box:hover{box-shadow:0 4px 20px rgba(15,34,32,0.06)}
-    .highlight-box{transition:transform 0.2s,box-shadow 0.2s}
-    .highlight-box:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(15,34,32,0.15)}
-
-    /* R6: Dot nav */
-    .section-nav{position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);z-index:300;display:flex;flex-direction:column;gap:8px}
-    .sn-dot{width:8px;height:8px;border-radius:50%;border:1.5px solid rgba(138,164,158,0.5);background:transparent;cursor:pointer;transition:all 0.2s;position:relative}
-    .sn-dot:hover,.sn-dot.active{background:#5ab5a5;border-color:#5ab5a5;transform:scale(1.25)}
-    .sn-dot::before{content:attr(data-label);position:absolute;right:calc(100% + 8px);top:50%;transform:translateY(-50%);background:#0f2220;color:rgba(255,255,255,0.85);font-size:10px;font-weight:500;padding:3px 8px;border-radius:3px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.15s;border:1px solid rgba(255,255,255,0.08)}
-    .sn-dot:hover::before{opacity:1}
-    @media(max-width:900px){.section-nav{display:none}}
-
-    /* R7: Ghost section counters */
-    .section-label{position:relative}
-    .section-counter{position:absolute;left:-3.5rem;top:50%;transform:translateY(-50%);font-family:'Fraunces',serif;font-size:3.5rem;font-weight:600;font-style:italic;color:rgba(26,92,82,0.07);line-height:1;pointer-events:none;user-select:none;letter-spacing:-0.02em}
-
-    /* G5: Hero tag / sub / stats selectors */
-    .hero-tag{animation:fadeUp .6s ease both}
-    .hero-sub,.hero-desc,.hero-stats{animation:fadeUp .6s .2s ease both}
-
-    /* G6: chart-wrap hover lift */
-    .chart-wrap{transition:box-shadow .2s,transform .2s}
-    .chart-wrap:hover{box-shadow:0 4px 20px rgba(0,0,0,0.15);transform:translateY(-1px)}
-
-    /* G7: note / insight / highlight-box scroll-reveal */
-    .note,.insight,.highlight-box{opacity:0;transform:translateX(-8px);transition:opacity .45s ease,transform .45s ease}
-    .note.visible,.insight.visible,.highlight-box.visible{opacity:1;transform:none}
-
-    /* G8: tbody tr visibility classes (complement existing rowReveal) */
-    tbody tr{opacity:0;transform:translateY(6px);transition:opacity .35s ease,transform .35s ease}
-    tbody tr.visible{opacity:1;transform:none}
-
-    /* G9: #dot-nav alias styles (mirrors .section-nav for spec compliance) */
-    #dot-nav{position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:50}
-    #dot-nav a{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);display:block;transition:background .2s,transform .2s}
-    #dot-nav a.active{background:#5ab5a5;transform:scale(1.35)}
-    @media(max-width:860px){#dot-nav{display:none}}
   </style>
 </head>
 <body>
+
 <div id="progress-bar"></div>
-<div class="section-nav">
-  <div class="sn-dot" data-label="Study Design" data-target="sec-design"></div>
-  <div class="sn-dot" data-label="Event Filter" data-target="sec-events"></div>
-  <div class="sn-dot" data-label="IV Profile" data-target="sec-profile"></div>
-  <div class="sn-dot" data-label="Instrument Divergence" data-target="sec-divergence"></div>
-  <div class="sn-dot" data-label="Strategy" data-target="sec-strategy"></div>
-  <div class="sn-dot" data-label="Conclusions" data-target="sec-conclusions"></div>
-</div>
 
 <!-- ── Nav ── -->
 <nav>
@@ -279,12 +187,12 @@
       a tradeable mean-reversion strategy from the IV patterns the data reveals.
     </p>
     <div class="hero-meta">
-      <span>By: Brian Liew (LSE, BSc Accounting and Finance)</span>
-      <span>Mar 2003 to Feb 2026</span>
-      <span>15 Events Identified</span>
       <span>OptionMetrics via WRDS</span>
-      <span>Published Mar 2026</span>
-      <a class="gh-btn" href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/iran-iv-study" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg> Code</a>
+      <span>Mar 2003 to Feb 2026</span>
+      <span>15 Events</span>
+      <span>Published June 2025</span>
+      <span>Brian Liew, LSE</span>
+      <span><a href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/iran-iv-study" target="_blank" style="color:rgba(255,255,255,0.3);text-decoration:none;border:1px solid rgba(255,255,255,0.15);padding:2px 8px;border-radius:4px;font-size:10px">GitHub</a></span>
     </div>
   </div>
 </div>
@@ -339,7 +247,7 @@
       <div class="kpi-cell">
         <div class="kpi-label">IV peak (avg)</div>
         <div class="kpi-value blue">109.4</div>
-        <div class="kpi-sub">at T+2, norm. baseline 100 (IV profile uses all 11 events)</div>
+        <div class="kpi-sub">at T+2, norm. baseline 100</div>
       </div>
       <div class="kpi-cell">
         <div class="kpi-label">Win rate (T+20)</div>
@@ -356,9 +264,9 @@
 </div>
 
 <!-- ── Section 1: Research Design ── -->
-<section class="section" id="sec-design">
+<section id="s1" class="section">
   <div class="section-inner">
-    <div class="section-label"><span class="section-counter">01</span><span>Study Design</span></div>
+    <div class="section-label"><span>Study Design</span></div>
     <h2>Why <em>Iran and energy options</em></h2>
 
     <p>
@@ -400,9 +308,9 @@
 </section>
 
 <!-- ── Section 2: Event Filter Results ── -->
-<section class="section" id="sec-events" style="background:var(--bg2)">
+<section id="s2" class="section" style="background:var(--bg2)">
   <div class="section-inner">
-    <div class="section-label"><span class="section-counter">02</span><span>Event Filter</span></div>
+    <div class="section-label"><span>Event Filter</span></div>
     <h2>Fifteen events, <em>eleven pass</em> the market reaction test</h2>
 
     <p>
@@ -504,14 +412,14 @@
     </tr><tr>
       <td style="font-family:'JetBrains Mono',monospace;color:#8aa49e">13</td>
       <td style="font-family:'JetBrains Mono',monospace;font-size:12px">2025-06-13</td>
-      <td><strong style="color:#0f2220;font-size:13px">Twelve-Day War begins: Israel strikes Iran</strong></td>
+      <td><strong style="color:#0f2220;font-size:13px">Twelve-Day War begins, Israel strikes Iran</strong></td>
       <td style="font-size:12px"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#86198f;margin-right:5px"></span>Twelve-Day War 2025</td>
       <td style="font-size:12px;color:#4a6460">XLE, USO, XOM, CVX</td>
       <td><span style="background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:600">Included</span></td>
     </tr><tr>
       <td style="font-family:'JetBrains Mono',monospace;color:#8aa49e">14</td>
       <td style="font-family:'JetBrains Mono',monospace;font-size:12px">2025-06-24</td>
-      <td><strong style="color:#0f2220;font-size:13px">Ceasefire: Twelve-Day War ends</strong></td>
+      <td><strong style="color:#0f2220;font-size:13px">Ceasefire, Twelve-Day War ends</strong></td>
       <td style="font-size:12px"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#86198f;margin-right:5px"></span>Twelve-Day War 2025</td>
       <td style="font-size:12px;color:#4a6460">XLE, USO, XOM, CVX</td>
       <td><span style="background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:600">Included</span></td>
@@ -568,9 +476,9 @@
 </section>
 
 <!-- ── Section 3: Average IV Profile ── -->
-<section class="section" id="sec-profile">
+<section id="s3" class="section">
   <div class="section-inner">
-    <div class="section-label"><span class="section-counter">03</span><span>Average IV Profile</span></div>
+    <div class="section-label"><span>Average IV Profile</span></div>
     <h2>The peak arrives at <em>T+2, not T0</em></h2>
 
     <p>
@@ -630,10 +538,10 @@
 </section>
 
 <!-- ── Section 4: Instrument Divergence ── -->
-<section class="section" id="sec-divergence" style="background:var(--bg2)">
+<section id="s4" class="section" style="background:var(--bg2)">
   <div class="section-inner">
-    <div class="section-label"><span class="section-counter">04</span><span>Instrument Divergence</span></div>
-    <h2>USO leads, <em>equity names lag and dampen</em></h2>
+    <div class="section-label"><span>Instrument Divergence</span></div>
+    <h2>USO leads; <em>equity names lag and dampen</em></h2>
 
     <p>
       The heatmap below shows IV change from the T-20 baseline at four checkpoints across all eleven
@@ -647,7 +555,7 @@
           <tr><th>Event</th><th colspan="4" style="text-align:center;border-left:2px solid #e2ddd0">XLE</th><th colspan="4" style="text-align:center;border-left:2px solid #e2ddd0">USO</th><th colspan="4" style="text-align:center;border-left:2px solid #e2ddd0">XOM</th><th colspan="4" style="text-align:center;border-left:2px solid #e2ddd0">CVX</th></tr>
           <tr><th></th><th style="border-left:2px solid #e2ddd0">T0</th><th style="border-left:1px solid #e2ddd0">T+5</th><th style="border-left:1px solid #e2ddd0">T+10</th><th style="border-left:1px solid #e2ddd0">T+30</th><th style="border-left:2px solid #e2ddd0">T0</th><th style="border-left:1px solid #e2ddd0">T+5</th><th style="border-left:1px solid #e2ddd0">T+10</th><th style="border-left:1px solid #e2ddd0">T+30</th><th style="border-left:2px solid #e2ddd0">T0</th><th style="border-left:1px solid #e2ddd0">T+5</th><th style="border-left:1px solid #e2ddd0">T+10</th><th style="border-left:1px solid #e2ddd0">T+30</th><th style="border-left:2px solid #e2ddd0">T0</th><th style="border-left:1px solid #e2ddd0">T+5</th><th style="border-left:1px solid #e2ddd0">T+10</th><th style="border-left:1px solid #e2ddd0">T+30</th></tr>
         </thead>
-        <tbody><tr><td style="white-space:nowrap"><strong style="color:#0f2220;font-size:12px">Iranian speedboats confront US Navy <span style='font-size:10px;color:#92400e'>(GFC flag)</span></strong><br><span style="font-size:11px;color:#8aa49e;font-family:'JetBrains Mono',monospace">Jan 07, 2008</span></td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+12.2</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+7.2</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+55.4</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+3.6</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+3.1</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">-1.7</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+14.3</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+5.8</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+13.0</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+13.5</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+48.7</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-3.5</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+13.1</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+12.9</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+57.3</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+7.2</td></tr><tr><td style="white-space:nowrap"><strong style="color:#0f2220;font-size:12px">Iran threatens to close Strait</strong><br><span style="font-size:11px;color:#8aa49e;font-family:'JetBrains Mono',monospace">Jan 23, 2012</span></td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-22.9</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-9.7</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-16.6</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-11.8</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-7.2</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-8.9</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-10.1</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">-0.7</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-7.9</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+3.3</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-11.9</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-6.3</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-9.4</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-5.5</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-14.6</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-12.6</td></tr><tr><td style="white-space:nowrap"><strong style="color:#0f2220;font-size:12px">Four tankers sabotaged off UAE</strong><br><span style="font-size:11px;color:#8aa49e;font-family:'JetBrains Mono',monospace">May 13, 2019</span></td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+35.6</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+8.5</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+18.0</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+15.6</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+31.1</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+14.5</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+34.5</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+64.5</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+11.7</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-4.9</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+6.9</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+5.7</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-4.8</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-23.0</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-13.5</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-13.7</td></tr><tr><td style="white-space:nowrap"><strong style="color:#0f2220;font-size:12px">Two tankers attacked in Gulf of Oman</strong><br><span style="font-size:11px;color:#8aa49e;font-family:'JetBrains Mono',monospace">Jun 13, 2019</span></td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">+2.6</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">+1.6</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">+1.2</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-17.7</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+51.6</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+43.3</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+28.1</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+9.6</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+9.3</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+10.4</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+14.0</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">+1.2</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+9.1</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+8.9</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+7.6</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">+0.7</td></tr><tr><td style="white-space:nowrap"><strong style="color:#0f2220;font-size:12px">Iran shoots down US RQ-4 drone</strong><br><span style="font-size:11px;color:#8aa49e;font-family:'JetBrains Mono',monospace">Jun 20, 2019</span></td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+12.1</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+11.7</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-5.1</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+22.9</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+44.9</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+29.6</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+19.4</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+23.7</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+15.1</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+18.8</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">-0.2</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+20.9</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+13.4</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+12.0</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">+0.3</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+21.0</td></tr><tr><td style="white-space:nowrap"><strong style="color:#0f2220;font-size:12px">Soleimani assassination</strong><br><span style="font-size:11px;color:#8aa49e;font-family:'JetBrains Mono',monospace">Jan 03, 2020</span></td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-8.3</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-15.5</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-23.2</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-3.5</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-8.0</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-12.4</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-20.3</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+6.2</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+15.3</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+6.1</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-5.5</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+19.7</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+3.7</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">+0.7</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-7.3</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+5.2</td></tr><tr><td style="white-space:nowrap"><strong style="color:#0f2220;font-size:12px">Israel strikes Iranian consulate Damascus</strong><br><span style="font-size:11px;color:#8aa49e;font-family:'JetBrains Mono',monospace">Apr 01, 2024</span></td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">-1.6</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+3.5</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+14.8</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-11.7</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-15.8</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+3.1</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+13.6</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-15.8</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">-1.8</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+8.1</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+21.4</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-11.3</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">-0.1</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+4.8</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+23.0</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-13.5</td></tr><tr><td style="white-space:nowrap"><strong style="color:#0f2220;font-size:12px">Iran ballistic missile strike on Israel</strong><br><span style="font-size:11px;color:#8aa49e;font-family:'JetBrains Mono',monospace">Oct 01, 2024</span></td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+13.9</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+33.6</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+16.9</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">-2.2</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+24.3</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+55.8</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+43.5</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-4.3</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+15.5</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+23.3</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+12.3</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-6.8</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+20.3</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+32.6</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+23.0</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-11.2</td></tr><tr><td style="white-space:nowrap"><strong style="color:#0f2220;font-size:12px">Israel strikes Iran directly</strong><br><span style="font-size:11px;color:#8aa49e;font-family:'JetBrains Mono',monospace">Oct 28, 2024</span></td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">+2.3</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+10.2</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-12.7</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-17.4</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">+0.6</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+11.5</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-8.9</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-21.9</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+6.0</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">-0.2</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-15.2</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-13.2</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+10.9</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-4.6</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-24.1</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-21.6</td></tr><tr><td style="white-space:nowrap"><strong style="color:#0f2220;font-size:12px">Twelve-Day War begins: Israel strikes Iran</strong><br><span style="font-size:11px;color:#8aa49e;font-family:'JetBrains Mono',monospace">Jun 13, 2025</span></td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+14.7</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+9.9</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">-0.6</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-8.6</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+50.7</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+37.1</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-5.7</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">-0.1</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+18.7</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+8.1</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+9.4</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">+1.5</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+16.3</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+7.1</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+6.6</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-5.8</td></tr><tr><td style="white-space:nowrap"><strong style="color:#0f2220;font-size:12px">Ceasefire: Twelve-Day War ends</strong><br><span style="font-size:11px;color:#8aa49e;font-family:'JetBrains Mono',monospace">Jun 24, 2025</span></td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-4.1</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-11.7</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-10.2</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-7.1</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+8.4</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-11.2</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-20.2</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-13.1</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-5.9</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-13.8</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-13.2</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-11.4</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-4.5</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-8.0</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">+1.1</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-16.5</td></tr></tbody>
+        <tbody><tr><td style="white-space:nowrap"><strong style="color:#0f2220;font-size:12px">Iranian speedboats confront US Navy <span style='font-size:10px;color:#92400e'>(GFC flag)</span></strong><br><span style="font-size:11px;color:#8aa49e;font-family:'JetBrains Mono',monospace">Jan 07, 2008</span></td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+12.2</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+7.2</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+55.4</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+3.6</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+3.1</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">-1.7</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+14.3</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+5.8</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+13.0</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+13.5</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+48.7</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-3.5</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+13.1</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+12.9</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+57.3</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+7.2</td></tr><tr><td style="white-space:nowrap"><strong style="color:#0f2220;font-size:12px">Iran threatens to close Strait</strong><br><span style="font-size:11px;color:#8aa49e;font-family:'JetBrains Mono',monospace">Jan 23, 2012</span></td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-22.9</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-9.7</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-16.6</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-11.8</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-7.2</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-8.9</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-10.1</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">-0.7</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-7.9</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+3.3</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-11.9</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-6.3</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-9.4</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-5.5</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-14.6</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-12.6</td></tr><tr><td style="white-space:nowrap"><strong style="color:#0f2220;font-size:12px">Four tankers sabotaged off UAE</strong><br><span style="font-size:11px;color:#8aa49e;font-family:'JetBrains Mono',monospace">May 13, 2019</span></td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+35.6</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+8.5</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+18.0</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+15.6</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+31.1</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+14.5</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+34.5</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+64.5</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+11.7</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-4.9</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+6.9</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+5.7</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-4.8</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-23.0</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-13.5</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-13.7</td></tr><tr><td style="white-space:nowrap"><strong style="color:#0f2220;font-size:12px">Two tankers attacked in Gulf of Oman</strong><br><span style="font-size:11px;color:#8aa49e;font-family:'JetBrains Mono',monospace">Jun 13, 2019</span></td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">+2.6</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">+1.6</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">+1.2</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-17.7</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+51.6</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+43.3</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+28.1</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+9.6</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+9.3</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+10.4</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+14.0</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">+1.2</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+9.1</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+8.9</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+7.6</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">+0.7</td></tr><tr><td style="white-space:nowrap"><strong style="color:#0f2220;font-size:12px">Iran shoots down US RQ-4 drone</strong><br><span style="font-size:11px;color:#8aa49e;font-family:'JetBrains Mono',monospace">Jun 20, 2019</span></td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+12.1</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+11.7</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-5.1</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+22.9</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+44.9</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+29.6</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+19.4</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+23.7</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+15.1</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+18.8</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">-0.2</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+20.9</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+13.4</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+12.0</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">+0.3</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+21.0</td></tr><tr><td style="white-space:nowrap"><strong style="color:#0f2220;font-size:12px">Soleimani assassination</strong><br><span style="font-size:11px;color:#8aa49e;font-family:'JetBrains Mono',monospace">Jan 03, 2020</span></td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-8.3</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-15.5</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-23.2</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-3.5</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-8.0</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-12.4</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-20.3</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+6.2</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+15.3</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+6.1</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-5.5</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+19.7</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+3.7</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">+0.7</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-7.3</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+5.2</td></tr><tr><td style="white-space:nowrap"><strong style="color:#0f2220;font-size:12px">Israel strikes Iranian consulate Damascus</strong><br><span style="font-size:11px;color:#8aa49e;font-family:'JetBrains Mono',monospace">Apr 01, 2024</span></td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">-1.6</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+3.5</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+14.8</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-11.7</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-15.8</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+3.1</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+13.6</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-15.8</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">-1.8</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+8.1</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+21.4</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-11.3</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">-0.1</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+4.8</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+23.0</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-13.5</td></tr><tr><td style="white-space:nowrap"><strong style="color:#0f2220;font-size:12px">Iran ballistic missile strike on Israel</strong><br><span style="font-size:11px;color:#8aa49e;font-family:'JetBrains Mono',monospace">Oct 01, 2024</span></td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+13.9</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+33.6</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+16.9</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">-2.2</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+24.3</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+55.8</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+43.5</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-4.3</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+15.5</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+23.3</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+12.3</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-6.8</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+20.3</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+32.6</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+23.0</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-11.2</td></tr><tr><td style="white-space:nowrap"><strong style="color:#0f2220;font-size:12px">Israel strikes Iran directly</strong><br><span style="font-size:11px;color:#8aa49e;font-family:'JetBrains Mono',monospace">Oct 28, 2024</span></td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">+2.3</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+10.2</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-12.7</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-17.4</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">+0.6</td><td style="text-align:right;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+11.5</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-8.9</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-21.9</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+6.0</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">-0.2</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-15.2</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-13.2</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+10.9</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-4.6</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-24.1</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-21.6</td></tr><tr><td style="white-space:nowrap"><strong style="color:#0f2220;font-size:12px">Twelve-Day War begins — Israel strikes Iran</strong><br><span style="font-size:11px;color:#8aa49e;font-family:'JetBrains Mono',monospace">Jun 13, 2025</span></td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+14.7</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+9.9</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">-0.6</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-8.6</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+50.7</td><td style="text-align:right;background:#fee2e2;color:#991b1b;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">+37.1</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-5.7</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">-0.1</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+18.7</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+8.1</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+9.4</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">+1.5</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fef2f2;color:#dc2626;font-family:'JetBrains Mono',monospace;font-size:12px">+16.3</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+7.1</td><td style="text-align:right;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+6.6</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-5.8</td></tr><tr><td style="white-space:nowrap"><strong style="color:#0f2220;font-size:12px">Ceasefire — Twelve-Day War ends</strong><br><span style="font-size:11px;color:#8aa49e;font-family:'JetBrains Mono',monospace">Jun 24, 2025</span></td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-4.1</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-11.7</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-10.2</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-7.1</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#fffbeb;color:#92400e;font-family:'JetBrains Mono',monospace;font-size:12px">+8.4</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-11.2</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-20.2</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-13.1</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-5.9</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-13.8</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-13.2</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-11.4</td><td style="text-align:right;border-left:2px solid #e2ddd0;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-4.5</td><td style="text-align:right;background:#eff6ff;color:#1e40af;font-family:'JetBrains Mono',monospace;font-size:12px">-8.0</td><td style="text-align:right;background:#f7f4ec;color:#4a6460;font-family:'JetBrains Mono',monospace;font-size:12px">+1.1</td><td style="text-align:right;background:#dbeafe;color:#1e40af;font-weight:600;font-family:'JetBrains Mono',monospace;font-size:12px">-16.5</td></tr></tbody>
       </table>
     </div>
     <p style="font-size:11px;color:var(--hint);margin-top:6px">
@@ -704,9 +612,9 @@
 </section>
 
 <!-- ── Section 5: Strategy ── -->
-<section class="section" id="sec-strategy">
+<section id="s5" class="section">
   <div class="section-inner">
-    <div class="section-label"><span class="section-counter">05</span><span>Strategy</span></div>
+    <div class="section-label"><span>Strategy</span></div>
     <h2>Short vol at T0 close, <em>exit at T+20</em></h2>
 
     <p>
@@ -863,14 +771,14 @@
       <td style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#059669;font-weight:500">+23.15</td>
       <td style="font-family:'JetBrains Mono',monospace;font-size:13px">+40.80</td>
     </tr><tr>
-      <td><strong style="color:#0f2220;font-size:12px">Twelve-Day War begins: Israel strikes Iran</strong></td>
+      <td><strong style="color:#0f2220;font-size:12px">Twelve-Day War begins , Israel strikes Iran</strong></td>
       <td style="font-size:12px;color:#4a6460">Twelve-Day War 2025</td>
       <td style="font-family:'JetBrains Mono',monospace;font-size:13px">125.1</td>
       <td style="font-family:'JetBrains Mono',monospace;font-size:13px">101.0</td>
       <td style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#059669;font-weight:500">+24.07</td>
       <td style="font-family:'JetBrains Mono',monospace;font-size:13px">+64.87</td>
     </tr><tr>
-      <td><strong style="color:#0f2220;font-size:12px">Ceasefire: Twelve-Day War ends</strong></td>
+      <td><strong style="color:#0f2220;font-size:12px">Ceasefire , Twelve-Day War ends</strong></td>
       <td style="font-size:12px;color:#4a6460">Twelve-Day War 2025</td>
       <td style="font-family:'JetBrains Mono',monospace;font-size:13px">98.5</td>
       <td style="font-family:'JetBrains Mono',monospace;font-size:13px">84.0</td>
@@ -888,19 +796,19 @@
         T0 to T+20. They do not account for delta hedging costs, gamma risk, bid-ask spreads on straddle
         entry at elevated IV levels, or the dollar vega exposure of a straddle entered on a high-IV day.
         In practice, a short straddle entered at T0 close will carry higher dollar vega than a typical
-        entry. The strategy requires active delta management and stop-loss discipline. The one loss in
-        the ex-event-2 sample (event 8, Soleimani) reflects a case where IV continued to build after T0,
-        not a case where IV spiked and held: an investor monitoring the position would have seen that
-        loss developing and had the option to exit early.
+        entry. The strategy requires active delta management and stop-loss discipline. The two losses in
+        the ex-event-2 sample (events 9 and 11) both reflect cases where IV continued to build after T0,
+        not cases where IV spiked and held: an investor monitoring the position would have seen those
+        losses developing and had the option to exit early.
       </div>
     </div>
   </div>
 </section>
 
 <!-- ── Section 6: Conclusions ── -->
-<section class="section" id="sec-conclusions" style="background:var(--bg2)">
+<section id="s6" class="section" style="background:var(--bg2)">
   <div class="section-inner">
-    <div class="section-label"><span class="section-counter">06</span><span>Conclusions</span></div>
+    <div class="section-label"><span>Conclusions</span></div>
     <h2>Four takeaways from <em>a small but structured dataset</em></h2>
 
     <div class="callout green">
@@ -980,6 +888,8 @@
   </div>
 </section>
 
+<div id="side-nav"></div>
+
 <!-- ── Footer ── -->
 <footer>
   <div class="footer-inner">
@@ -1002,6 +912,8 @@
       <div class="footer-disclaimer">For informational purposes only. Not investment advice.</div>
     </div>
   </div>
+
+  <div style="text-align:center;font-size:0.75rem;color:rgba(255,255,255,0.4);margin-top:1.5rem;font-family:var(--font, 'Inter', sans-serif);width:100%;">For research purposes only. Not financial advice.</div>
 </footer>
 
 <script>
@@ -1012,6 +924,34 @@ function switchTab(id, el) {
   document.getElementById('panel-' + id).classList.add('active');
   el.classList.add('active');
 }
+
+// ── Progress bar ──────────────────────────────────────────────────────────────
+const pb = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100;
+  if (pb) pb.style.width = pct + '%';
+}, {passive: true});
+
+// ── Side nav ──────────────────────────────────────────────────────────────────
+const NAV_LABELS = ['Study Design', 'Event Filter', 'IV Profile', 'Instrument Divergence', 'Strategy', 'Conclusions'];
+const sideNav = document.getElementById('side-nav');
+NAV_LABELS.forEach((label, i) => {
+  const a = document.createElement('a');
+  a.href = '#s' + (i + 1);
+  a.innerHTML = `<span class="sn-label">${label}</span><span class="sn-dot"></span>`;
+  sideNav.appendChild(a);
+});
+const sideLinks = sideNav.querySelectorAll('a');
+const sectionObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      sideLinks.forEach(l => l.classList.remove('active'));
+      const active = sideNav.querySelector(`a[href="#${entry.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, {threshold: 0.3});
+document.querySelectorAll('section[id]').forEach(el => sectionObserver.observe(el));
 
 // ── Chart 1: IV Profile ───────────────────────────────────────────────────────
 const profileCtx = document.getElementById('profileChart').getContext('2d');
@@ -1082,7 +1022,7 @@ new Chart(profileCtx, {
 const pnlCtx = document.getElementById('pnlChart').getContext('2d');
 new Chart(pnlCtx, {
   data: {
-    labels: ["Iranian speedboats confront US Navy", "Iran threatens to close Strait", "Four tankers sabotaged off UAE", "Two tankers attacked in Gulf of Oman", "Iran shoots down US RQ-4 drone", "Soleimani assassination", "Israel strikes Iranian consulate Damascus", "Iran ballistic missile strike on Israel", "Israel strikes Iran directly", "Twelve-Day War begins \u2014 Israel strikes Iran", "Ceasefire \u2014 Twelve-Day War ends"],
+    labels: ["Iranian speedboats confront US Navy", "Iran threatens to close Strait", "Four tankers sabotaged off UAE", "Two tankers attacked in Gulf of Oman", "Iran shoots down US RQ-4 drone", "Soleimani assassination", "Israel strikes Iranian consulate Damascus", "Iran ballistic missile strike on Israel", "Israel strikes Iran directly", "Twelve-Day War begins , Israel strikes Iran", "Ceasefire , Twelve-Day War ends"],
     datasets: [
       {
         type: 'bar',
@@ -1146,101 +1086,6 @@ new Chart(pnlCtx, {
     }
   }
 });
-</script>
-
-<script>
-// Nav scroll
-const nav = document.querySelector('nav');
-window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 10); }, { passive: true });
-
-// Progress bar
-const progressBar = document.getElementById('progress-bar');
-window.addEventListener('scroll', () => {
-  const d = document.documentElement.scrollHeight - window.innerHeight;
-  progressBar.style.width = (d > 0 ? (window.scrollY / d) * 100 : 0) + '%';
-}, { passive: true });
-
-// Section + callout reveal
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      entry.target.querySelectorAll('table').forEach(t => t.classList.add('revealed'));
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
-document.querySelectorAll('.section, .callout').forEach(el => revealObserver.observe(el));
-
-// Dot nav
-const dots = document.querySelectorAll('.sn-dot');
-dots.forEach(dot => {
-  dot.addEventListener('click', () => {
-    const target = document.getElementById(dot.dataset.target);
-    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-});
-const sectionObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      dots.forEach(d => d.classList.remove('active'));
-      const activeDot = document.querySelector(`.sn-dot[data-target="${entry.target.id}"]`);
-      if (activeDot) activeDot.classList.add('active');
-    }
-  });
-}, { threshold: 0.3 });
-document.querySelectorAll('.section[id]').forEach(el => sectionObserver.observe(el));
-</script>
-
-<div id="dot-nav"></div>
-<script>
-// G: Progress bar (spec-compliant handler)
-const pb = document.getElementById('progress-bar');
-if (pb) {
-  window.addEventListener('scroll', () => {
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    pb.style.width = (max > 0 ? window.scrollY / max * 100 : 0) + '%';
-  }, { passive: true });
-}
-
-// G: #dot-nav population
-const dotNav = document.getElementById('dot-nav');
-const allSections = document.querySelectorAll('.section');
-if (dotNav && allSections.length) {
-  allSections.forEach((s, i) => {
-    if (!s.id) s.id = 'sec-' + i;
-    const a = document.createElement('a');
-    a.href = '#' + s.id;
-    const heading = s.querySelector('h2,h3');
-    a.title = heading ? heading.textContent.trim() : '';
-    dotNav.appendChild(a);
-  });
-}
-
-// G: highlight-box / note / insight reveal via existing observer
-const gReveal = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.querySelectorAll('.note,.insight,.highlight-box').forEach((c, i) => {
-        setTimeout(() => c.classList.add('visible'), i * 80);
-      });
-      e.target.querySelectorAll('tbody tr').forEach((tr, i) => {
-        setTimeout(() => tr.classList.add('visible'), i * 40);
-      });
-    }
-  });
-}, { threshold: 0.08 });
-allSections.forEach(s => gReveal.observe(s));
-
-// G: #dot-nav active state
-const dotLinks = dotNav ? dotNav.querySelectorAll('a') : [];
-const ioNav = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    const idx = Array.from(allSections).indexOf(e.target);
-    if (idx >= 0 && dotLinks[idx]) dotLinks[idx].classList.toggle('active', e.isIntersecting);
-  });
-}, { threshold: 0.3 });
-allSections.forEach(s => ioNav.observe(s));
 </script>
 </body>
 </html>

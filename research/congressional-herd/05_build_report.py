@@ -119,7 +119,7 @@ def build_sens_table():
             me  = rows_me[i][j]
             n   = rows_n[i][j]
             bg  = _cell_color_excess(me)
-            txt = (f"{me * 100:+.2f}%" if me is not None else "&#8212;")
+            txt = (f"{me * 100:+.2f}%" if me is not None else "-")
             sub = f'<br><span style="font-size:.65rem;color:#8aa49e">n={n}</span>'
             html += f'\n      <td class="hm-cell" style="background:{bg}">{txt}{sub}</td>'
         html += "\n    </tr>"
@@ -150,7 +150,7 @@ def build_sell_sens_table():
             me  = rows_me[i][j]
             n   = rows_n[i][j]
             bg  = _cell_color_excess(me)
-            txt = (f"{me * 100:+.2f}%" if me is not None else "&#8212;")
+            txt = (f"{me * 100:+.2f}%" if me is not None else "-")
             sub = f'<br><span style="font-size:.65rem;color:#8aa49e">n={n}</span>'
             html += f'\n      <td class="hm-cell" style="background:{bg}">{txt}{sub}</td>'
         html += "\n    </tr>"
@@ -261,7 +261,7 @@ def build_committee_table():
             else:
                 exc_str = f'{me * 100:.1f}%'
                 exc_color = 'color:var(--red2)'
-            wr_str = f"{wr * 100:.1f}%" if wr is not None else "&#8212;"
+            wr_str = f"{wr * 100:.1f}%" if wr is not None else "-"
             html += f"""
     <tr>
       <td>{cat if cohort_key == "in_jurisdiction" else ""}</td>
@@ -397,7 +397,7 @@ HTML = f"""<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Disclosure-Lag Trap: Why Following Congress Doesn't Work | The Intrinsic Investor</title>
 <meta property="og:title" content="The Disclosure-Lag Trap: Why Following Congress Doesn't Work">
-<meta property="og:description" content="A pointed critique of NANC, KRUZ, and the disclosure-tracking industry. Built on 35,343 STOCK Act filings, the data shows the signal cannot survive the 27-day disclosure lag.">
+<meta property="og:description" content="A pointed critique of NANC, KRUZ, and the disclosure-tracking industry. Built on {lag_n:,} STOCK Act filings, the data shows the signal cannot survive the 27-day disclosure lag.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -538,7 +538,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
 
     <h1>The Disclosure-Lag Trap: <em>Why Following Congress Doesn't Work</em></h1>
     <p class="hero-sub">
-      The Stop Trading on Congressional Knowledge Act gives politicians up to 45 days to disclose their trades. Across 29,071 STOCK Act filings, the median disclosure lag is 27 days. By the time the signal becomes visible, the trade information has been stale for nearly a month. This report shows that the disclosure-following industry, including the NANC and KRUZ ETFs, is selling beta dressed as alpha.
+      The Stop Trading on Congressional Knowledge Act gives politicians up to 45 days to disclose their trades. Across {lag_n:,} STOCK Act filings, the median disclosure lag is 27 days. By the time the signal becomes visible, the trade information has been stale for nearly a month. This report shows that the disclosure-following industry, including the NANC and KRUZ ETFs, is selling beta dressed as alpha.
     </p>
     <div class="hero-meta">
       <div class="hero-meta-item"><strong>Author</strong>Brian Liew, BSc Accounting and Finance, LSE</div>
@@ -558,7 +558,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
     <div class="kpi-cell">
       <div class="kpi-label">Median disclosure lag</div>
       <div class="kpi-value amber">{lag_median} days</div>
-      <div class="kpi-sub">29,071 valid STOCK Act filings</div>
+      <div class="kpi-sub">{lag_n:,} valid STOCK Act filings</div>
     </div>
     <div class="kpi-cell">
       <div class="kpi-label">Excess during lag (vs SPY)</div>
@@ -619,7 +619,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
     <div class="section-label"><span class="section-counter">02</span><span>The Dead Zone</span></div>
     <h2>By the time you see the trade, <em>it is nearly a month old</em></h2>
     <p>
-      The first problem with disclosure-driven strategies is the disclosure timeline itself. The STOCK Act allows up to 45 days between trade execution and public filing, and members routinely use most of that window. Across 29,071 valid disclosures in this dataset, the median lag from trade to disclosure is 27 calendar days. The mean is 31 days. Roughly one in fifteen filings ({lag_over_45_pct:.1f}%) exceeds the 45-day statutory limit, with the worst offenders disclosing months late.
+      The first problem with disclosure-driven strategies is the disclosure timeline itself. The STOCK Act allows up to 45 days between trade execution and public filing, and members routinely use most of that window. Across {lag_n:,} valid disclosures in this dataset, the median lag from trade to disclosure is 27 calendar days. The mean is 31 days. Roughly one in fifteen filings ({lag_over_45_pct:.1f}%) exceeds the 45-day statutory limit, with the worst offenders disclosing months late.
     </p>
     <div class="chart-box">
       <div class="chart-title">Distribution of disclosure lag (days from trade to public filing)</div>
@@ -877,20 +877,20 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
       Eggers and Hainmueller (2013) examined 16 years of congressional trades and found that, on a portfolio-weighted basis, members of Congress earned returns indistinguishable from random selection within their stated investment universe. Belmont and Tilelli (2022) updated the analysis and reached substantially the same conclusion. The academic consensus has held for over a decade. The disclosure-tracking industry has not noticeably contracted in response. NANC and KRUZ launched in 2023 to the explicit pitch that they capture an edge that the literature already demonstrated does not exist.
     </p>
     <p>
-      The results in this report, built on 35,343 STOCK Act filings and 10-day forward returns across {kpi_n} high-conviction buy herds, are consistent with that consensus. The 27-day median disclosure lag is the proximate killer of any informational edge, but the deeper finding is that even at the politicians' own entry point, the herded stocks underperform SPY. There is no edge to be lost. The retail-facing wrappers (NANC, KRUZ, Pelosi-tracker subscriptions) are selling investors a beta-heavy mega-cap portfolio wrapped in a narrative about insider access.
+      The results in this report, built on {lag_n:,} STOCK Act filings and 10-day forward returns across {kpi_n} high-conviction buy herds, are consistent with that consensus. The 27-day median disclosure lag is the proximate killer of any informational edge, but the deeper finding is that even at the politicians' own entry point, the herded stocks underperform SPY. There is no edge to be lost. The retail-facing wrappers (NANC, KRUZ, Pelosi-tracker subscriptions) are selling investors a beta-heavy mega-cap portfolio wrapped in a narrative about insider access.
     </p>
 
     <table class="method-table">
       <thead><tr><th>Dimension</th><th>Detail</th></tr></thead>
       <tbody>
-        <tr><td>Trade data</td><td>35,343 individual-equity disclosures from 201 politicians, May 2023 to May 2026, scraped from Capitol Trades (STOCK Act feed)</td></tr>
-        <tr><td>Herding events</td><td>Rolling window over disclosure dates; 12 threshold-window combinations; primary = 3 politicians, 30-day window; ETFs and mutual funds excluded</td></tr>
-        <tr><td>Price data</td><td>CRSP daily stock files via WRDS through {max_date_str}; ETF data (NANC, KRUZ, SPY) from Yahoo Finance after CRSP coverage proved insufficient for newer ETFs</td></tr>
+        <tr><td>Trade data</td><td>{lag_n:,} individual-equity disclosures from 201 politicians, May 2023 to May 2026, scraped from Capitol Trades (STOCK Act feed)</td></tr>
+        <tr><td>Herding events</td><td>Rolling window over disclosure dates. 12 threshold-window combinations. Primary = 3 politicians, 30-day window. ETFs and mutual funds excluded</td></tr>
+        <tr><td>Price data</td><td>CRSP daily stock files via WRDS through {max_date_str}. ETF data (NANC, KRUZ, SPY) from Yahoo Finance after CRSP coverage proved insufficient for newer ETFs</td></tr>
         <tr><td>Return calculation</td><td>Two parallel entries: disclosure-date (first trading day on or after publication) and trade-date (first trading day on or after execution). Returns at 10, 20, 60, 90, 180, 252 calendar days</td></tr>
-        <tr><td>Lag-period return</td><td>Stock return from trade date to disclosure date, minus SPY return over same window; measures what followers cannot capture</td></tr>
-        <tr><td>Committee data</td><td>unitedstates/congress-legislators YAML (committee-membership-current, legislators-current); 184 of 201 trader names matched (91.5%)</td></tr>
-        <tr><td>Statistical tests</td><td>One-sample t-test of 10-day excess return against zero, primary combination; Sharpe annualised as mean/std &#215; sqrt(252/horizon); p-values omitted because results are clearly non-significant</td></tr>
-        <tr><td>Out of scope</td><td>Politicians' own trades evaluated against pre-trade prices (would require pre-trade-date price benchmarks); IPO-related disclosures and ESOP grants; options trades; non-US equities; disclosures filed after 2025-12-31 (CRSP price coverage limit)</td></tr>
+        <tr><td>Lag-period return</td><td>Stock return from trade date to disclosure date, minus SPY return over same window. Measures what followers cannot capture</td></tr>
+        <tr><td>Committee data</td><td>unitedstates/congress-legislators YAML (committee-membership-current, legislators-current). 184 of 201 trader names matched (91.5%)</td></tr>
+        <tr><td>Statistical tests</td><td>One-sample t-test of 10-day excess return against zero, primary combination. Sharpe annualised as mean/std &#215; sqrt(252/horizon). p-values omitted because results are clearly non-significant</td></tr>
+        <tr><td>Out of scope</td><td>Politicians' own trades evaluated against pre-trade prices (would require pre-trade-date price benchmarks). IPO-related disclosures and ESOP grants. Options trades. Non-US equities. Disclosures filed after 2025-12-31 (CRSP price coverage limit)</td></tr>
       </tbody>
     </table>
 
@@ -904,7 +904,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
       <strong>What this report does not claim.</strong> It does not claim that politicians never have informational advantages on individual trades. It claims that the disclosure-based wrappers and tracking products sold to retail investors do not capture any such advantages if they exist. The two questions are different and the literature consensus on the second one has been stable for over a decade.
     </div>
     <div class="callout purple">
-      <strong>Disclaimer.</strong> This is independent research published for educational and analytical purposes only. It does not constitute investment advice or a recommendation to buy or sell any security. All performance figures are historical and gross of transaction costs and taxes. NANC and KRUZ are referenced as the two pure-play products in the disclosure-tracking category; mention does not imply any further relationship with their issuers.
+      <strong>Disclaimer.</strong> This is independent research published for educational and analytical purposes only. It does not constitute investment advice or a recommendation to buy or sell any security. All performance figures are historical and gross of transaction costs and taxes. NANC and KRUZ are referenced as the two pure-play products in the disclosure-tracking category. Mention does not imply any further relationship with their issuers.
     </div>
   </div>
 </section>

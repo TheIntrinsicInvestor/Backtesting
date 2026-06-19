@@ -11,7 +11,7 @@ EVENTS = [
     {"id": 10, "date": "2024-04-13", "label": "Iran launches 300+ missiles at Israel",      "cluster": "Iran-Israel 2024",      "instruments": ["XLE","USO","XOM","CVX"]},
     {"id": 11, "date": "2024-10-01", "label": "Iran ballistic missile strike on Israel",    "cluster": "Iran-Israel 2024",      "instruments": ["XLE","USO","XOM","CVX"]},
     {"id": 12, "date": "2024-10-26", "label": "Israel strikes Iran directly",               "cluster": "Iran-Israel 2024",      "instruments": ["XLE","USO","XOM","CVX"]},
-    {"id": 13, "date": "2025-06-13", "label": "Twelve-Day War begins — Israel strikes Iran","cluster": "Twelve-Day War 2025",   "instruments": ["XLE","USO","XOM","CVX"]},
-    {"id": 14, "date": "2025-06-24", "label": "Ceasefire — Twelve-Day War ends",            "cluster": "Twelve-Day War 2025",   "instruments": ["XLE","USO","XOM","CVX"]},
+    {"id": 13, "date": "2025-06-13", "label": "Twelve-Day War begins, Israel strikes Iran", "cluster": "Twelve-Day War 2025",   "instruments": ["XLE","USO","XOM","CVX"]},
+    {"id": 14, "date": "2025-06-24", "label": "Ceasefire, Twelve-Day War ends",             "cluster": "Twelve-Day War 2025",   "instruments": ["XLE","USO","XOM","CVX"]},
     {"id": 15, "date": "2026-02-28", "label": "US-Israel strike Iran, Khamenei killed",     "cluster": "2026 Conflict",         "instruments": ["XLE","USO","XOM","CVX"]},
 ]

@@ -10,19 +10,23 @@ Personal research site publishing systematic market research and options strateg
 
 ```
 /
-├── index.html                                      # Homepage
-├── about.html                                      # About page
+├── index.html                                          # Homepage
+├── about.html                                          # About page
 ├── research/
-│   ├── index.html                                  # Research index
-│   ├── 0dte-gamma-trap/                            # 0DTE GEX & intraday SPX vol dynamics
-│   ├── earnings-vol-cycle/                         # Earnings vol premium across S&P 500 (2010-2024)
-│   ├── etf-factor-sector-rotation-strategy/        # Factor & sector rotation parameter study
-│   ├── fomc-iv-study/                              # FOMC IV event study (2018-2024)
-│   ├── iran-iv-study/                              # IV behaviour around Iran geopolitical events
-│   ├── leveraged-etf-strategy/                     # Leveraged ETF decay carry trade
-│   ├── short-straddle/                             # Short straddle across Magnificent Seven
-│   └── wheel-strategy/                             # Wheel strategy on SPY
-└── options-payoff/                                 # Options payoff visualiser tool
+│   ├── index.html                                      # Research index
+│   ├── 0dte-gamma-trap/                                # 0DTE GEX & intraday SPX vol dynamics
+│   ├── congressional-herd/                             # Congress disclosure-lag study
+│   ├── earnings-vol-cycle/                             # Earnings vol premium across S&P 500
+│   ├── etf-factor-sector-rotation-strategy/            # Factor & sector rotation parameter study
+│   ├── fomc-iv-study/                                  # FOMC IV event study
+│   ├── iran-iv-study/                                  # IV behaviour around Iran geopolitical events
+│   ├── leveraged-etf-strategy/                         # Leveraged ETF decay carry trade
+│   ├── rate-cycle-turns/                               # Rate cycle turn timing study
+│   ├── sandbagging/                                    # S&P 500 earnings beat manufacturing (WIP)
+│   ├── short-straddle/                                 # Short straddle across Magnificent Seven
+│   ├── spacex-passive-bid/                             # SpaceX IPO passive demand study
+│   └── wheel-strategy/                                 # Wheel strategy on SPY
+└── options-payoff/                                     # Options payoff visualiser (unlinked)
 ```
 
 Each report folder contains an `index.html` (the published report) and, where applicable, the Python scripts used to pull and process the data.
@@ -37,10 +41,15 @@ Each report folder contains an `index.html` (the published report) and, where ap
 | The Earnings Vol Premium: IV Dynamics Across the S&P 500 | 68.7% win rate selling straddles at earnings; avg +$30/trade across 35,862 events |
 | The FOMC Vol Crush: IV Dynamics Around Fed Decisions | Post-announcement straddle sell wins 67% (driven by hike cycles); pre-meeting sell has negative Sharpe |
 | Factor & Sector Rotation: Parameter Optimisation | Rotation strategy underperforms SPY B&H on risk-adjusted basis across all tested configs |
-| Iran Geopolitical IV Event Study | IV spikes significantly pre-event; mean-reverts within 5 days |
+| Iran Geopolitical IV Event Study | 82% win rate short vol at T+20 across 11 events; IV peaks T+2, not T0 |
+| The Disclosure-Lag Trap: Why Following Congress Doesn't Work | Filing lag averages 18 days; by the time trades are visible, the move is over |
+| The Float Mirage: Sizing the Passive Bid for SpaceX | Passive inflows at IPO likely $8-12B; structural demand but not a standalone catalyst |
+| Rate Cycle Turns: Why Preemptive Beats Reactive in Fed Policy | Preemptive cuts outperform reactive on equity returns and volatility over 12-month windows |
 | Exploiting Leveraged ETF Decay | Structural volatility decay premium exists but drawdowns are severe |
 | Selling Earnings Volatility (Mag7 Straddles) | Edge exists pre-earnings; post-earnings IV crush less consistent |
 | SPY Wheel Strategy Backtest | Underperforms SPY B&H on CAGR; reduces drawdown modestly |
+
+**WIP (not yet published):** The Walk-Down: How the S&P 500 Manufactures Earnings Beats (`/research/sandbagging/`)
 
 ---
 

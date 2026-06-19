@@ -1,8 +1,6 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-HT9VG5C62E"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-HT9VG5C62E');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The FOMC Vol Crush | The Intrinsic Investor</title>
@@ -28,12 +26,11 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16p
 body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
   mix-blend-mode:multiply;opacity:0.5}
-body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;background:#0f2220;z-index:9997}
 #progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;
   background:linear-gradient(90deg,#1a5c52,#2d9d8f);z-index:9998;transition:width .1s linear}
 nav{position:sticky;top:0;z-index:100;height:62px;display:flex;align-items:center;
   justify-content:space-between;padding:0 2rem;
-  background:#0f2220;
+  background:rgba(247,244,236,.92);backdrop-filter:blur(12px);
   -webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);transition:box-shadow .3s}
 nav.scrolled{box-shadow:0 1px 24px rgba(15,34,32,.06)}
 .nav-logo{font-family:var(--serif);font-weight:600;font-size:1.1rem;color:var(--ink);letter-spacing:-.01em;text-decoration:none}
@@ -174,12 +171,6 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
 }
-nav{border-bottom-color:rgba(255,255,255,.08)!important}
-nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
-.nav-logo{color:#fff!important}
-.nav-links a{color:rgba(255,255,255,.7)!important}
-.nav-links a:hover{color:#fff!important}
-.nav-links a::after{background:#2d9d8f!important}
 </style>
 </head>
 <body>
@@ -220,7 +211,7 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
       <div class="hero-meta-item"><strong>Published</strong>May 2026</div>
       <div class="hero-meta-item"><strong>Period</strong>2018 to 2025, n=60 meetings</div>
       <div class="hero-meta-item"><strong>Data</strong>OptionMetrics, FRED, CME FedWatch</div>
-      <a href="https://github.com/TheIntrinsicInvestor/Backtesting" target="_blank" rel="noopener" class="gh-btn">
+      <a href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/fomc-iv-study" target="_blank" rel="noopener" class="gh-btn">
         <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
         GitHub Code
       </a>
@@ -338,7 +329,7 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
 <section class="section" id="s3">
   <div class="container">
     <div class="section-label"><span class="section-counter">03</span><span>Surprise Analysis</span></div>
-    <h2>Hike meetings carry the largest pre-meeting premium; dovish guidance collapses vol fastest</h2>
+    <h2>Hike meetings carry the largest pre-meeting premium, dovish guidance collapses vol fastest</h2>
     <p>
       Splitting the IV profile by decision type reveals that hike meetings generate a more pronounced
       pre-meeting IV build-up, consistent with greater policy uncertainty when the Fed is actively
@@ -1815,7 +1806,7 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
     <table class="method-table">
       <thead><tr><th>Dimension</th><th>Detail</th></tr></thead>
       <tbody>
-        <tr><td>Universe</td><td>SPX and TLT 30-day ATM IV (delta=50, days=30 from OptionMetrics vsurfd); CBOE VIX from FRED VIXCLS; SPY ATM straddle prices from OptionMetrics opprcd</td></tr>
+        <tr><td>Universe</td><td>SPX and TLT 30-day ATM IV (delta=50, days=30 from OptionMetrics vsurfd), CBOE VIX from FRED VIXCLS, SPY ATM straddle prices from OptionMetrics opprcd</td></tr>
         <tr><td>Period</td><td>2018-01-31 to 2024-12-18 (60 meetings including 2 emergency, 3 outliers flagged)</td></tr>
         <tr><td>Event window</td><td>T-20 to T+10 trading days relative to FOMC announcement date</td></tr>
         <tr><td>IV baseline</td><td>Mean of T-20 to T-15 (6 trading days) per meeting per instrument, set to 100. Meetings with fewer than 3 valid observations in the baseline window are excluded.</td></tr>
@@ -1823,7 +1814,7 @@ nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
         <tr><td>Communication surprise</td><td>Manually classified as Hawkish, Neutral, or Dovish based on dot plot changes, statement language, and same-day market reaction. Source: FOMC minutes, CME FedWatch historical data, Bloomberg terminal records.</td></tr>
         <tr><td>Straddle construction</td><td>ATM call plus ATM put with nearest weekly expiry at least 14 calendar days after the FOMC date. ATM defined as strike closest to spot on entry date. Mid-price = (best bid plus best offer) divided by 2. Falls back to intrinsic value when exit price unavailable.</td></tr>
         <tr><td>P&amp;L</td><td>Gross. Excludes bid-ask spread (approx $10 to $30 per contract round-trip), commissions, and margin costs.</td></tr>
-        <tr><td>Sharpe scaling</td><td>sqrt(8) — approximately 8 FOMC meetings per year. Per-trade return = P&amp;L divided by (entry straddle value times 100).</td></tr>
+        <tr><td>Sharpe scaling</td><td>sqrt(8), approximately 8 FOMC meetings per year. Per-trade return = P&amp;L divided by (entry straddle value times 100).</td></tr>
         <tr><td>Outliers</td><td>3 March 2020 (emergency -50bps), 15 March 2020 (emergency -100bps), and 18 March 2020 (degenerate scheduled meeting at ZLB). Included in per-meeting tables with flags but excluded from profile aggregations.</td></tr>
       </tbody>
     </table>

@@ -297,7 +297,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
       <div class="hero-meta-item"><strong>Published</strong>May 2025</div>
       <div class="hero-meta-item"><strong>Period</strong>2010 to 2025, n={n_total:,} events</div>
       <div class="hero-meta-item"><strong>Data</strong>OptionMetrics, IBES, CRSP</div>
-      <a href="https://github.com/TheIntrinsicInvestor/Backtesting" target="_blank" rel="noopener" class="gh-btn">
+      <a href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/earnings-vol-cycle" target="_blank" rel="noopener" class="gh-btn">
         <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
         GitHub Code
       </a>
@@ -457,7 +457,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
     meaning options priced in roughly 25 percentage points more vol than subsequently realised. Real Estate
     and Utilities sit near zero: options there price the expected move with far greater accuracy, leaving
     little systematic premium. The market cap picture is analytically the most interesting: the smallest
-    quintile (Q1) carries the largest IV-RV spread (-22pp), yet delivers the lowest average P&amp;L (+$7)
+    quintile (Q1) carries the largest IV-RV spread (-22pp), yet delivers the lowest average P&amp;L (+$5)
     and win rate (64%). High IV overshooting does not guarantee profitability when the move distribution is
     fat-tailed: the premium is consumed by occasional large losses that thinner option markets price imprecisely.</p>
     <div class="callout purple">
@@ -488,12 +488,12 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
       </div>
     </div>
     <p>Large misses (consensus miss of more than 10%) are the single damaging category: despite carrying the
-    widest IV-RV spread of any group (-22pp), average P&amp;L collapses to -$41. The IV overprice is real in
+    widest IV-RV spread of any group (-22pp), average P&amp;L collapses to -$42. The IV overprice is real in
     aggregate but stock moves on severe misses frequently clear the straddle breakeven by multiples of the
-    implied range. Slight misses (0 to -10%) barely break even (+$4), with the stock move typically landing
-    just inside the breakeven zone. Slight beats are the most profitable (+$48, 72% win rate), showing the
+    implied range. Slight misses (0 to -10%) barely break even (+$5), with the stock move typically landing
+    just inside the breakeven zone. Slight beats are the most profitable (+$50, 72% win rate), showing the
     narrowest IV-RV spread (-13pp): option markets price these low-uncertainty confirmations with the least
-    excess IV, yet the move is almost always contained. Large beats also perform well (+$38), with a wider
+    excess IV, yet the move is almost always contained. Large beats also perform well (+$40), with a wider
     spread (-18pp) that reflects greater uncertainty priced into pre-announcement IV for big upside events.
     The pattern is asymmetric: on the downside, only large misses are damaging; on the upside, both slight
     and large beats are consistently profitable.</p>
@@ -581,19 +581,19 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 2.5rem}}
     <table class="method-table">
       <thead><tr><th>Dimension</th><th>Detail</th></tr></thead>
       <tbody>
-        <tr><td>Universe</td><td>S&amp;P 500 point-in-time constituents from CRSP msp500list; survivorship-bias-free membership windows used throughout</td></tr>
-        <tr><td>Period</td><td>2010-01-01 to 2025-08-29 (15+ years); IV data pulled from 2009 to provide T-20 buffer for January 2010 events</td></tr>
-        <tr><td>Earnings dates</td><td>IBES actu_epsus, pdicity='QTR'; announcement date = anndats; deduplicated on permno + anndats</td></tr>
-        <tr><td>Implied volatility</td><td>OptionMetrics vsurfd, 30-day maturity, delta=50, cp_flag='C'; secid matched to CRSP permno via 8-char CUSIP through optionm_all.secnmd</td></tr>
-        <tr><td>IV baseline</td><td>Mean of T-20 to T-15 (six trading days); events with fewer than 3 valid baseline days excluded</td></tr>
+        <tr><td>Universe</td><td>S&amp;P 500 point-in-time constituents from CRSP msp500list. Survivorship-bias-free membership windows used throughout</td></tr>
+        <tr><td>Period</td><td>2010-01-01 to 2025-08-29 (15+ years). IV data pulled from 2009 to provide T-20 buffer for January 2010 events</td></tr>
+        <tr><td>Earnings dates</td><td>IBES actu_epsus, pdicity='QTR'. Announcement date = anndats, deduplicated on permno + anndats</td></tr>
+        <tr><td>Implied volatility</td><td>OptionMetrics vsurfd, 30-day maturity, delta=50, cp_flag='C'. Secid matched to CRSP permno via 8-char CUSIP through optionm_all.secnmd</td></tr>
+        <tr><td>IV baseline</td><td>Mean of T-20 to T-15 (six trading days). Events with fewer than 3 valid baseline days excluded</td></tr>
         <tr><td>Normalised IV</td><td>IV at each T-day offset divided by baseline mean, multiplied by 100</td></tr>
-        <tr><td>Actual move</td><td>Absolute 2-day compound return from T-1 close to T+1 close: |((1+ret_T) * (1+ret_T+1)) - 1|; CRSP dsf</td></tr>
-        <tr><td>P&amp;L model</td><td>BSM vega-gamma decomposition for a short 30-day ATM straddle held for 2 days: vega_pnl = $10K × 2 × φ(0) × sqrt(30/252) × (IV_T-1 − IV_T+1); gamma_loss = $10K × φ(0) × actual_move² / (IV_T-1 × sqrt(30/252)); net P&amp;L = vega_pnl − gamma_loss; where φ(0) = 1/sqrt(2π) ≈ 0.3989</td></tr>
-        <tr><td>P&amp;L basis</td><td>Gross, approximated from OptionMetrics standardised IV; excludes bid-ask spreads, commissions, and margin costs</td></tr>
-        <tr><td>Sharpe ratio</td><td>Computed on quarterly aggregate P&amp;L (sum of all trades in each calendar quarter); annualised as mean / std × sqrt(4); disclosed limitation: within-quarter cross-sectional correlation inflates this statistic</td></tr>
-        <tr><td>EPS surprise</td><td>(actual_eps − consensus_mean) / |consensus_mean|; IBES statsum_epsus fpi='6', most recent estimate before anndats</td></tr>
-        <tr><td>Sectors</td><td>GICS codes from Compustat company table via CCM link; current (most recent) classification used for all historical events</td></tr>
-        <tr><td>Market cap</td><td>abs(prc) × shrout at T-1; quintiles assigned cross-sectionally at each event date</td></tr>
+        <tr><td>Actual move</td><td>Absolute 2-day compound return from T-1 close to T+1 close: |((1+ret_T) * (1+ret_T+1)) - 1|. Source: CRSP dsf</td></tr>
+        <tr><td>P&amp;L model</td><td>BSM vega-gamma decomposition for a short 30-day ATM straddle held for 2 days: vega_pnl = $10K &times; 2 &times; &phi;(0) &times; sqrt(30/252) &times; (IV_T-1 &minus; IV_T+1), gamma_loss = $10K &times; &phi;(0) &times; actual_move&sup2; / (IV_T-1 &times; sqrt(30/252)), net P&amp;L = vega_pnl &minus; gamma_loss, where &phi;(0) = 1/sqrt(2&pi;) &asymp; 0.3989</td></tr>
+        <tr><td>P&amp;L basis</td><td>Gross, approximated from OptionMetrics standardised IV. Excludes bid-ask spreads, commissions, and margin costs</td></tr>
+        <tr><td>Sharpe ratio</td><td>Computed on quarterly aggregate P&amp;L (sum of all trades in each calendar quarter), annualised as mean / std &times; sqrt(4). Disclosed limitation: within-quarter cross-sectional correlation inflates this statistic</td></tr>
+        <tr><td>EPS surprise</td><td>(actual_eps &minus; consensus_mean) / |consensus_mean|. Source: IBES statsum_epsus fpi='6', most recent estimate before anndats</td></tr>
+        <tr><td>Sectors</td><td>GICS codes from Compustat company table via CCM link. Current (most recent) classification used for all historical events</td></tr>
+        <tr><td>Market cap</td><td>abs(prc) &times; shrout at T-1. Quintiles assigned cross-sectionally at each event date</td></tr>
         <tr><td>Exclusions</td><td>Events with missing IV baseline, missing T-1 or T+1 price/return, or no OM secid match are excluded from all statistics</td></tr>
       </tbody>
     </table>

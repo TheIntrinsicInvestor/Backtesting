@@ -3,192 +3,104 @@
 <head>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-HT9VG5C62E"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-HT9VG5C62E');</script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Walk-Down: How the S&amp;P 500 Manufactures Earnings Beats | The Intrinsic Investor</title>
-  <meta name="description" content="S&amp;P 500 firms selectively walk analyst estimates down before earnings so they can beat a lowered bar. 17.5% of annual beats are manufactured. New quant research.">
-  <meta property="og:title" content="The Walk-Down: How the S&amp;P 500 Manufactures Earnings Beats">
-  <meta property="og:description" content="17.5% of annual beats are manufactured by walking down analyst estimates. Quant research on S&amp;P 500 earnings sandbagging, 2015&ndash;2025.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <style>
-    :root {
-      --bg:#f7f4ec; --bg2:#f0ece2; --bg3:#e8e3d8; --card:#fff;
-      --ink:#0f2220; --muted:#4a6460; --hint:#8aa49e;
-      --border:#e2ddd0; --accent:#1a5c52; --accent2:#144a42;
-      --green:#0E9F6E; --green2:#059669; --green-bg:#ecfdf5; --green-border:#a7f3d0;
-      --red:#E02424; --red2:#dc2626; --red-bg:#fef2f2; --red-border:#fca5a5;
-      --blue:#1e40af; --blue2:#2563eb; --blue-bg:#eff6ff; --blue-border:#bfdbfe;
-      --amber:#E3A008; --amber-bg:#fffbeb; --amber-border:#fcd34d;
-      --purple:#7E3AF2; --purple-bg:#f5f3ff; --purple-border:#c4b5fd;
-      --font:'Inter',sans-serif; --serif:'Fraunces',serif; --mono:'JetBrains Mono',monospace;
-    }
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
-    body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.7}
-    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
-      mix-blend-mode:multiply;opacity:0.5}
-    a{color:var(--accent);text-decoration:none}
-    a:hover{text-decoration:underline}
-    code{font-family:var(--mono);font-size:.85em;background:var(--bg3);padding:1px 4px;border-radius:3px}
-    body::before{content:'';position:fixed;top:0;left:0;right:0;height:2px;background:#0f2220;z-index:9997}
-    #progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;
-      background:linear-gradient(90deg,#1a5c52,#2d9d8f);z-index:9998;transition:width .1s linear}
-    nav{position:sticky;top:0;z-index:100;height:62px;display:flex;align-items:center;
-      justify-content:space-between;padding:0 2rem;
-      background:#0f2220;
-      -webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
-      transition:box-shadow .3s}
-    nav.scrolled{box-shadow:0 1px 24px rgba(15,34,32,.06)}
-    .nav-logo{font-family:var(--serif);font-weight:600;font-size:1.1rem;color:var(--ink);letter-spacing:-.01em}
-    .nav-links{display:flex;gap:1.75rem;list-style:none}
-    .nav-links a{color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:500;
-      position:relative;padding-bottom:2px;transition:color .2s}
-    .nav-links a:hover{color:var(--ink)}
-    .nav-links a::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
-      background:var(--accent);transform:scaleX(0);transform-origin:left;
-      transition:transform .25s cubic-bezier(.4,0,.2,1)}
-    .nav-links a:hover::after{transform:scaleX(1)}
-    .hero{background:var(--ink);padding:5rem 2rem 4rem;position:relative;overflow:hidden}
-    .hero::before{content:'';position:absolute;inset:0;pointer-events:none;
-      background-image:repeating-linear-gradient(-55deg,transparent,transparent 40px,
-        rgba(255,255,255,.013) 40px,rgba(255,255,255,.013) 41px)}
-    .hero-inner{max-width:860px;margin:0 auto;position:relative}
-    .hero-tag{display:inline-block;font-family:var(--mono);font-size:.72rem;color:var(--accent);
-      letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(26,92,82,.4);
-      padding:.25rem .75rem;border-radius:2px;margin-bottom:1.5rem;
-      animation:fadeUp .6s ease both}
-    .hero h1{font-family:var(--serif);font-size:clamp(1.9rem,4.5vw,3.2rem);font-weight:600;
-      color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:1.25rem;
-      animation:fadeUp .6s .1s ease both}
-    .hero h1 em{font-style:italic;color:var(--accent)}
-    .hero-sub{font-size:1rem;color:rgba(255,255,255,.65);max-width:620px;line-height:1.7;
-      margin-bottom:2rem;animation:fadeUp .6s .2s ease both}
-    .hero-meta{display:flex;flex-wrap:wrap;gap:2rem;font-family:var(--mono);font-size:.75rem;
-      color:rgba(255,255,255,.5);border-top:1px solid rgba(255,255,255,.1);
-      padding-top:1.5rem;animation:fadeUp .6s .3s ease both}
-    .hero-meta-item strong{display:block;color:rgba(255,255,255,.85);font-size:.85rem;margin-bottom:.15rem}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-    .kpi-strip{background:var(--card);border-bottom:1px solid var(--border);padding:2rem}
-    .kpi-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
-    .kpi-cell{padding:1.5rem;border-right:1px solid var(--border)}
-    .kpi-cell:last-child{border-right:none}
-    .kpi-label{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
-      color:var(--hint);margin-bottom:.5rem}
-    .kpi-value{font-family:var(--mono);font-size:1.9rem;font-weight:500;color:var(--ink);
-      line-height:1;margin-bottom:.4rem}
-    .kpi-value.green{color:var(--green2)}
-    .kpi-value.red{color:var(--red2)}
-    .kpi-value.blue{color:var(--blue2)}
-    .kpi-sub{font-size:.78rem;color:var(--muted)}
-    .container{max-width:860px;margin:0 auto;padding:0 2rem}
-    .section{opacity:0;transform:translateY(16px);
-      transition:opacity .55s ease,transform .55s ease;
-      padding:4.5rem 0;border-bottom:1px solid var(--border)}
-    .section.visible{opacity:1;transform:none}
-    .section:last-of-type{border-bottom:none}
-    .section-label{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem}
-    .section-counter{font-family:var(--mono);font-size:.72rem;color:var(--hint);letter-spacing:.04em}
-    .section-label span:last-child{font-size:.72rem;font-weight:600;letter-spacing:.08em;
-      text-transform:uppercase;color:var(--hint)}
-    h2{font-family:var(--serif);font-size:clamp(1.5rem,3vw,2.1rem);font-weight:600;
-      color:var(--ink);line-height:1.25;letter-spacing:-.02em;margin-bottom:1.25rem}
-    h2 em{font-style:italic;color:var(--accent)}
-    h3{font-family:var(--serif);font-size:1.15rem;font-weight:600;color:var(--ink);margin:2rem 0 .75rem}
-    p{color:var(--muted);line-height:1.75;margin-bottom:1rem;text-align:justify;hyphens:none;word-break:normal;overflow-wrap:normal}
-    p:last-child{margin-bottom:0}
-    .callout{display:flex;gap:1rem;padding:1.25rem 1.5rem;border-radius:4px;
-      margin:1.5rem 0;border-left:3px solid}
-    .callout.green{background:var(--green-bg);border-color:var(--green2)}
-    .callout.amber{background:var(--amber-bg);border-color:var(--amber)}
-    .callout.red{background:var(--red-bg);border-color:var(--red2)}
-    .callout.blue{background:var(--blue-bg);border-color:var(--blue2)}
-    .callout.purple{background:var(--purple-bg);border-color:var(--purple)}
-    .callout-icon{font-size:1.1rem;flex-shrink:0;margin-top:.1rem}
-    .callout-body{font-size:.9rem;color:var(--ink);line-height:1.6}
-    .callout-body strong{font-weight:600}
-    .highlight-box{background:var(--ink);border-radius:4px;padding:2rem;margin:1.5rem 0}
-    .hl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
-    .hl-cell{padding:0 1.5rem;border-right:1px solid rgba(255,255,255,.1)}
-    .hl-cell:first-child{padding-left:0}
-    .hl-cell:last-child{border-right:none}
-    .hl-label{font-size:.7rem;font-weight:500;color:rgba(255,255,255,.35);text-transform:uppercase;
-      letter-spacing:.1em;margin-bottom:.5rem}
-    .hl-value{font-family:var(--serif);font-style:italic;font-size:1.75rem;color:#5ab5a5;line-height:1.1}
-    .hl-sub{font-size:.75rem;color:rgba(255,255,255,.3);margin-top:.3rem}
-    .chart-box{background:var(--bg2);border:1px solid var(--border);
-      border-radius:4px;padding:1.5rem;margin:1.5rem 0}
-    .chart-title{font-size:.85rem;font-weight:600;color:var(--ink);
-      margin-bottom:1rem;letter-spacing:.02em}
-    .chart-caption{font-family:var(--mono);font-size:.7rem;color:var(--hint);text-align:center;margin-top:.6rem}
-    .chart-box canvas{max-height:340px}
-    .data-table{width:100%;border-collapse:collapse;font-size:.88rem}
-    .data-table th{background:var(--ink);color:#fff;font-family:var(--mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;padding:.55rem .75rem;text-align:left}
-    .data-table td{padding:.5rem .75rem;border-bottom:1px solid var(--border)}
-    .data-table tr:hover td{background:var(--bg2)}
-    .data-table td:first-child{color:var(--ink)}
-    .mono{font-family:var(--mono);font-size:.82rem}
-    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin:1.5rem 0}
-    #side-nav{position:fixed;right:0;top:50%;transform:translateY(-50%);
-      z-index:50;display:flex;flex-direction:column;gap:2px;padding:10px 6px}
-    #side-nav a{display:flex;align-items:center;justify-content:flex-end;gap:7px;
-      text-decoration:none;padding:5px 8px;border-radius:4px;transition:background .2s}
-    #side-nav a:hover{background:rgba(26,92,82,.07)}
-    .sn-label{font-size:.67rem;font-weight:500;color:var(--hint);white-space:nowrap;
-      letter-spacing:.02em;font-family:var(--font);transition:color .2s;text-align:right}
-    .sn-dot{width:5px;height:5px;border-radius:50%;background:var(--border);
-      flex-shrink:0;transition:all .2s}
-    #side-nav a.active .sn-label{color:var(--accent);font-weight:600}
-    #side-nav a.active .sn-dot{background:var(--accent);transform:scale(1.5)}
-    #side-nav a:hover .sn-label{color:var(--ink)}
-    #side-nav a:hover .sn-dot{background:var(--muted)}
-    footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
-    .footer-inner{max-width:860px;margin:0 auto;display:flex;
-      justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
-    .footer-name{font-family:var(--serif);font-weight:600;font-size:1rem;color:rgba(255,255,255,.9)}
-    .footer-right{font-size:.8rem;text-align:right}
-    .footer-right a{color:rgba(255,255,255,.5);text-decoration:none;margin-left:1.2rem}
-    .footer-right a:hover{color:rgba(255,255,255,.85)}
-    .gh-btn{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);
-      font-size:.68rem;color:rgba(255,255,255,.5);text-decoration:none;
-      border:1px solid rgba(255,255,255,.2);padding:3px 9px;border-radius:3px;
-      transition:all .2s;letter-spacing:.02em;align-self:center}
-    .gh-btn:hover{color:#fff;border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.08)}
-    @media(max-width:860px){
-      #side-nav{display:none}
-      .kpi-grid{grid-template-columns:repeat(2,1fr)}
-      .footer-inner{flex-direction:column;text-align:center}
-      .footer-right{text-align:center}
-    }
-    @media(max-width:640px){
-      .two-col{grid-template-columns:1fr}
-    }
-    @media(max-width:560px){
-      .kpi-cell{border-right:none;border-bottom:1px solid var(--border)}
-      .hl-grid{grid-template-columns:1fr;gap:1rem}
-      .hl-cell{border-right:none;padding:0;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:1rem}
-      .hl-cell:last-child{border-bottom:none}
-    }
-    @media(prefers-reduced-motion:reduce){
-      *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
-    }
-    nav{border-bottom-color:rgba(255,255,255,.08)!important}
-    nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)!important}
-    .nav-logo{color:#fff!important}
-    .nav-links a{color:rgba(255,255,255,.7)!important}
-    .nav-links a:hover{color:#fff!important}
-    .nav-links a::after{background:#2d9d8f!important}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Walk-Down: How the S&amp;P 500 Manufactures Earnings Beats</title>
+<meta name="description" content="S&amp;P 500 firms selectively walk analyst estimates down before earnings so they can beat a lowered bar. 17.5% of annual beats are manufactured. New quant research.">
+<meta property="og:title" content="The Walk-Down: How the S&amp;P 500 Manufactures Earnings Beats">
+<meta property="og:description" content="17.5% of annual beats are manufactured by walking down analyst estimates. Quant research on S&amp;P 500 earnings sandbagging, 2015&#8211;2025.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#f7f4ec;--bg2:#f0ece2;--bg3:#e8e3d8;
+  --ink:#0f2220;--muted:#4a6460;--hint:#8aa49e;--border:#e2ddd0;
+  --accent:#1a5c52;--accent2:#144a42;
+  --green:#0E9F6E;--green2:#059669;--green-bg:#ecfdf5;--green-border:#a7f3d0;
+  --red:#E02424;--red2:#dc2626;--red-bg:#fef2f2;--red-border:#fca5a5;
+  --blue:#1e40af;--blue2:#2563eb;--blue-bg:#eff6ff;--blue-border:#bfdbfe;
+  --amber:#E3A008;--amber-bg:#fffbeb;--amber-border:#fcd34d;
+  --font:'Inter',sans-serif;--serif:'Fraunces',serif;--mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:1rem;line-height:1.7}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:var(--mono);font-size:.85em;background:var(--bg3);padding:1px 4px;border-radius:3px}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--ink);padding:.75rem 2rem;display:flex;align-items:center;justify-content:space-between}
+nav .logo{color:#fff;font-family:var(--serif);font-size:1.05rem;font-weight:600}
+nav .nav-links{display:flex;gap:1.5rem;list-style:none}
+nav .nav-links a{color:rgba(255,255,255,.8);font-size:.875rem;position:relative}
+nav .nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;width:100%;height:1px;background:#fff;transform:scaleX(0);transform-origin:right;transition:transform .25s cubic-bezier(.4,0,.2,1)}
+nav .nav-links a:hover{color:#fff;text-decoration:none}
+nav .nav-links a:hover::after{transform:scaleX(1);transform-origin:left}
+#progress-bar{position:fixed;top:48px;left:0;height:2px;background:var(--accent);width:0;z-index:99;transition:width .1s}
+#side-nav{position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:.6rem;z-index:90}
+#side-nav a{display:flex;align-items:center;gap:.5rem;justify-content:flex-end;color:var(--hint);font-size:.68rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;transition:color .2s;text-decoration:none}
+#side-nav a:hover,#side-nav a.active{color:var(--ink)}
+#side-nav .sn-dot{width:6px;height:6px;border-radius:50%;background:var(--hint);transition:all .2s;flex-shrink:0}
+#side-nav a.active .sn-dot{width:8px;height:8px;background:var(--accent)}
+@media(max-width:980px){#side-nav{display:none}}
+.hero{background:var(--ink);color:#fff;padding:7rem 2rem 4rem;margin-top:48px;text-align:center}
+.hero-tag{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.15em;color:rgba(255,255,255,.55);margin-bottom:1rem}
+.hero h1{font-family:var(--serif);font-size:clamp(1.7rem,4vw,2.8rem);font-weight:600;line-height:1.18;max-width:760px;margin:0 auto .75rem;animation:fadeUp .6s .1s both}
+.hero .subtitle{color:rgba(255,255,255,.7);font-size:1.05rem;max-width:600px;margin:0 auto 1.5rem;animation:fadeUp .6s .2s both}
+.hero-meta{display:flex;flex-wrap:wrap;gap:.75rem 1.5rem;justify-content:center;font-family:var(--mono);font-size:.72rem;color:rgba(255,255,255,.5)}
+.hero-meta span strong{color:rgba(255,255,255,.8)}
+.hero-meta a{color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.2);padding:.3rem .8rem;border-radius:4px;font-size:.72rem;transition:all .2s}
+.hero-meta a:hover{background:rgba(255,255,255,.1);text-decoration:none}
+.kpi-strip{background:var(--ink);border-top:1px solid rgba(255,255,255,.1)}
+.kpi-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(255,255,255,.1)}
+.kpi-card{padding:1.25rem 1rem;border-right:1px solid rgba(255,255,255,.1);text-align:center}
+.kpi-card:last-child{border-right:none}
+.kpi-label{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.45);margin-bottom:.35rem}
+.kpi-value{font-family:var(--serif);font-size:1.8rem;font-weight:600;color:#fff}
+.kpi-sub{font-size:.75rem;color:rgba(255,255,255,.4);margin-top:.15rem}
+@media(max-width:600px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+.section{padding:4rem 2rem;opacity:0;transform:translateY(16px);transition:opacity .5s,transform .5s}
+.section.visible{opacity:1;transform:none}
+.container{max-width:900px;margin:0 auto}
+.section-label{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:var(--hint);margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+h2{font-family:var(--serif);font-size:clamp(1.35rem,2.5vw,1.85rem);font-weight:600;margin-bottom:1rem;line-height:1.25}
+h2 em{font-style:italic;color:var(--accent)}
+h3{font-family:var(--serif);font-size:1.15rem;font-weight:600;margin:1.5rem 0 .5rem}
+p{text-align:justify;hyphens:none;color:var(--muted);margin-bottom:1rem}
+.chart-box{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:1.5rem;margin:1.5rem 0}
+.chart-box canvas{max-height:340px}
+.chart-caption{font-family:var(--mono);font-size:.7rem;color:var(--hint);text-align:center;margin-top:.6rem}
+.callout{border-radius:4px;padding:.9rem 1.1rem;margin:1rem 0;border-left:3px solid}
+.callout.green{background:var(--green-bg);border-color:var(--green2)}
+.callout.red{background:var(--red-bg);border-color:var(--red2)}
+.callout.amber{background:var(--amber-bg);border-color:var(--amber)}
+.callout.blue{background:var(--blue-bg);border-color:var(--blue2)}
+.callout p{color:var(--ink);margin:0;font-size:.92rem;hyphens:none}
+.callout strong{color:var(--ink)}
+.highlight-box{background:var(--ink);color:#fff;border-radius:6px;padding:1.25rem 1.5rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin:1.5rem 0;text-align:center}
+.highlight-box .hb-item{padding:.75rem .5rem}
+.highlight-box .hb-val{font-family:var(--serif);font-size:1.6rem;font-weight:600;color:#fff}
+.highlight-box .hb-label{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.45);margin-top:.2rem}
+.data-table{width:100%;border-collapse:collapse;font-size:.88rem}
+.data-table th{background:var(--ink);color:#fff;font-family:var(--mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;padding:.55rem .75rem;text-align:left}
+.data-table td{padding:.5rem .75rem;border-bottom:1px solid var(--border)}
+.data-table tr:hover td{background:var(--bg2)}
+.data-table td:first-child{color:var(--ink)}
+.mono{font-family:var(--mono);font-size:.86em}
+.top-row{background:var(--green-bg)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin:1.5rem 0}
+@media(max-width:640px){.two-col{grid-template-columns:1fr}.highlight-box{grid-template-columns:1fr}}
+footer{background:var(--ink);color:rgba(255,255,255,.4);text-align:center;padding:2rem;font-size:.82rem}
+footer a{color:rgba(255,255,255,.5)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+</style>
 </head>
 <body>
 
-<div id="progress-bar"></div>
-
 <nav>
-  <div class="nav-logo">The Intrinsic Investor</div>
+  <a class="logo" href="/">The Intrinsic Investor</a>
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
     <li><a href="/research/">Research</a></li>
@@ -196,44 +108,47 @@
   </ul>
 </nav>
 
+<div id="progress-bar"></div>
+
 <div id="side-nav"></div>
 
-<div class="hero">
-  <div class="hero-inner">
-    <div class="hero-tag">Quantitative Research &middot; Earnings &amp; Estimates</div>
-    <h1>The Walk-Down: <em>How the S&amp;P&#160;500 Manufactures Earnings Beats</em></h1>
-    <p class="hero-sub">Annual EPS estimates are selectively guided lower before earnings so firms can report a beat against a lowered bar. 17.5&#160;% of annual beats in the S&amp;P&#160;500 are manufactured this way.</p>
-    <div class="hero-meta">
-      <div class="hero-meta-item"><strong>S&amp;P 500</strong>Universe</div>
-      <div class="hero-meta-item"><strong>2015&ndash;2025</strong>Sample Period</div>
-      <div class="hero-meta-item"><strong>6,131 Events</strong>Included</div>
-      <div class="hero-meta-item"><strong>IBES + CRSP v2 via WRDS</strong>Data Sources</div>
-      <div class="hero-meta-item"><strong>June 2026</strong>Published</div>
-      <a class="gh-btn" href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/sandbagging" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg> Code</a>
-    </div>
+<header class="hero">
+  <div class="hero-tag">Quantitative Research &middot; Earnings &amp; Estimates</div>
+  <h1>The Walk-Down: How the S&amp;P&#160;500 <em>Manufactures</em> Earnings Beats</h1>
+  <p class="subtitle">Annual EPS estimates are selectively guided lower before earnings so firms
+    can report a beat against a lowered bar. 17.5&#160;% of annual beats in the S&amp;P&#160;500
+    are manufactured this way.</p>
+  <div class="hero-meta">
+    <span><strong>Universe</strong> S&amp;P 500</span>
+    <span><strong>Period</strong> 2015&#8211;2025</span>
+    <span><strong>Events</strong> 6,131 included</span>
+    <span><strong>Data</strong> IBES &#43; CRSP v2</span>
+    <span><strong>Published</strong> June 2026</span>
+    <a href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/sandbagging"
+       target="_blank" rel="noopener">GitHub Code</a>
   </div>
-</div>
+</header>
 
 <div class="kpi-strip">
   <div class="kpi-grid">
-    <div class="kpi-cell">
+    <div class="kpi-card">
       <div class="kpi-label">Manufactured Beat Rate</div>
       <div class="kpi-value">17.5%</div>
       <div class="kpi-sub">of all annual beats</div>
     </div>
-    <div class="kpi-cell">
+    <div class="kpi-card">
       <div class="kpi-label">Manufactured Beats</div>
-      <div class="kpi-value blue">849</div>
-      <div class="kpi-sub">events, 2015&ndash;2025</div>
+      <div class="kpi-value">849</div>
+      <div class="kpi-sub">events, 2015&#8211;2025</div>
     </div>
-    <div class="kpi-cell">
+    <div class="kpi-card">
       <div class="kpi-label">Median Walk-Down</div>
-      <div class="kpi-value red">-6.4%</div>
+      <div class="kpi-value">-6.4%</div>
       <div class="kpi-sub">manufactured cohort</div>
     </div>
-    <div class="kpi-cell">
+    <div class="kpi-card">
       <div class="kpi-label">L/S Drift Spread</div>
-      <div class="kpi-value green">+1.65%</div>
+      <div class="kpi-value">+1.65%</div>
       <div class="kpi-sub">genuine minus manufactured, T+1 to T+60</div>
     </div>
   </div>
@@ -242,7 +157,7 @@
 <!-- ── s1: Study Design ─────────────────────────────────────────────────────── -->
 <section class="section" id="s1">
   <div class="container">
-    <div class="section-label"><span class="section-counter">01</span><span>Study Design</span></div>
+    <div class="section-label"><span class="mono">01</span> Study Design</div>
     <h2>What We Are Measuring, and the <em>Paradox</em></h2>
     <p>Earnings sandbagging is the practice where management, through guidance and investor-relations
       channels, encourages analysts to lower their annual EPS estimates before the earnings release,
@@ -255,12 +170,11 @@
       and 2025.</p>
 
     <div class="callout amber">
-      <div class="callout-icon">&#9888;</div>
-      <div class="callout-body"><strong>The paradox.</strong> Across all 6,131 included events,
+      <p><strong>The paradox.</strong> Across all 6,131 included events,
         the <em>median</em> walk-down is +0.7%.
         The typical S&amp;P&#160;500 firm does not walk estimates down at all, it walks them up.
         The walk-down is not a universal phenomenon. It is <strong>selective</strong>, deployed
-        specifically on the firms that would otherwise miss.</div>
+        specifically on the firms that would otherwise miss.</p>
     </div>
 
     <h3>Classification</h3>
@@ -268,19 +182,19 @@
       the actual EPS, the original consensus, and the final consensus:</p>
     <div class="two-col" style="margin:1rem 0">
       <div class="callout green" style="margin:0">
-        <div class="callout-body"><strong>Genuine Beat (4,009 events)</strong><br>
+        <p><strong>Genuine Beat (4,009 events)</strong>
           Actual EPS exceeded the original consensus. The firm would have beaten regardless of
-          any walk-down.</div>
+          any walk-down.</p>
       </div>
       <div class="callout red" style="margin:0">
-        <div class="callout-body"><strong>Manufactured Beat (849 events)</strong><br>
+        <p><strong>Manufactured Beat (849 events)</strong>
           Actual EPS missed the original consensus but beat the final (walked-down) consensus.
-          The beat was manufactured by walking the bar down.</div>
+          The beat was manufactured by walking the bar down.</p>
       </div>
     </div>
     <div class="callout" style="background:var(--bg2);border-left:3px solid var(--hint);margin:0 0 1rem">
-      <div class="callout-body"><strong>Miss (1,273 events)</strong><br>
-        Actual EPS fell below even the walked-down final consensus.</div>
+      <p><strong>Miss (1,273 events)</strong>
+        Actual EPS fell below even the walked-down final consensus.</p>
     </div>
     <p>Quality filters exclude events with non-positive consensus, sign flips between original
       and final, fewer than 3 active analysts at either snapshot, or an absolute original
@@ -292,7 +206,7 @@
 <!-- ── s2: The Selective Walk-Down ────────────────────────────────────────────── -->
 <section class="section" id="s2" style="background:var(--bg2)">
   <div class="container">
-    <div class="section-label"><span class="section-counter">02</span><span>The Selective Walk-Down</span></div>
+    <div class="section-label"><span class="mono">02</span> The Selective Walk-Down</div>
     <h2>The Walk-Down Is Deployed <em>Selectively</em></h2>
     <p>The chart below shows the distribution of walk-down percentages across all included events.
       The overall distribution skews positive (more walk-ups than walk-downs), but the manufactured
@@ -338,19 +252,18 @@
     <th style="background:var(--red2);color:#fff">Manufactured Beat</th>
     <th>Miss</th><th>Total</th>
   </tr></thead>
-  <tbody><tr><td style="color:var(--muted)">Walk-Down &lt;&#8722;2%</td><td class="mono">257</td><td class="mono" style="color:var(--red2);font-weight:600">709</td><td class="mono">872</td><td class="mono" style="color:var(--hint)">1,838 (30.0%)</td></tr>
-<tr><td style="color:var(--muted)">Flat &#177;2%</td><td class="mono">1,396</td><td class="mono" style="color:var(--red2);font-weight:600">140</td><td class="mono">328</td><td class="mono" style="color:var(--hint)">1,864 (30.4%)</td></tr>
-<tr><td style="color:var(--muted)">Walk-Up &gt;+2%</td><td class="mono">2,356</td><td class="mono" style="color:var(--red2);font-weight:600">0</td><td class="mono">73</td><td class="mono" style="color:var(--hint)">2,429 (39.6%)</td></tr>
+  <tbody><tr><td style="color:var(--muted)">Walk-Down &lt;&#8722;2%</td><td class="mono" style="">257</td><td class="mono" style="color:var(--red2);font-weight:600">709</td><td class="mono" style="">872</td><td class="mono" style="color:var(--hint)">1,838 (30.0%)</td></tr>
+<tr><td style="color:var(--muted)">Flat &#177;2%</td><td class="mono" style="">1,396</td><td class="mono" style="color:var(--red2);font-weight:600">140</td><td class="mono" style="">328</td><td class="mono" style="color:var(--hint)">1,864 (30.4%)</td></tr>
+<tr><td style="color:var(--muted)">Walk-Up &gt;+2%</td><td class="mono" style="">2,356</td><td class="mono" style="color:var(--red2);font-weight:600">0</td><td class="mono" style="">73</td><td class="mono" style="color:var(--hint)">2,429 (39.6%)</td></tr>
 </tbody>
 </table></div>
 
     <div class="callout red">
-      <div class="callout-icon">&#10007;</div>
-      <div class="callout-body"><strong>Zero manufactured beats from up-walking firms.</strong>
+      <p><strong>Zero manufactured beats from up-walking firms.</strong>
         Of 849 manufactured beats, 709 come from
         firms that walked estimates down more than 2%, and 140 from firms
         that held estimates flat. Not a single manufactured beat occurs at a firm where
-        the consensus rose over the nine-month window.</div>
+        the consensus rose over the nine-month window.</p>
     </div>
   </div>
 </section>
@@ -358,7 +271,7 @@
 <!-- ── s3: Who Gets Walked Down ────────────────────────────────────────────── -->
 <section class="section" id="s3">
   <div class="container">
-    <div class="section-label"><span class="section-counter">03</span><span>Who Gets Walked Down</span></div>
+    <div class="section-label"><span class="mono">03</span> Who Gets Walked Down</div>
     <h2>Sandbagging Happens at the <em>Most-Covered</em> Names</h2>
     <p>A naive prior might expect sandbagging to occur at smaller, less-scrutinised firms where
       management has more influence over the analyst consensus. The data shows the opposite.
@@ -366,19 +279,17 @@
       the analyst community is densest and the incentive to produce a clean beat is highest.</p>
 
     <div class="highlight-box">
-      <div class="hl-grid">
-        <div class="hl-cell">
-          <div class="hl-label">Median analysts, manufactured cohort</div>
-          <div class="hl-value">20</div>
-        </div>
-        <div class="hl-cell">
-          <div class="hl-label">Median analysts, genuine cohort</div>
-          <div class="hl-value">20</div>
-        </div>
-        <div class="hl-cell">
-          <div class="hl-label">Mfg beats within 5% of original consensus</div>
-          <div class="hl-value">56%</div>
-        </div>
+      <div class="hb-item">
+        <div class="hb-val">20</div>
+        <div class="hb-label">Median analysts, manufactured cohort</div>
+      </div>
+      <div class="hb-item">
+        <div class="hb-val">20</div>
+        <div class="hb-label">Median analysts, genuine cohort</div>
+      </div>
+      <div class="hb-item">
+        <div class="hb-val">56%</div>
+        <div class="hb-label">Mfg beats within 5% of original consensus</div>
       </div>
     </div>
 
@@ -428,10 +339,10 @@
     <th style="background:var(--red2);color:#fff">Mfg Beat %</th>
     <th>Genuine Beat %</th><th>Miss %</th>
   </tr></thead>
-  <tbody><tr><td>&lt;$5B</td><td class="mono" style="color:var(--red2)">11.1%</td><td class="mono">6.6%</td><td class="mono" style="color:var(--hint)">12.2%</td></tr>
+  <tbody><tr><td><$5B</td><td class="mono" style="color:var(--red2)">11.1%</td><td class="mono">6.6%</td><td class="mono" style="color:var(--hint)">12.2%</td></tr>
 <tr><td>$5B-$20B</td><td class="mono" style="color:var(--red2)">44.5%</td><td class="mono">38.6%</td><td class="mono" style="color:var(--hint)">42.3%</td></tr>
 <tr><td>$20B-$50B</td><td class="mono" style="color:var(--red2)">25.7%</td><td class="mono">29.7%</td><td class="mono" style="color:var(--hint)">25.8%</td></tr>
-<tr><td>&gt;$50B</td><td class="mono" style="color:var(--red2)">18.7%</td><td class="mono">24.9%</td><td class="mono" style="color:var(--hint)">19.5%</td></tr>
+<tr><td>>$50B</td><td class="mono" style="color:var(--red2)">18.7%</td><td class="mono">24.9%</td><td class="mono" style="color:var(--hint)">19.5%</td></tr>
 </tbody>
 </table></div>
   </div>
@@ -440,7 +351,7 @@
 <!-- ── s4: Strategy ────────────────────────────────────────────────────────── -->
 <section class="section" id="s4" style="background:var(--bg2)">
   <div class="container">
-    <div class="section-label"><span class="section-counter">04</span><span>Does It Pay?</span></div>
+    <div class="section-label"><span class="mono">04</span> Does It Pay?</div>
     <h2>Announcement Reaction and <em>Post-Print Drift</em></h2>
     <p>If manufactured beats are qualitatively different from genuine beats, market prices should
       reflect that. We test two windows: (1) the <em>announcement reaction</em>
@@ -455,19 +366,17 @@
     <h3>Announcement Reaction: The Market Is Initially Fooled</h3>
 
     <div class="highlight-box">
-      <div class="hl-grid">
-        <div class="hl-cell">
-          <div class="hl-label">Mean CAR (T&#8722;1 to T+1), Genuine Beats</div>
-          <div class="hl-value" style="color:var(--green2)">+0.59%</div>
-        </div>
-        <div class="hl-cell">
-          <div class="hl-label">Mean CAR (T&#8722;1 to T+1), Manufactured Beats</div>
-          <div class="hl-value" style="color:var(--green2)">+0.81%</div>
-        </div>
-        <div class="hl-cell">
-          <div class="hl-label">L/S Spread (Genuine minus Manufactured)</div>
-          <div class="hl-value" style="color:var(--red2)">-0.21%</div>
-        </div>
+      <div class="hb-item">
+        <div class="hb-val">+0.59%</div>
+        <div class="hb-label">Mean CAR (T&#8722;1 to T+1), Genuine Beats</div>
+      </div>
+      <div class="hb-item">
+        <div class="hb-val">+0.81%</div>
+        <div class="hb-label">Mean CAR (T&#8722;1 to T+1), Manufactured Beats</div>
+      </div>
+      <div class="hb-item">
+        <div class="hb-val">-0.21%</div>
+        <div class="hb-label">L/S Spread (Genuine minus Manufactured)</div>
       </div>
     </div>
 
@@ -490,32 +399,29 @@
 </table></div>
 
     <div class="callout amber">
-      <div class="callout-icon">&#9888;</div>
-      <div class="callout-body"><strong>The market does not see through manufactured beats at announcement.</strong>
+      <p><strong>The market does not see through manufactured beats at announcement.</strong>
         Manufactured beats generate a mean CAR of +0.81% over the
         T&#8722;1 to T+1 window, modestly <em>above</em> the +0.59%
         earned by genuine beats. The L/S reaction spread of -0.21% is small and
         (t&#160;=&#160;3.48 ***) not statistically significant.
         The market celebrates the nominal beat without immediately discounting its
-        manufactured nature. This rules out a reaction-window strategy.</div>
+        manufactured nature. This rules out a reaction-window strategy.</p>
     </div>
 
     <h3>Post-Print Drift: The Reality Reasserts Itself</h3>
 
     <div class="highlight-box">
-      <div class="hl-grid">
-        <div class="hl-cell">
-          <div class="hl-label">Mean CAR (T+1 to T+60), Genuine Beats</div>
-          <div class="hl-value" style="color:var(--green2)">+0.15%</div>
-        </div>
-        <div class="hl-cell">
-          <div class="hl-label">Mean CAR (T+1 to T+60), Manufactured Beats</div>
-          <div class="hl-value" style="color:var(--red2)">-1.49%</div>
-        </div>
-        <div class="hl-cell">
-          <div class="hl-label">L/S Spread (Genuine minus Manufactured)</div>
-          <div class="hl-value" style="color:var(--green2)">+1.65%</div>
-        </div>
+      <div class="hb-item">
+        <div class="hb-val">+0.15%</div>
+        <div class="hb-label">Mean CAR (T+1 to T+60), Genuine Beats</div>
+      </div>
+      <div class="hb-item">
+        <div class="hb-val">-1.49%</div>
+        <div class="hb-label">Mean CAR (T+1 to T+60), Manufactured Beats</div>
+      </div>
+      <div class="hb-item">
+        <div class="hb-val">+1.65%</div>
+        <div class="hb-label">L/S Spread (Genuine minus Manufactured)</div>
       </div>
     </div>
 
@@ -548,17 +454,15 @@
       Any viable strategy must enter after the announcement, not before.</p>
 
     <div class="callout amber">
-      <div class="callout-icon">&#9888;</div>
-      <div class="callout-body"><strong>Conditional signal: practical execution is the barrier.</strong> The +1.65&#160;pp 60-day drift spread (Sharpe 0.39 over 11 years) is statistically present. Three practical hurdles likely erode it in live trading: (1) shorting manufactured beats requires locating borrow on large-cap names around earnings, often at elevated fees; (2) the strategy competes with post-earnings drift traders already positioned in these names; (3) running ~849 short and ~4009 long positions per year generates meaningful transaction costs over a 59-trading-day holding period. A paper-trading exercise is warranted before committing capital.</div>
+      <p><strong>Conditional signal: practical execution is the barrier.</strong> The +1.65&#160;pp 60-day drift spread (Sharpe 0.39 over 11 years) is statistically present. Three practical hurdles likely erode it in live trading. First, shorting manufactured beats requires locating borrow on large-cap names around earnings, often at elevated fees. Second, the strategy competes with post-earnings drift traders already positioned in these names. Third, running ~849 short and ~4009 long positions per year generates meaningful transaction costs over a 59-trading-day holding period. A paper-trading exercise is warranted before committing capital.</p>
     </div>
 
     <div class="callout red">
-      <div class="callout-icon">&#9432;</div>
-      <div class="callout-body"><strong>Disclaimer.</strong> This report is for educational and informational purposes
+      <p><strong>Disclaimer.</strong> This report is for educational and informational purposes
         only. Past performance is not indicative of future results. Nothing here constitutes
         investment advice or a recommendation to buy or sell any security. Any strategy
         described here has not been live-traded and faces implementation costs not captured
-        in paper returns.</div>
+        in paper returns.</p>
     </div>
   </div>
 </section>
@@ -566,7 +470,7 @@
 <!-- ── s5: Methodology ────────────────────────────────────────────────────────── -->
 <section class="section" id="s5">
   <div class="container">
-    <div class="section-label"><span class="section-counter">05</span><span>Methodology</span></div>
+    <div class="section-label"><span class="mono">05</span> Methodology</div>
     <h2>Data and <em>Construction Details</em></h2>
     <p>Key parameters and data choices are summarised below. The PIT reconstruction uses
       individual analyst estimates from IBES Detail rather than the pre-aggregated
@@ -575,7 +479,7 @@
     <div style="overflow-x:auto">
       <table class="data-table" style="max-width:720px;margin:1.5rem auto">
         <thead><tr><th>Parameter</th><th>Value</th></tr></thead>
-        <tbody><tr><td><strong>Universe</strong></td><td style="font-size:.9rem">S&amp;P 500, point-in-time membership, 2015&ndash;2025</td></tr><tr><td><strong>EPS series</strong></td><td style="font-size:.9rem">Annual (fpi&#160;=&#160;1) from IBES</td></tr><tr><td><strong>Estimate source</strong></td><td style="font-size:.9rem">IBES Detail (individual analyst estimates, <code>ibes.det_epsus</code>)</td></tr><tr><td><strong>Walk-down window</strong></td><td style="font-size:.9rem">T&#8722;270 to T&#8722;2 trading days before announcement</td></tr><tr><td><strong>Original consensus</strong></td><td style="font-size:.9rem">Mean of active estimates, T&#8722;280 to T&#8722;260</td></tr><tr><td><strong>Final consensus</strong></td><td style="font-size:.9rem">Mean of active estimates, T&#8722;7 to T&#8722;2</td></tr><tr><td><strong>Active estimate</strong></td><td style="font-size:.9rem">Most-recent estimate per analyst, issued within prior 365 days</td></tr><tr><td><strong>Analyst floor</strong></td><td style="font-size:.9rem">3 or more active analysts at both original and final snapshot</td></tr><tr><td><strong>Min EPS base</strong></td><td style="font-size:.9rem">&#124;orig_consensus&#124; &ge; $0.10 (avoids % distortion on tiny bases)</td></tr><tr><td><strong>Classification</strong></td><td style="font-size:.9rem">Genuine: actual &gt; orig. Manufactured: orig &ge; actual &gt; final. Miss: actual &le; final</td></tr><tr><td><strong>Returns</strong></td><td style="font-size:.9rem">Price-only from CRSP dsf_v2 (dlyprc, adjusted close); dividends excluded</td></tr><tr><td><strong>Benchmark</strong></td><td style="font-size:.9rem">SPY (permno 84398) over identical calendar windows</td></tr><tr><td><strong>Censoring</strong></td><td style="font-size:.9rem">Events where T+60 falls after 2025-12-31 excluded from drift statistics</td></tr><tr><td><strong>Data cutoffs</strong></td><td style="font-size:.9rem">IBES through 2026-02-19, CRSP v2 through 2025-12-31, yfinance n/a</td></tr></tbody>
+        <tbody><tr><td><strong>Universe</strong></td><td style="font-size:.9rem">S&amp;P 500, point-in-time membership, 2015&#8211;2025</td></tr><tr><td><strong>EPS series</strong></td><td style="font-size:.9rem">Annual (fpi&#160;=&#160;1) from IBES</td></tr><tr><td><strong>Estimate source</strong></td><td style="font-size:.9rem">IBES Detail (individual analyst estimates, <code>ibes.det_epsus</code>)</td></tr><tr><td><strong>Walk-down window</strong></td><td style="font-size:.9rem">T&#8722;270 to T&#8722;2 trading days before announcement</td></tr><tr><td><strong>Original consensus</strong></td><td style="font-size:.9rem">Mean of active estimates, T&#8722;280 to T&#8722;260</td></tr><tr><td><strong>Final consensus</strong></td><td style="font-size:.9rem">Mean of active estimates, T&#8722;7 to T&#8722;2</td></tr><tr><td><strong>Active estimate</strong></td><td style="font-size:.9rem">Most-recent estimate per analyst, issued within prior 365 days</td></tr><tr><td><strong>Analyst floor</strong></td><td style="font-size:.9rem">3 or more active analysts at both original and final snapshot</td></tr><tr><td><strong>Min EPS base</strong></td><td style="font-size:.9rem">&#124;orig_consensus&#124; &ge; $0.10 (avoids % distortion on tiny bases)</td></tr><tr><td><strong>Classification</strong></td><td style="font-size:.9rem">Genuine: actual &gt; orig. Manufactured: orig &ge; actual &gt; final. Miss: actual &le; final</td></tr><tr><td><strong>Returns</strong></td><td style="font-size:.9rem">Price-only from CRSP dsf_v2 (dlyprc, adjusted close), dividends excluded</td></tr><tr><td><strong>Benchmark</strong></td><td style="font-size:.9rem">SPY (permno 84398) over identical calendar windows</td></tr><tr><td><strong>Censoring</strong></td><td style="font-size:.9rem">Events where T+60 falls after 2025-12-31 excluded from drift statistics</td></tr><tr><td><strong>Data cutoffs</strong></td><td style="font-size:.9rem">IBES through 2026-02-19, CRSP v2 through 2025-12-31, yfinance n/a</td></tr></tbody>
       </table>
     </div>
   </div>
@@ -584,55 +488,45 @@
 <!-- ── s6: Conclusions ────────────────────────────────────────────────────────── -->
 <section class="section" id="s6" style="background:var(--bg2)">
   <div class="container">
-    <div class="section-label"><span class="section-counter">06</span><span>Conclusions</span></div>
+    <div class="section-label"><span class="mono">06</span> Conclusions</div>
     <h2>Four Key <em>Findings</em></h2>
 
     <div class="callout green">
-      <div class="callout-icon">&#10003;</div>
-      <div class="callout-body"><strong>The walk-down is real, but selective.</strong> 17.5% of annual S&amp;P&#160;500
+      <p><strong>The walk-down is real, but selective.</strong> 17.5% of annual S&amp;P&#160;500
         beats between 2015 and 2025 are manufactured by walking analyst estimates down over the
         nine months before announcement. The median S&amp;P&#160;500 firm does not walk estimates
-        down. The phenomenon is selective, concentrated at firms that would otherwise miss.</div>
+        down. The phenomenon is selective, concentrated at firms that would otherwise miss.</p>
     </div>
 
     <div class="callout red">
-      <div class="callout-icon">&#10007;</div>
-      <div class="callout-body"><strong>Zero manufactured beats from up-walking firms.</strong> Every one of the
+      <p><strong>Zero manufactured beats from up-walking firms.</strong> Every one of the
         849 manufactured beats comes from a firm in the down or flat
         walk-down bin. Not one manufactured beat occurs at a firm where the consensus rose.
-        This is a structural feature of the classification, not a coincidence.</div>
+        This is a structural feature of the classification, not a coincidence.</p>
     </div>
 
     <div class="callout amber">
-      <div class="callout-icon">&#9888;</div>
-      <div class="callout-body"><strong>Sandbagging concentrates at the most-covered names.</strong> The manufactured
+      <p><strong>Sandbagging concentrates at the most-covered names.</strong> The manufactured
         cohort has a median of 20 active analysts vs 20 for genuine beats.
         Large-cap, heavily-covered names are the most active sandbagging sites, consistent
         with the hypothesis that the incentive to produce a clean institutional beat is
-        highest where the audience is largest.</div>
+        highest where the audience is largest.</p>
     </div>
 
     <div class="callout blue">
-      <div class="callout-icon">&#9432;</div>
-      <div class="callout-body"><strong>Statistical limits.</strong> The study uses price-only returns (dividends
+      <p><strong>Statistical limits.</strong> The study uses price-only returns (dividends
         excluded), which slightly understates long-run performance for high-dividend names.
         The T+60 drift window censors 70 events where CRSP data
         ends before the exit date. Annual Sharpe estimates use 11 year-observations
         and should be treated as indicative only. All t-statistics are one-sample tests
-        against zero with no multiple-comparison correction.</div>
+        against zero with no multiple-comparison correction.</p>
     </div>
   </div>
 </section>
 
 <footer>
-  <div class="footer-inner">
-    <div class="footer-name">The Intrinsic Investor</div>
-    <div class="footer-right">
-      <span>&#169; 2026 Brian Liew, BSc Accounting &amp; Finance (LSE)</span>
-      <a href="/research/">Research</a>
-      <a href="/about/">About</a>
-    </div>
-  </div>
+  <p>&#169; 2026 The Intrinsic Investor &middot; Brian Liew, BSc Accounting &amp; Finance (LSE) &middot;
+    <a href="/research/">Research</a> &middot; <a href="/about/">About</a></p>
 </footer>
 
 <script>
@@ -755,7 +649,6 @@ new Chart(document.getElementById('dftChart'), {
 window.addEventListener('scroll', () => {
   const p = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
   document.getElementById('progress-bar').style.width = Math.min(p, 100) + '%';
-  document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 10);
 });
 
 // Section fade-in

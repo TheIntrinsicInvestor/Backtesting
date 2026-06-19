@@ -42,10 +42,10 @@ if verdict_viable:
     verdict_head   = "Conditional signal: practical execution is the barrier"
     verdict_body   = (
         f"The {ls_dft_str}&#160;pp 60-day drift spread (Sharpe {dft_sh_str} over {n_ann} years) "
-        f"is statistically present. Three practical hurdles likely erode it in live trading: "
-        f"(1) shorting manufactured beats requires locating borrow on large-cap names around "
-        f"earnings, often at elevated fees; (2) the strategy competes with post-earnings "
-        f"drift traders already positioned in these names; (3) running "
+        f"is statistically present. Three practical hurdles likely erode it in live trading. "
+        f"First, shorting manufactured beats requires locating borrow on large-cap names around "
+        f"earnings, often at elevated fees. Second, the strategy competes with post-earnings "
+        f"drift traders already positioned in these names. Third, running "
         f"~{meta['n_manufactured']} short and ~{meta['n_genuine']} long positions per year "
         f"generates meaningful transaction costs over a 59-trading-day holding period. "
         f"A paper-trading exercise is warranted before committing capital."
@@ -204,7 +204,7 @@ method_rows = [
     ("Analyst floor",     "3 or more active analysts at both original and final snapshot"),
     ("Min EPS base",      "&#124;orig_consensus&#124; &ge; $0.10 (avoids % distortion on tiny bases)"),
     ("Classification",    "Genuine: actual &gt; orig. Manufactured: orig &ge; actual &gt; final. Miss: actual &le; final"),
-    ("Returns",           "Price-only from CRSP dsf_v2 (dlyprc, adjusted close); dividends excluded"),
+    ("Returns",           "Price-only from CRSP dsf_v2 (dlyprc, adjusted close), dividends excluded"),
     ("Benchmark",         "SPY (permno 84398) over identical calendar windows"),
     ("Censoring",         "Events where T+60 falls after 2025-12-31 excluded from drift statistics"),
     ("Data cutoffs",      "IBES through 2026-02-19, CRSP v2 through 2025-12-31, yfinance n/a"),

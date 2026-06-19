@@ -624,27 +624,27 @@ ETF_INFO = {
     'QUAL': ('iShares MSCI USA Quality Factor', 'Factor', 'Jul 2013',
              'High ROE, low leverage, stable earnings growth'),
     'IWD':  ('iShares Russell 1000 Value', 'Factor', 'May 2000',
-             'Broad value factor; longest live history in the sleeve'),
+             'Broad value factor, longest live history in the sleeve'),
     'IWM':  ('iShares Russell 2000', 'Factor', 'May 2000',
-             'Small-cap risk premium; diversifies large-cap bias'),
+             'Small-cap risk premium, diversifies large-cap bias'),
     'XLK':  ('Technology Select Sector SPDR', 'Sector', 'Dec 1998',
              'Highest-returning sector in the post-GFC cycle'),
     'XLF':  ('Financial Select Sector SPDR', 'Sector', 'Dec 1998',
-             'Rate-sensitive; rotates with the yield curve'),
+             'Rate-sensitive, rotates with the yield curve'),
     'XLE':  ('Energy Select Sector SPDR', 'Sector', 'Dec 1998',
-             'Commodity cycle exposure; low correlation to tech'),
+             'Commodity cycle exposure, low correlation to tech'),
     'XLV':  ('Health Care Select Sector SPDR', 'Sector', 'Dec 1998',
-             'Defensive growth; useful in drawdown regimes'),
+             'Defensive growth, useful in drawdown regimes'),
     'XLI':  ('Industrial Select Sector SPDR', 'Sector', 'Dec 1998',
-             'Cyclical; tracks manufacturing and capex cycles'),
+             'Cyclical, tracks manufacturing and capex cycles'),
     'XLY':  ('Consumer Discretionary SPDR', 'Sector', 'Dec 1998',
-             'Consumer cycle bellwether; high beta'),
+             'Consumer cycle bellwether, high beta'),
     'XLP':  ('Consumer Staples SPDR', 'Sector', 'Dec 1998',
-             'Defensive; flight-to-safety rotation target'),
+             'Defensive, flight-to-safety rotation target'),
     'XLU':  ('Utilities Select Sector SPDR', 'Sector', 'Dec 1998',
-             'Rate-sensitive defensive; strong in risk-off'),
+             'Rate-sensitive defensive, strong in risk-off'),
     'XLB':  ('Materials Select Sector SPDR', 'Sector', 'Dec 1998',
-             'Commodities proxy; inflation-cycle exposure'),
+             'Commodities proxy, inflation-cycle exposure'),
 }
 etf_rows_html = ''
 for tic, (name, sleeve, inception, rationale) in ETF_INFO.items():
@@ -748,7 +748,7 @@ html = f"""<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Factor &amp; Sector ETF Rotation — The Intrinsic Investor</title>
+<title>Factor &amp; Sector ETF Rotation: The Intrinsic Investor</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -1079,7 +1079,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}}
     <table>
       <thead><tr><th>ID</th><th>Filter Rule (go to cash if&hellip;)</th><th>Series used</th></tr></thead>
       <tbody>
-        <tr><td class="mono">F0</td><td>No filter &mdash; always invested</td><td class="muted-cell">Baseline</td></tr>
+        <tr><td class="mono">F0</td><td>No filter (always invested)</td><td class="muted-cell">Baseline</td></tr>
         <tr><td class="mono">F1</td><td>SPY 12-month total return &lt; 0</td><td class="muted-cell">Monthly</td></tr>
         <tr><td class="mono">F2</td><td>SPY month-end close &lt; 10-month SMA</td><td class="muted-cell">Monthly</td></tr>
         <tr><td class="mono">F3</td><td>SPY daily close &lt; 200-day SMA at month-end</td><td class="muted-cell">Daily</td></tr>
@@ -1121,15 +1121,15 @@ footer{{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}}
   <p>The three heatmaps show how Sharpe ratio varies across the (lookback, filter) grid for each split method, plus the cell-wise best across both. Warmer green indicates higher risk-adjusted returns. A robust strategy shows a broad green region, not a single outlier cell.</p>
 
   <div class="chart-box">
-    <div class="chart-title">Split A (50/50 Fixed) &mdash; Sharpe Ratio by Lookback &times; Filter</div>
+    <div class="chart-title">Split A (50/50 Fixed): Sharpe Ratio by Lookback &times; Filter</div>
     {hm_a_html}
   </div>
   <div class="chart-box">
-    <div class="chart-title">Split B (Momentum-Weighted) &mdash; Sharpe Ratio by Lookback &times; Filter</div>
+    <div class="chart-title">Split B (Momentum-Weighted): Sharpe Ratio by Lookback &times; Filter</div>
     {hm_b_html}
   </div>
   <div class="chart-box">
-    <div class="chart-title">Combined Best &mdash; Highest Sharpe Across Both Splits per Cell</div>
+    <div class="chart-title">Combined Best: Highest Sharpe Across Both Splits per Cell</div>
     {hm_c_html}
   </div>
 
@@ -1186,19 +1186,19 @@ footer{{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}}
 
   <h3>Equity Curve vs Benchmarks (Log Scale, Rebased to 100)</h3>
   <div class="chart-box">
-    <div class="chart-title">Cumulative Growth of $100 &mdash; Top 3 Combos vs SPY vs Equal-Weight B&amp;H</div>
+    <div class="chart-title">Cumulative Growth of $100: Top 3 Combos vs SPY vs Equal-Weight B&amp;H</div>
     <canvas id="equityCurve" height="55"></canvas>
   </div>
 
   <h3>Annual Returns vs SPY</h3>
   <div class="chart-box">
-    <div class="chart-title">Calendar Year Returns &mdash; Best Combo vs SPY</div>
+    <div class="chart-title">Calendar Year Returns: Best Combo vs SPY</div>
     <canvas id="annualBar" height="40"></canvas>
   </div>
 
   <h3>Monthly Return Heatmap</h3>
   <div class="chart-box">
-    <div class="chart-title">Monthly Returns (%) &mdash; Best Combination</div>
+    <div class="chart-title">Monthly Returns (%): Best Combination</div>
     {hm_monthly_html}
   </div>
 
