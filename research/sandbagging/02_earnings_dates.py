@@ -13,7 +13,7 @@ import wrds
 import pandas as pd
 from pathlib import Path
 
-_u = os.environ.get("WRDS_USERNAME", "hoovyalert")
+_u = os.environ["WRDS_USERNAME"]
 def _ai(p=""):
     v = _u if "username" in p.lower() else ""
     print(p + v); return v

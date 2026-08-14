@@ -4,7 +4,7 @@ Factor & Sector ETF Rotation Strategy — Systematic Backtest
 Author: Brian Liew (LSE, BSc Accounting and Finance)
 
 Run on WRDS JupyterHub:
-    set WRDS_USERNAME=hoovyalert
+    set WRDS_USERNAME=<your-wrds-username>
     python 01_factor_rotation.py
 """
 
@@ -74,7 +74,7 @@ if os.path.exists(CACHE_DAILY):
 else:
     print("\n[WRDS] Connecting...")
     import wrds
-    db = wrds.Connection(wrds_username=os.environ.get('WRDS_USERNAME', 'hoovyalert'))
+    db = wrds.Connection(wrds_username=os.environ['WRDS_USERNAME'])
     print("  Connected.")
     tickers_sql = "', '".join(TICKERS)
     query = f"""

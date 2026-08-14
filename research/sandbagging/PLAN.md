@@ -49,7 +49,7 @@ Note: `ibes.det_epsus` has **no `estdats` column**; `anndats` is the estimate is
 
 Three scripts, renumbered DAG **06 → 07 → 08**. WRDS scripts use the standard
 `builtins.input`/`getpass` monkey-patch and run with
-`$env:WRDS_USERNAME="hoovyalert"; $env:PGPASSWORD=...`. `data/*.parquet` gitignored;
+`$env:WRDS_USERNAME="<your-wrds-username>"; $env:PGPASSWORD=...`. `data/*.parquet` gitignored;
 `charts/*.json` (or `analysis.json`) committed so the report regenerates from JSON alone.
 Deliver in DAG-batches (batch delivery approved); do **not** push or publish until Brian
 reviews.

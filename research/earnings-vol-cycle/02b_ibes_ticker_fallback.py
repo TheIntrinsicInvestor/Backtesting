@@ -12,7 +12,7 @@ import pandas as pd
 
 # WRDS library always calls input() even when username is in env var.
 # Monkey-patch to return the env var value non-interactively.
-_WRDS_USER = os.environ.get("WRDS_USERNAME", "hoovyalert")
+_WRDS_USER = os.environ["WRDS_USERNAME"]
 _orig_input = builtins.input
 def _auto_input(prompt=""):
     val = _WRDS_USER if "username" in prompt.lower() else ""

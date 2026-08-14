@@ -1,5 +1,5 @@
 import builtins, os
-_u = os.environ.get("WRDS_USERNAME", "hoovyalert")
+_u = os.environ["WRDS_USERNAME"]
 def _ai(p=""): v = _u if "username" in p.lower() else ""; print(p+v); return v
 builtins.input = _ai
 
@@ -61,7 +61,7 @@ def main():
     start_date = (events["entry_disclosure_date"].min() - pd.Timedelta(days=30)).strftime("%Y-%m-%d")
     end_date = (events["entry_disclosure_date"].max() + pd.Timedelta(days=300)).strftime("%Y-%m-%d")
 
-    db = wrds.Connection(wrds_username=os.environ.get("WRDS_USERNAME", "hoovyalert"))
+    db = wrds.Connection(wrds_username=os.environ["WRDS_USERNAME"])
 
     print(f"Mapping {len(tickers)} tickers to permno...")
     ticker_map = map_tickers(db, tickers)

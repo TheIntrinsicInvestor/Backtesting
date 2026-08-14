@@ -22,7 +22,7 @@ import wrds
 import pandas as pd
 import numpy as np
 
-_u = os.environ.get("WRDS_USERNAME", "hoovyalert")
+_u = os.environ["WRDS_USERNAME"]
 _p = os.environ.get("PGPASSWORD", "")
 def _ai(p=""):
     if "username" in p.lower():

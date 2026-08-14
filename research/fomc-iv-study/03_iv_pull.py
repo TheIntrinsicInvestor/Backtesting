@@ -37,7 +37,7 @@ if os.path.exists(CACHE):
 else:
     print("No cache — querying WRDS.")
     import builtins
-    _u2 = os.environ.get("WRDS_USERNAME", "hoovyalert")
+    _u2 = os.environ["WRDS_USERNAME"]
     def _ai2(p=""):
         v = _u2 if "username" in p.lower() else ""
         print(p + v); return v

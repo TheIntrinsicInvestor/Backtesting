@@ -5,7 +5,7 @@ Output: data/etf_prices.parquet with columns: date, ticker, prc, ret
 """
 
 import builtins, os
-_u = os.environ.get("WRDS_USERNAME", "hoovyalert")
+_u = os.environ["WRDS_USERNAME"]
 def _ai(p=""):
     v = _u if "username" in p.lower() else ""
     print(p + v)
