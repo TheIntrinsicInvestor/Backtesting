@@ -258,10 +258,11 @@ html = f"""<!DOCTYPE html>
   <title>IV Behaviour in Energy Options Around Iran Geopolitical Events | The Intrinsic Investor</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@1,300;1,400;1,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <style>
     :root {{
+      --font:'Inter',sans-serif; --serif:'Fraunces',serif; --mono:'JetBrains Mono',monospace;
       --bg:#f7f4ec; --bg2:#f0ece2; --bg3:#e8e3d8;
       --ink:#0f2220; --ink2:#2a3c38;
       --muted:#4a6460; --hint:#8aa49e; --border:#e2ddd0;
@@ -405,7 +406,48 @@ html = f"""<!DOCTYPE html>
       .footer-top {{ flex-direction: column; }}
       .footer-bottom {{ flex-direction: column; gap: 8px; text-align: center; }}
     }}
-  </style>
+  /* CHROME:START canonical nav, hero, footer, side nav. Keep identical across reports. */
+#progress-bar{{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,#1a5c52,#2d9d8f);z-index:9998;transition:width .1s linear}}
+nav{{position:sticky;top:0;z-index:100;height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;background:#0f2220;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.08);transition:box-shadow .3s}}
+nav.scrolled{{box-shadow:0 1px 24px rgba(0,0,0,.2)}}
+.nav-logo{{font-family:var(--serif);font-style:normal;font-weight:600;font-size:1.1rem;color:#fff;letter-spacing:-.01em;text-decoration:none}}
+.nav-links{{display:flex;gap:1.75rem;list-style:none}}
+.nav-links a{{position:relative;padding-bottom:2px;color:rgba(255,255,255,.7);text-decoration:none;font-size:.9rem;font-weight:500;transition:color .2s}}
+.nav-links a:hover{{color:#fff}}
+.nav-links a::after{{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:#2d9d8f;transform:scaleX(0);transform-origin:left;transition:transform .25s cubic-bezier(.4,0,.2,1)}}
+.nav-links a:hover::after{{transform:scaleX(1)}}
+.hero{{position:relative;overflow:hidden;margin-top:0;background:var(--ink);color:#fff;text-align:left;padding:5rem 2rem 4rem}}
+.hero::before{{content:'';position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(-55deg,transparent,transparent 40px,rgba(255,255,255,.013) 40px,rgba(255,255,255,.013) 41px)}}
+.hero-inner,.footer-inner{{max-width:860px;margin:0 auto;position:relative}}
+.hero-tag{{display:inline-block;font-family:var(--mono);font-size:.72rem;font-weight:400;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(26,92,82,.4);padding:.25rem .75rem;border-radius:2px;margin-bottom:1.5rem;animation:fadeUp .6s ease both}}
+.hero h1{{font-family:var(--serif);font-size:clamp(1.9rem,4.5vw,3.2rem);font-weight:600;font-style:normal;color:#fff;line-height:1.2;letter-spacing:-.02em;max-width:none;margin:0 0 1.25rem;animation:fadeUp .6s .1s ease both}}
+.hero h1 em{{font-style:italic;color:var(--accent)}}
+.hero-sub{{font-size:1rem;color:rgba(255,255,255,.65);max-width:620px;line-height:1.7;margin-bottom:2rem;text-align:left;animation:fadeUp .6s .2s ease both}}
+.hero-meta{{display:flex;flex-wrap:wrap;gap:2rem;justify-content:flex-start;align-items:flex-start;margin-top:0;font-family:var(--mono);font-size:.75rem;color:rgba(255,255,255,.5);border-top:1px solid rgba(255,255,255,.1);padding-top:1.5rem;animation:fadeUp .6s .3s ease both}}
+.hero-meta-item strong{{display:block;font-size:.85rem;font-weight:700;letter-spacing:0;text-transform:none;color:rgba(255,255,255,.85);margin:0 0 .15rem}}
+.gh-btn{{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.68rem;color:rgba(255,255,255,.5);text-decoration:none;border:1px solid rgba(255,255,255,.2);padding:3px 9px;border-radius:3px;transition:all .2s;letter-spacing:.02em;align-self:center}}
+.gh-btn:hover{{color:#fff;border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.08)}}
+#side-nav{{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:2px;padding:10px 6px}}
+#side-nav a{{display:flex;align-items:center;justify-content:flex-end;gap:7px;text-decoration:none;padding:5px 8px;border-radius:4px;transition:background .2s}}
+#side-nav a:hover{{background:rgba(26,92,82,.07)}}
+.sn-label{{font-size:.67rem;font-weight:500;color:var(--hint);white-space:nowrap;letter-spacing:.02em;font-family:var(--font);text-transform:none;text-align:right;transition:color .2s}}
+.sn-dot{{width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;transition:all .2s}}
+#side-nav a.active .sn-label{{color:var(--accent);font-weight:600}}
+#side-nav a.active .sn-dot{{width:5px;height:5px;background:var(--accent);transform:scale(1.5)}}
+#side-nav a:hover .sn-label{{color:var(--ink)}}
+#side-nav a:hover .sn-dot{{background:var(--muted)}}
+footer{{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem;font-size:1rem;text-align:left}}
+.footer-inner{{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}}
+.footer-name{{font-family:var(--serif);font-weight:600;font-size:1rem;color:rgba(255,255,255,.9)}}
+.footer-right{{font-size:.8rem;text-align:right}}
+.footer-right a{{color:rgba(255,255,255,.5);text-decoration:none;margin-left:1.2rem;transition:none}}
+.footer-right a:hover{{color:rgba(255,255,255,.85)}}
+@media(max-width:860px){{#side-nav{{display:none}}.footer-inner{{flex-direction:column;text-align:center}}.footer-right{{text-align:center}}}}
+body::after{{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+      mix-blend-mode:multiply;opacity:0.5}}
+/* CHROME:END */
+</style>
 </head>
 <body>
 
@@ -413,33 +455,34 @@ html = f"""<!DOCTYPE html>
 
 <!-- ── Nav ── -->
 <nav>
-  <a href="/" class="nav-logo">The Intrinsic Investor</a>
+  <a href="../../index.html" class="nav-logo">The Intrinsic Investor</a>
   <ul class="nav-links">
-    <li><a href="/">Home</a></li>
-    <li><a href="/research" class="active">Research</a></li>
-    <li><a href="/about">About</a></li>
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="../index.html">Research</a></li>
+    <li><a href="../../about.html">About</a></li>
   </ul>
 </nav>
 
 <!-- ── Hero ── -->
 <div class="hero">
   <div class="hero-inner">
-    <div class="eyebrow"><span>Systematic Market Research</span></div>
+    <div class="hero-tag">Systematic Market Research</div>
     <h1>IV Behaviour in <em>Energy Sector Options</em><br>Around Iran-Related <em>Geopolitical Events</em></h1>
-    <p class="hero-subtitle">
+    <p class="hero-sub">
       An event study of 30-day ATM implied volatility across XLE, USO, XOM, and CVX
       around fifteen Iran-related escalation events from 2003 to 2026. The study derives
       a tradeable mean-reversion strategy from the IV patterns the data reveals.
     </p>
     <div class="hero-meta">
-      <span>OptionMetrics via WRDS</span>
-      <span>Mar 2003 to Feb 2026</span>
-      <span>15 Events</span>
-      <span>Published June 2025</span>
-      <span>Brian Liew, LSE</span>
-      <span><a href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/iran-iv-study" target="_blank" style="color:rgba(255,255,255,0.3);text-decoration:none;border:1px solid rgba(255,255,255,0.15);padding:2px 8px;border-radius:4px;font-size:10px">GitHub</a></span>
-    </div>
-  </div>
+      <div class="hero-meta-item"><strong>Author</strong>Brian Liew, BSc Accounting and Finance, LSE</div>
+      <div class="hero-meta-item"><strong>Published</strong>June 2025</div>
+      <div class="hero-meta-item"><strong>Period</strong>Mar 2003 to Feb 2026, 15 events</div>
+      <div class="hero-meta-item"><strong>Data</strong>OptionMetrics via WRDS</div>
+      <a href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/iran-iv-study" target="_blank" rel="noopener" class="gh-btn">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub Code
+      </a>
+    </div></div>
 </div>
 
 <!-- ── KPI Strip ── -->
@@ -938,27 +981,16 @@ html = f"""<!DOCTYPE html>
 <!-- ── Footer ── -->
 <footer>
   <div class="footer-inner">
-    <div class="footer-top">
-      <div>
-        <div class="footer-name">The Intrinsic Investor</div>
-        <div class="footer-desc">
-          Systematic trading research. Quantitative event studies and strategy
-          backtests across equities, derivatives, and macro instruments.
-        </div>
-      </div>
-      <div class="footer-links">
-        <a href="https://www.linkedin.com/in/brianliew" target="_blank">LinkedIn</a>
-        <a href="https://github.com/brianliew" target="_blank">GitHub</a>
-        <a href="mailto:brian@theintrinsicinvestor.com" target="_blank">Email</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <div class="footer-data">OptionMetrics via WRDS | yfinance | Mar 2003 to Aug 2025</div>
-      <div class="footer-disclaimer">For informational purposes only. Not investment advice.</div>
+    <div class="footer-name">The Intrinsic Investor</div>
+    <div class="footer-right">
+      <span style="color:rgba(255,255,255,.35)">&copy; 2025 Brian Liew</span>
+      <a href="https://www.linkedin.com/in/brianliewrz" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/TheIntrinsicInvestor" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:brianliew.rz@gmail.com">Email</a>
     </div>
   </div>
 
-  <div style="text-align:center;font-size:0.75rem;color:rgba(255,255,255,0.4);margin-top:1.5rem;font-family:var(--font, \'Inter\', sans-serif);width:100%;">For research purposes only. Not financial advice.</div>
+  <div style="text-align:center;font-size:.75rem;color:rgba(255,255,255,.4);margin-top:1.5rem;font-family:var(--font);width:100%;">For research purposes only. Not financial advice.</div>
 </footer>
 
 <script>
@@ -1000,6 +1032,7 @@ document.querySelectorAll('section[id]').forEach(el => sectionObserver.observe(e
 
 // ── Chart 1: IV Profile ───────────────────────────────────────────────────────
 const profileCtx = document.getElementById('profileChart').getContext('2d');
+Chart.defaults.font.family = 'Inter, sans-serif';
 new Chart(profileCtx, {{
   data: {{
     labels: {profile_labels_js},
@@ -1136,6 +1169,7 @@ new Chart(pnlCtx, {{
 </html>"""
 
 out_path = "index.html"
+html = html.replace(" — ", ": ")  # event labels in the cached data contain em dashes; site rule bans them
 with open(out_path, "w", encoding="utf-8") as f:
     f.write(html)
 

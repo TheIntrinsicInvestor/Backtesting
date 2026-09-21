@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HT9VG5C62E"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-HT9VG5C62E');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Factor &amp; Sector ETF Rotation: The Intrinsic Investor</title>
+<title>Factor &amp; Sector ETF Rotation | The Intrinsic Investor</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -209,6 +210,44 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
 }
+/* CHROME:START canonical nav, hero, footer, side nav. Keep identical across reports. */
+#progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,#1a5c52,#2d9d8f);z-index:9998;transition:width .1s linear}
+nav{position:sticky;top:0;z-index:100;height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;background:#0f2220;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.08);transition:box-shadow .3s}
+nav.scrolled{box-shadow:0 1px 24px rgba(0,0,0,.2)}
+.nav-logo{font-family:var(--serif);font-style:normal;font-weight:600;font-size:1.1rem;color:#fff;letter-spacing:-.01em;text-decoration:none}
+.nav-links{display:flex;gap:1.75rem;list-style:none}
+.nav-links a{position:relative;padding-bottom:2px;color:rgba(255,255,255,.7);text-decoration:none;font-size:.9rem;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:#fff}
+.nav-links a::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:#2d9d8f;transform:scaleX(0);transform-origin:left;transition:transform .25s cubic-bezier(.4,0,.2,1)}
+.nav-links a:hover::after{transform:scaleX(1)}
+.hero{position:relative;overflow:hidden;margin-top:0;background:var(--ink);color:#fff;text-align:left;padding:5rem 2rem 4rem}
+.hero::before{content:'';position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(-55deg,transparent,transparent 40px,rgba(255,255,255,.013) 40px,rgba(255,255,255,.013) 41px)}
+.hero-inner,.footer-inner{max-width:860px;margin:0 auto;position:relative}
+.hero-tag{display:inline-block;font-family:var(--mono);font-size:.72rem;font-weight:400;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(26,92,82,.4);padding:.25rem .75rem;border-radius:2px;margin-bottom:1.5rem;animation:fadeUp .6s ease both}
+.hero h1{font-family:var(--serif);font-size:clamp(1.9rem,4.5vw,3.2rem);font-weight:600;font-style:normal;color:#fff;line-height:1.2;letter-spacing:-.02em;max-width:none;margin:0 0 1.25rem;animation:fadeUp .6s .1s ease both}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero-sub{font-size:1rem;color:rgba(255,255,255,.65);max-width:620px;line-height:1.7;margin-bottom:2rem;text-align:left;animation:fadeUp .6s .2s ease both}
+.hero-meta{display:flex;flex-wrap:wrap;gap:2rem;justify-content:flex-start;align-items:flex-start;margin-top:0;font-family:var(--mono);font-size:.75rem;color:rgba(255,255,255,.5);border-top:1px solid rgba(255,255,255,.1);padding-top:1.5rem;animation:fadeUp .6s .3s ease both}
+.hero-meta-item strong{display:block;font-size:.85rem;font-weight:700;letter-spacing:0;text-transform:none;color:rgba(255,255,255,.85);margin:0 0 .15rem}
+.gh-btn{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.68rem;color:rgba(255,255,255,.5);text-decoration:none;border:1px solid rgba(255,255,255,.2);padding:3px 9px;border-radius:3px;transition:all .2s;letter-spacing:.02em;align-self:center}
+.gh-btn:hover{color:#fff;border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.08)}
+#side-nav{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:2px;padding:10px 6px}
+#side-nav a{display:flex;align-items:center;justify-content:flex-end;gap:7px;text-decoration:none;padding:5px 8px;border-radius:4px;transition:background .2s}
+#side-nav a:hover{background:rgba(26,92,82,.07)}
+.sn-label{font-size:.67rem;font-weight:500;color:var(--hint);white-space:nowrap;letter-spacing:.02em;font-family:var(--font);text-transform:none;text-align:right;transition:color .2s}
+.sn-dot{width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;transition:all .2s}
+#side-nav a.active .sn-label{color:var(--accent);font-weight:600}
+#side-nav a.active .sn-dot{width:5px;height:5px;background:var(--accent);transform:scale(1.5)}
+#side-nav a:hover .sn-label{color:var(--ink)}
+#side-nav a:hover .sn-dot{background:var(--muted)}
+footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem;font-size:1rem;text-align:left}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.footer-name{font-family:var(--serif);font-weight:600;font-size:1rem;color:rgba(255,255,255,.9)}
+.footer-right{font-size:.8rem;text-align:right}
+.footer-right a{color:rgba(255,255,255,.5);text-decoration:none;margin-left:1.2rem;transition:none}
+.footer-right a:hover{color:rgba(255,255,255,.85)}
+@media(max-width:860px){#side-nav{display:none}.footer-inner{flex-direction:column;text-align:center}.footer-right{text-align:center}}
+/* CHROME:END */
 </style>
 </head>
 <body>
@@ -216,11 +255,11 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
 <div id="progress-bar"></div>
 
 <nav>
-  <div class="nav-logo">The Intrinsic Investor</div>
+  <a href="../../index.html" class="nav-logo">The Intrinsic Investor</a>
   <ul class="nav-links">
-    <li><a href="/">Home</a></li>
-    <li><a href="/research">Research</a></li>
-    <li><a href="/about">About</a></li>
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="../index.html">Research</a></li>
+    <li><a href="../../about.html">About</a></li>
   </ul>
 </nav>
 
@@ -230,12 +269,12 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
     <h1>Factor &amp; Sector Rotation:<br><em>A Systematic Parameter Optimisation</em></h1>
     <p class="hero-sub">A monthly ETF rotation strategy across two parallel sleeves, tested across 60 parameter combinations spanning momentum lookback periods, SPY drawdown filter methods, and sleeve allocation rules. All 60 results reported.</p>
     <div class="hero-meta">
-      <div class="hero-meta-item"><strong>Brian Liew</strong>LSE, BSc Accounting and Finance</div>
-      <div class="hero-meta-item"><strong>July 2014 &ndash; March 2026</strong>Backtest Period</div>
-      <div class="hero-meta-item"><strong>141 Months</strong>Observations</div>
-      <div class="hero-meta-item"><strong>60 Combinations</strong>5 lookbacks &times; 6 filters &times; 2 splits</div>
-      <div class="hero-meta-item"><strong>Compustat / WRDS</strong>Data Source</div>
-      <div class="hero-meta-item"><strong>April 2026</strong>Published</div>
+      <div class="hero-meta-item"><strong>Author</strong>Brian Liew, BSc Accounting and Finance, LSE</div>
+      <div class="hero-meta-item"><strong>Period</strong>July 2014 &ndash; March 2026</div>
+      <div class="hero-meta-item"><strong>Observations</strong>141 Months</div>
+      <div class="hero-meta-item"><strong>Parameters</strong>60 combinations (5 lookbacks &times; 6 filters &times; 2 splits)</div>
+      <div class="hero-meta-item"><strong>Data</strong>Compustat / WRDS</div>
+      <div class="hero-meta-item"><strong>Published</strong>April 2026</div>
       <a class="gh-btn" href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/etf-factor-sector-rotation-strategy" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg> Code</a>
     </div>
   </div>
@@ -535,12 +574,14 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem}
   <div class="footer-inner">
     <div class="footer-name">The Intrinsic Investor</div>
     <div class="footer-right">
-      &copy; Brian Liew &middot; BSc Accounting &amp; Finance, London School of Economics
-      <a href="/">Home</a><a href="/research">Research</a><a href="/about">About</a>
+      <span style="color:rgba(255,255,255,.35)">&copy; 2026 Brian Liew</span>
+      <a href="https://www.linkedin.com/in/brianliewrz" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/TheIntrinsicInvestor" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:brianliew.rz@gmail.com">Email</a>
     </div>
   </div>
 
-  <div style="text-align:center;font-size:0.75rem;color:rgba(255,255,255,0.4);margin-top:1.5rem;font-family:var(--font, 'Inter', sans-serif);width:100%;">For research purposes only. Not financial advice.</div>
+  <div style="text-align:center;font-size:.75rem;color:rgba(255,255,255,.4);margin-top:1.5rem;font-family:var(--font);width:100%;">For research purposes only. Not financial advice.</div>
 </footer>
 
 <div id="side-nav"></div>
@@ -616,6 +657,7 @@ sections.forEach(s => ioNav.observe(s));
 // Equity curve (Chart.js)
 const eqLabels   = ["2014-07", "2014-08", "2014-09", "2014-10", "2014-11", "2014-12", "2015-01", "2015-02", "2015-03", "2015-04", "2015-05", "2015-06", "2015-07", "2015-08", "2015-09", "2015-10", "2015-11", "2015-12", "2016-01", "2016-02", "2016-03", "2016-04", "2016-05", "2016-06", "2016-07", "2016-08", "2016-09", "2016-10", "2016-11", "2016-12", "2017-01", "2017-02", "2017-03", "2017-04", "2017-05", "2017-06", "2017-07", "2017-08", "2017-09", "2017-10", "2017-11", "2017-12", "2018-01", "2018-02", "2018-03", "2018-04", "2018-05", "2018-06", "2018-07", "2018-08", "2018-09", "2018-10", "2018-11", "2018-12", "2019-01", "2019-02", "2019-03", "2019-04", "2019-05", "2019-06", "2019-07", "2019-08", "2019-09", "2019-10", "2019-11", "2019-12", "2020-01", "2020-02", "2020-03", "2020-04", "2020-05", "2020-06", "2020-07", "2020-08", "2020-09", "2020-10", "2020-11", "2020-12", "2021-01", "2021-02", "2021-03", "2021-04", "2021-05", "2021-06", "2021-07", "2021-08", "2021-09", "2021-10", "2021-11", "2021-12", "2022-01", "2022-02", "2022-03", "2022-04", "2022-05", "2022-06", "2022-07", "2022-08", "2022-09", "2022-10", "2022-11", "2022-12", "2023-01", "2023-02", "2023-03", "2023-04", "2023-05", "2023-06", "2023-07", "2023-08", "2023-09", "2023-10", "2023-11", "2023-12", "2024-01", "2024-02", "2024-03", "2024-04", "2024-05", "2024-06", "2024-07", "2024-08", "2024-09", "2024-10", "2024-11", "2024-12", "2025-01", "2025-02", "2025-03", "2025-04", "2025-05", "2025-06", "2025-07", "2025-08", "2025-09", "2025-10", "2025-11", "2025-12", "2026-01", "2026-02", "2026-03"];
 const eqDatasets = [{"label": "Combo #1 (L1,F3,A)", "data": [100.0, 103.8142, 99.76, 101.2522, 101.8988, 101.012, 100.5334, 100.0483, 99.0219, 97.2118, 95.2928, 94.9435, 96.7425, 96.836, 96.836, 95.6535, 94.9851, 87.8312, 87.8312, 87.8312, 89.4482, 94.2501, 94.5016, 93.7545, 94.6996, 96.0948, 95.2507, 91.7191, 100.7417, 104.09, 104.8903, 107.1736, 106.8933, 109.3434, 112.5496, 111.2189, 112.6429, 115.115, 115.1445, 115.0849, 117.5073, 119.5589, 123.9612, 120.9058, 116.5662, 118.3262, 123.7442, 123.9626, 127.4376, 128.4918, 129.071, 119.5176, 119.4891, 116.7042, 116.7042, 119.1307, 120.7235, 126.8559, 118.1308, 122.1966, 122.8711, 122.0908, 123.9907, 126.4154, 132.1473, 136.8727, 128.8822, 120.3999, 114.7285, 114.7285, 113.6323, 119.5213, 127.1109, 131.4852, 125.4797, 124.2826, 136.078, 145.0278, 147.2378, 168.3364, 172.0162, 179.0207, 182.3453, 185.0736, 191.7978, 196.7342, 191.5208, 205.4824, 203.1055, 209.9663, 204.4939, 210.6919, 214.5304, 211.8511, 211.8511, 211.8511, 211.8511, 208.9307, 208.9307, 208.9307, 208.9307, 204.8087, 200.4314, 196.5746, 195.1202, 196.675, 185.8725, 197.4756, 205.7925, 202.2563, 199.8096, 192.5851, 203.6569, 212.7627, 207.586, 222.1932, 225.3518, 219.5022, 232.9582, 230.2637, 224.1783, 227.6752, 230.2793, 228.0808, 247.9548, 238.9567, 246.6637, 247.9996, 243.1187, 243.1187, 249.3463, 266.6117, 273.8419, 281.5326, 288.4425, 296.8181, 291.1998, 290.1319, 293.1749, 308.1525, 289.0483], "borderColor": "#1a5c52", "borderWidth": 2.5, "pointRadius": 0, "tension": 0.3, "fill": false}, {"label": "Combo #2 (L1,F0,B)", "data": [100.0, 103.8142, 99.4667, 102.3722, 103.1415, 102.1893, 101.7052, 95.2013, 93.7109, 91.9979, 90.1818, 89.8735, 91.5764, 88.3913, 89.1101, 90.0569, 90.509, 87.6364, 86.2027, 87.8728, 94.5267, 99.8874, 99.3286, 102.2595, 105.0034, 106.8768, 106.3787, 101.4884, 111.4721, 115.3841, 116.3449, 117.6845, 117.5667, 120.2615, 124.062, 123.782, 124.8444, 127.8835, 126.7374, 127.6611, 131.2305, 133.307, 138.1783, 134.8094, 129.9707, 131.9331, 137.2423, 137.6925, 139.9613, 140.7769, 141.8841, 131.145, 134.4861, 121.8679, 127.9199, 135.0773, 137.36, 146.1027, 135.9446, 142.2693, 143.4253, 143.8055, 142.1713, 145.7255, 152.523, 158.0941, 147.1727, 134.631, 124.2618, 139.7108, 145.6729, 151.8517, 161.1511, 167.7163, 161.347, 159.8078, 174.9748, 189.8224, 194.6989, 206.7752, 212.2279, 220.957, 225.2389, 234.6796, 243.8024, 250.0332, 243.2023, 260.9314, 260.95, 269.4293, 264.1991, 271.9502, 297.2374, 281.7095, 278.7499, 254.3645, 265.0097, 257.1766, 237.2335, 263.5226, 270.1585, 255.0435, 251.794, 246.9489, 254.3709, 254.0677, 241.8078, 256.9027, 267.8692, 259.2064, 265.4184, 250.1493, 267.4001, 279.5524, 272.4853, 291.6592, 297.6308, 284.9851, 302.4554, 292.8196, 286.9593, 291.4356, 294.7153, 291.9387, 317.377, 308.8692, 319.6352, 321.5884, 317.7956, 290.8021, 320.4997, 342.4724, 353.2677, 357.2288, 368.587, 375.1808, 357.138, 359.4917, 375.7623, 378.3094, 365.5632], "borderColor": "#1e40af", "borderWidth": 2.5, "pointRadius": 0, "tension": 0.3, "fill": false}, {"label": "Combo #3 (L1,F3,B)", "data": [100.0, 103.8142, 99.4667, 100.9545, 102.0928, 101.1503, 100.6711, 94.2333, 92.7581, 91.0625, 89.2648, 88.9597, 90.6453, 93.9628, 93.9628, 92.8153, 92.9513, 85.1498, 85.1498, 85.1498, 86.7175, 90.3837, 89.878, 91.4121, 93.8649, 95.5395, 95.0943, 90.7228, 99.6474, 103.1444, 104.0033, 105.2008, 105.0956, 107.5045, 110.9018, 110.6515, 111.6012, 114.318, 113.2934, 114.1191, 117.3099, 119.1661, 123.5207, 120.5092, 116.1838, 117.938, 122.684, 123.0865, 125.1146, 125.8436, 126.8333, 116.3862, 116.3584, 113.2149, 113.2149, 115.5689, 117.9984, 125.5088, 116.7825, 120.8019, 121.8633, 122.1863, 120.7978, 123.8178, 129.5933, 134.3268, 125.0473, 116.8174, 111.3148, 111.3148, 110.2512, 114.0239, 121.0067, 125.9365, 121.1539, 119.9981, 131.3869, 142.5358, 146.1975, 155.2655, 159.3598, 165.9144, 169.1297, 176.2186, 183.0688, 187.7475, 182.6182, 195.9308, 195.9447, 202.3117, 197.0084, 202.9795, 211.9439, 216.0712, 216.0712, 216.0712, 216.0712, 213.0927, 213.0927, 213.0927, 213.0927, 208.8886, 204.424, 200.4904, 199.0071, 198.7699, 189.1783, 200.9878, 209.5675, 202.7901, 207.6501, 200.7583, 212.3001, 221.9834, 216.3717, 231.597, 236.339, 226.2974, 240.1699, 232.5185, 227.8651, 231.4195, 234.0238, 231.819, 252.0187, 245.263, 253.8119, 255.3629, 255.7338, 255.7338, 262.2845, 277.0005, 285.7321, 288.9359, 298.1226, 303.4559, 288.8624, 290.7662, 303.9262, 305.9864, 286.344], "borderColor": "#7E3AF2", "borderWidth": 2.5, "pointRadius": 0, "tension": 0.3, "fill": false}, {"label": "SPY B&H", "data": [98.6562, 102.5496, 101.1353, 103.5171, 106.3609, 106.0886, 102.9453, 108.7313, 107.0193, 108.0717, 109.4611, 107.2401, 109.6626, 102.9786, 100.3599, 108.8965, 109.2945, 107.4169, 102.0694, 101.9847, 108.8424, 109.2718, 111.1302, 111.5162, 115.5861, 115.7245, 115.7336, 113.7271, 117.9166, 120.3083, 122.4612, 127.2729, 127.433, 128.6979, 130.5142, 131.3461, 134.0459, 134.437, 137.1447, 140.3764, 144.6671, 146.4156, 154.6675, 149.0437, 144.9576, 145.7068, 149.2488, 150.1077, 155.6687, 160.6376, 161.5931, 150.4263, 153.2166, 139.7434, 150.932, 155.8246, 158.6417, 165.1226, 154.5926, 165.351, 167.8511, 165.0407, 168.2555, 171.9747, 178.1999, 183.3736, 183.2996, 168.7885, 147.7503, 166.5122, 174.4457, 177.544, 187.9999, 201.1217, 193.6001, 188.7729, 209.3071, 217.0652, 214.8533, 220.8274, 230.8541, 243.0686, 244.6646, 250.1629, 256.27, 263.8966, 251.6055, 269.2591, 267.0956, 279.4608, 264.7216, 256.9079, 266.5562, 243.1608, 243.7097, 223.6111, 244.2029, 234.239, 212.5914, 229.8699, 242.6488, 228.6781, 243.059, 236.9478, 245.7445, 249.6703, 250.8228, 267.0797, 275.8221, 271.3394, 258.4798, 252.8685, 275.9665, 288.5679, 293.1637, 308.463, 318.5571, 305.713, 321.1759, 332.5085, 336.5348, 344.3982, 351.6337, 348.4958, 369.2779, 360.3783, 370.0568, 365.359, 345.0008, 342.0096, 363.5032, 382.1849, 390.9872, 399.0101, 413.2174, 423.0675, 423.8924, 424.2195, 430.4716, 426.7514, 394.2351], "borderColor": "#dc2626", "borderWidth": 1.8, "pointRadius": 0, "tension": 0.3, "fill": false}, {"label": "EW B&H", "data": [97.6798, 101.7403, 99.8423, 102.5345, 104.6724, 104.9477, 102.4945, 107.5775, 106.1121, 106.7315, 107.9636, 105.8282, 107.4159, 101.1773, 98.4457, 106.2274, 106.6872, 104.476, 99.4792, 100.0269, 106.9463, 108.2614, 109.6593, 110.9266, 114.3789, 114.1619, 114.2735, 112.1331, 116.8722, 119.163, 121.1497, 125.2783, 125.259, 126.3564, 127.6971, 128.7851, 131.0763, 130.9195, 134.6415, 137.3555, 141.6203, 142.9887, 149.5873, 143.1638, 140.8848, 141.7822, 144.6521, 145.6435, 150.561, 154.0809, 154.5926, 143.8223, 147.1376, 133.8976, 144.3036, 149.3446, 151.4573, 156.3792, 146.7508, 157.4146, 158.7694, 155.8661, 159.4389, 161.459, 166.4802, 171.2839, 169.4204, 154.0231, 131.2146, 148.2459, 155.2524, 156.7347, 164.2811, 172.8723, 167.586, 164.74, 185.5672, 192.4027, 191.4254, 198.9764, 209.0704, 217.9646, 221.0097, 222.5983, 224.6801, 229.8404, 221.6759, 237.2468, 232.2624, 243.6147, 234.4988, 231.5042, 241.6783, 225.085, 228.0016, 208.4006, 225.6861, 219.5202, 200.4106, 220.6283, 232.988, 221.9572, 232.786, 225.6121, 228.2402, 231.0455, 224.3005, 239.9618, 248.2019, 242.8051, 232.2665, 225.7023, 243.1704, 255.0016, 255.2428, 268.133, 279.1426, 268.6158, 278.5555, 280.0352, 289.2128, 296.2961, 301.9109, 297.8166, 316.8276, 298.5331, 309.5829, 308.7908, 297.2426, 292.0161, 305.2918, 315.3528, 318.9979, 327.7142, 334.563, 335.6549, 340.7545, 275.6663, 286.5629, 295.1864, 276.0345], "borderColor": "#E3A008", "borderWidth": 1.8, "pointRadius": 0, "tension": 0.3, "fill": false}];
+Chart.defaults.font.family = 'Inter, sans-serif';
 new Chart(document.getElementById('equityCurve'), {
   type: 'line',
   data: { labels: eqLabels, datasets: eqDatasets },

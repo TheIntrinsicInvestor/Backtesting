@@ -115,6 +115,7 @@ bt_colors_js     = json.dumps(backtest_data["bar_colors"])
 html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HT9VG5C62E"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-HT9VG5C62E');</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Gamma Trap: How 0DTE Options Reshape Intraday SPX Dynamics | The Intrinsic Investor</title>
@@ -280,18 +281,56 @@ html = f"""<!DOCTYPE html>
     @media(prefers-reduced-motion:reduce){{
       *,*::before,*::after{{animation-duration:.01ms!important;transition-duration:.01ms!important}}
     }}
-  </style>
+  /* CHROME:START canonical nav, hero, footer, side nav. Keep identical across reports. */
+#progress-bar{{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,#1a5c52,#2d9d8f);z-index:9998;transition:width .1s linear}}
+nav{{position:sticky;top:0;z-index:100;height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;background:#0f2220;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.08);transition:box-shadow .3s}}
+nav.scrolled{{box-shadow:0 1px 24px rgba(0,0,0,.2)}}
+.nav-logo{{font-family:var(--serif);font-style:normal;font-weight:600;font-size:1.1rem;color:#fff;letter-spacing:-.01em;text-decoration:none}}
+.nav-links{{display:flex;gap:1.75rem;list-style:none}}
+.nav-links a{{position:relative;padding-bottom:2px;color:rgba(255,255,255,.7);text-decoration:none;font-size:.9rem;font-weight:500;transition:color .2s}}
+.nav-links a:hover{{color:#fff}}
+.nav-links a::after{{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:#2d9d8f;transform:scaleX(0);transform-origin:left;transition:transform .25s cubic-bezier(.4,0,.2,1)}}
+.nav-links a:hover::after{{transform:scaleX(1)}}
+.hero{{position:relative;overflow:hidden;margin-top:0;background:var(--ink);color:#fff;text-align:left;padding:5rem 2rem 4rem}}
+.hero::before{{content:'';position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(-55deg,transparent,transparent 40px,rgba(255,255,255,.013) 40px,rgba(255,255,255,.013) 41px)}}
+.hero-inner,.footer-inner{{max-width:860px;margin:0 auto;position:relative}}
+.hero-tag{{display:inline-block;font-family:var(--mono);font-size:.72rem;font-weight:400;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(26,92,82,.4);padding:.25rem .75rem;border-radius:2px;margin-bottom:1.5rem;animation:fadeUp .6s ease both}}
+.hero h1{{font-family:var(--serif);font-size:clamp(1.9rem,4.5vw,3.2rem);font-weight:600;font-style:normal;color:#fff;line-height:1.2;letter-spacing:-.02em;max-width:none;margin:0 0 1.25rem;animation:fadeUp .6s .1s ease both}}
+.hero h1 em{{font-style:italic;color:var(--accent)}}
+.hero-sub{{font-size:1rem;color:rgba(255,255,255,.65);max-width:620px;line-height:1.7;margin-bottom:2rem;text-align:left;animation:fadeUp .6s .2s ease both}}
+.hero-meta{{display:flex;flex-wrap:wrap;gap:2rem;justify-content:flex-start;align-items:flex-start;margin-top:0;font-family:var(--mono);font-size:.75rem;color:rgba(255,255,255,.5);border-top:1px solid rgba(255,255,255,.1);padding-top:1.5rem;animation:fadeUp .6s .3s ease both}}
+.hero-meta-item strong{{display:block;font-size:.85rem;font-weight:700;letter-spacing:0;text-transform:none;color:rgba(255,255,255,.85);margin:0 0 .15rem}}
+.gh-btn{{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.68rem;color:rgba(255,255,255,.5);text-decoration:none;border:1px solid rgba(255,255,255,.2);padding:3px 9px;border-radius:3px;transition:all .2s;letter-spacing:.02em;align-self:center}}
+.gh-btn:hover{{color:#fff;border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.08)}}
+#side-nav{{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:2px;padding:10px 6px}}
+#side-nav a{{display:flex;align-items:center;justify-content:flex-end;gap:7px;text-decoration:none;padding:5px 8px;border-radius:4px;transition:background .2s}}
+#side-nav a:hover{{background:rgba(26,92,82,.07)}}
+.sn-label{{font-size:.67rem;font-weight:500;color:var(--hint);white-space:nowrap;letter-spacing:.02em;font-family:var(--font);text-transform:none;text-align:right;transition:color .2s}}
+.sn-dot{{width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;transition:all .2s}}
+#side-nav a.active .sn-label{{color:var(--accent);font-weight:600}}
+#side-nav a.active .sn-dot{{width:5px;height:5px;background:var(--accent);transform:scale(1.5)}}
+#side-nav a:hover .sn-label{{color:var(--ink)}}
+#side-nav a:hover .sn-dot{{background:var(--muted)}}
+footer{{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem;font-size:1rem;text-align:left}}
+.footer-inner{{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}}
+.footer-name{{font-family:var(--serif);font-weight:600;font-size:1rem;color:rgba(255,255,255,.9)}}
+.footer-right{{font-size:.8rem;text-align:right}}
+.footer-right a{{color:rgba(255,255,255,.5);text-decoration:none;margin-left:1.2rem;transition:none}}
+.footer-right a:hover{{color:rgba(255,255,255,.85)}}
+@media(max-width:860px){{#side-nav{{display:none}}.footer-inner{{flex-direction:column;text-align:center}}.footer-right{{text-align:center}}}}
+/* CHROME:END */
+</style>
 </head>
 <body>
 
 <div id="progress-bar"></div>
 
 <nav>
-  <div class="nav-logo">The Intrinsic Investor</div>
+  <a href="../../index.html" class="nav-logo">The Intrinsic Investor</a>
   <ul class="nav-links">
-    <li><a href="/">Home</a></li>
-    <li><a href="/research">Research</a></li>
-    <li><a href="/about">About</a></li>
+    <li><a href="../../index.html">Home</a></li>
+    <li><a href="../index.html">Research</a></li>
+    <li><a href="../../about.html">About</a></li>
   </ul>
 </nav>
 
@@ -301,11 +340,11 @@ html = f"""<!DOCTYPE html>
     <h1>The Gamma Trap: <em>How 0DTE Options Reshape Intraday SPX Dynamics</em></h1>
     <p class="hero-sub">Every day, dealers who sell zero-days-to-expiry SPX options must hedge their positions in real time. When their aggregate gamma exposure turns negative, that hedging mechanically amplifies intraday moves. We measure this effect empirically using OptionMetrics and TAQ data across {n_days} trading days.</p>
     <div class="hero-meta">
-      <div class="hero-meta-item"><strong>Brian Liew</strong>LSE, BSc Accounting and Finance</div>
-      <div class="hero-meta-item"><strong>{date_start} &ndash; {date_end}</strong>Sample Period</div>
-      <div class="hero-meta-item"><strong>{n_days} Trading Days</strong>Observations</div>
-      <div class="hero-meta-item"><strong>OptionMetrics &amp; TAQ via WRDS</strong>Data Sources</div>
-      <div class="hero-meta-item"><strong>April 2026</strong>Published</div>
+      <div class="hero-meta-item"><strong>Author</strong>Brian Liew, BSc Accounting and Finance, LSE</div>
+      <div class="hero-meta-item"><strong>Period</strong>{date_start} &ndash; {date_end}</div>
+      <div class="hero-meta-item"><strong>Observations</strong>{n_days} Trading Days</div>
+      <div class="hero-meta-item"><strong>Data</strong>OptionMetrics &amp; TAQ via WRDS</div>
+      <div class="hero-meta-item"><strong>Published</strong>April 2026</div>
       <a class="gh-btn" href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/0dte-gamma-trap" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg> Code</a>
     </div>
   </div>
@@ -732,12 +771,14 @@ html = f"""<!DOCTYPE html>
   <div class="footer-inner">
     <div class="footer-name">The Intrinsic Investor</div>
     <div class="footer-right">
-      <a href="/">Home</a>
-      <a href="/research">Research</a>
-      <a href="/about">About</a>
-      <div style="margin-top:.5rem;color:rgba(255,255,255,.25)">&copy; 2026 Brian Liew. For research purposes only. Not financial advice.</div>
+      <span style="color:rgba(255,255,255,.35)">&copy; 2026 Brian Liew</span>
+      <a href="https://www.linkedin.com/in/brianliewrz" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/TheIntrinsicInvestor" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:brianliew.rz@gmail.com">Email</a>
     </div>
   </div>
+
+  <div style="text-align:center;font-size:.75rem;color:rgba(255,255,255,.4);margin-top:1.5rem;font-family:var(--font);width:100%;">For research purposes only. Not financial advice.</div>
 </footer>
 
 <script>

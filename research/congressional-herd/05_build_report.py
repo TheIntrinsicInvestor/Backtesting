@@ -393,6 +393,7 @@ max_month = max_date_obj.strftime("%b")
 HTML = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HT9VG5C62E"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-HT9VG5C62E');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Disclosure-Lag Trap: Why Following Congress Doesn't Work | The Intrinsic Investor</title>
@@ -516,6 +517,44 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
 .footer-right a{{color:rgba(255,255,255,.4);text-decoration:none;transition:color .2s}}
 .footer-right a:hover{{color:#fff}}
 @media(prefers-reduced-motion:reduce){{*,*::before,*::after{{animation-duration:.01ms!important;transition-duration:.01ms!important}}}}
+/* CHROME:START canonical nav, hero, footer, side nav. Keep identical across reports. */
+#progress-bar{{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,#1a5c52,#2d9d8f);z-index:9998;transition:width .1s linear}}
+nav{{position:sticky;top:0;z-index:100;height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;background:#0f2220;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.08);transition:box-shadow .3s}}
+nav.scrolled{{box-shadow:0 1px 24px rgba(0,0,0,.2)}}
+.nav-logo{{font-family:var(--serif);font-style:normal;font-weight:600;font-size:1.1rem;color:#fff;letter-spacing:-.01em;text-decoration:none}}
+.nav-links{{display:flex;gap:1.75rem;list-style:none}}
+.nav-links a{{position:relative;padding-bottom:2px;color:rgba(255,255,255,.7);text-decoration:none;font-size:.9rem;font-weight:500;transition:color .2s}}
+.nav-links a:hover{{color:#fff}}
+.nav-links a::after{{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:#2d9d8f;transform:scaleX(0);transform-origin:left;transition:transform .25s cubic-bezier(.4,0,.2,1)}}
+.nav-links a:hover::after{{transform:scaleX(1)}}
+.hero{{position:relative;overflow:hidden;margin-top:0;background:var(--ink);color:#fff;text-align:left;padding:5rem 2rem 4rem}}
+.hero::before{{content:'';position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(-55deg,transparent,transparent 40px,rgba(255,255,255,.013) 40px,rgba(255,255,255,.013) 41px)}}
+.hero-inner,.footer-inner{{max-width:900px;margin:0 auto;position:relative}}
+.hero-tag{{display:inline-block;font-family:var(--mono);font-size:.72rem;font-weight:400;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(26,92,82,.4);padding:.25rem .75rem;border-radius:2px;margin-bottom:1.5rem;animation:fadeUp .6s ease both}}
+.hero h1{{font-family:var(--serif);font-size:clamp(1.9rem,4.5vw,3.2rem);font-weight:600;font-style:normal;color:#fff;line-height:1.2;letter-spacing:-.02em;max-width:none;margin:0 0 1.25rem;animation:fadeUp .6s .1s ease both}}
+.hero h1 em{{font-style:italic;color:var(--accent)}}
+.hero-sub{{font-size:1rem;color:rgba(255,255,255,.65);max-width:620px;line-height:1.7;margin-bottom:2rem;text-align:left;animation:fadeUp .6s .2s ease both}}
+.hero-meta{{display:flex;flex-wrap:wrap;gap:2rem;justify-content:flex-start;align-items:flex-start;margin-top:0;font-family:var(--mono);font-size:.75rem;color:rgba(255,255,255,.5);border-top:1px solid rgba(255,255,255,.1);padding-top:1.5rem;animation:fadeUp .6s .3s ease both}}
+.hero-meta-item strong{{display:block;font-size:.85rem;font-weight:700;letter-spacing:0;text-transform:none;color:rgba(255,255,255,.85);margin:0 0 .15rem}}
+.gh-btn{{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.68rem;color:rgba(255,255,255,.5);text-decoration:none;border:1px solid rgba(255,255,255,.2);padding:3px 9px;border-radius:3px;transition:all .2s;letter-spacing:.02em;align-self:center}}
+.gh-btn:hover{{color:#fff;border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.08)}}
+#side-nav{{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:2px;padding:10px 6px}}
+#side-nav a{{display:flex;align-items:center;justify-content:flex-end;gap:7px;text-decoration:none;padding:5px 8px;border-radius:4px;transition:background .2s}}
+#side-nav a:hover{{background:rgba(26,92,82,.07)}}
+.sn-label{{font-size:.67rem;font-weight:500;color:var(--hint);white-space:nowrap;letter-spacing:.02em;font-family:var(--font);text-transform:none;text-align:right;transition:color .2s}}
+.sn-dot{{width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;transition:all .2s}}
+#side-nav a.active .sn-label{{color:var(--accent);font-weight:600}}
+#side-nav a.active .sn-dot{{width:5px;height:5px;background:var(--accent);transform:scale(1.5)}}
+#side-nav a:hover .sn-label{{color:var(--ink)}}
+#side-nav a:hover .sn-dot{{background:var(--muted)}}
+footer{{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem;font-size:1rem;text-align:left}}
+.footer-inner{{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}}
+.footer-name{{font-family:var(--serif);font-weight:600;font-size:1rem;color:rgba(255,255,255,.9)}}
+.footer-right{{font-size:.8rem;text-align:right}}
+.footer-right a{{color:rgba(255,255,255,.5);text-decoration:none;margin-left:1.2rem;transition:none}}
+.footer-right a:hover{{color:rgba(255,255,255,.85)}}
+@media(max-width:860px){{#side-nav{{display:none}}.footer-inner{{flex-direction:column;text-align:center}}.footer-right{{text-align:center}}}}
+/* CHROME:END */
 </style>
 </head>
 <body>
@@ -535,7 +574,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
 
 <header class="hero">
   <div class="hero-inner">
-
+    <div class="hero-tag">Herding Event Study</div>
     <h1>The Disclosure-Lag Trap: <em>Why Following Congress Doesn't Work</em></h1>
     <p class="hero-sub">
       The Stop Trading on Congressional Knowledge Act gives politicians up to 45 days to disclose their trades. Across {lag_n:,} STOCK Act filings, the median disclosure lag is 27 days. By the time the signal becomes visible, the trade information has been stale for nearly a month. This report shows that the disclosure-following industry, including the NANC and KRUZ ETFs, is selling beta dressed as alpha.
@@ -921,13 +960,13 @@ footer{{background:var(--ink);color:rgba(255,255,255,.4);padding:2.5rem 2.5rem}}
     <div class="footer-name">The Intrinsic Investor</div>
     <div class="footer-right">
       <span style="color:rgba(255,255,255,.35)">&copy; 2025 Brian Liew</span>
-      <a href="https://www.linkedin.com/in/brian-liew" target="_blank">LinkedIn</a>
-      <a href="https://github.com/TheIntrinsicInvestor" target="_blank">GitHub</a>
-      <a href="mailto:brianliew99@gmail.com">Email</a>
+      <a href="https://www.linkedin.com/in/brianliewrz" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/TheIntrinsicInvestor" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:brianliew.rz@gmail.com">Email</a>
     </div>
   </div>
 
-  <div style="text-align:center;font-size:0.75rem;color:rgba(255,255,255,0.4);margin-top:1.5rem;font-family:var(--font, \'Inter\', sans-serif);width:100%;">For research purposes only. Not financial advice.</div>
+  <div style="text-align:center;font-size:.75rem;color:rgba(255,255,255,.4);margin-top:1.5rem;font-family:var(--font);width:100%;">For research purposes only. Not financial advice.</div>
 </footer>
 
 <script>
