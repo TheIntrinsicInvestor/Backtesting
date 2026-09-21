@@ -37,12 +37,12 @@ Each report folder contains an `index.html` (the published report) and, where ap
 
 | Report | Key Finding |
 |---|---|
-| The Gamma Trap: 0DTE Options & Intraday SPX Dynamics | Negative GEX days show 62% higher intraday RVol vs high GEX days (p<0.0001) |
-| The Earnings Vol Premium: IV Dynamics Across the S&P 500 | 68.7% win rate selling straddles at earnings; avg +$30/trade across 35,862 events |
+| The Gamma Trap: 0DTE Options & Intraday SPX Dynamics | Negative GEX days show roughly 70% higher intraday RVol vs high GEX days (p<0.0001) |
+| The Earnings Vol Premium: IV Dynamics Across the S&P 500 | 69% win rate selling straddles at earnings; avg +$31/trade across 37,508 events |
 | The FOMC Vol Crush: IV Dynamics Around Fed Decisions | Post-announcement straddle sell wins 67% (driven by hike cycles); pre-meeting sell has negative Sharpe |
 | Factor & Sector Rotation: Parameter Optimisation | Rotation strategy underperforms SPY B&H on risk-adjusted basis across all tested configs |
 | Iran Geopolitical IV Event Study | 82% win rate short vol at T+20 across 11 events; IV peaks T+2, not T0 |
-| The Disclosure-Lag Trap: Why Following Congress Doesn't Work | Filing lag averages 18 days; by the time trades are visible, the move is over |
+| The Disclosure-Lag Trap: Why Following Congress Doesn't Work | Median disclosure lag is 27 days; by the time trades are visible, the move is over |
 | The Float Mirage: Sizing the Passive Bid for SpaceX | Passive inflows at IPO likely $8-12B; structural demand but not a standalone catalyst |
 | Rate Cycle Turns: Why Preemptive Beats Reactive in Fed Policy | Preemptive cuts outperform reactive on equity returns and volatility over 12-month windows |
 | Exploiting Leveraged ETF Decay | Structural volatility decay premium exists but drawdowns are severe |
