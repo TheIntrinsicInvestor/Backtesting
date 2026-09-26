@@ -15,6 +15,7 @@ Personal research site publishing systematic market research and options strateg
 ├── research/
 │   ├── index.html                                      # Research index
 │   ├── 0dte-gamma-trap/                                # 0DTE GEX & intraday SPX vol dynamics
+│   ├── barrier-skew/                                   # Barrier option skew premium vs realised knock-ins
 │   ├── congressional-herd/                             # Congress disclosure-lag study
 │   ├── earnings-vol-cycle/                             # Earnings vol premium across S&P 500
 │   ├── etf-factor-sector-rotation-strategy/            # Factor & sector rotation parameter study
@@ -37,6 +38,7 @@ Each report folder contains an `index.html` (the published report) and, where ap
 
 | Report | Key Finding |
 |---|---|
+| The Barrier Premium: What the Skew Charges for a Crash | Local vol priced knock-ins at 2.5x the realised rate on SPX but 1.3x on single stocks; index sellers kept 69% of the premium, single-stock sellers 29% |
 | The Gamma Trap: 0DTE Options & Intraday SPX Dynamics | Negative GEX days show roughly 70% higher intraday RVol vs high GEX days (p<0.0001) |
 | The Earnings Vol Premium: IV Dynamics Across the S&P 500 | 69% win rate selling straddles at earnings; avg +$31/trade across 37,508 events |
 | The FOMC Vol Crush: IV Dynamics Around Fed Decisions | Post-announcement straddle sell wins 67% (driven by hike cycles); pre-meeting sell has negative Sharpe |
