@@ -161,7 +161,7 @@ fitted the same way, came in at {sn7['lv']['ratio']:.1f} times. The Euro Stoxx 5
 {spx7['lv']['dip']:.2f}% collected and {spx7['lv']['pnl']:+.2f}% earned on the index. What separates them is how much
 of the premium survives realised losses: the index seller kept {spx7['lv']['kept']:.0f}%, the single stock seller
 {sn7['lv']['kept']:.0f}%. The single stock premium is larger because single stocks are more volatile, and the seller
-pays almost all of it back.</p>
+pays back {100 - sn7['lv']['kept']:.0f}% of it in realised losses.</p>
 <p>That split is the correlation risk premium, measured in one contract. Driessen, Maenhout and Vilkov (2009) found
 that index options carry a large priced premium while individual equity options carry little, because the index
 premium compensates for correlation risk that single names do not bear. Their evidence is in variances. The same
