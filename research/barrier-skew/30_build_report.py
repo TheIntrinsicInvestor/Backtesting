@@ -236,7 +236,7 @@ PAGE = """<!DOCTYPE html>
 <section class="section" id="s3">
   <div class="container">
     <div class="section-label"><span class="section-counter">03</span><span>Implied Against Realised</span></div>
-    <h2>The test: <em>how often did the barrier actually break</em></h2>
+    <h2>The test: <em>how often did the barrier break</em></h2>
     {{S3_BODY}}
     <div class="ctrl-row"><span class="ctrl-label">Barrier</span>
       <button class="ctrl-btn" data-bar="0.6" data-group="real">60%</button>
@@ -265,7 +265,7 @@ PAGE = """<!DOCTYPE html>
 <section class="section" id="s4" style="background:var(--bg2)">
   <div class="container">
     <div class="section-label"><span class="section-counter">04</span><span>Where the Premium Lives</span></div>
-    <h2>The index is where <em>the crash premium actually sits</em></h2>
+    <h2>The index is where <em>the crash premium sits</em></h2>
     {{S4_BODY}}
     <div class="highlight-box">
       <div class="hl-grid">
