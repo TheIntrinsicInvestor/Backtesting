@@ -79,3 +79,11 @@ All institutional data accessed via WRDS (Wharton Research Data Services) throug
 - Compustat — equity fundamentals
 - TAQ (TAQMSEC) — intraday trade and quote data
 - yfinance — supplementary ETF price data
+
+---
+
+## Licence
+
+- **Code** (Python scripts, JavaScript, CSS and HTML markup): MIT, see [`LICENSE`](LICENSE).
+- **Written content** (report text, explainers, and the charts as they appear on the pages): CC BY 4.0, see [`LICENSE-CONTENT.md`](LICENSE-CONTENT.md). Credit Brian Liew and link to the site.
+- **WRDS-derived data** (including the chart data files under `research/*/charts/`): not licensed by me; the original data providers' terms apply.
