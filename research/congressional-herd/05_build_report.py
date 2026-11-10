@@ -581,7 +581,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem;font-
     </p>
     <div class="hero-meta">
       <div class="hero-meta-item"><strong>Author</strong>Brian Liew, BSc Accounting and Finance, LSE</div>
-      <div class="hero-meta-item"><strong>Published</strong>May 2025</div>
+      <div class="hero-meta-item"><strong>Published</strong>October 2026</div>
       <div class="hero-meta-item"><strong>Period</strong>2023 to {max_year}, n={kpi_n} herding events</div>
       <div class="hero-meta-item"><strong>Data</strong>Capitol Trades, CRSP, congress-legislators, Yahoo Finance</div>
       <a href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/congressional-herd" target="_blank" rel="noopener" class="gh-btn">

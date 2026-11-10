@@ -463,7 +463,7 @@ footer{{background:var(--ink);color:rgba(255,255,255,.6);padding:3rem 2rem;font-
     </p>
     <div class="hero-meta">
       <div class="hero-meta-item"><strong>Author</strong>Brian Liew, BSc Accounting and Finance, LSE</div>
-      <div class="hero-meta-item"><strong>Published</strong>May 2026</div>
+      <div class="hero-meta-item"><strong>Published</strong>September 2026</div>
       <div class="hero-meta-item"><strong>Period</strong>2018 to 2025, n={n_meetings} meetings</div>
       <div class="hero-meta-item"><strong>Data</strong>OptionMetrics, FRED, CME FedWatch</div>
       <a href="https://github.com/TheIntrinsicInvestor/Backtesting/tree/main/research/fomc-iv-study" target="_blank" rel="noopener" class="gh-btn">
